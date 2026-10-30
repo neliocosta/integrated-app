@@ -1,5 +1,10 @@
 # Prompt — mock navegável da área logada do cliente
 
+> **Superado em 30/10/2026.** O mock gerado por este prompt já existe, e a área passou a ser construída em
+> `area-cliente.html`, a base única para os quatro degraus ([CORRECOES-PLANO-2026-10-30.md](CORRECOES-PLANO-2026-10-30.md)).
+> Duas regras deste prompt mudaram: o Plano não é mais o Status em lista nem só o livro no Completo (são os onze cartões
+> em todo degrau, com a área vazia aparecendo), e nada de "combinado na clínica" como rótulo ou grupo. Fica como registro.
+
 Copiar daqui para baixo numa sessão nova do Claude Code aberta neste repositório. O prompt é autocontido; os arquivos
 que ele manda ler estão todos no repositório. Revisado em 24/10/2026 com as duas rodadas de avaliação; onde este
 prompt e o UX.md divergirem, vale o UX.md.

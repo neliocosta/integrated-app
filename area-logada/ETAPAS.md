@@ -134,6 +134,12 @@ desligam os lembretes.
 
 **Objetivo:** o cliente do planejamento completo encontra, na mesma área, o livro apresentado na reunião.
 
+> **Andamento em 30/10/2026** ([CORRECOES-PLANO-2026-10-30.md](CORRECOES-PLANO-2026-10-30.md)): o livro entra pelos
+> onze cartões do Plano, os mesmos em todo degrau. Cada cartão lê o resumo do próprio relatório
+> (`window.resumoParaArea`) e a página expandida embute o capítulo (`evolucao-patrimonial.html?embutido&versao=<n>`),
+> inclusive o fluxo de caixa de 24 meses e o da vida toda. O item 6 abaixo (Status) foi trocado pelos cartões. O
+> Realizado (etapa 4) já compara cada mês com a versão vigente, com lançamento manual.
+
 1. Embutir `evolucao-patrimonial.html` como o destino Plano, lendo do armazém da plataforma (o bloco `armazem` trocado
    por `window.__MONTAGEM__`/`/montagemController`, interface mantida), com sumário e páginas vistas.
 2. Tarefas nascendo do plano: aportes por objetivo e liberdade, próximos passos do capítulo Evolução, recomendações

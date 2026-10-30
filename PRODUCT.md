@@ -73,7 +73,10 @@ evolução patrimonial. Ele dá certo quando a família sai da reunião sabendo 
 1. O cliente entende antes de decidir. Cada página responde a uma pergunta da família, em linguagem dela.
 2. O plano é vivo: toda mudança recalcula tudo, e nenhum número aparece sem origem rastreável.
 3. O consultor nunca fica em dúvida sobre a ferramenta, só sobre o conteúdo, que ele pergunta ao cliente.
-4. Mostrar só o que o cliente tem: o que falta some, em vez de aparecer vazio.
+4. Mostrar só o que o cliente tem: o que falta some, em vez de aparecer vazio. A exceção são as áreas do Plano na área
+   do cliente: todas aparecem, com a profundidade de cada uma, para o cliente ver o tamanho do plano e o que falta.
+5. A mesma estrutura para todo cliente: o visitante, o da clínica e o do planejamento completo veem as mesmas telas; o
+   que muda é a profundidade e quem preencheu. O destaque é do momento de vida, nunca do tipo de reunião.
 
 ## Accessibility & Inclusion
 

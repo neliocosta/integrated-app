@@ -114,7 +114,7 @@ function desenhar({ dono, nuvem, planos }) {
     const nome = p.nome || 'Cliente sem nome', conj = p.conjuge ? ' e ' + p.conjuge.split(' ')[0] : '';
     return `<div class="cli"><div class="ini">${escH(iniciais(nome))}</div>
       <div class="nome"><b>${escH(nome + conj)}${exemplo ? '<span class="tag">exemplo</span>' : ''}</b><small>${p.em ? 'Atualizado em ' + dataHora(p.em) : 'Plano de demonstração, com dados fictícios'}</small></div>
-      <div class="acoes"><a class="btn btn-secondary" href="${url('area-cliente.html', p.id)}" title="A área logada do cliente da clínica financeira">Área do cliente</a><a class="btn btn-secondary" href="${url('evolucao-patrimonial.html', p.id, '&consultor')}">Ver relatório</a><a class="btn btn-primary" href="${url('tela-consultor.html', p.id)}">Editar relatório</a></div></div>`;
+      <div class="acoes"><a class="btn btn-secondary" href="${url('area-cliente.html', p.id)}" title="A área logada do cliente, a mesma em todo degrau (com ?demo, a barra dos exemplos)">Área do cliente</a><a class="btn btn-secondary" href="${url('evolucao-patrimonial.html', p.id, '&consultor')}">Ver relatório</a><a class="btn btn-primary" href="${url('tela-consultor.html', p.id)}">Editar relatório</a></div></div>`;
   };
   lista.innerHTML = reais.map(p => linha(p, false)).join('') + linha(ex, true);
   document.getElementById('nota').textContent = nuvem

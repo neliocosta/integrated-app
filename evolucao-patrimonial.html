@@ -35,6 +35,7 @@ header{min-height:64px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 1
 .legend .serie{display:none} .legend,.legend.com-div{grid-template-columns:repeat(4,auto);align-items:center}
 .legend i.ring{border-radius:50%;border-width:2px;background:#fff}
 .brand small{display:none} body.fluxo .brand small{display:inline}
+body.embutido .brand,body.embutido .hello,body.embutido #btnEditar,body.embutido.fluxo #btnVoltar{display:none!important}
 @media (max-width:1300px){ .hello{display:none} }
 .seg{display:flex;background:#F0EEE9;border-radius:11px;padding:3px}
 .seg button{background:transparent;border:0;color:#666;font:500 12px 'DM Sans',sans-serif;padding:6px 12px;border-radius:9px;cursor:pointer;transition:background .15s,color .15s;white-space:nowrap}
@@ -3638,7 +3639,10 @@ const definirConjuge = plan => { CONJ_BIRTH = plan.tipo !== 'individual' && +pla
 const outroHoje = plan => { const a = ENGINE.idadeExata(plan.nascimento); return a != null ? Math.round(a * ENGINE.WPY) !== ENGINE.W0 : plan.age != null && plan.age !== '' && +plan.age !== ENGINE.CURRENT_AGE; };
 // O cliente só vê versões finais: a mais recente que o consultor publicou ("Gerar versão final para cliente", no portal),
 // nunca o plano em edição. O consultor apresentando vê o plano em edição. versaoFinal(): { n, em, comentario, dados } ou null.
-const versaoFinal = () => (((ARMAZEM.ler('versoes') || {}).lista || [])[0]) || null;
+// ?versao=<n> abre uma versão anterior (a área do cliente compara cada mês com a versão que valia naquele mês)
+const versaoFinal = () => { const l = (ARMAZEM.ler('versoes') || {}).lista || [], n = new URLSearchParams(location.search).get('versao'); return (n ? l.find(v => String(v.n) === n) : l[0]) || null; };
+// ?embutido: a página dentro da área do cliente, que já tem a marca e o nome da família no alto
+if (new URLSearchParams(location.search).has('embutido')) document.body.classList.add('embutido');
 const planoDoPapel = () => PAPEL === 'cliente' ? (versaoFinal() || {}).dados || null : ARMAZEM.ler('plano');
 (function loadPlan() {
   try {
@@ -3754,7 +3758,8 @@ const tOfU = u => Math.sign(u) * K_T * (Math.exp(Math.abs(u)) - 1);
 // na janela do fluxo, a linha do tempo começa no início do mês corrente (dia 5), para a primeira coluna ser um mês inteiro
 const T_MIN = FLUXO ? tOf(SIM.perp.weeks.findIndex(w => w.mi === 0)) : 0, T_MAX = 100 - ENGINE.CURRENT_AGE; // linha do tempo começa em "hoje" (pequena margem à esquerda)
 const SPAN_MIN = 16 / WPY, SPAN_MAX = 100;
-const DEFAULT_VIEW = () => ({ uL: uOf(T_MIN), uR: uOf(T_MIN + (FLUXO ? 2 : 6)) });   // janela do fluxo abre em 24 meses
+// a janela do fluxo abre em 24 meses; com ?vida, a vida toda (o fluxo de caixa da vida toda, na área do cliente)
+const DEFAULT_VIEW = () => ({ uL: uOf(T_MIN), uR: uOf(FLUXO && new URLSearchParams(location.search).has('vida') ? T_MAX : T_MIN + (FLUXO ? 2 : 6)) });
 
 const state = {
   view: DEFAULT_VIEW(), target: null,
@@ -5354,6 +5359,60 @@ function destaques(id, P) {
     return { nums, faz: null }; }
   return null;
 }
+// O resumo do plano para a área do cliente (area-cliente.html): a capa de cada área em números, tirados das mesmas funções
+// que desenham as páginas, para que o cartão, a página e o relatório nunca digam coisas diferentes. A área abre esta tela num
+// quadro escondido (?embutido) e chama window.resumoParaArea(). Só valores; o desenho é da área.
+window.resumoParaArea = function () {
+  const P = planoVista(), s = sim(), cfg = ENGINE.config(), nm = ENGINE.nomesDaFamilia(P), casal = ENGINE.casalDe(P), v = versaoFinal();
+  const g = ENGINE.gestaoFinanceira(P), h = ENGINE.horasDoTrabalho(P), hf = h.familia || h.pessoas.find(p => p.horas) || null;
+  const f = ENGINE.faseDaVida(P), rk = ENGINE.avaliaRiscos(P), dg = ENGINE.diagnosticoDaFamilia(P), Pz = ENGINE.politicaDeInvestimentos(P, s), D = dadosDosObjetivos(P, s);
+  // o fluxo de caixa mês a mês, nos grupos do orçamento (entradas, fixas, ajustáveis e o que vai para o futuro)
+  const somaMes = (l, mi) => l.reduce((a, it) => a + ENGINE.valorEm(it, mi), 0);
+  const fluxo = Array.from({ length: 36 }, (_, mi) => { const e = somaMes(cfg.incomes, mi), fx = somaMes(cfg.expenses.filter(x => x.group === 'fix'), mi), aj = somaMes(cfg.expenses.filter(x => x.group !== 'fix'), mi);
+    return { mes: ENGINE.mesISO(mi), entradas: e, fixas: fx, ajustaveis: aj, futuro: e - fx - aj }; });
+  // o patrimônio no fim de cada mês (para o planejado × realizado) e no fim de cada ano de idade (a curva)
+  const blocos = w => ({ financeiro: w.fin + (w.prev || 0), bens: w.bens, participacoes: w.part, dividas: w.div || 0, total: w.fin + (w.prev || 0) + w.bens + w.part - (w.div || 0) });
+  const porMes = {}, porAno = [];
+  for (let i = ENGINE.W0, ult = null; i < s.weeks.length; i++) { const w = s.weeks[i], a = Math.floor(ageOf(i)); if (w.mi >= 0 && w.mi < 60) porMes[ENGINE.mesISO(w.mi)] = blocos(w); if (a !== ult) { ult = a; porAno.push(Object.assign({ idade: a }, blocos(w))); } }
+  const ff = s.ff, ffMi = ff ? s.weeks[ff.week].mi : null, ativos = ffMi != null ? PASSIVE.filter(p => ENGINE.rendaAtiva(p, ffMi, ffMi)) : [];
+  const esg = ff && state.mode === 'desej' ? fimDoPatrimonio(s) : null;
+  const marcos = s.events.filter(e => e.type === 'obj' && e.obj).map(e => ({ nome: e.obj.name, idade: Math.floor(ageOf(e.week)), ano: weekDate(e.week).getFullYear(), status: e.obj.status }));
+  const dest = id => { try { return destaques(id, P); } catch (e) { return null; } };
+  const cx = id => Pz.caixinhas.find(c => c.id === id) || {};
+  const objs = D.objs.map(o => ({ id: o.id, nome: o.name, valor: +o.amount || 0, mes: ENGINE.mesISO(Math.round(+o.months || 0)), guardado: Math.max(0, +o.dedicated || 0), aporte: Math.max(0, +o.planned || 0),
+    necessario: Math.max(0, +o.required || 0), taxa: +o.rate || 0, status: o.status, ratio: o.ratio, foto: o.photo || null, porque: o.descricao || '', estrategia: o.strategy || '' }));
+  const K = P.carteira ? ENGINE.carteiraDoPlano(P) : null;
+  return {
+    versao: v ? { n: v.n, em: v.em, comentario: v.comentario || '' } : null, dataRelatorio: P.dataRelatorio || null, inicio: ENGINE.INICIO,
+    familia: { titular: nm.titular, conjuge: casal ? nm.conjuge : null, casal, nome: P.name || '' }, consultor: P.consultor || null,
+    proposito: ENGINE.fraseDoProposito(P), mensagemFinal: P.mensagemFinal || '',
+    diagnostico: dg.placar,
+    gestao: { renda: g.mes.renda, custo: g.mes.custo, futuro: g.mes.futuro, pctFuturo: g.pctFuturo, fixas: g.grupos.fixas, ajustaveis: g.grupos.ajustaveis, ideal: g.ideal, vezesPoupou: g.vezesPoupou,
+      combinado: g.combinado, itens: g.itens, valorHora: hf ? hf.valorHora : null, horas: hf ? hf.horas : null, horasPresente: hf ? hf.presente : null, horasFuturo: hf ? hf.futuro : null,
+      horasPatrimonio: hf ? hf.patrimonio : null },
+    fluxo,
+    patrimonio: { total: f.total, financeiro: f.fin, bens: f.bens, participacoes: f.part, dividas: f.dividas, fase: f.fases && f.fase != null ? f.fases[f.fase].nome : null, esperado: f.esperado != null ? f.esperado : null,
+      minimo: f.minimo, maximo: f.maximo, liquidezIdeal: f.liquidezIdeal, idade: f.idade, porMes, porAno },
+    riscos: { nota: rk.nota, ameacas: ENGINE.RISCOS.map(x => ({ id: x.id, nome: x.nome, pct: rk.itens[x.id].pct, status: rk.itens[x.id].status })),
+      reserva: rk.itens.reserva, liquidez: rk.itens.liquidez.escada, saude: rk.itens.saude, renda: rk.itens.renda, familia: rk.itens.familia, terceiros: rk.itens.terceiros, bens: rk.itens.bens, faz: (dest('riscos') || {}).faz || null },
+    objetivos: { lista: objs, necessaria: D.necessaria, poupanca: D.poupanca, separado: D.separado, trilha: D.trilha.map(t => ({ mes: ENGINE.mesISO(t.mi), v: t.v })) },
+    politica: { total: Pz.total, sobra: Pz.sobra, caixinhas: Pz.caixinhas.map(c => ({ id: c.id, nome: c.nome, cor: c.cor, tipo: c.tipo, patrimonio: c.patrimonio, mensal: c.mensal, estrategia: c.estrategia || null })) },
+    // cada dívida: o financiamento de um bem ou uma dívida avulsa, com o saldo, a parcela, os juros e as parcelas que faltam
+    dividas: (((P.patrimonio || {}).bens) || []).filter(b => +b.saldoDevedor > 0.5).map(b => ({ nome: 'Financiamento: ' + (b.nome || 'bem'), d: b }))
+      .concat((((P.patrimonio || {}).dividas) || []).filter(d => +d.saldoDevedor > 0.5).map(d => ({ nome: d.nome || 'Dívida', d })))
+      .map(({ nome, d }) => ({ nome, saldo: +d.saldoDevedor, parcela: +d.parcela || null, juros: d.juros != null && d.juros !== '' ? +d.juros : null, restantes: (() => { try { return ENGINE.restantesDaDivida(d) || null; } catch (e) { return null; } })() })),
+    carteira: K && K.atual > 0 ? { atual: K.atual, classes: K.classes.map(c => ({ nome: c.nome, atual: c.pAtual, rec: c.pRec })), resgatado: K.resgatado, aplicado: K.aplicado } : null,
+    tributario: ['ir', 'prolabore', 'sucessao', 'previdencia'].map(id => ({ id, titulo: { ir: 'Imposto de renda', prolabore: 'Retirada da empresa', sucessao: 'Sucessão e ITCMD', previdencia: 'Previdência no longo prazo' }[id], d: dest(id) })).filter(x => x.d),
+    economias: { ir: (ENGINE.irDaFamilia(P) || {}).economia || 0, prolabore: (ENGINE.retiradaDosSocios(P) || {}).economia || 0, sucessao: P.tributario ? ENGINE.sucessao(P).economia || 0 : 0 },
+    liberdade: ff ? { idade: Math.floor(ff.age), mes: ENGINE.mesDoPlano(ffMi), mesISO: ENGINE.mesISO(ffMi), desejada: ENGINE.desejoDoPlano(P, ffMi), investido: s.weeks[ff.week].fin, renda: ENGINE.desejoDoPlano(P, ffMi),
+      passivas: PASSIVE.map(p => ({ nome: p.name, valor: p.net, inicio: ENGINE.mesISO(ENGINE.inicioRenda(p, ffMi)), dur: p.dur })), passivasNaData: ativos.reduce((a, p) => a + p.net, 0),
+      modo: state.mode, vidaAte: LIFE_EXP, duraAte: esg ? Math.floor(ageOf(esg)) : null, forcada: !!ff.forced, sustentavel: ff.sustentavel || null, alvo: cfg.retireAge,
+      depois: porAno.filter(p => p.idade >= Math.floor(ff.age)) } : { idade: null, alvo: cfg.retireAge, desejada: cfg.desired },
+    evolucao: { porAno, marcos, ruina: s.ruina ? { idade: Math.floor(ageOf(s.ruina.week)) } : null, objetivosOk: ENGINE.OBJ.filter(ENGINE.temValor).filter(o => o.status === 'ok').length, objetivosN: ENGINE.OBJ.filter(ENGINE.temValor).length },
+    destaques: Object.fromEntries(PAGINAS.map(p => [p.id, dest(p.id)]).filter(x => x[1])),
+    paginas: PAGINAS.filter(p => !p.capa && !p.resumo).map(p => ({ id: p.id, titulo: p.titulo, cap: p.capId })),
+  };
+};
 // Capítulo 1: uma landing page, a primeira coisa que o cliente vê, para voltar e rever. Boas-vindas com o vídeo do
 // planejador; o propósito (a frase, ENGINE.fraseDoProposito); a jornada dos objetivos na ordem declarada
 // (ENGINE.objetivosDoProposito), com as fotos; quem cuida do planejamento (plan.consultor) e a data do relatório

@@ -12,6 +12,27 @@ anterior. Leia junto com o `README.md`, que descreve como as duas telas funciona
 **Última sessão (16/10/2026):** veja `SESSAO-2026-10-16.md`: o orçamento da família virou a bancada do orçamento combinado
 (sem o treemap). A anterior (15/10, tarde) está em `SESSAO-2026-10-15.md`.
 
+## Área do cliente: a base única (30/10/2026)
+
+Implementado a partir de `area-logada/CORRECOES-PLANO-2026-10-30.md` em `area-cliente.html` (a mesma área para os quatro
+degraus, os onze cartões com a profundidade, o exame com fotografias, o Realizado com versões) e em
+`evolucao-patrimonial.html` (`window.resumoParaArea`, `?versao`, `?embutido`, `?fluxo&vida`). `node verificar.js` cobre a
+estrutura (seção 15). Em aberto, para o dono do produto decidir:
+
+- **Quantos cartões.** São onze; as fusões possíveis são Dívidas dentro de Gestão financeira e Reserva dentro de Gestão de
+  riscos. A lista está em `CARTOES`, num lugar só.
+- **O peso da profundidade.** Hoje cada informação vale o mesmo e o plano é a média dos cartões. Com o exemplo: o visitante
+  sai de 0% e chega a cerca de 33% depois do exame; o cadastrado de exemplo está em 40%, a clínica em 51% e o completo em
+  94% (sem carteira). Se a ideia é o visitante ficar perto de 10% com o exame, as informações do planejador ("consultor")
+  precisam pesar mais, ou o "sem dívidas" não pode contar como área inteira.
+- **A fórmula da nota do exame.** A área usa uma conta provisória (`notaDoExame`), avisada na tela; a oficial está no
+  servidor da plataforma (COLETA.md, "o que falta").
+- **As fotos de natureza** continuam vindo do Unsplash pelo endereço; no produto, escolher e guardar com a marca.
+- **O mock** (`area-logada/mock/index.html`) não foi atualizado: o Plano e o Painel dele estão superados pela base única,
+  e ele fica só como referência das telas que ela ainda não tem (Conteúdos, Utilitários, o lado do consultor, o WhatsApp).
+- **O financiamento do exemplo** aparece com 360 parcelas restantes porque o plano de exemplo não tem a data de início do
+  contrato; o relatório mostra o mesmo.
+
 ## Feedback da apresentação real (21/10/2026)
 
 O usuário apresentou um plano a um cliente e trouxe:

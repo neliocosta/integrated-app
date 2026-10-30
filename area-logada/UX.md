@@ -5,6 +5,14 @@ Como o cliente vive a área, tela a tela. Os degraus (Visitante, Cadastrado, Cl�
 aquele cliente**. Nada de cadeado nem de "disponível no plano completo" espalhado; onde falta, aparece o próximo
 passo.
 
+**Revisão de 30/10/2026** ([CORRECOES-PLANO-2026-10-30.md](CORRECOES-PLANO-2026-10-30.md)), que vale acima do texto
+abaixo onde houver conflito: (1) **a estrutura é a mesma para todo degrau**, inclusive o Visitante: as mesmas abas e os
+mesmos onze cartões no Plano; o degrau muda só quem preenche, a profundidade e com quem se fala; (2) **o destaque é do
+momento de vida**, nunca do tipo de reunião: nada de selo "foco da clínica" nem de "O que combinamos" no alto do Painel; a
+origem de cada número fica no toque; (3) **o Plano são as áreas em cartões** (a capa de cada capítulo do relatório, que
+abre a página expandida) e **a área vazia aparece**, com o percentual de profundidade e o convite; o "o que falta some"
+continua valendo fora do Plano. Implementado em `area-cliente.html`, a base única da área.
+
 Revisado em 24/10/2026 a partir de duas rodadas de avaliação com personas
 ([avaliacao-2026-10-24.md](avaliacao-2026-10-24.md) e [avaliacao-2026-10-24-rodada-2.md](avaliacao-2026-10-24-rodada-2.md)).
 As referências entre colchetes, como [B6] ou [I15], apontam para o achado que motivou a regra. As decisões que o dono
@@ -259,7 +267,7 @@ a definir). É isso que sustenta a frase da entrada.
 | **Painel** | Qual é o próximo passo mais importante, e como está o conjunto? | ✓ | ✓ | ✓ |
 | **Objetivos** | O que eu quero realizar, e como cada um está indo? | os dele | os combinados na clínica + os dele | os do plano, com a liberdade e a carteira como complementares |
 | **Tarefas** | O que preciso fazer, e fiz? | ✓ (propostas pelo sistema e as suas) | ✓ | ✓ |
-| **Plano** | O que combinamos, por quê, e onde estão todos os meus números? | Status | Status com as orientações da clínica | o livro completo + Status |
+| **Plano** | Onde estão todos os meus números, área por área? | os onze cartões, com o que ele preencheu | os mesmos onze, com o que a clínica e ele preencheram | os mesmos onze, cada um abrindo o capítulo do livro |
 | **Realizado** | O que aconteceu de verdade contra o planejado? | a partir do primeiro registro | tarefas, sobra e colchão; open banking pontual em estudo | aportes, orçamento, patrimônio |
 | **Conteúdos** | O que preciso entender para dar o próximo passo? | ✓ | ✓ | ✓ |
 | **Jornada** | Onde estou na escalada e na relação com a Nord? | ✓ | ✓ | ✓ |
@@ -304,7 +312,7 @@ compacta e o cartão do passo. Por isso o bloco 1 é uma faixa, não uma página
    | Em Sobreviver, com dívida | "Quitar o cartão · saldo R$ 4.800 · previsto para junho", com traço de progresso; os sonhos, se houver, vêm depois e menores [B2] |
    | Sem sobra e sem objetivo | "Minha reserva · R$ 1.000 · até dezembro", sugerida pronta, na escala da renda [B8, I14] |
    | Cadastrado sem objetivo, com sobra | o convite para criar o primeiro, com exemplos na escala da renda dele; é o único convite grande da tela |
-   | Clínica sem objetivo combinado | "O que combinamos em 12/09": as orientações da consultora, em frases dela, com o andamento de cada uma, e abaixo "temas para uma próxima conversa" [B11] |
+   | Clínica sem objetivo combinado | o passo do momento de vida (a reserva, o colchão); as orientações da consultora viram tarefas, com a frase dela dentro de cada tarefa, e os "temas para uma próxima conversa" ficam na Jornada (revisão de 30/10; antes, "O que combinamos em 12/09") [B11] |
    | Completo antes da apresentação | "Seu plano está em montagem", com as etapas e as datas (ver "Plano em montagem") [I5] |
 
    Quando a soma dos aportes dos objetivos passa da sobra, uma linha discreta abaixo dos cartões: "Os objetivos
@@ -670,6 +678,18 @@ vazio: "Nada para esta semana. A próxima é em 5/11: R$ 771 para a Faculdade." 
 dele, com o nome do cliente, os motivos de adiamento e quem respondeu.
 
 ## Plano — o livro e o Status
+
+> **Revisão de 30/10/2026: o Plano são os onze cartões das áreas, os mesmos em todo degrau.** Saúde financeira, Gestão
+> financeira (com o fluxo de caixa de 24 meses e o da vida toda), Dívidas, Objetivos, Reserva e liquidez, Gestão de riscos
+> (com a teia das oito ameaças), Patrimônio e ativos, Investimentos, Impostos e sucessão, Liberdade financeira e Evolução
+> patrimonial (com o gráfico do relatório). Cada cartão tem uma lista fixa de informações, cada uma marcada com o jeito de
+> preencher (exame, calculadora do cartão ou planejador); a **profundidade** do cartão é a parte que já existe, e a do plano
+> é a média dos cartões, mostrada no Plano e no Painel com o próximo passo para aprofundar. Um cartão sem nada aparece
+> vazio, tracejado, com o convite. No Completo, os números vêm do próprio relatório (`window.resumoParaArea`) e a página
+> expandida é o capítulo do relatório embutido; nos outros degraus, a página mostra o que existe, o que falta e a
+> calculadora. As subseções abaixo ("O livro" e "Status") ficam como histórico da decisão; a lista canônica e as
+> informações de cada cartão estão em [CORRECOES-PLANO-2026-10-30.md](CORRECOES-PLANO-2026-10-30.md), seção 5, e no código
+> (`CARTOES`, em `area-cliente.html`).
 
 ### O livro (degrau Completo)
 
@@ -1088,7 +1108,8 @@ consultora está de férias, a fila passa a quem a cobre.
   lugar onde se corrige.
 - Um nome por número: "cobertura de seguros" é a porcentagem da proteção contratada; "Proteção" é o pilar do exame
   [D10].
-- O que falta some. Um cadastrado nunca vê um cartão vazio de "Realizado".
+- O que falta some. Um cadastrado nunca vê um cartão vazio de "Realizado". A exceção (30/10) são os cartões do Plano:
+  a área vazia aparece, com a profundidade e o convite, para o cliente ver o tamanho do plano e o que falta.
 - Cabe em 390 px: toda tela do dia a dia é desenhada no celular primeiro; o que só funciona largo (tabelas do fluxo,
   bolhas) tem uma forma de celular própria.
 - Casal no plural, pessoa no singular, quem lê no singular, em toda mensagem, inclusive no WhatsApp.

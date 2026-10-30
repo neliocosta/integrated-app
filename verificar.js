@@ -1061,5 +1061,35 @@ console.log('\n14. Segunda rodada da auditoria (M5 a M10, D4, D6 e os campos nov
     const { Ea } = roda(pl), tr = Ea.trajetoriaDaParticipacao(Ea.PARTS[0]);
     ok('imposto sobre o ganho: 15% de (2.000.000 − 500.000) = 225.000 saem do líquido da venda', tr.venda && Math.abs(tr.venda.custo - 225000) < 1 && Math.abs(tr.venda.liquido - 1775000) < 1, tr.venda && tr.venda.custo); }
 }
+console.log('\n15. Área do cliente: a mesma estrutura para todo degrau (area-logada/CORRECOES-PLANO-2026-10-30.md)');
+{ const area = fs.readFileSync('area-cliente.html', 'utf8'), rel = fs.readFileSync(CLIENTE, 'utf8');
+  const trecho = (de, ate) => { const i = area.indexOf(de), j = area.indexOf(ate, i); return i >= 0 && j > i ? area.slice(i, j) : null; };
+  // os cartões: um literal só, avaliado à parte
+  const srcCartoes = trecho('const CARTOES = [', 'const COMO = ');
+  const ctx = { console }; vm.createContext(ctx);
+  vm.runInContext((srcCartoes || '').replace('const CARTOES', 'var CARTOES'), ctx);
+  const cartoes = ctx.CARTOES || [];
+  ok('o Plano tem os onze cartões da lista canônica, na ordem', cartoes.map(c => c.id).join(',') === 'saude,gestao,dividas,objetivos,reserva,riscos,patrimonio,politica,tributario,liberdade,evolucao', cartoes.map(c => c.id).join(','));
+  ok('cada informação de cada cartão diz como se preenche (exame, calculadora ou consultor)', cartoes.every(c => c.ind.length && c.ind.every(i => ['exame', 'calc', 'consultor'].includes(i[2]))), cartoes.reduce((a, c) => a + c.ind.length, 0) + ' informações');
+  const paginas = [...new Set(cartoes.flatMap(c => c.paginas.map(p => p[0])))].filter(p => !['fluxo24', 'fluxovida'].includes(p));
+  const faltam = paginas.filter(p => !new RegExp("id: '" + p + "'").test(rel));
+  ok('a versão expandida de cada cartão abre uma página que existe no relatório', !faltam.length, faltam.length ? 'faltam: ' + faltam.join(', ') : paginas.length + ' páginas');
+  ok('o relatório entrega o resumo para a área (window.resumoParaArea) e aceita ?versao e ?embutido', /window\.resumoParaArea\s*=/.test(rel) && /get\('versao'\)/.test(rel) && /has\('embutido'\)/.test(rel), '');
+  ok('nenhum selo nem ordenação pelo tipo de reunião ("foco da clínica", focos)', !/foco da cl[ií]nica|R\.focos|\.focos\b/i.test(area), '');
+  ok('a navegação não depende do degrau (as mesmas abas, sem esconder destino por degrau)', /const LATERAL = \[\['painel'/.test(area) && /const BAIXO = \[\['painel'/.test(area) && !/LATERAL\.filter|BAIXO\.filter/.test(area), '');
+  // o exame: as 33 perguntas e a fase da vida pela mesma régua do motor
+  const srcExame = trecho('const VEZES = ', '// =====================================================================================================================\n// 5. A PONTE');
+  const cx = { console, HOJE: '2026-10-20' }; vm.createContext(cx);
+  vm.runInContext(`const clamp = (v, a, b) => Math.max(a, Math.min(b, v)); const soma = a => a.reduce((x, y) => x + (+y || 0), 0);
+    const tem = v => v != null && v !== '' && !(typeof v === 'number' && !isFinite(v)) && !(Array.isArray(v) && !v.length);
+    const dia = s => new Date(s.slice(0, 10) + 'T00:00:00'); const idadeEm = (n, d) => n ? Math.floor((dia(d) - dia(n)) / (365.25 * 86400000)) : null;
+    ${(srcExame || '').replace(/^const (EXAME|faseDaVida|notaDoExame|NATUREZA_MESES|PILARES) /gm, 'var $1 ')}
+    var _f = typeof faseDaVida !== 'undefined' ? faseDaVida : null, _n = typeof notaDoExame !== 'undefined' ? notaDoExame : null;`, cx);
+  ok('o exame tem as 33 perguntas da plataforma (COLETA.md › 0)', (cx.EXAME || []).length === 33, (cx.EXAME || []).length);
+  const pl = JSON.parse(fs.readFileSync('ux/plano-exemplo.json', 'utf8')).dados, Ex = carregar(srcCliente); Ex.configure(JSON.parse(JSON.stringify(pl)));
+  const fm = Ex.faseDaVida(JSON.parse(JSON.stringify(pl))), fa = cx._f ? cx._f(fm.idade, fm.comecou, fm.alvo, fm.padrao) : null;
+  ok('a fase da vida da área é a mesma do motor (nome e patrimônio esperado)', fa && fa.nome === fm.fases[fm.fase].nome && Math.abs(fa.esperado - fm.esperado) < 1, fa ? fa.nome + ' ' + Math.round(fa.esperado) + ' × ' + Math.round(fm.esperado) : 'sem a função');
+  const nota = cx._n ? cx._n({ renda: 15000, poupanca: 2500, vezesPoupou: '4-6', custo: 12500, financeiro: 860000, bens: 1210000, dividas: 368000, reserva: 60000, natureza: 'CLT', dependentes: 'Sim', nascimento: '1991-05-12', comecou: 23, idadeAlvo: 57, temObjetivo: 'Sim', seguros: ['Plano de saúde'] }) : null;
+  ok('a nota provisória do exame fica entre 0 e 100, com os cinco pilares', nota && nota.nota >= 0 && nota.nota <= 100 && Object.keys(nota.pilares).length === 5, nota && JSON.stringify(nota)); }
 console.log('\n' + (falhas ? falhas + ' verificação(ões) falharam.' : 'Tudo certo.') + '\n');
 process.exit(falhas ? 1 : 0);

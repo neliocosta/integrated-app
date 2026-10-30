@@ -86,13 +86,15 @@ objetivo; e que, cada vez que não guardou, recebeu um lembrete claro do que faz
   retirado da apresentação em 17/10 porque pertence à área logada: é o embrião da ferramenta de acompanhamento que
   se desenha aqui.
 - **Apresentação do plano:** ainda em evolução, mas o formato atual serve de base para o mock.
-- **Área do cliente, degrau Clínica** (`area-cliente.html`, 30/10/2026): a primeira versão de produção, no tom sóbrio
-  do mock. Lê o registro da clínica (`clinicas/<cliente>`, gravado só pela consultora) e grava a execução
-  (`execucao/<cliente>`: respostas, ajustes datados e conversas); as ocorrências das tarefas, o guardado, o passo e o
-  efeito de uma falta são derivados. Painel, Tarefas (Fiz, Fiz parte, Não fiz com efeito e saídas, Adiar; o teto da
-  semana), Objetivos, Plano (o combinado e as verticais em gráficos), Jornada e Conversas. O hoje vem do relógio
-  (`?hoje=` para testes) e `?cliente=exemplo&reiniciar` volta o exemplo ao início. Falta o Completo, o Cadastrado, o
-  Realizado e o registro da clínica no portal do consultor.
+- **Área do cliente, a base única** (`area-cliente.html`, 30/10/2026, revista no mesmo dia por
+  [CORRECOES-PLANO-2026-10-30.md](CORRECOES-PLANO-2026-10-30.md)): a mesma área para os quatro degraus, no tom sóbrio.
+  Lê o vetor (`vetor/<cliente>`: o exame, cada um uma fotografia datada, e as calculadoras), o registro da clínica
+  (`clinicas/<cliente>`), as versões do plano (`versoes/<cliente>`, cujos números vêm do próprio relatório) e a execução
+  (`execucao/<cliente>`: respostas, ajustes, conversas e o realizado). Painel, Objetivos, Tarefas, Plano (os onze cartões
+  com a profundidade, cada um abrindo a página da área), Realizado (orçado × realizado do orçamento e do patrimônio, cada
+  mês contra a versão que valia nele), Jornada e Conversas, mais o exame. `?demo` mostra a mesma família nas quatro
+  profundidades e em julho de 2027. Falta o registro da clínica no portal do consultor, Conteúdos e Utilitários, e a
+  fórmula oficial da nota do exame. O mock (`mock/index.html`) fica como referência das telas que a base ainda não tem.
 - **Design** (`DESIGN.md`): tokens, tipografia (Sora, DM Sans), regras Horizon/Aurora/tons suaves, cartões, chips de
   estado, barra de progresso de capítulos.
 
@@ -141,7 +143,8 @@ dia (UX.md › Decisões de 24/10):
    sem origem.
 10. **O consultor prevalece sobre a régua.** O nivelamento da escalada sugere o mundo e o passo; na Clínica e no
     Completo, o foco escolhido pelo consultor é o que define o próximo passo. A escalada fica numa versão básica e
-    será redesenhada depois.
+    será redesenhada depois. Isso decide o cálculo do passo; o cliente nunca vê o tipo de reunião como selo nem como
+    critério de ordem (revisão de 30/10): vê o passo do momento de vida dele, com a origem no toque.
 11. **Mudar de degrau não apaga nada.** O que o cliente criou continua dele; o que sai do degrau vira histórico
     datado; cada mudança (subir, terminar o contrato, cancelar) tem uma mensagem dizendo o que muda.
 
@@ -149,8 +152,9 @@ dia (UX.md › Decisões de 24/10):
 
 Um esqueleto só, acumulativo. O que muda de um degrau para o outro é **quem preenche e prioriza** (o próprio cliente,
 o consultor numa conversa curta, o consultor em profundidade) e o **grau de profundidade, complexidade e precisão**.
-O degrau não é escolhido pelo cliente; é derivado do estágio no pipeline e dos dados que existem. O que falta some,
-em vez de aparecer vazio ou bloqueado. Muitas funções da clínica e do planejamento completo ficam disponíveis em
+O degrau não é escolhido pelo cliente; é derivado do estágio no pipeline e dos dados que existem. **As telas e os
+cartões são os mesmos em todo degrau** (revisão de 30/10): no Plano, a área ainda vazia aparece com a profundidade e o
+convite; fora do Plano, o que falta some, em vez de aparecer vazio ou bloqueado. Muitas funções da clínica e do planejamento completo ficam disponíveis em
 **modo self-service**; por ora o cliente self-service tem acesso às ferramentas disponíveis, e a assinatura fica
 para depois (decisão de 24/10).
 
@@ -159,10 +163,10 @@ para depois (decisão de 24/10).
 | Quem é | Chegou por uma postagem, pelo link de indicação, pelo exame público ou pela Nord; usa por curiosidade | Criou login para guardar os dados e ver o planejamento cruzado; ou chegou pelo **programa de bem-estar financeiro da empresa** (junta tokens para pedir a clínica) | Fez a clínica financeira com um consultor | Passou por coleta, montagem e apresentação do plano |
 | Quem preenche e prioriza | Ele, sem salvar | Ele (ou o casal), organizando as próprias prioridades | O consultor, na conversa, escolhendo onde focar; o foco dele prevalece sobre a régua | O consultor, em profundidade, com a coleta |
 | Dados que existem | Nenhum guardado: os dados podem ser apagados ao sair | O que ele preencher no vetor (por membro e por domicílio, quando há dois) | Os do cadastrado + as **orientações da clínica** registradas pelo consultor | As quatro camadas: exame, coleta, decisões do consultor, calculado |
-| Painel | Não há: é a **entrada** antes do login, que continua o assunto de onde a pessoa veio, e o exame em linguagem direta | O plano numa página: o objetivo protagonista no alto (os sonhos, ou a dívida a quitar, ou a primeira reserva), o próximo passo, as próximas tarefas, quatro números, o ritmo | O mesmo; sem objetivo combinado, o alto mostra "O que combinamos" com as orientações da consultora | O mesmo, com os números do plano; antes da apresentação, "Seu plano está em montagem" |
+| Painel | Não há: é a **entrada** antes do login, que continua o assunto de onde a pessoa veio, e o exame em linguagem direta | O plano numa página: o objetivo protagonista no alto (os sonhos, ou a dívida a quitar, ou a primeira reserva), o próximo passo, as próximas tarefas, quatro números, o ritmo | O mesmo; sem objetivo combinado, o alto mostra o passo do momento de vida, e as orientações da consultora viram tarefas | O mesmo, com os números do plano; antes da apresentação, "Seu plano está em montagem" |
 | Objetivos | Não (sem onde guardar) | O ambiente de cada objetivo, planejado por ele, e a tela "os objetivos juntos" | Os combinados na clínica e os que ele criar (a consultora vê) | Os do plano, com a liberdade e a carteira como objetivos complementares; é onde a reunião semestral acontece |
 | Tarefas e lembretes | Não (sem onde guardar) | O sistema propõe as primeiras a partir do exame e ele aceita ou descarta; depois cria as suas a partir do Status; sem a categoria Carteira | Nascem das orientações da clínica, no ritmo da renda do cliente; o consultor pode acrescentar | Nascem do plano (aportes por objetivo, teto da semana, próximos passos, tarefas da coleta, carteira, educacionais) |
-| Plano | As calculadoras do tema de entrada e do passo, sem Status | **Status**: todas as verticais com os seus valores, levando a cada calculadora, com o histórico | **Status** com as orientações da clínica em destaque | O livro completo (`evolucao-patrimonial.html`) dentro da área, e o Status como resumo |
+| Plano | Os onze cartões das áreas, preenchidos pelo exame e pelas calculadoras, sem guardar | Os mesmos onze, com o que ele preencheu | Os mesmos onze, com o que a clínica e ele preencheram | Os mesmos onze, com os números do plano; cada um abre o capítulo do livro (`evolucao-patrimonial.html`) |
 | Conteúdos | Os públicos | A biblioteca, o comitê e as lives mensais | O mesmo | O mesmo, mais os materiais de atualização e as monitorias mensais |
 | Utilitários | ✓ | ✓ | ✓ | ✓ |
 | Orçado × realizado | Não | A partir do primeiro registro: dinheiro dedicado, sobra, dívidas, orçamento por grupo, teto da semana e patrimônio, lançados à mão | O mesmo, mais o colchão de renda irregular e o orçamento refeito na clínica; em estudo um **acesso pontual de open banking** | Aportes, orçamento por categoria e patrimônio, em 3, 6 e 12 meses e no ano; open banking quando conectado |
