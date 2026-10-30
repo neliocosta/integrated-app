@@ -59,3 +59,23 @@ fotos de natureza continuam as mesmas; a escolha vira tokens no `DESIGN.md` só 
 - **`&movimento=sim`** (só para a demonstração; lembrado no navegador, `&movimento=nao` desfaz): ignora o "menos
   movimento" do sistema, para avaliar as transições num Windows com "Mostrar animações" desligado. O produto continua
   respeitando a preferência do cliente.
+
+## Revisão de 30/10 (noite): o Livro com a identidade da montagem
+
+A área foi reavaliada (impeccable, revisão de UI/UX e jornada) contra a montagem publicada, nas visões do consultor e do
+cliente. O Livro guarda o papel quente e a Newsreader na voz do livro (título da página e títulos das seções) e volta à
+identidade do DESIGN.md no resto:
+
+- **Números em Sora 600** (The Numbers Speak Sora); o texto em DM Sans.
+- **O nome de cada área** no rótulo da montagem: 11px, maiúsculas, espaçado, marinho. A escada fica título em serifa,
+  rótulo, número.
+- **Cartões brancos de 16px** com a sombra leve, sem borda e sem o fio de 2px no topo; a área sem dado fica tracejada.
+- **Laranja da marca no lugar do terracota:** a ação principal é a pílula laranja com texto marinho; o sublinhado da aba
+  ativa e o anel do aprofundamento também; o foco usa o contorno laranja.
+- **O alternador Resumo | Em detalhe** como o Mês | Ano do relatório: cantos de 10px e o ligado em marinho cheio.
+- **O logo completo** (positivo, o mesmo do cabeçalho da plataforma) no menu, em `marca/nord-liberta-positivo.svg`; no
+  celular segue só o ícone.
+- **Alinhamento:** menu, título e conteúdo começam na mesma linha da coluna de 1184px; a volta é um botão redondo com a
+  seta desenhada, fora da linha do título no computador largo.
+- **Acessibilidade:** alvos de 44px no celular, nenhum texto abaixo de 11px, tarefa feita sem perder contraste, e o
+  carrossel do Plano pula também com Enter e Espaço, com a página atrás do véu inerte.

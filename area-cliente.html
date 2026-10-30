@@ -62,6 +62,7 @@ a{color:var(--marinho)}
 .casca{display:flex;min-height:100vh}
 .lateral{display:none;flex:none;width:232px;padding:22px 14px;border-right:1px solid var(--areia);flex-direction:column;position:sticky;top:0;height:100vh}
 .lateral .marca{font:500 21px var(--serifa);color:var(--marinho);padding:0 10px 2px}
+.lateral .marca img{width:auto;height:34px}
 .lateral .quem{font-size:12.5px;color:var(--legenda);padding:0 10px 20px}
 .item{border:0;background:transparent;text-align:left;padding:9px 10px;border-radius:8px;font:500 14px var(--sans);color:var(--grafite);display:flex;align-items:center;gap:10px;text-decoration:none}
 .item svg,.nav-baixo svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
@@ -71,6 +72,8 @@ a{color:var(--marinho)}
 .cab{display:flex;align-items:center;gap:10px;padding:16px 16px 12px;position:sticky;top:0;background:var(--fundo);z-index:5;border-bottom:1px solid var(--areia)}
 .cab h1{font:400 26px/1.15 var(--serifa);color:var(--marinho);margin:0;flex:1;min-width:0;letter-spacing:-.01em}
 .voltar{border:0;background:transparent;font-size:24px;line-height:1;color:var(--marinho);min-width:36px;min-height:36px;padding:0}
+.voltar{display:inline-flex;align-items:center;justify-content:center;flex:none;text-decoration:none}
+.voltar svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .falar{position:relative;flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--borda);background:var(--cartao);display:flex;align-items:center;justify-content:center;color:var(--marinho)}
 .falar svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7}
 .falar .cont{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:9999px;background:var(--marinho);color:#fff;font:600 11px var(--sans);display:flex;align-items:center;justify-content:center;padding:0 5px}
@@ -208,7 +211,8 @@ main{flex:1;padding:16px 16px 96px;width:100%;max-width:1120px}
 .pilares div{display:grid;grid-template-columns:96px 1fr 28px;gap:8px;align-items:center;font-size:12px;padding:2px 0}
 .pilares i{display:block;height:6px;border-radius:3px;background:var(--trilho);overflow:hidden}
 .pilares em{display:block;height:100%;background:var(--marinho);border-radius:3px}
-.pilares b{text-align:right;color:var(--marinho);font-weight:600}
+.pilares b{text-align:right;color:var(--marinho);font-weight:600;white-space:nowrap}
+.pilares div:has(b[style*="width:auto"]){grid-template-columns:72px 1fr 74px}
 .orientacao{display:grid;grid-template-columns:20px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--areia);font-size:14.5px;color:var(--marinho)}
 .orientacao:first-of-type{border-top:0}
 .orientacao .p{width:14px;height:14px;border-radius:50%;border:2px solid var(--borda);margin-top:3px}
@@ -351,25 +355,56 @@ body[class*="v-"] .trilho.fut i{background:linear-gradient(90deg,var(--anel-a),v
 :is(.v-livro,.v-aurora) :is(.cap .big small,.grande small){font-family:var(--sans);font-weight:500;font-size:15px;letter-spacing:0}
 .v-aurora .passo .valor small{font-family:var(--sans);font-weight:500;font-size:15px;letter-spacing:0}
 
-/* ---------- Livro: a área como o relatório impresso. Papel quente, Newsreader nos títulos e números, a navegação
-   no alto como um sumário (no computador), cada área com o fio de capítulo no topo e o terracota do logo nas ações ---------- */
-.v-livro{--fundo:#F5EFE6;--cartao:#FFFCF7;--borda:#E4D9C8;--areia:#EAE1D3;--trilho:#ECE3D6;--neutro-bg:#EFE7DA;--legenda:#6E6457;--grafite:#4A443C;--marinho:#1F3047;--ardosia:#E5E2DA;--raio:6px;--anel-a:#C2541A;--anel-b:#8E3A10}
-.v-livro :is(.cab h1,.paisagem h2,.passo .valor,.grande,.cap .big,.numero b,.nums b,.num,.prof b,.obj-foto .sobre b,.folha h2,.vazio h2,.marca){font-family:var(--serifa);font-weight:500;letter-spacing:-.01em}
-.v-livro .cab h1{font-size:32px}
-@media (min-width:900px){.v-livro .cab h1{font-size:44px}}
-.v-livro .cap .big{font-size:30px}
-body.v-livro .cap .r{font-family:var(--serifa);font-size:19px;font-weight:500}
-body.v-livro .rotulo{font-family:var(--serifa);font-size:20px;font-weight:500}
-.v-livro .cap{border-top:2px solid var(--marinho)}
-.v-livro .cap.semdado{border-top:2px solid #C9BBA6;background:transparent}
-.v-livro :is(.card,.cap,.tarefa,.obj-card,.obj-mini,.passo,.numeros,.prof,.nums>div,.mes,.pergunta,.mais-lista a){box-shadow:none}
-.v-livro .passo{border-top:2px solid #B34A12}
-.v-livro .primaria{background:#B34A12;color:#fff}
-.v-livro .primaria:hover{background:#8E3A10}
-.v-livro .filtro.on,.v-livro .opcoes button.on{background:#1F3047;border-color:#1F3047}
-.v-livro .nav-baixo a.on{color:#B34A12}
-.v-livro a{text-decoration-color:#C9BBA6}
+/* ---------- Livro: a área como o relatório, com a identidade da montagem (DESIGN.md). Papel creme quente, cartões
+   brancos de 16px com a sombra leve, os números em Sora, o texto em DM Sans e a Newsreader só na voz do livro (o título
+   da página e os títulos das seções); o laranja só no futuro e na ação principal, o marinho no que é firme ---------- */
+.v-livro{--fundo:#F8F4EE;--cartao:#FFFFFF;--borda:#E9E1D5;--areia:#F1ECE4;--trilho:#EEE8DF;--neutro-bg:#F3EEE6;--legenda:#6B6359;--grafite:#4F4A44;--marinho:#20344C;--ardosia:#DCE3EC;--at-bg:#FFF3EB;--raio:16px;--anel-a:#FA7A35;--anel-b:#E06600;
+  --sombra:0 1px 3px rgba(32,52,76,.06),0 4px 12px rgba(32,52,76,.05);--sombra-alta:0 4px 10px rgba(32,52,76,.08),0 12px 28px rgba(32,52,76,.10)}
+.v-livro ::selection{background:#FFE3CC;color:var(--marinho)}
+.v-livro :focus-visible{outline:2px solid var(--laranja);outline-offset:3px}
+.v-livro :is(.cab h1,.paisagem h2,.obj-foto .sobre b,.folha h2,.vazio h2){font-family:var(--serifa);font-weight:500;letter-spacing:-.015em}
+/* The Numbers Speak Sora: todo valor que é o assunto do cartão */
+.v-livro :is(.passo .valor,.grande,.cap .big,.numero b,.nums b,.num,.prof b){font-family:'Sora',sans-serif;font-weight:600;letter-spacing:-.02em}
+.v-livro :is(.passo .valor small,.cap .big small,.grande small){font-family:var(--sans);font-weight:500;font-size:14px;letter-spacing:0;color:var(--legenda)}
+.v-livro .passo .valor{font-size:34px}
+.v-livro .cab h1{font-size:30px;line-height:1.1}
+@media (min-width:900px){.v-livro .cab h1{font-size:38px}}
+.v-livro .cap .big{font-size:26px}
+.v-livro :is(.guia,.cap-grade.compacta) .cap .big{font-size:20px}
+/* a escada da montagem: o título em serifa, o rótulo (11px, maiúsculas, marinho) e o número em Sora */
+body.v-livro :is(.cap .r,.nums span,.numero span),body.v-livro :is(.guia,.cap-grade.compacta) .cap .r{font:600 11px/1.35 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--marinho)}
+body.v-livro .cap .r .prof-mini{font-size:12px;letter-spacing:0;text-transform:none;font-weight:500;color:var(--legenda)}
+body.v-livro :is(.rotulo,.plano-cab h2){font:500 22px/1.25 var(--serifa);color:var(--marinho);letter-spacing:-.01em}
+body.v-livro .rotulo{margin:30px 0 12px}
+body.v-livro .rotulo:first-child{margin-top:4px}
+body.v-livro .rotulo .mais{font:600 13px var(--sans);letter-spacing:0}
+.v-livro :is(.faixa-obj,.nums){gap:12px}
+.v-livro .cap.compacto{padding:14px 16px}
+@media (min-width:900px){.v-livro :is(.card,.cap:not(.compacto)){padding:20px 22px}}
+.v-livro .voltar{width:44px;height:44px;border-radius:50%;background:var(--cartao);box-shadow:var(--sombra);transition:box-shadow .2s ease}
+.v-livro .voltar:hover{box-shadow:var(--sombra-alta)}
+.v-livro .falar{border-color:transparent;box-shadow:var(--sombra)}
+@media (min-width:1320px){.v-livro .cab .voltar{margin-left:-58px;margin-right:4px}}
+.v-livro .tarefa.feita{opacity:1}
+.v-livro .tarefa.feita :is(b,small,.cat){color:var(--legenda)}
+.v-livro :is(.marcas,.semanas small){font-size:11px}
+.v-livro .paisagem .credito{font-size:11px;opacity:.85}
+.v-livro :is(.card,.cap,.tarefa,.obj-card,.obj-mini,.passo,.numeros,.prof,.nums>div,.mes,.pergunta,.mais-lista a,.encontro){border-color:transparent;box-shadow:var(--sombra)}
+.v-livro :is(a.cap,a.tarefa,a.obj-card,a.obj-mini,button.tarefa,.mais-lista a){transition:box-shadow .25s ease,transform .25s ease}
+.v-livro :is(a.cap,a.tarefa,a.obj-card,a.obj-mini,button.tarefa,.mais-lista a):hover{box-shadow:var(--sombra-alta);transform:translateY(-1px)}
+.v-livro .cap.semdado{background:transparent;box-shadow:none;border:1.5px dashed #DCCFBD}
+.v-livro .passo{box-shadow:var(--sombra-alta)}
+/* a ação principal: a pílula laranja com o texto marinho, como o "Próximo" do relatório */
+.v-livro .primaria{background:var(--laranja);color:var(--marinho);border-radius:9999px;padding:11px 22px;transition:filter .2s ease,transform .1s ease}
+.v-livro .primaria:hover{background:var(--laranja);filter:brightness(.94)}
+.v-livro .primaria:active{transform:scale(.97)}
+.v-livro :is(.btn,.filtro){border-radius:11px}
+.v-livro .filtro{border-radius:9999px}
+.v-livro .filtro.on,.v-livro .opcoes button.on{background:var(--marinho);border-color:var(--marinho)}
+.v-livro .chip{font-weight:600;padding:4px 11px}
+.v-livro a{text-decoration-color:#D9CCBA;text-underline-offset:3px}
 .v-livro .paisagem h2{font-style:italic}
+.v-livro .obj-mini .foto,.v-livro .obj-card .thumb{filter:none}
 /* ajustes dos pares de fontes alternativos (?fonte=): a Instrument Serif é menor no olho e só tem um peso */
 body.f-instrument :is(.cab h1,.cap .big,.grande,.passo .valor,.rotulo,.cap .r,.plano-cab h2){font-weight:400}
 body.f-instrument .cap .big{font-size:33px}
@@ -414,14 +449,20 @@ body.f-instrument .cab h1{font-size:36px}
   :is(.v-livro,.v-aurora) .casca{flex-direction:column}
   :is(.v-livro,.v-aurora) .lateral{position:sticky;top:0;z-index:12;width:auto;height:auto;flex-direction:row;align-items:center;gap:2px;padding:10px 32px;border-right:0;border-bottom:1px solid var(--borda);background:var(--fundo);box-shadow:none}
   :is(.v-livro,.v-aurora) .lateral .marca{margin-right:22px;padding:0}
-  :is(.v-livro,.v-aurora) .lateral .marca img{width:36px;height:36px}
+  :is(.v-livro,.v-aurora) .lateral .marca img{width:auto;height:30px}
   :is(.v-livro,.v-aurora) .lateral .quem{display:none}
   :is(.v-livro,.v-aurora) .lateral .item svg{display:none}
   :is(.v-livro,.v-aurora) .lateral .pe{margin:0 0 0 auto;border:0;padding:0}
   :is(.v-livro,.v-aurora) .cab{position:static;border-bottom:0;padding:34px 32px 8px;max-width:1184px;width:100%;margin:0 auto;background:transparent}
   :is(.v-livro,.v-aurora) main{margin:0 auto}
-  .v-livro .lateral .item{padding:8px 12px;border-radius:0;border-bottom:2px solid transparent}
-  .v-livro .lateral .item.on{background:transparent;border-bottom-color:#B34A12;color:var(--marinho)}
+  /* o menu, o título e o conteúdo começam na mesma linha: a coluna de 1184px com 32px de margem */
+  .v-livro .lateral{padding:12px max(32px,calc(50% - 560px));background:rgba(248,244,238,.92);backdrop-filter:saturate(1.2) blur(8px);border-bottom-color:var(--areia)}
+  .v-livro .lateral .marca{margin-right:28px}
+  .v-livro .lateral .marca img{width:auto;height:30px}
+  .v-livro main{max-width:1184px}
+  .v-livro .lateral .item{padding:8px 12px;border-radius:0;border-bottom:2px solid transparent;font-weight:500;color:var(--grafite)}
+  .v-livro .lateral .item:hover{color:var(--marinho)}
+  .v-livro .lateral .item.on{background:transparent;border-bottom-color:var(--laranja);color:var(--marinho);font-weight:600}
   .v-aurora .lateral .item{padding:8px 14px;border-radius:9999px}
   .v-aurora .lateral .item.on{background:#FFE9DA;color:#8E3A10}
 }
@@ -450,8 +491,10 @@ body.v-livro .plano-cab h2{font:500 22px var(--serifa)}
 .alterna button[aria-pressed="true"]{color:#fff}
 .alterna .pino{position:absolute;z-index:0;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:9999px;background:var(--marinho);box-shadow:0 1px 2px rgba(19,31,46,.18);transition:transform .5s cubic-bezier(.22,.9,.26,1)}
 .alterna[data-on="1"] .pino{transform:translateX(100%)}
-body.v-livro .alterna button{font:500 14.5px var(--serifa);letter-spacing:0;padding:6px 16px}
-body.v-livro .alterna{background:transparent;border-color:#C9BBA6}
+/* como o Mês | Ano do relatório: cantos de 10px, o ligado em marinho cheio com 8px */
+body.v-livro .alterna button{font:600 13px var(--sans);letter-spacing:.01em;padding:7px 18px;border-radius:8px;min-height:36px;transition:color .2s ease}
+body.v-livro .alterna{background:var(--cartao);border-color:var(--borda);border-radius:10px;box-shadow:var(--sombra)}
+body.v-livro .alterna .pino{border-radius:8px;transition:transform .3s cubic-bezier(.22,.9,.26,1)}
 body.v-livro .alterna .pino{background:var(--marinho);box-shadow:none}
 .v-aurora .alterna .pino{background:linear-gradient(135deg,#F2A93B,#E2702A)}
 .v-aurora .alterna button[aria-pressed="true"]{color:#2A1305}
@@ -463,7 +506,9 @@ body.v-livro .alterna .pino{background:var(--marinho);box-shadow:none}
 .palco.cap-grade{display:block}
 .palco .veu-palco{position:absolute;inset:0;background:var(--fundo);opacity:.95}
 .palco.cap-grade .cap{position:fixed;margin:0;pointer-events:none;background:var(--cartao);box-shadow:0 2px 6px rgba(19,31,46,.06),0 30px 60px -28px rgba(19,31,46,.38);transform-origin:center;will-change:transform,opacity}
-.palco .pular{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font:500 12.5px var(--sans);color:var(--legenda);letter-spacing:.02em}
+.palco .pular{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font:500 13px var(--sans);color:var(--marinho);letter-spacing:.02em}
+/* no celular, todo controle tem pelo menos 44px de alvo */
+@media (max-width:899px){.voltar{min-width:44px;min-height:44px}:is(.filtro,.opcoes button){min-height:44px}.alterna button{min-height:40px}.btn.peq{min-height:36px}.btn.link{min-height:24px}}
 .cap-grade.escondida .cap{visibility:hidden}
 .cap-grade.enche .cap{--d:.15s}
 .cap-grade.enche .cap :is(.sub,.estado,.viz){animation:sobe-leve calc(.7s*var(--k,1)) cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d)}
@@ -638,6 +683,8 @@ if (FONTE !== 'newsreader') { const f = FONTES.find(x => x[0] === FONTE); docume
   document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?${f[4]}&display=swap">`); }
 // o ícone da marca (os dois visuais são claros: o positivo)
 const ICONE_MARCA = () => 'marca/nord-icone-64.png';
+// o logo completo (ícone e nome) no menu; o positivo é o mesmo do cabeçalho da plataforma
+const LOGO_MARCA = 'marca/nord-liberta-positivo.svg';
 // as transições entre estados da tela (View Transitions): o cartão cresce até a página da área, o Plano se expande;
 // sem suporte do navegador ou com menos movimento pedido, a tela troca direto
 // ?movimento=sim (só na demonstração, lembrado neste navegador) ignora o "menos movimento" do sistema, para avaliar as animações
@@ -1394,10 +1441,10 @@ function casca(conteudo) {
   let titulo = TITULOS[tela] || 'Painel';
   if (tela === 'objetivo') titulo = (objDe(arg) || {}).nome || 'Objetivo';
   if (tela === 'cartao') titulo = (CARTOES.find(c => c.id === arg) || {}).nome || 'Plano';
-  const n = aguardando(), voltar = PAI[tela] && !(DESK() && ['realizado', 'jornada'].includes(tela)) ? `<a class="voltar" href="#${PAI[tela]}" aria-label="Voltar">&#8249;</a>` : '';
+  const n = aguardando(), voltar = PAI[tela] && !(DESK() && ['realizado', 'jornada'].includes(tela)) ? `<a class="voltar" href="#${PAI[tela]}" aria-label="Voltar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>` : '';
   const falar = `<a class="falar" href="#conversas" aria-label="${esc(falarCom())}${n ? ', ' + n + ' esperando resposta' : ''}" title="${esc(falarCom())}">${ICONES.conversas}${n ? `<span class="cont">${n}</span>` : ''}</a>`;
   const selo = voltar ? '' : `<img class="selo" src="${ICONE_MARCA(false)}" alt="Nord Liberta">`;
-  return `${barraDemo()}<div class="casca"><nav class="lateral" aria-label="Menu"><div class="marca"><img src="${ICONE_MARCA(true)}" alt="Nord Liberta"></div><div class="quem">${esc(R.domicilio.titulo)}</div>
+  return `${barraDemo()}<div class="casca"><nav class="lateral" aria-label="Menu"><div class="marca"><img src="${LOGO_MARCA}" alt="Nord Liberta"></div><div class="quem">${esc(R.domicilio.titulo)}</div>
       ${LATERAL.map(([id, nome]) => `<a class="item${ativo === id ? ' on' : ''}" href="#${id}">${ICONES[id]}${nome}</a>`).join('')}
       <div class="pe"><a class="item${tela === 'conversas' ? ' on' : ''}" href="#conversas">${ICONES.conversas}Conversas${n ? ` <span class="chip mar">${n}</span>` : ''}</a></div></nav>
     <div class="coluna"><header class="cab">${voltar}${selo}<h1>${esc(titulo)}</h1>${falar}</header><main id="miolo">${conteudo}</main></div></div>
@@ -1542,8 +1589,10 @@ async function abrirPlano(salvar) {
   const W = innerWidth, H = innerHeight, passo = Math.min(64, W * 0.07);
   const palco = document.createElement('div'); palco.className = 'palco cap-grade enche'; palco.setAttribute('aria-hidden', 'true');
   palco.innerHTML = '<div class="veu-palco"></div><div class="pular">toque para pular</div>'; document.body.appendChild(palco);
-  let pular = false; const pula = () => { pular = true; }, tecla = e => { if (e.key === 'Escape') pula(); };
+  let pular = false; const pula = () => { pular = true; }, tecla = e => { if (['Escape', 'Enter', ' '].includes(e.key)) { e.preventDefault(); pula(); } };
   palco.addEventListener('click', pula); addEventListener('keydown', tecla);
+  // enquanto o palco está aberto, a página atrás do véu não recebe foco nem clique
+  const casca = document.querySelector('.casca'); if (casca) casca.inert = true;
   const pausa = async ms => { const t0 = performance.now(); while (!pular && performance.now() - t0 < ms) await espera(30); };
   const veu = palco.firstChild; anima(veu, [{ opacity: 0 }, { opacity: .95 }], { duration: 350 });
   // a posição de quem já passou: k passos atrás, à esquerda, menor e mais apagado; depois do quarto, some
@@ -1566,6 +1615,7 @@ async function abrirPlano(salvar) {
     { duration: pular ? 420 : 820, delay: j * (pular ? 15 : 45), easing: 'cubic-bezier(.65,0,.25,1)' })));
   grade.classList.remove('escondida');
   caps.slice(ps.length).forEach((c, i) => anima(c, [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 320, delay: i * 30, fill: 'backwards' }));
+  if (casca) casca.inert = false;
   palco.remove();
 }
 async function fecharPlano(salvar) {
