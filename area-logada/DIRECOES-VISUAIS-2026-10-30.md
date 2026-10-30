@@ -50,6 +50,8 @@ fotos de natureza continuam as mesmas; a escolha vira tokens no `DESIGN.md` só 
   os pontos pingam); as que já passaram recuam para trás, à esquerda, menores e mais apagadas. Depois da última, todas
   vão para o seu lugar na grade. Cerca de 1 s por área com gráfico e 0,6 s por área sem gráfico; um toque ou Esc pula
   para o fim. No Resumo, os cartões se recolhem um a um, rápido (cerca de 0,6 s), e os compactos aparecem em sequência.
+  O carrossel toca uma vez por visita ao Plano: voltando ao detalhe sem sair da tela, os cartões só surgem em sequência
+  na grade, com os gráficos enchendo (cerca de 1 s); ao ir para outra aba e voltar, o carrossel toca de novo.
   Com "menos movimento" pedido, nada disso anima.
 - **O menu no alto mostra só o ícone do logo**, sem o nome escrito ao lado: o nome já é parte do logo. O arquivo do logo
   completo que existe em `marca/` é a versão negativa (nome em branco), que não serve sobre o papel claro; para usar o

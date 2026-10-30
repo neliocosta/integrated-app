@@ -493,6 +493,7 @@ body.v-livro .alterna .pino{background:var(--marinho);box-shadow:none}
 .lateral{view-transition-name:menu}
 .nav-baixo{view-transition-name:menu-baixo}
 .demo{view-transition-name:demo}
+.demo + .demo{view-transition-name:demo-visual}
 ::view-transition-group(*){animation-duration:.85s;animation-timing-function:cubic-bezier(.22,.9,.26,1)}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.3s}
 ::view-transition-old(*),::view-transition-new(*){height:100%;object-fit:cover;object-position:left top}
@@ -1508,7 +1509,9 @@ function telaPlano() {
 // enchendo; as que já passaram recuam para trás, como num carrossel; depois da última, todas vão para o seu lugar. Um
 // toque ou Esc pula para o fim. Resumo: os cartões se recolhem um a um, rápido, e os compactos aparecem em sequência.
 // Sem animação quando o sistema pede menos movimento (salvo ?movimento=sim na demonstração) ----------
-let PLANO_ANIMANDO = false;
+// o carrossel toca uma vez por visita ao Plano: voltando ao detalhe sem sair da tela, entra a versão rápida; ao ir
+// para outra aba e voltar, o carrossel toca de novo
+let PLANO_ANIMANDO = false, CARROSSEL_VISTO = false;
 const espera = ms => new Promise(r => setTimeout(r, ms));
 const anima = (el, quadros, o) => el.animate(quadros, Object.assign({ duration: 450, fill: 'forwards', easing: 'cubic-bezier(.22,.9,.26,1)' }, o)).finished.catch(() => { });
 async function alternarPlano(q) {
@@ -1527,6 +1530,14 @@ async function abrirPlano(salvar) {
   await espera(280);
   salvar(); desenhar();
   const grade = document.querySelector('.cap-grade'), caps = [...grade.querySelectorAll('.cap')], alvos = caps.map(c => c.getBoundingClientRect());
+  if (CARROSSEL_VISTO) {   // a versão rápida: os cartões surgem na grade em sequência, com os gráficos enchendo
+    grade.classList.add('enche');
+    caps.forEach((c, i) => { c.style.setProperty('--d', (0.1 + i * 0.04) + 's'); c.style.setProperty('--k', '.5');
+      anima(c, [{ opacity: 0, transform: 'translateY(12px) scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 420, delay: i * 40, fill: 'backwards' }); });
+    await espera(caps.length * 40 + 420);
+    return;
+  }
+  CARROSSEL_VISTO = true;
   grade.classList.add('escondida');
   const W = innerWidth, H = innerHeight, passo = Math.min(64, W * 0.07);
   const palco = document.createElement('div'); palco.className = 'palco cap-grade enche'; palco.setAttribute('aria-hidden', 'true');
@@ -1919,6 +1930,7 @@ function desenhar() {
   if (degrau() === 'completo' && !RS) { raiz.innerHTML = barraDemo() + `<div class="carregando">${ERRO_PLANO ? 'Não foi possível abrir o plano: ' + esc(ERRO_PLANO) : 'Abrindo o seu plano…'}</div>`; return; }
   OC_CACHE = null; R = montar();
   const { tela, arg } = rota(), topo = desenhar.ultima === location.hash ? window.scrollY : 0;
+  if (tela !== 'plano') CARROSSEL_VISTO = false;   // saiu do Plano: na volta, o carrossel toca de novo
   let html;
   try {
     html = ({ painel: telaPainel, passo: telaPasso, tarefas: telaTarefas, tarefa: telaTarefas, objetivos: telaObjetivos, objetivo: () => telaObjetivo(arg), plano: telaPlano, cartao: () => telaCartao(arg),
