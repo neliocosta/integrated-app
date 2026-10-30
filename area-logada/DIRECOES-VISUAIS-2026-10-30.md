@@ -52,3 +52,6 @@ fotos de natureza continuam as mesmas; a escolha vira tokens no `DESIGN.md` só 
 - **O menu no alto mostra só o ícone do logo**, sem o nome escrito ao lado: o nome já é parte do logo. O arquivo do logo
   completo que existe em `marca/` é a versão negativa (nome em branco), que não serve sobre o papel claro; para usar o
   logo inteiro no alto falta a versão positiva.
+- **`&movimento=sim`** (só para a demonstração; lembrado no navegador, `&movimento=nao` desfaz): ignora o "menos
+  movimento" do sistema, para avaliar as transições num Windows com "Mostrar animações" desligado. O produto continua
+  respeitando a preferência do cliente.

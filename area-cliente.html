@@ -269,7 +269,7 @@ textarea{width:100%;min-height:96px;border:1px solid var(--borda);border-radius:
 
 @keyframes aparece{from{opacity:0}to{opacity:1}}
 @keyframes sobe{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion: reduce){.veu,.folha,.toast{animation:aparece .2s ease both!important}}
+@media (prefers-reduced-motion: reduce){html:not(.movimento) :is(.veu,.folha,.toast){animation:aparece .2s ease both!important}}
 
 /* ===== Base única (30/10): a profundidade, os cartões do Plano, a página de cada área, o exame e o realizado ===== */
 .demo{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:7px 16px;background:var(--noite);color:#fff;font-size:12.5px}
@@ -478,7 +478,7 @@ body.v-livro .alterna .pino{background:var(--marinho);box-shadow:none}
 @keyframes revela-x{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 @keyframes traca{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
 @keyframes pinga{from{transform:scale(0);opacity:0}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion: reduce){.cap-grade.enche .cap *{animation:none!important}}
+@media (prefers-reduced-motion: reduce){html:not(.movimento) .cap-grade.enche .cap *{animation:none!important}}
 .guia-pe{display:flex;justify-content:flex-end;margin-top:8px}
 
 /* ---------- As transições (View Transitions): o cartão cresce até a página da área e volta; o Plano compacto se abre
@@ -502,7 +502,7 @@ body.v-livro .alterna .pino{background:var(--marinho);box-shadow:none}
 ::view-transition-group(cap-liberdade),::view-transition-old(cap-liberdade),::view-transition-new(cap-liberdade){animation-delay:360ms}
 ::view-transition-group(cap-evolucao),::view-transition-old(cap-evolucao),::view-transition-new(cap-evolucao){animation-delay:400ms}
 ::view-transition-old(*),::view-transition-new(*){height:100%;object-fit:cover;object-position:left top}
-@media (prefers-reduced-motion: reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
+@media (prefers-reduced-motion: reduce){html:not(.movimento)::view-transition-group(*),html:not(.movimento)::view-transition-old(*),html:not(.movimento)::view-transition-new(*){animation:none!important}}
 </style>
 </head>
 <body>
@@ -645,7 +645,10 @@ if (FONTE !== 'newsreader') { const f = FONTES.find(x => x[0] === FONTE); docume
 const ICONE_MARCA = () => 'marca/nord-icone-64.png';
 // as transições entre estados da tela (View Transitions): o cartão cresce até a página da área, o Plano se expande;
 // sem suporte do navegador ou com menos movimento pedido, a tela troca direto
-const transicao = f => { const menos = matchMedia('(prefers-reduced-motion: reduce)').matches; if (document.startViewTransition && !menos) document.startViewTransition(f); else f(); };
+// ?movimento=sim (só na demonstração, lembrado neste navegador) ignora o "menos movimento" do sistema, para avaliar as animações
+const MOVIMENTO = (() => { const q = PARAMS.get('movimento'); if (q) { try { localStorage.setItem('nl-movimento', q); } catch (e) { } return q === 'sim'; } try { return localStorage.getItem('nl-movimento') === 'sim'; } catch (e) { return false; } })();
+if (MOVIMENTO) document.documentElement.classList.add('movimento');
+const transicao = f => { const menos = !MOVIMENTO && matchMedia('(prefers-reduced-motion: reduce)').matches; if (document.startViewTransition && !menos) document.startViewTransition(f); else f(); };
 const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 const HOJE = /^\d{4}-\d{2}-\d{2}$/.test(PARAMS.get('hoje') || '') ? PARAMS.get('hoje') : EXEMPLO ? '2026-10-20' : iso(new Date());
 const MES = HOJE.slice(0, 7);
