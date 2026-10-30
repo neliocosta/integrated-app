@@ -36,3 +36,19 @@ O que vale observar ao comparar:
 
 O que ainda não foi feito, de propósito: nenhuma direção mexe no relatório embutido nem no portal do consultor; as
 fotos de natureza continuam as mesmas; a escolha vira tokens no `DESIGN.md` só depois da decisão.
+
+## Refinos de 30/10 (tarde), sobre o Livro
+
+- **O dono do produto prefere o Livro** ao Aurora (menos carregado, mais limpo); as fontes ainda em dúvida. Para
+  comparar, a barra de demonstração ganhou a linha **Fontes** (só no Livro; `&fonte=` também funciona): Newsreader + DM
+  Sans (o atual), Instrument Serif + Instrument Sans, Source Serif 4 + Source Sans 3, Fraunces + Manrope. A escolha fica
+  lembrada no navegador. Os pares alternativos carregam do Google Fonts só quando escolhidos.
+- **O seletor Resumo | Em detalhe** substitui o botão "Ver todos em detalhe": uma cápsula fina com o pino que desliza
+  (no Livro, os rótulos em Newsreader e a cápsula sem fundo).
+- **A transformação** do Plano compacto nos cartões completos ficou mais lenta e em sequência: cada cartão cresce um
+  pouco depois do anterior (View Transition de 0,85 s, 40 ms entre cartões); dentro, a frase, o estado e o gráfico chegam
+  depois e os gráficos se enchem (barras crescem da esquerda, a curva se traça, a teia se abre do centro, os pontos
+  pingam). Dura cerca de 2,5 s até o último cartão. Com "menos movimento" pedido, nada disso anima.
+- **O menu no alto mostra só o ícone do logo**, sem o nome escrito ao lado: o nome já é parte do logo. O arquivo do logo
+  completo que existe em `marca/` é a versão negativa (nome em branco), que não serve sobre o papel claro; para usar o
+  logo inteiro no alto falta a versão positiva.
