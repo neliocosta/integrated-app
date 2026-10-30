@@ -86,6 +86,13 @@ objetivo; e que, cada vez que não guardou, recebeu um lembrete claro do que faz
   retirado da apresentação em 17/10 porque pertence à área logada: é o embrião da ferramenta de acompanhamento que
   se desenha aqui.
 - **Apresentação do plano:** ainda em evolução, mas o formato atual serve de base para o mock.
+- **Área do cliente, degrau Clínica** (`area-cliente.html`, 30/10/2026): a primeira versão de produção, no tom sóbrio
+  do mock. Lê o registro da clínica (`clinicas/<cliente>`, gravado só pela consultora) e grava a execução
+  (`execucao/<cliente>`: respostas, ajustes datados e conversas); as ocorrências das tarefas, o guardado, o passo e o
+  efeito de uma falta são derivados. Painel, Tarefas (Fiz, Fiz parte, Não fiz com efeito e saídas, Adiar; o teto da
+  semana), Objetivos, Plano (o combinado e as verticais em gráficos), Jornada e Conversas. O hoje vem do relógio
+  (`?hoje=` para testes) e `?cliente=exemplo&reiniciar` volta o exemplo ao início. Falta o Completo, o Cadastrado, o
+  Realizado e o registro da clínica no portal do consultor.
 - **Design** (`DESIGN.md`): tokens, tipografia (Sora, DM Sans), regras Horizon/Aurora/tons suaves, cartões, chips de
   estado, barra de progresso de capítulos.
 

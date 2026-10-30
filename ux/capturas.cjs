@@ -13,10 +13,10 @@ const plano = JSON.parse(fs.readFileSync(path.join(__dirname, 'plano-exemplo.jso
 const b64 = Buffer.from(JSON.stringify(plano), 'utf8').toString('base64').replace(/\+/g, '-').replace(/\//g, '_');
 const base = 'http://localhost:8137/';
 const consultor = ['cliente', 'fluxo', 'patrimonio', 'riscos', 'objetivos', 'liberdade', 'tributario', 'premissas', 'apresentacao', 'propostas'];
-const cliente = ['proposito', 'proposito-nos', 'diagnostico', 'hoje-depois', 'capa-gestao', 'renda-custo', 'tempo', 'orcamento', 'capa-tributario', 'resumo-tributario', 'ir', 'prolabore', 'sucessao', 'previdencia', 'capa-patrimonio', 'resumo-patrimonio', 'patrimonio', 'capa-riscos', 'resumo-riscos', 'riscos', 'capa-evolucao', 'resumo-evolucao', 'evolucao', 'caminho'];
+const cliente = ['proposito', 'proposito-nos', 'diagnostico', 'hoje-depois', 'capa-gestao', 'renda-custo', 'tempo', 'orcamento', 'capa-tributario', 'resumo-tributario', 'ir', 'prolabore', 'sucessao', 'previdencia', 'capa-patrimonio', 'resumo-patrimonio', 'patrimonio', 'capa-riscos', 'resumo-riscos', 'riscos', 'capa-objetivos', 'resumo-objetivos', 'objetivos-juntos', 'realizacao', 'capa-politica', 'resumo-politica', 'politica', 'capa-carteira', 'resumo-carteira', 'carteira-hoje', 'carteira-recomendada', 'carteira-decisoes', 'capa-evolucao', 'resumo-evolucao', 'evolucao', 'caminho'];
 // o portal sem plano no navegador abre o exemplo completo; a área do cliente recebe o plano pelo endereço
 const alvos = [].concat(so === 'cliente' ? [] : consultor.map((p, i) => [`consultor-${String(i + 1).padStart(2, '0')}-${p}`, `${base}tela-consultor.html#${p}`]),
-  so === 'consultor' ? [] : cliente.map((p, i) => [`cliente-${String(i + 1).padStart(2, '0')}-${p}`, `${base}evolucao-patrimonial.html?fase=${p}${process.env.Q || ''}#plano=${b64}`]))
+  so === 'consultor' ? [] : cliente.map((p, i) => [`cliente-${String(i + 1).padStart(2, '0')}-${p}`, `${base}evolucao-patrimonial.html?cliente=exemplo&apresentar&fase=${p}${process.env.Q || ''}#plano=${b64}`]))
   .filter(([n]) => !uma || n.endsWith('-' + uma));
 const espera = ms => new Promise(r => setTimeout(r, ms));
 

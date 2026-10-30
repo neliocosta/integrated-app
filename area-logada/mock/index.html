@@ -28,8 +28,8 @@
       e a saída escolhida vale para o conjunto. "Ajustar ao que coube" pergunta quanto cabe (sugere 60%).
   10. Saídas fora do dinheiro: reserva e colchão (fazer depois, ajustar, resgatar agora); comportamental (manter o
       teto do mês, ajustar o teto); burocrática e interação (nova data, pedir ajuda); educacional (só a nova data).
-  11. Status no desktop: alternador Bolhas | Radar | As duas lado a lado, com a lista abaixo. O peso das bolhas é um
-      valor por vertical atribuído à mão (o quanto ela pede por mês); no produto precisa de regra.
+  11. Plano (30/10): no Completo, o livro em cartões (um por capítulo, com um número e um gráfico pequeno) que abrem a
+      página do capítulo; na Clínica e no Cadastrado, o Status em lista. O radar e as bolhas saíram.
   12. Cadastrado do Padrão: um objetivo (Casa própria, criado pela Ana) e as quatro verticais do exame.
   13. Plano em montagem = Ana e Marcos logo depois do contrato (06/10), coleta em 15/10, apresentação em 12/11: o que
       tinham como Cadastrado continua lá.
@@ -124,7 +124,7 @@
 <title>Área logada · mock navegável</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Serif+Display&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Serif+Display&family=Sora:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
 /* ===== Tokens do DESIGN.md ===== */
 :root{
@@ -351,7 +351,99 @@ table.tab td.vazio{color:#B9B6B0}
 .vert .vals{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:6px}
 .vert .vals div{font-size:12.5px;color:var(--legenda)}
 .vert .vals div b{font:600 14px Sora,sans-serif;color:var(--marinho);margin-left:4px}
-.status-desk{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* Plano no Completo: o livro em cartões e as páginas dos capítulos */
+.plano-topo{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.diag-faixa{display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap;width:100%;text-align:left;background:#fff;border:1px solid var(--borda);border-radius:12px;padding:14px 18px;margin-bottom:12px;cursor:pointer;font:inherit;color:var(--grafite);box-shadow:var(--sombra)}
+.diag-faixa .rot,.cap .rot{font:600 11px 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--legenda)}
+#frame.sobrio :is(.diag-faixa .rot,.cap .rot){font:500 10.5px var(--mono)}
+.diag-faixa .dg{display:flex;align-items:center;gap:10px}
+.diag-faixa .dg small{display:block;font-size:11.5px;color:var(--legenda)}
+.diag-faixa .dg b{font:600 18px Sora,sans-serif;color:var(--marinho)}
+#frame.sobrio .diag-faixa .dg b{font:500 22px var(--serifa)}
+.diag-faixa .seta{color:var(--nevoa);font-size:18px}
+.pontos8{display:inline-flex;gap:4px}
+.pontos8 i{width:9px;height:9px;border-radius:50%;display:block}
+.cap-grade{display:grid;grid-template-columns:1fr;gap:10px}
+#frame.desk .cap-grade{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.cap{display:flex;flex-direction:column;gap:4px;width:100%;text-align:left;background:#fff;border:1px solid var(--borda);border-radius:12px;padding:16px 18px;cursor:pointer;font:inherit;color:var(--grafite);min-height:176px;box-shadow:var(--sombra)}
+.cap:hover{border-color:#C9C3B8}
+.cap .rot{display:flex;justify-content:space-between}
+.cap .big{font:600 24px/1.15 Sora,sans-serif;color:var(--marinho);margin-top:4px}
+#frame.sobrio .cap .big{font:500 29px/1.1 var(--serifa)}
+.cap .big small{font:500 13px 'DM Sans',sans-serif;color:var(--legenda)}
+.cap .sub{font-size:13px;color:var(--legenda);line-height:1.35}
+.cap .viz{margin-top:auto;padding-top:10px}
+.cap.vazio{cursor:default;background:transparent;border-style:dashed;box-shadow:none}
+.b100{position:relative;display:flex;gap:2px}
+.b100 i{display:block;min-width:3px;border-radius:2px}
+.b100 u{position:absolute;top:-4px;bottom:-4px;border-left:1.5px dashed var(--marinho)}
+.leg{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:8px;font-size:11.5px;color:var(--legenda)}
+.leg i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+.leg i.tracejado{width:0;height:10px;border-left:1.5px dashed var(--marinho);border-radius:0;vertical-align:-1px}
+.mini-barras div{display:grid;grid-template-columns:minmax(0,1fr) 56px 74px;gap:8px;align-items:center;font-size:11.5px;color:var(--legenda);padding:1.5px 0}
+.mini-barras span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-barras i{height:5px;background:var(--trilho);border-radius:3px;overflow:hidden;display:block}
+.mini-barras em{display:block;height:100%;background:var(--verde)}
+.mini-barras b{text-align:right;color:var(--marinho);font-weight:600;white-space:nowrap}
+.colunas8{display:flex;gap:4px;height:34px}
+.colunas8 i{flex:1;background:var(--trilho);border-radius:3px;display:flex;align-items:flex-end;overflow:hidden}
+.colunas8 em{display:block;width:100%}
+.fases{display:flex;gap:3px}
+.fases > div{flex:1;min-width:0}
+.fases i{display:block;position:relative;height:6px;background:var(--trilho);border-radius:3px}
+.fases em{display:block;height:100%;border-radius:3px;background:var(--ajust)}
+.fases .on em{background:var(--marinho)}
+.fases u{position:absolute;top:-4px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#fff;border:2.5px solid var(--marinho);box-sizing:border-box}
+.fases span{display:block;font-size:11.5px;color:var(--marinho);font-weight:600;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fases small{display:block;font-size:11px;color:var(--legenda)}
+.fases.grande i{height:10px}
+.fases.grande u{top:-3px;width:16px;height:16px;margin-left:-8px}
+.cap-sub{margin:0 0 14px;color:var(--legenda);max-width:68ch}
+.cap-nums{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px}
+#frame.desk .cap-nums{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cap-nums > div{background:#fff;border:1px solid var(--borda);border-radius:12px;padding:14px 16px;box-shadow:var(--sombra)}
+.cap-nums span{display:block;font:600 11px 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--legenda)}
+#frame.sobrio .cap-nums span{font:500 10.5px var(--mono)}
+.cap-nums b{display:block;font:600 24px/1.15 Sora,sans-serif;color:var(--marinho);margin:6px 0 2px}
+#frame.sobrio .cap-nums b{font:500 29px/1.1 var(--serifa)}
+.cap-nums b.ok{color:var(--verde-txt)}
+.cap-nums b.fut{color:var(--laranja-txt)}
+.cap-nums b.risco{color:#B53434}
+.cap-nums small{font-size:12.5px;color:var(--legenda)}
+.grade-cap{display:grid;grid-template-columns:1fr;gap:0 14px}
+#frame.desk .grade-cap{grid-template-columns:1fr 1fr}
+.b100-linha{display:grid;grid-template-columns:80px 1fr 44px;gap:10px;align-items:center;margin:12px 0}
+.b100-linha span{font-size:13px;color:var(--legenda)}
+.b100-linha b{text-align:right;color:var(--laranja-txt);font-weight:600}
+.item-barra{display:grid;grid-template-columns:minmax(0,1fr) minmax(60px,1.4fr) auto;gap:10px;align-items:center;padding:5px 0;font-size:13px}
+.item-barra > span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-barra i{position:relative;display:block;height:8px;background:var(--trilho);border-radius:4px;overflow:hidden}
+.item-barra em{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
+.item-barra em.corte{background:repeating-linear-gradient(45deg,#fff 0 2px,var(--laranja) 2px 4px);border-radius:0}
+.item-barra b{color:var(--marinho);font-weight:600;white-space:nowrap;text-align:right}
+.item-barra b small{color:var(--laranja-txt);font-weight:600}
+.escada{display:grid;grid-template-columns:170px 1fr 92px;gap:10px;align-items:center;padding:4px 0;font-size:13px}
+#frame.cel .escada{grid-template-columns:104px 1fr 72px;font-size:12px}
+.escada i{position:relative;display:block;height:16px}
+.escada em{position:absolute;top:0;bottom:0;border-radius:3px}
+.escada .forte{color:var(--marinho);font-weight:600}
+.escada b{color:var(--marinho);font-weight:600;text-align:right;white-space:nowrap}
+.obj-linha{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--areia)}
+.obj-linha:first-of-type{border-top:0}
+.obj-linha .thumb{width:48px;height:48px;border-radius:8px;background-size:cover;background-position:center}
+#frame.sobrio .obj-linha .thumb{filter:saturate(.75) contrast(.96)}
+.obj-linha b{display:block;color:var(--marinho);font-size:14px}
+.obj-linha small{display:block;font-size:12px;color:var(--legenda)}
+.par-barra{position:relative;height:8px;margin:6px 0 4px;background:var(--trilho);border-radius:4px}
+.par-barra i{position:absolute;left:0;top:-2px;bottom:-2px;border-right:1.5px dashed var(--marinho)}
+.par-barra em{position:absolute;left:0;top:0;bottom:0;background:var(--marinho);border-radius:4px}
+.cap-faz .faz-item,.faz-item{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px solid var(--areia);font-size:14px;color:var(--marinho)}
+.cap-faz .faz-item:first-of-type{border-top:0}
+.faz-item .btn{flex:none}
+.cap-nav{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:16px}
+.chip.crit{background:#FBE6E6;color:#B53434}
+table.tab.diag th,table.tab.diag td{text-align:left;padding:8px}
 
 /* Escalada (Jornada) */
 .trilha{display:flex;flex-direction:column;gap:0;margin:6px 0 4px}
@@ -416,6 +508,52 @@ svg .n{font-family:Sora,sans-serif;font-weight:600}
   .revela,.toast,.veu,.cresce,.folha{animation:so-opacidade .3s ease both!important;transform:none!important}
   .calculando{animation:pulso 1.6s ease-in-out infinite}
 }
+
+/* ===== Tom sóbrio (variante em teste; barra "Tom" ou ?tom=sobrio), a partir da leitura da Origin em 30/10/2026 =====
+   Neutro de fundo, borda fina no lugar da sombra, serifa nos títulos e nos números grandes, rótulos em mono, botão
+   principal em marinho e o laranja só no passo agora. As paisagens entram nos momentos de pausa (propósito, entrada,
+   escalada), nunca nas telas de dado. */
+#frame.sobrio{
+  --creme:#F7F6F3; --pessego:#EDEBE6; --areia:#ECEAE5; --borda:#E3E0DA; --trilho:#ECEAE5; --at-bg:#F5EDE6;
+  --sombra:none; --sombra-destaque:none;
+  --serifa:'Newsreader',Georgia,serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  font-variant-numeric:lining-nums tabular-nums;
+}
+#frame.sobrio :is(.card,.tarefa,.numeros,.ritmo-linha,.obj-mini,.vert,.lista-obj .item,.arrasta,.secao-rec>.tit,.passo){border:1px solid var(--borda);border-radius:12px}
+#frame.sobrio .lateral{background:var(--creme)}
+#frame.sobrio .lateral .marca{font:500 20px var(--serifa)}
+#frame.sobrio .cab h1{font:400 26px/1.15 var(--serifa);letter-spacing:-.01em}
+#frame.sobrio.desk .cab h1{font-size:32px}
+#frame.sobrio .folha h2{font:500 22px/1.2 var(--serifa)}
+#frame.sobrio :is(.label,.passo .rotulo,.cat){font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.1em;color:var(--legenda)}
+#frame.sobrio .numero span{font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+#frame.sobrio :is(.numero-passo,.grande,.medio,.numero b,.ritmo-linha b,.sonho-foto .sobre b){font-family:var(--serifa);font-weight:500;letter-spacing:-.01em}
+#frame.sobrio .numero-passo{font-size:40px}
+#frame.sobrio .numero b{font-size:19px}
+#frame.sobrio .ritmo-linha b{font-size:20px}
+#frame.sobrio :is(.card h3,.h3,.obj-mini b,.vert .topo b,.vert .vals div b,.mundo b,.secao-rec>.tit b,.mini b,.antesdepois b,.num,.sora){font-family:'DM Sans',sans-serif}
+#frame.sobrio :is(.proposito,.citacao){font-family:var(--serifa);font-style:italic}
+#frame.sobrio :is(.pilula,.saida.sug){background:var(--marinho);border-color:var(--marinho);color:#fff;border-radius:8px}
+#frame.sobrio .pilula:hover{filter:none;background:var(--noite)}
+#frame.sobrio :is(.btn,.campo input,.campo select,.campo textarea,.resp4 button,.saida){border-radius:8px}
+#frame.sobrio :is(.btn,.pilula,button):focus-visible{outline-color:var(--marinho)}
+#frame.sobrio .trilho{height:4px}
+#frame.sobrio .trilho.fut i{background:var(--marinho)}
+#frame.sobrio .passo .trilho.fut i{background:var(--laranja)}
+#frame.sobrio .nav-baixo button.on svg{stroke:var(--marinho)}
+#frame.sobrio .mundo.atual .marca{border-color:var(--marinho);box-shadow:0 0 0 4px var(--ardosia)}
+#frame.sobrio .passos span.atual{outline-color:var(--marinho)}
+#frame.sobrio .etapa.agora .p{background:#fff;border:3px solid var(--marinho)}
+#frame.sobrio .obj-mini .foto{height:64px}
+#frame.sobrio :is(.obj-mini .foto,.lista-obj .thumb){filter:saturate(.75) contrast(.96)}
+.paisagem{position:relative;border-radius:12px;background-size:cover;background-position:center;color:#fff;padding:20px;margin-bottom:16px;min-height:128px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+#frame.desk .paisagem{min-height:188px;padding:28px 32px}
+.paisagem .rotulo{font:500 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.9}
+.paisagem h2{font:400 23px/1.2 var(--serifa);margin:6px 0 0;max-width:32ch;text-wrap:balance}
+#frame.desk .paisagem h2{font-size:31px}
+.paisagem h2 em{font-style:italic}
+.paisagem p{margin:6px 0 0;font-size:13.5px;opacity:.92;max-width:52ch}
+.paisagem .credito{position:absolute;right:12px;bottom:8px;font-size:10px;opacity:.6}
 </style>
 </head>
 <body>
@@ -487,6 +625,10 @@ const PLANO = JSON.parse(document.getElementById('plano-exemplo').textContent).d
 const FOTO = f => f ? `url('../../${f}')` : '';
 const GRAD = { aurora: 'linear-gradient(135deg,#FCD9C2,#F6A06B)', ardosia: 'linear-gradient(135deg,#EEF1F5,#9FB0C4)', verde: 'linear-gradient(135deg,#E3F3E9,#77C094)', areia: 'linear-gradient(135deg,#F1EEE8,#E6BA74)', divida: 'linear-gradient(135deg,#F7D7D4,#E2928D)', marinho: 'linear-gradient(135deg,#DCE3EC,#4B6584)' };
 const fundoObj = o => [o.foto ? FOTO(o.foto) : '', GRAD[o.grad || 'aurora']].filter(Boolean).join(',');
+// tom sóbrio: paisagens do Unsplash (licença livre), carregadas do CDN só no mock; no produto, guardadas com a marca
+const sobrio = () => S.tom === 'sobrio';
+const NATUREZA = { amanhecer: '1500534314209-a25ddb2bd429', nevoa: '1418065460487-3e41a6c84dc5', travessia: '1447752875215-b2761acb3c5d' };
+const paisagem = (k, rotulo, titulo, sub) => `<section class="paisagem" style="background-image:linear-gradient(100deg,rgba(19,31,46,.62),rgba(19,31,46,.12) 75%),url('https://images.unsplash.com/photo-${NATUREZA[k]}?w=1600&q=70&auto=format&fit=crop')"><span class="rotulo">${rotulo}</span><h2>${titulo}</h2>${sub ? `<p>${sub}</p>` : ''}<span class="credito">Unsplash</span></section>`;
 
 const NATUREZAS_T = { 'Servidor público': 3, 'Aposentado': 3, 'Estagiário': 5, 'CLT (empresa privada)': 5, 'Profissional liberal ou autônomo': 7, 'Empresário': 7 };
 const vEm = (steps, mi) => (steps || []).reduce((v, s) => mi >= s.from ? s.value : v, 0);
@@ -617,11 +759,11 @@ function montaPadrao(degrau) {
   const numerosTodos = [
     { id: 'sobra', rot: 'Sobra do mês', val: brl(sobra), sub: `${pct(sobra / renda)} da renda`, origem: degrau === 'completo' ? 'Fluxo de caixa do plano de 19/09/2026' : 'exame de 19/09/2026, respondido por Ana', vert: 'orcamento' },
     { id: 'reserva', rot: 'Reserva', val: brlC(atual), sub: degrau === 'clinica' ? `alvo ${brlC(ideal)} (ideal)` : `alvo ${brlC(aceitavel)} · ideal ${brlC(ideal)}`, origem: degrau === 'clinica' ? 'combinado na clínica de 12/09' : 'liquidez D+0, coleta de 12/02/2026', vert: 'reserva' },
-    { id: 'patrimonio', rot: 'Patrimônio', val: brlC(liquido), sub: 'esperado para a fase: R$ 1,5 milhão', origem: 'Patrimônio do plano; empresa à parte', vert: 'patrimonio' },
+    { id: 'patrimonio', rot: 'Patrimônio', val: brlC(liquido), sub: `esperado para a fase: ${brlC(LIVRO.patrimonio.esperado)}`, origem: 'Patrimônio do plano; empresa à parte', vert: 'patrimonio' },
     { id: 'nota', rot: 'Saúde financeira', val: '71', sub: 'era 64 em jan/2026', origem: 'exame de 19/09/2026', vert: 'saude' },
     { id: 'renda', rot: 'Renda líquida', val: brl(renda), sub: 'Ana e Marcos, por mês', origem: 'Fluxo de caixa', vert: 'orcamento' },
     { id: 'custo', rot: 'Custo de vida', val: brl(custo12), sub: 'média de 12 meses', origem: 'Fluxo de caixa', vert: 'orcamento' },
-    { id: 'seguros', rot: 'Cobertura de seguros', val: '48%', sub: 'Marcos sem seguro de vida', origem: 'Gestão de riscos', vert: 'seguros' },
+    { id: 'seguros', rot: 'Proteção', val: pct(LIVRO.riscos.nota), sub: 'Marcos sem seguro de vida', origem: 'Gestão de riscos', vert: 'seguros' },
     { id: 'lib', rot: 'Aporte da liberdade', val: brl(aporteLibNec), sub: `para parar aos ${P.retireAge}`, origem: 'Liberdade financeira', vert: 'objetivos' },
   ];
   if (degrau === 'clinica') numerosTodos.forEach(n => { if (['reserva', 'lib'].includes(n.id)) n.rotulo = 'combinado na clínica de 12/09'; });
@@ -635,7 +777,7 @@ function montaPadrao(degrau) {
     objetivos: { valores: degrau === 'cadastrado' ? [['Casa própria', `${pct(casa.guardado / casa.valor)} guardado`], ['Aporte', brl(casa.aporte)]] : [['Objetivos', String(objetivos.filter(o => o.tipo === 'montante').length)], ['Liberdade', `aos ${P.retireAge}`], ['Aporte da liberdade', brl(aporteLibNec)]], estado: 'at', estadoTxt: 'atenção', razao: `Casa em ${pct(casa.ratio)} do necessário`, peso: totalAporte, calc: { nome: 'Objetivos', campo: 'Aporte da Casa própria', valor: casa.aporte }, hist: [{ data: '02/08/2026', txt: 'Casa própria criada, R$ 180 mil', quem: 'Ana' }], tarefa: 'R$ 1.500 para a Casa própria, no dia 5' },
     reserva: { valores: degrau === 'clinica' ? [['Hoje', brlC(atual)], ['Alvo (ideal)', brlC(ideal)]] : [['Hoje', brlC(atual)], ['Aceitável', brlC(aceitavel)], ['Ideal', brlC(ideal)]], estado: 'at', estadoTxt: 'atenção', razao: `${pct(atual / (degrau === 'clinica' ? ideal : aceitavel))} do alvo`, peso: 2400, calc: { nome: 'Reserva', campo: 'Reserva de hoje', valor: atual }, hist: [{ data: '10/01/2026', txt: 'R$ 38 mil (exame)', quem: 'Ana' }, { data: '19/09/2026', txt: 'R$ 60 mil', quem: 'Ana' }], tarefa: degrau === 'clinica' ? null : `Separar ${brl(faltaAceitavel)} do bônus de março` },
     politica: { valores: [['Aporte do mês', brl(totalAporte)], ['Caixinhas', String(objsPlano.length + 2)]], estado: 'ok', estadoTxt: 'em dia', peso: totalAporte * 0.6, hist: [{ data: '19/03/2026', txt: 'R$ 2.500 em 5 objetivos', quem: 'Patrícia' }, { data: '19/09/2026', txt: 'Casa R$ 1.200 → R$ 1.500; Europa R$ 600 → R$ 300', quem: 'Patrícia' }] },
-    seguros: { valores: [['Cobertura de seguros', '48%'], ['Liquidez imediata', brlC(P.riscos.liquidez.d0)], ['Liquidez ideal', brlC(P.patrimonio.liquidezIdeal)]], estado: 'at', estadoTxt: 'atenção', razao: 'Marcos sem seguro de vida', peso: 1800, hist: [{ data: '19/03/2026', txt: 'cobertura 31%', quem: 'Patrícia' }, { data: '19/09/2026', txt: 'cobertura 48% (seguro da Ana)', quem: 'Patrícia' }], tarefa: 'Contratar o seguro de vida do Marcos' },
+    seguros: { valores: [['Percentual de proteção', pct(LIVRO.riscos.nota)], ['Liquidez imediata', brlC(P.riscos.liquidez.d0)], ['Liquidez ideal', brlC(P.patrimonio.liquidezIdeal)]], estado: 'at', estadoTxt: 'atenção', razao: 'Marcos sem seguro de vida', peso: 1800, hist: [{ data: '19/03/2026', txt: 'proteção de 25%', quem: 'Patrícia' }, { data: '19/09/2026', txt: 'proteção de 38% (seguro da Ana)', quem: 'Patrícia' }], tarefa: 'Contratar o seguro de vida do Marcos' },
     carteira: { valores: [['Aderência à recomendada', '62%'], ['PGBL recomendado (Ana)', brl(P.tributario.ir.recomendada.lanc[0].pgbl) + '/ano']], estado: 'at', estadoTxt: 'atenção', razao: '62% de aderência', peso: 1404, hist: [{ data: '19/03/2026', txt: 'aderência 20%', quem: 'Patrícia' }, { data: '19/09/2026', txt: 'aderência 62%', quem: 'Patrícia' }] },
     patrimonio: { valores: [['Líquido', brlC(liquido)], ['Financeiro', brlC(financeiro)], ['Empresa, à parte', brlC(empresa)]], estado: 'ok', estadoTxt: 'em dia', peso: 600, hist: [{ data: '12/02/2026', txt: 'R$ 1,68 milhão', quem: 'Ana' }, { data: '19/09/2026', txt: 'R$ 1,70 milhão', quem: 'Ana' }] },
     sucessao: { valores: [['ITCMD', P.tributario.sucessao.itcmd + '%'], ['Para a previdência', brlC(P.tributario.sucessao.paraPrevidencia)]], estado: 'neutro', estadoTxt: 'sem alvo', peso: 300, validade: 'respondido em mar/2025; atualizar', hist: [{ data: '15/03/2025', txt: 'ITCMD 4%, custos 8%', quem: 'Ana' }] },
@@ -1101,8 +1243,9 @@ const DEGRAUS = [['visitante', 'Visitante'], ['cadastrado', 'Cadastrado'], ['cli
 // =====================================================================================================
 const S = {
   lado: 'cliente', degrau: 'completo', sit: 'padrao', tela: 'cel', origem: 'sem',
+  tom: new URLSearchParams(location.search).get('tom') === 'sobrio' ? 'sobrio' : 'atual',
   rota: 'painel', pilha: [], folha: null, toast: null, whats: null, menuEstados: false,
-  ui: { statusForma: 'bolhas', orcVisao: 'mesa', orcMes: 1, horizonte: null, abertos: {}, filtroCat: 'todas', filtroObj: 'todos', filtroResp: 'todos', livroPag: 'realizacao', tokens5: false },
+  ui: { orcVisao: 'mesa', orcMes: 1, horizonte: null, abertos: {}, filtroCat: 'todas', filtroObj: 'todos', filtroResp: 'todos', livroPag: 'realizacao', tokens5: false },
   estados: { revisao: false, convite: false, offline: false },
   consultor: { tela: 'fila', vercomo: 'irregular|clinica', tratados: {}, abertos: {}, respondendo: {}, publicado: null, confirmar: false, foco: { orcamento: true, reserva: true, patrimonio: true }, cc: { cliente: 'irregular|clinica', data: '2026-09-12', rasc: {} } },
   visit: { tela: 'entrada', respostas: { divida: 'nao', sobra: 'sim', reserva: 'sim', objetivos: 'nao' }, lib: { idade: 36, parar: 55, renda: 9000, patrimonio: 210000, aporte: 3000, taxa: 4, modo: 'perpetuidade' } },
@@ -1214,6 +1357,7 @@ function casca(conteudo, d) {
   if (r === 'objetivo') { const o = objDe(d, S.rota.split(':')[1]); titulo = o ? o.nome : 'Objetivo'; }
   if (r === 'tarefa') titulo = 'Tarefa';
   if (r === 'vertical') titulo = 'Status';
+  if (r === 'plano' && S.rota.includes(':')) { const c = CAPS_PLANO.find(x => x[0] === S.rota.split(':')[1]); titulo = c ? c[1] : 'Diagnóstico'; }
   const n = contadorConversas(d);
   const cab = `<header class="cab">${fundo && S.pilha.length ? '<button class="voltar" data-acao="voltar" aria-label="Voltar">&#8249;</button>' : ''}<h1>${esc(titulo)}</h1>${botaoFalar(n, 'data-ir="conversas"')}</header>`;
   const ro = C.ro ? `<div class="faixa-ro">Você está vendo a área de ${esc(d.quem.titulo)} ${esc(d.quem.sobrenome)} como o cliente vê. Só leitura.</div>` : '';
@@ -1258,7 +1402,7 @@ function blocoProtagonista(d) {
   const P = d.protagonista;
   if (P.tipo === 'objetivos') {
     const objs = d.objetivos.filter(o => !o.complementar);
-    return `${d.proposito ? `<p class="proposito" title="${esc(d.proposito)}">${esc(d.proposito)}</p>` : ''}<div class="faixa-obj">${objs.map(o => objMini(d, o)).join('')}${avisoJuntos(d)}</div>`;
+    return `${d.proposito && !sobrio() ? `<p class="proposito" title="${esc(d.proposito)}">${esc(d.proposito)}</p>` : ''}<div class="faixa-obj">${objs.map(o => objMini(d, o)).join('')}${avisoJuntos(d)}</div>`;
   }
   if (P.tipo === 'divida') {
     const o = d.objetivos[0], p = progresso(d, o), saldo = o.valor - guardadoAtual(d, o);
@@ -1365,8 +1509,10 @@ function telaPainel(d) {
   const nums = d.numeros.length ? `<div class="label">Os números do plano <button class="btn link mais" data-acao="numeros-todos">Ver todos</button></div>${blocoNumeros(d)}` : '';
   const r = blocoRitmo(d), ritmo = r ? `<div class="label">O ritmo</div>${r}` : '';
   const enc = `<button class="encontro" data-ir="${d.encontro.ir}">${esc(d.encontro.txt)} &#8250;</button>`;
-  if (S.tela === 'desk') return `${blocoAvisos(d)}<div class="painel-desk"><div>${nums}${b1}${tar}${ritmo}</div><div>${passo}${enc}</div></div>`;
-  return `${blocoAvisos(d)}${b1}${passo}${tar}${nums}${ritmo}${enc}`;
+  // tom sóbrio: o propósito sai da linha pequena e vira a paisagem do alto (só quando o objetivo é o protagonista)
+  const topo = sobrio() && d.proposito && d.protagonista.tipo === 'objetivos' ? paisagem('amanhecer', 'O propósito', esc(d.proposito)) : '';
+  if (S.tela === 'desk') return `${blocoAvisos(d)}${topo}<div class="painel-desk"><div>${nums}${b1}${tar}${ritmo}</div><div>${passo}${enc}</div></div>`;
+  return `${blocoAvisos(d)}${topo}${b1}${passo}${tar}${nums}${ritmo}${enc}`;
 }
 
 // =====================================================================================================
@@ -1792,7 +1938,6 @@ function aplicarSaida(d, t, F) {
 // =====================================================================================================
 // 15. PLANO: o Status (todas as verticais) e, no Completo, o livro
 // =====================================================================================================
-const ESTADO_COR = { ok: { fill: '#E3F3E9', stroke: '#2E9E5B', txt: '#22794A' }, at: { fill: '#FFF3EB', stroke: '#F6A06B', txt: '#964400' }, neutro: { fill: '#F1EEE8', stroke: '#C9C3B8', txt: '#6B6A66' } };
 function cartaoVertical(d, v) {
   const aberta = S.ui.abertos['v-' + v.id];
   const rot = v.foco && C.degrau === 'clinica' ? `<div class="mut" style="color:var(--marinho);margin-top:2px">combinado na clínica de ${d.clinicaData}</div>` : '';
@@ -1813,64 +1958,208 @@ function listaStatus(d) {
   return `${foco.length ? `<div class="label">Combinado na clínica de ${d.clinicaData}</div>${foco.map(v => cartaoVertical(d, v)).join('')}` : ''}
     ${grupos.map(([e, n]) => { const l = resto.filter(v => v.estado === e); return l.length ? `<div class="label">${n}</div>${l.map(v => cartaoVertical(d, v)).join('')}` : ''; }).join('')}`;
 }
-function bolhas(d) {
-  const W = 560, H = 400, vs = d.verticais.slice().sort((a, b) => b.peso - a.peso), maxP = Math.max(...vs.map(v => v.peso));
-  const placed = [];
-  vs.forEach((v, i) => {
-    const r = 22 + 44 * Math.sqrt(v.peso / maxP);
-    let best = null;
-    for (let k = 0; k < 6000 && !best; k++) {
-      const ang = k * 0.3, rad = k * 0.08, x = W / 2 + Math.cos(ang) * rad, y = H / 2 + Math.sin(ang) * rad * 0.75;
-      if (x - r < 4 || x + r > W - 4 || y - r < 4 || y + r > H - 4) continue;
-      if (placed.every(p => Math.hypot(p.x - x, p.y - y) >= p.r + r + 4)) best = { x, y, r, v };
-    }
-    if (best) placed.push(best);
-  });
-  return `<svg viewBox="0 0 ${W} ${H}" width="100%" class="revela">${placed.map(p => { const c = ESTADO_COR[p.v.estado] || ESTADO_COR.neutro, palavras = p.v.nome.split(' '), meio = Math.ceil(palavras.length / 2);
-    const l1 = p.r > 50 ? p.v.nome : palavras.slice(0, meio).join(' '), l2 = p.r > 50 ? '' : palavras.slice(meio).join(' ');
-    // só o nome e a cor do estado; os valores aparecem ao passar o mouse (title) e na lista abaixo
-    return `<g class="toque" data-acao="abre-vert" data-id="${p.v.id}" role="button" tabindex="0"><title>${esc(p.v.nome)}: ${esc(p.v.estado === 'at' ? (p.v.razao || p.v.estadoTxt) : p.v.estadoTxt)} · ${esc(p.v.valores.map(([k, x]) => k + ' ' + x).join(' · '))}</title><circle cx="${p.x}" cy="${p.y}" r="${p.r}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="1.5"/><text x="${p.x}" y="${p.y - (l2 ? 4 : 0) + 4}" text-anchor="middle" font-size="${p.r > 45 ? 12 : 10.5}" font-weight="600" fill="#20344C">${esc(l1)}</text>${l2 ? `<text x="${p.x}" y="${p.y + 12}" text-anchor="middle" font-size="${p.r > 45 ? 12 : 10.5}" font-weight="600" fill="#20344C">${esc(l2)}</text>` : ''}</g>`; }).join('')}</svg>
-    <p class="mut" style="margin:4px 0 0">Tamanho: o peso da vertical no plano. Cor: o estado. Passe o mouse para ver os valores.</p>`;
+// ---------- A aba Plano no Completo: o livro em cartões (30/10/2026) ----------
+// Um cartão por capítulo, com um número e um gráfico pequeno; o cartão abre a página do capítulo (rota plano:<id>), com
+// os gráficos maiores, os números e o que fazer. O radar e as bolhas do Status saíram. Os números foram lidos da
+// apresentação (evolucao-patrimonial.html, modo apresentar, com ux/plano-exemplo.json, em 30/10/2026) pelas funções
+// destaques(), gestaoFinanceira(), avaliaRiscos(), faseDaVida(), politicaDeInvestimentos(), irDaFamilia() e
+// diagnosticoDaFamilia(); a trajetória, pelo sim() (patrimônio total a cada dois anos, em R$ mil). No produto, saem do
+// motor sobre a versão final publicada. Os objetivos são os do próprio mock, para bater com a aba Objetivos (o JSON pede
+// R$ 5.506 por mês; o motor de hoje, depois da auditoria de 30/10, pede R$ 5.690).
+const LIVRO = {
+  versao: '19/09/2026',
+  diag: [['Status do orçamento', 'Superavitário', 'ok', 'Superavitário', 'ok'], ['Reserva', 'Entre mínima e aceitável', 'at', 'Ideal', 'ok'],
+    ['Objetivos bem definidos', '2 de 5', 'at', '5 de 5', 'ok'], ['Objetivos com caminho definido', '0 de 5', 'crit', '4 de 5', 'at'],
+    ['Percentual de proteção', '38%', 'crit', '100%', 'ok'], ['Perfil de risco da carteira', 'A ajustar', 'at', 'Adequado', 'ok'],
+    ['Concentração patrimonial', 'Razoável', 'at', 'Bem distribuída', 'ok'], ['Liberdade financeira encaminhada', 'Ainda não', 'crit', 'Sim', 'ok']],
+  gestao: { mes: 'set/2026', renda: 15000, hoje: { fixas: 6300, ajust: 6200, fut: 2500 }, combinado: { fixas: 6300, ajust: 5300, fut: 3400 }, ref: 0.2,
+    fixas: [['Moradia (aluguel)', 3000], ['Plano de saúde', 1500], ['Carro (2º veículo)', 1000], ['Curso de inglês', 800]],
+    ajust: [['Mercado', 2700], ['Alimentação', 1900, 450], ['Lazer', 1150, 450], ['Pet', 170], ['Academia', 150], ['Assinaturas', 70], ['Streaming', 60]],
+    faz: ['Liberar R$ 900 das despesas ajustáveis: R$ 450 da alimentação e R$ 450 do lazer.', 'Levar o que vai para o futuro de R$ 2.500 para R$ 3.400 por mês, acima da referência de 20%.'] },
+  trib: [{ id: 'ir', nome: 'Imposto de renda da família', v: 3043, un: 'por ano', hoje: 29337, depois: 26295, faz: 'Declarar os dependentes com a Ana, fazer um PGBL de R$ 16.848 no ano para a Ana e rever as despesas com instrução dos dois.' },
+    { id: 'prolabore', nome: 'Retirada da papelaria', v: 34990, un: 'por ano', faz: 'Marcos: pró-labore de R$ 1.621 por mês (hoje, R$ 7.800) e o resto como dividendos.' },
+    { id: 'sucessao', nome: 'Sucessão e ITCMD', v: 36000, un: 'uma vez, na sucessão', faz: 'Levar R$ 300.000 dos investimentos para a previdência, que vai direto aos beneficiários, fora do inventário.' },
+    { id: 'previdencia', nome: 'Previdência no longo prazo', v: 167815, un: 'a mais em 20 anos', faz: 'Investir o longo prazo pela previdência: sem come-cotas, com trocas sem imposto e alíquota menor no resgate.' }],
+  patrimonio: { fin: 860000, part: 50000, bens: 1210000, dividas: 368000, total: 1752000, idade: 35, fase: 2, minimo: 229800, esperado: 387506, maximo: 766000, liq: 400000,
+    fases: [['Preparação', 0, 23], ['Início de carreira', 23, 30.6], ['Consolidação', 30.6, 45.7], ['Plenitude', 45.7, 57], ['Liberdade financeira', 57, 70]], onde: 'acima do máximo desta fase' },
+  riscos: { nota: 0.375, itens: [['Desemprego e emergência', 'at', 0.587], ['Problema de saúde', 'at', 0.5], ['Danos a terceiros', 'crit', 0], ['Ruína em investimentos', 'at', 0.833],
+      ['Risco de liquidez', 'ok', 1], ['Proteção dos bens', 'at', 0.607], ['Proteção da renda', 'crit', 0.187], ['Proteção da família', 'crit', 0.44]],
+    faz: ['Resolver primeiro: danos a terceiros, proteção da renda e proteção da família.', 'Depois, rever: desemprego e emergência, problema de saúde, ruína em investimentos e proteção dos bens.'] },
+  politica: { total: 860000, sobra: 3233, caixinhas: [['Reserva de emergência', 'reserva', 102200, 0, 'Curtíssimo prazo'], ['Viagem a Fortaleza', 'objetivo', 3000, 354, 'Curto prazo'],
+      ['Casa própria', 'objetivo', 45000, 1500, 'Médio prazo'], ['Viagem à Europa em família', 'objetivo', 18000, 300, 'Longo prazo'], ['Intercâmbio do filho', 'objetivo', 20000, 150, 'Longo prazo'],
+      ['Casa de praia', 'objetivo', 25000, 100, 'Longuíssimo prazo'], ['Liberdade financeira', 'liberdade', 646800, 830, 'Longuíssimo prazo']],
+    faz: ['Manter R$ 102.200 na reserva (a reserva ideal), longe dos objetivos.', 'Todo mês, levar a sobra para as caixinhas, cada uma com a sua estratégia.'] },
+  carteira: null,   // o plano de exemplo não tem carteira registrada
+  evolucao: { liberdade: 57, ano: 2048, investido: 5200000, renda: 25000, faz: ['Rever: Intercâmbio do filho e Casa de praia.', 'Ajustar: Casa própria e Viagem à Europa em família.'],
+    pontos: [[35, 2608], [37, 2943], [39, 3311], [41, 3904], [43, 4405], [45, 5222], [47, 6414], [49, 7755], [51, 9226], [53, 10796], [55, 12572], [57, 12160], [59, 13071], [61, 13662],
+      [63, 14104], [65, 14641], [67, 15165], [69, 15727], [71, 16341], [73, 17023], [75, 17739], [77, 18490], [79, 19328], [81, 20249], [83, 21264], [85, 22399], [87, 23628], [89, 24979], [91, 26475], [93, 28111], [95, 29912]] },
+};
+const CORP = { fixas: '#4B6584', ajust: '#9FB0C4', fut: '#FA7A35', ok: '#2E9E5B', at: '#D9952A', crit: '#D64545', mar: '#20344C', trilho: '#ECEAE5', leg: '#6B6A66', reserva: '#4B6584', objetivo: '#9FB0C4', liberdade: '#77C094' };
+const ESTADO_OBJ = { ok: ['ok', 'no caminho'], adj: ['at', 'com ajustes'], risk: ['crit', 'para rever'] };
+const CHIP_TOM = { ok: 'ok', at: 'at', crit: 'crit' };
+const CAPS_PLANO = [
+  ['gestao', 'Gestão financeira', 'Quanto entra, quanto custa a vida da família e quanto vai para o futuro.'],
+  ['tributario', 'Otimização tributária', 'Onde a família pode pagar menos imposto: na declaração, na retirada da empresa, na sucessão e no longo prazo.'],
+  ['patrimonio', 'Patrimônio', 'O que a família tem hoje e onde isso está para a fase da vida.'],
+  ['riscos', 'Gestão de riscos', 'As oito ameaças ao padrão de vida e quanto de cada uma já está protegido.'],
+  ['objetivos', 'Objetivos', 'Cada objetivo na linha do tempo, o que pede por mês e o que o plano põe.'],
+  ['politica', 'Política de investimentos', 'O patrimônio e a sobra do mês, cada parte numa caixinha com o seu prazo.'],
+  ['carteira', 'Carteira', 'Como os investimentos estão hoje e como recomendamos que fiquem.'],
+  ['evolucao', 'Evolução patrimonial', 'A trajetória do patrimônio ao longo da vida, até a liberdade financeira.'],
+];
+const objsLivro = d => d.objetivos.filter(o => o.tipo === 'montante');
+// uma barra de 100% em partes ([valor, cor, rótulo]), com marcas tracejadas opcionais ([fração, rótulo])
+const b100 = (partes, alt, marcas) => `<div class="b100" style="height:${alt || 10}px">${partes.filter(p => p[0] > 0).map(([v, c, r]) => `<i style="flex:${v};background:${c}" title="${esc(r)}: ${brl(v)}"></i>`).join('')}${(marcas || []).map(([f, r]) => `<u style="left:${f * 100}%" title="${esc(r)}"></u>`).join('')}</div>`;
+const legenda = itens => `<div class="leg">${itens.map(([n, c]) => `<span><i${c ? ` style="background:${c}"` : ' class="tracejado"'}></i>${esc(n)}</span>`).join('')}</div>`;
+const chipTom = (txt, st) => `<span class="chip ${CHIP_TOM[st] || ''}">${esc(txt)}</span>`;
+// a trilha das cinco fases da vida financeira, com o cliente na fase em que está
+function trilhaFases(p, grande) {
+  return `<div class="fases${grande ? ' grande' : ''}">${p.fases.map(([n, de, ate], i) => {
+    const on = i === p.fase, f = on ? clamp((p.idade - de) / (ate - de), 0, 1) : i < p.fase ? 1 : 0;
+    const faixa = i === 0 ? `até ${Math.round(ate)} anos` : i === p.fases.length - 1 ? `a partir de ${Math.round(de)}` : `${Math.round(de)} a ${Math.round(ate)} anos`;
+    return `<div class="${on ? 'on' : i < p.fase ? 'feito' : ''}"><i><em style="width:${f * 100}%"></em>${on ? `<u style="left:${f * 100}%" title="${p.idade} anos"></u>` : ''}</i>${grande ? `<span>${n}</span>` : ''}${grande ? `<small>${faixa}</small>` : ''}</div>`;
+  }).join('')}</div>`;
 }
-function radar(d) {
-  const W = 520, H = 380, cx = W / 2, cy = H / 2 + 6, R = 120, P = d.exame.pilares;
-  const ang = i => -Math.PI / 2 + i * 2 * Math.PI / 5, pt = (i, f) => [cx + Math.cos(ang(i)) * R * f, cy + Math.sin(ang(i)) * R * f];
-  const anel = f => PILARES.map((_, i) => pt(i, f).join(',')).join(' ');
-  const poly = PILARES.map((p, i) => pt(i, (P[p] || 0) / 100).join(',')).join(' ');
-  return `<svg viewBox="0 0 ${W} ${H}" width="100%" class="revela">${[0.33, 0.66, 1].map(f => `<polygon points="${anel(f)}" fill="none" stroke="#F1EEE8"/>`).join('')}
-    ${PILARES.map((_, i) => `<line x1="${cx}" y1="${cy}" x2="${pt(i, 1)[0]}" y2="${pt(i, 1)[1]}" stroke="#F1EEE8"/>`).join('')}
-    <polygon points="${poly}" fill="rgba(246,160,107,.22)" stroke="#FA7A35" stroke-width="2"/>
-    ${PILARES.map((p, i) => { const [x, y] = pt(i, 1.18), vs = d.verticais.filter(v => v.pilar === p), anc = x < cx - 20 ? 'end' : x > cx + 20 ? 'start' : 'middle';
-      return `<text x="${x}" y="${y}" text-anchor="${anc}" font-size="12.5" font-weight="600" fill="#20344C">${p} <tspan class="n">${P[p]}</tspan></text>${vs.map((v, k) => `<text x="${x}" y="${y + 15 + k * 14}" text-anchor="${anc}" font-size="11" fill="${(ESTADO_COR[v.estado] || ESTADO_COR.neutro).txt}" class="toque" data-acao="abre-vert" data-id="${v.id}">${esc(v.nome)}</text>`).join('')}`; }).join('')}</svg>
-    <p class="mut" style="margin:4px 0 0">Os cinco pilares do exame (nota de cada um) e, ao redor, as verticais que alimentam cada pilar, na cor do estado.</p>`;
+// os objetivos numa linha do tempo: a posição é a data, o tamanho é o valor, a cor é o estado
+function linhaObjs(os, grande) {
+  const W = grande ? 760 : 300, H = grande ? 150 : 44, a0 = +MES_REF.slice(0, 4), a1 = Math.max(...os.map(o => +o.data.slice(0, 4))) + 1, yb = grande ? 96 : 22;
+  const x = s => { const [y, m] = s.split('-').map(Number); return 14 + (W - 28) * ((y + (m - 1) / 12) - a0) / (a1 - a0); }, maxV = Math.max(...os.map(o => o.valor));
+  const r = o => grande ? 6 + 11 * Math.sqrt(o.valor / maxV) : 3.5 + 4 * Math.sqrt(o.valor / maxV), anos = [];
+  for (let a = a0; a <= a1; a++) anos.push(a);
+  const eixo = grande ? anos.map(a => `<line x1="${x(a + '-01')}" x2="${x(a + '-01')}" y1="${yb - 4}" y2="${yb + 4}" stroke="#C9C3B8"/><text x="${x(a + '-01')}" y="${yb + 24}" font-size="11" text-anchor="middle" fill="${CORP.leg}">${a}</text>`).join('')
+    : `<text x="14" y="${H - 1}" font-size="10" fill="${CORP.leg}">hoje</text><text x="${W - 14}" y="${H - 1}" font-size="10" text-anchor="end" fill="${CORP.leg}">${a1}</text>`;
+  const bolas = os.map((o, i) => { const c = CORP[(ESTADO_OBJ[o.status] || ESTADO_OBJ.adj)[0]], nome = o.nome.length > 22 ? o.nome.slice(0, 21) + '…' : o.nome;
+    return `<g${grande ? ` class="toque" data-ir="objetivo:${o.id}"` : ''}><circle cx="${x(o.data)}" cy="${yb}" r="${r(o)}" fill="${c}" fill-opacity=".85" stroke="#fff" stroke-width="1.5"><title>${esc(o.nome)} · ${mesAno(o.data)} · ${brlC(o.valor)}</title></circle>${grande ? `<text x="${x(o.data)}" y="${yb - r(o) - 8 - (i % 2) * 18}" font-size="11.5" text-anchor="${x(o.data) > W - 90 ? 'end' : x(o.data) < 90 ? 'start' : 'middle'}" fill="${CORP.mar}" font-weight="600">${esc(nome)}</text>` : ''}</g>`; }).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Os objetivos na linha do tempo"><line x1="14" x2="${W - 14}" y1="${yb}" y2="${yb}" stroke="${CORP.trilho}" stroke-width="2"/>${eixo}<circle cx="${x(MES_REF)}" cy="${yb}" r="3" fill="${CORP.mar}"/>${bolas}</svg>`;
 }
-const CAPITULOS = [['proposito', 'Propósito'], ['diagnostico', 'Diagnóstico'], ['gestao', 'Gestão financeira'], ['tributario', 'Otimização tributária'], ['patrimonio', 'Patrimônio'], ['riscos', 'Gestão de riscos'], ['objetivos', 'Objetivos'], ['politica', 'Política de investimentos'], ['carteira', 'Carteira'], ['evolucao', 'Evolução patrimonial']];
-function livro(d) {
-  const vistos = 7;
-  const barra = `<div style="display:flex;gap:3px;margin:8px 0 4px">${CAPITULOS.map((c, i) => `<span title="${c[1]}" style="flex:1;height:5px;border-radius:9999px;background:${i < vistos ? 'var(--laranja)' : 'var(--trilho)'}"></span>`).join('')}</div><div class="mut">${vistos} de ${CAPITULOS.length} capítulos vistos</div>`;
-  const sumario = `<div class="card"><span class="label" style="margin:0 0 4px">O livro do plano · versão de 19/09/2026</span>${barra}<div class="sep"></div>${CAPITULOS.map((c, i) => `<div class="entre toque" style="padding:7px 0;border-bottom:1px solid var(--areia)" data-acao="livro-pag" data-v="${c[0]}"><span style="color:var(--marinho);font-weight:${c[0] === 'objetivos' ? 600 : 500}">${c[1]}</span><span class="mut">${i < vistos ? 'visto' : ''}</span></div>`).join('')}</div>`;
-  const objs = d.objetivos.filter(o => o.tipo === 'montante');
-  const pagina = `<div class="card destaque"><div class="mut">Objetivos</div><div class="medio" style="margin:2px 0 8px">Como realizar cada objetivo</div>
-    <p class="peq" style="margin:0 0 8px">Uma linha por objetivo. O ambiente de cada um é a fonte: o que muda lá aparece aqui.</p>
-    ${objs.map(o => `<div class="entre toque" style="padding:8px 0;border-bottom:1px solid var(--areia)" data-ir="objetivo:${o.id}"><span><b style="color:var(--marinho)">${esc(o.nome)}</b><span class="mut"> · ${mesAno(o.data)} · ${brl(o.aporte)}/mês</span></span><span class="chip ${o.status === 'ok' ? 'ok' : 'at'}">${o.status === 'ok' ? 'no caminho' : pct(o.ratio) + ' do necessário'}</span></div>`).join('')}
-    ${S.tela === 'cel' ? '<div class="aviso neutro" style="margin-top:10px">O gráfico "O caminho até lá" é largo: ver no computador.</div>' : `<div style="margin-top:10px">${curvaObjetivo(d, objDe(d, 'casa'))}</div>`}
-    <div class="entre" style="margin-top:14px;flex-wrap:wrap;gap:8px"><button class="btn terc" data-acao="propor" data-id="casa">Simular e propor</button><span><button class="btn">&#8249; anterior</button> <button class="pilula" data-acao="toast" data-txt="Próximo: Política de investimentos.">Próximo: Política de investimentos</button></span></div></div>`;
-  return S.tela === 'desk' ? `<div style="display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start"><div>${sumario}</div><div>${pagina}</div></div>` : sumario + pagina;
+// a trajetória do patrimônio total, com a liberdade financeira marcada (e, grande, os objetivos no caminho)
+function curvaLivro(d, grande) {
+  const e = LIVRO.evolucao, P = e.pontos, W = grande ? 760 : 300, H = grande ? 230 : 58, pl = grande ? 14 : 4, pb = grande ? 26 : 12;
+  const a0 = P[0][0], a1 = P[P.length - 1][0], max = Math.max(...P.map(p => p[1])) * 1.08;
+  const x = a => pl + (W - 2 * pl) * (a - a0) / (a1 - a0), y = v => H - pb - (H - pb - 8) * v / max;
+  const naIdade = a => { for (let i = 1; i < P.length; i++) if (P[i][0] >= a) { const [b0, v0] = P[i - 1], [b1, v1] = P[i]; return v0 + (v1 - v0) * (a - b0) / (b1 - b0); } return P[P.length - 1][1]; };
+  const linha = P.map((p, i) => (i ? 'L' : 'M') + x(p[0]).toFixed(1) + ' ' + y(p[1]).toFixed(1)).join(' ');
+  const xl = x(e.liberdade), yl = y(naIdade(e.liberdade)), idadeDe = s => LIVRO.patrimonio.idade + difM(MES_REF, s) / 12;
+  const eixo = grande ? [40, 50, 60, 70, 80, 90].map(a => `<text x="${x(a)}" y="${H - 6}" font-size="11" text-anchor="middle" fill="${CORP.leg}">${a} anos</text>`).join('') + `<text x="${x(a0)}" y="${H - 6}" font-size="11" fill="${CORP.leg}">hoje</text>` : '';
+  const objs = grande ? objsLivro(d).map(o => { const a = idadeDe(o.data); return `<circle cx="${x(a)}" cy="${y(naIdade(a))}" r="4" fill="#fff" stroke="${CORP[(ESTADO_OBJ[o.status] || ESTADO_OBJ.adj)[0]]}" stroke-width="2"><title>${esc(o.nome)} · ${mesAno(o.data)}</title></circle>`; }).join('') : '';
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="A trajetória do patrimônio até a liberdade financeira"><line x1="${pl}" x2="${W - pl}" y1="${H - pb}" y2="${H - pb}" stroke="${CORP.trilho}"/>
+    <path d="${linha} L${x(a1)} ${H - pb} L${x(a0)} ${H - pb} Z" fill="${CORP.mar}" fill-opacity=".07"/><path d="${linha}" fill="none" stroke="${CORP.mar}" stroke-width="${grande ? 2 : 1.6}"/>
+    <line x1="${xl}" x2="${xl}" y1="${yl}" y2="${H - pb}" stroke="${CORP.fut}" stroke-dasharray="3 3"/><circle cx="${xl}" cy="${yl}" r="${grande ? 5 : 3.5}" fill="${CORP.fut}"/>
+    ${grande ? `<text x="${xl + 8}" y="${yl - 8}" font-size="12" font-weight="600" fill="${CORP.mar}">liberdade aos ${e.liberdade}</text>` : ''}<circle cx="${x(a0)}" cy="${y(P[0][1])}" r="3" fill="${CORP.mar}"/>${objs}${eixo}</svg>`;
+}
+// o cartão de cada capítulo: { big, un, sub, viz }; null quando o capítulo ainda não tem dados
+function resumoCap(d, id) {
+  const L = LIVRO;
+  if (id === 'gestao') { const g = L.gestao, h = g.hoje;
+    return { big: pct(h.fut / g.renda), un: 'para o futuro', sub: `${brl(h.fut)} de ${brl(g.renda)} por mês; a referência é ${pct(g.ref)}`,
+      viz: b100([[h.fixas, CORP.fixas, 'Fixas'], [h.ajust, CORP.ajust, 'Ajustáveis'], [h.fut, CORP.fut, 'Futuro']], 10, [[1 - g.ref, 'referência: 20% para o futuro']]) + legenda([['fixas', CORP.fixas], ['ajustáveis', CORP.ajust], ['futuro', CORP.fut]]) }; }
+  if (id === 'tributario') { const anual = soma(L.trib.filter(t => t.un === 'por ano').map(t => t.v)), max = Math.max(...L.trib.map(t => t.v));
+    return { big: brlC(anual), un: 'por ano', sub: `a menos de imposto; e ${brlC(L.trib.find(t => t.id === 'sucessao').v)} a menos na sucessão`,
+      viz: `<div class="mini-barras">${L.trib.map(t => `<div><span>${esc(t.nome)}</span><i><em style="width:${Math.max(3, t.v / max * 100)}%"></em></i><b>${brlC(t.v)}</b></div>`).join('')}</div>` }; }
+  if (id === 'patrimonio') { const p = L.patrimonio;
+    return { big: brlC(p.fin + p.bens - p.dividas), un: 'fora a papelaria', sub: `${p.fases[p.fase][0]}, aos ${p.idade}: ${p.onde}`, viz: trilhaFases(p, false) }; }
+  if (id === 'riscos') { const r = L.riscos, crit = r.itens.filter(x => x[1] === 'crit').length;
+    return { big: pct(r.nota), un: 'protegido', sub: `${crit} ameaças críticas; ${r.itens.filter(x => x[1] === 'ok').length} de ${r.itens.length} totalmente protegida`,
+      viz: `<div class="colunas8">${r.itens.map(([n, st, f]) => `<i title="${esc(n)}: ${pct(f)}"><em style="height:${Math.max(4, f * 100)}%;background:${CORP[st]}"></em></i>`).join('')}</div>` }; }
+  if (id === 'objetivos') { const os = objsLivro(d), pedem = soma(os.map(o => o.necessario || 0)), aporte = soma(os.map(o => o.aporte || 0));
+    return { big: `${os.filter(o => o.status === 'ok').length} de ${os.length}`, un: 'no caminho', sub: `pedem ${brl(pedem)} por mês; o plano põe ${brl(aporte)}`, viz: linhaObjs(os, false) }; }
+  if (id === 'politica') { const p = L.politica, grupo = t => soma(p.caixinhas.filter(c => c[1] === t).map(c => c[2]));
+    return { big: brlC(p.total), un: `em ${p.caixinhas.filter(c => c[2] > 0).length} caixinhas`, sub: `e ${brl(p.sobra)} por mês, cada parte no seu prazo`,
+      viz: b100([[grupo('reserva'), CORP.reserva, 'Reserva'], [grupo('objetivo'), CORP.objetivo, 'Objetivos'], [grupo('liberdade'), CORP.liberdade, 'Liberdade financeira']]) + legenda([['reserva', CORP.reserva], ['objetivos', CORP.objetivo], ['liberdade', CORP.liberdade]]) }; }
+  if (id === 'carteira') return L.carteira;
+  if (id === 'evolucao') { const e = L.evolucao, os = objsLivro(d);
+    return { big: `aos ${e.liberdade}`, un: 'a liberdade financeira', sub: `em ${e.ano}; ${os.filter(o => o.status === 'ok').length} de ${os.length} objetivos cabem como estão`, viz: curvaLivro(d, false) }; }
+  return null;
+}
+function faixaDiag() {
+  const D = LIVRO.diag, conta = k => D.filter(x => x[k] === 'ok').length;
+  const pontos = k => `<span class="pontos8">${D.map(x => `<i style="background:${CORP[x[k]]}" title="${esc(x[0])}: ${esc(x[k - 1])}"></i>`).join('')}</span>`;
+  return `<button class="diag-faixa" data-ir="plano:diagnostico"><span class="rot">Diagnóstico</span><span class="dg"><span><small>Hoje</small><b>${conta(2)} de ${D.length}</b> em dia</span>${pontos(2)}</span><span class="seta">&#8594;</span><span class="dg"><span><small>Depois do plano</small><b>${conta(4)} de ${D.length}</b> em dia</span>${pontos(4)}</span><span class="mut" style="margin-left:auto">&#8250;</span></button>`;
+}
+function cartaoCap(d, [id, nome]) {
+  const r = resumoCap(d, id);
+  if (!r) return `<div class="cap vazio"><span class="rot">${nome}</span><div class="big" style="color:var(--nevoa)">—</div><div class="sub">Entra quando a ${esc(nomeC(d))} registrar os investimentos de vocês.</div></div>`;
+  return `<button class="cap" data-ir="plano:${id}"><span class="rot">${nome}<span>&#8250;</span></span><div class="big">${r.big} <small>${r.un}</small></div><div class="sub">${r.sub}</div><div class="viz">${r.viz}</div></button>`;
+}
+function planoCartoes(d) {
+  return `<div class="plano-topo"><span class="mut">O plano de ${esc(d.quem.titulo)}, versão de ${LIVRO.versao}</span><button class="btn link peq" data-acao="toast" data-txt="Abre o livro completo (a apresentação), na versão final publicada.">Abrir o livro completo</button></div>
+    ${faixaDiag()}<div class="cap-grade">${CAPS_PLANO.map(c => cartaoCap(d, c)).join('')}</div>`;
+}
+
+// ---------- as páginas dos capítulos ----------
+const numsCap = ns => `<div class="cap-nums">${ns.map(([r, v, t, tom]) => `<div><span>${esc(r)}</span><b class="${tom || ''}">${v}</b><small>${esc(t)}</small></div>`).join('')}</div>`;
+const fazCap = (id, itens) => `<div class="card cap-faz"><span class="label" style="margin:0 0 6px">O que fazer</span>${itens.map(t => `<div class="faz-item"><span>${esc(t)}</span><button class="btn peq terc" data-acao="virar-tarefa" data-txt="${esc(t)}" data-v="${id}">Virar tarefa</button></div>`).join('')}</div>`;
+const barraItem = (rot, v, max, cor, extra, sufixo) => `<div class="item-barra"><span title="${esc(rot)}">${esc(rot)}</span><i><em style="width:${Math.max(1.5, v / max * 100)}%;background:${cor}"></em>${extra || ''}</i><b>${brl(v)}${sufixo || ''}</b></div>`;
+function capDiagnostico() {
+  const D = LIVRO.diag, conta = k => D.filter(x => x[k] === 'ok').length;
+  return numsCap([['Hoje', `${conta(2)} de ${D.length}`, 'indicadores em dia'], ['Depois do plano', `${conta(4)} de ${D.length}`, 'indicadores em dia', 'ok']])
+    + `<div class="card"><table class="tab diag"><thead><tr><th>Indicador</th><th>Hoje</th><th></th><th>Depois do plano</th></tr></thead><tbody>${D.map(x => `<tr><td>${esc(x[0])}</td><td>${chipTom(x[1], x[2])}</td><td class="mut">&#8594;</td><td>${chipTom(x[3], x[4])}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function capGestao() {
+  const g = LIVRO.gestao, h = g.hoje, c = g.combinado;
+  const linha = (rot, v) => `<div class="b100-linha"><span>${rot}</span>${b100([[v.fixas, CORP.fixas, 'Fixas'], [v.ajust, CORP.ajust, 'Ajustáveis'], [v.fut, CORP.fut, 'Futuro']], 26, [[0.5, '50%: o teto das fixas'], [1 - g.ref, '80%: daqui em diante, o futuro']])}<b>${pct(v.fut / g.renda)}</b></div>`;
+  const lista = (titulo, itens, cor) => { const max = Math.max(...itens.map(i => i[1]));
+    return `<div class="card"><h3>${titulo} <span class="mut" style="font-weight:500">${brl(soma(itens.map(i => i[1])))}</span></h3>${itens.map(([n, v, corte]) => barraItem(n, v, max, cor, corte ? `<em class="corte" style="left:${(v - corte) / max * 100}%;width:${corte / max * 100}%" title="liberar ${brl(corte)}"></em>` : '', corte ? ` <small>&#8722; ${brl(corte)}</small>` : '')).join('')}</div>`; };
+  return numsCap([['Renda líquida', brl(g.renda), `em ${g.mes}, o mês de maior gasto dos próximos 12`], ['Custo de vida', brl(h.fixas + h.ajust), 'despesas fixas e ajustáveis'], ['Para o futuro', brl(h.fut), `${pct(h.fut / g.renda)} da renda; com o combinado, ${brl(c.fut)}`, 'fut']])
+    + `<div class="card"><h3>Para onde vai a renda</h3>${linha('Hoje', h)}${linha('Combinado', c)}${legenda([['fixas', CORP.fixas], ['ajustáveis', CORP.ajust], ['futuro', CORP.fut], ['referência: até 50% fixas e ao menos 20% para o futuro', null]])}</div>`
+    + `<div class="grade-cap">${lista('Despesas fixas', g.fixas, CORP.fixas)}${lista('Despesas ajustáveis', g.ajust, CORP.ajust)}</div>` + fazCap('orcamento', g.faz);
+}
+function capTributario() {
+  const T = LIVRO.trib, anual = soma(T.filter(t => t.un === 'por ano').map(t => t.v)), ir = T[0], max = Math.max(ir.hoje, ir.depois);
+  return numsCap([['Todo ano', brl(anual), 'a menos de imposto: na declaração e na retirada da papelaria', 'ok'], ['Na sucessão', brl(T[2].v), 'a menos de imposto e custos, uma vez', 'ok'], ['No longo prazo', brl(T[3].v), 'a mais em 20 anos, investindo pela previdência', 'ok']])
+    + `<div class="grade-cap">${T.map(t => `<div class="card"><span class="label" style="margin:0 0 6px">${esc(t.nome)}</span><div class="medio">${brl(t.v)} <small class="mut" style="font:500 13px 'DM Sans',sans-serif">${esc(t.un)}</small></div>
+      ${t.hoje ? `<div style="margin:10px 0 2px">${barraItem('Hoje', t.hoje, max, CORP.ajust)}${barraItem('Com o plano', t.depois, max, CORP.mar)}</div><div class="mut">o imposto de renda da família no ano</div>` : ''}
+      <div class="faz-item" style="border:0;padding:10px 0 0"><span class="peq">${esc(t.faz)}</span><button class="btn peq terc" data-acao="virar-tarefa" data-txt="${esc(t.faz)}" data-v="carteira">Virar tarefa</button></div></div>`).join('')}</div>`;
+}
+function capPatrimonio() {
+  const p = LIVRO.patrimonio, bruto = p.fin + p.part + p.bens, topo = Math.max(bruto, p.maximo), x = v => v / topo * 100;
+  const barra = (rot, de, ate, cor, txt, forte) => `<div class="escada"><span${forte ? ' class="forte"' : ''}>${rot}</span><i><em style="left:${x(Math.min(de, ate))}%;width:${Math.abs(x(ate) - x(de))}%;background:${cor}"></em></i><b>${txt}</b></div>`;
+  return numsCap([['Patrimônio total', brlC(p.total), `o que a família tem, menos o que deve; ${brlC(p.total - p.part)} fora a papelaria`], ['Fase da vida', p.fases[p.fase][0], `aos ${p.idade} anos: ${p.onde}`], ['Dinheiro disponível', brlC(p.fin), `acima da liquidez ideal de ${brlC(p.liq)}`]])
+    + `<div class="card"><h3>A fase da vida financeira</h3>${trilhaFases(p, true)}</div>`
+    + `<div class="card"><h3>O patrimônio, peça por peça</h3>${barra('Mercado financeiro', 0, p.fin, '#77C094', brlC(p.fin))}${barra('Participação na papelaria', p.fin, p.fin + p.part, '#E6BA74', '+ ' + brlC(p.part))}${barra('Imóveis e outros bens', p.fin + p.part, bruto, '#7FA1DD', '+ ' + brlC(p.bens))}${barra('Dívidas e financiamentos', bruto, p.total, '#E2928D', '&#8722; ' + brlC(p.dividas))}${barra('Patrimônio total', 0, p.total, CORP.mar, brlC(p.total), true)}
+      <div class="sep"></div><div class="mut" style="margin-bottom:4px">Para quem tem ${p.idade} anos e está na ${p.fases[p.fase][0].toLowerCase()}:</div>${barra('Mínimo desta fase', 0, p.minimo, '#FCE6D8', brlC(p.minimo))}${barra('Esperado para a idade', 0, p.esperado, '#F9C9A9', brlC(p.esperado))}${barra('Máximo desta fase', 0, p.maximo, '#F6A06B', brlC(p.maximo))}</div>`;
+}
+function capRiscos() {
+  const r = LIVRO.riscos, ordem = { crit: 0, at: 1, ok: 2 }, itens = r.itens.slice().sort((a, b) => ordem[a[1]] - ordem[b[1]] || a[2] - b[2]), conta = st => r.itens.filter(x => x[1] === st).length;
+  const nome = { crit: 'crítica', at: 'atenção', ok: 'protegida' };
+  return numsCap([['Percentual de proteção', pct(r.nota), `${conta('ok')} de ${r.itens.length} ameaças totalmente protegidas`], ['Críticas', String(conta('crit')), 'pedem ação agora', 'risco'], ['Em atenção', String(conta('at')), 'protegidas em parte']])
+    + `<div class="card"><h3>As oito ameaças ao padrão de vida</h3>${itens.map(([n, st, f]) => `<div class="item-barra"><span>${esc(n)}</span><i><em style="width:${Math.max(1.5, f * 100)}%;background:${CORP[st]}"></em></i><b>${pct(f)} ${chipTom(nome[st], st)}</b></div>`).join('')}
+      <p class="mut" style="margin:8px 0 0">Cada barra é o quanto da ameaça já está protegido: pelo seguro, pela reserva ou pela forma como o patrimônio está guardado.</p></div>` + fazCap('seguros', r.faz);
+}
+function capObjetivos(d) {
+  const os = objsLivro(d), pedem = soma(os.map(o => o.necessario || 0)), aporte = soma(os.map(o => o.aporte || 0)), maxA = Math.max(...os.map(o => Math.max(o.necessario || 0, o.aporte || 0)));
+  return numsCap([['Pedem por mês', brl(pedem), 'para todos os objetivos chegarem na data'], ['O plano põe', brl(aporte), `por mês; faltam ${brl(pedem - aporte)} para o necessário`, 'fut'], ['No caminho', `${os.filter(o => o.status === 'ok').length} de ${os.length}`, 'os outros, com ajustes ou para rever']])
+    + `<div class="card"><h3>Na linha do tempo</h3>${linhaObjs(os, true)}${legenda([['no caminho', CORP.ok], ['com ajustes', CORP.at], ['para rever', CORP.crit]])}<p class="mut" style="margin:6px 0 0">O tamanho do círculo é o valor do objetivo. Toque num objetivo para abrir.</p></div>`
+    + `<div class="card"><h3>O que cada um pede e o que o plano põe</h3>${os.map(o => { const e = ESTADO_OBJ[o.status] || ESTADO_OBJ.adj;
+      return `<div class="obj-linha toque" data-ir="objetivo:${o.id}"><span class="thumb" style="background-image:${fundoObj(o)}"></span><div style="min-width:0"><b>${esc(o.nome)}</b><small>${mesAno(o.data)} · ${brlC(o.valor)}</small>
+        <div class="par-barra"><i style="width:${(o.necessario || 0) / maxA * 100}%"></i><em style="width:${(o.aporte || 0) / maxA * 100}%"></em></div><small>${brl(o.aporte)} por mês, de ${brl(o.necessario)} necessários</small></div>${chipTom(e[1], e[0])}</div>`; }).join('')}
+      ${legenda([['o plano põe', CORP.mar], ['o necessário', null]])}</div>`;
+}
+function capPolitica() {
+  const p = LIVRO.politica, prazos = [...new Set(p.caixinhas.map(c => c[4]))], lib = p.caixinhas.find(c => c[1] === 'liberdade');
+  return numsCap([['Patrimônio de hoje', brlC(p.total), `dividido em ${p.caixinhas.filter(c => c[2] > 0).length} caixinhas`], ['Sobra por mês', brl(p.sobra), `${brl(soma(p.caixinhas.filter(c => c[1] === 'objetivo').map(c => c[3])))} para os objetivos`], ['Liberdade financeira', brlC(lib[2]), `e ${brl(lib[3])} por mês, para o longo prazo`, 'fut']])
+    + `<div class="card"><h3>O patrimônio de hoje, por caixinha</h3>${b100(p.caixinhas.map(c => [c[2], CORP[c[1]], c[0]]), 28)}${legenda([['reserva', CORP.reserva], ['objetivos', CORP.objetivo], ['liberdade financeira', CORP.liberdade]])}</div>`
+    + `<div class="card"><h3>As caixinhas, do prazo mais curto ao mais longo</h3><div class="rola-x"><table class="tab"><thead><tr><th>Caixinha</th><th>Hoje</th><th>Por mês</th></tr></thead><tbody>${prazos.map(pz => `<tr class="grupo"><td colspan="3">${pz}</td></tr>${p.caixinhas.filter(c => c[4] === pz).map(c => `<tr><td><span class="ponto" style="background:${CORP[c[1]]}"></span> ${esc(c[0])}</td><td>${brl(c[2])}</td><td>${c[3] ? brl(c[3]) : '—'}</td></tr>`).join('')}`).join('')}</tbody></table></div></div>`
+    + fazCap('politica', p.faz);
+}
+function capEvolucao(d) {
+  const e = LIVRO.evolucao, os = objsLivro(d), conta = st => os.filter(o => o.status === st).length;
+  return numsCap([['Liberdade financeira', `aos ${e.liberdade} anos`, `em ${e.ano}`, 'fut'], ['Objetivos que cabem', `${conta('ok')} de ${os.length}`, `${conta('adj')} com ajustes, ${conta('risk')} para rever`], ['Investido na data', brlC(e.investido), `para uma renda de ${brlC(e.renda)} por mês, para sempre`]])
+    + `<div class="card"><h3>A trajetória do patrimônio</h3>${curvaLivro(d, true)}${legenda([['patrimônio total', CORP.mar], ['liberdade financeira', CORP.fut], ['objetivos no caminho', null]])}<p class="mut" style="margin:6px 0 0">O patrimônio total, de hoje aos 95 anos, em valores de cada época. Depois da liberdade, ele passa a pagar a renda desejada.</p></div>` + fazCap('objetivos', e.faz);
+}
+function telaCapitulo(d, id) {
+  const corpo = id === 'diagnostico' ? capDiagnostico() : ({ gestao: capGestao, tributario: capTributario, patrimonio: capPatrimonio, riscos: capRiscos, objetivos: capObjetivos, politica: capPolitica, evolucao: capEvolucao }[id] || (() => ''))(d);
+  const caps = CAPS_PLANO.filter(c => resumoCap(d, c[0])), j = caps.findIndex(c => c[0] === id), ant = j > 0 ? caps[j - 1] : null, prox = caps[j + 1];
+  const sub = id === 'diagnostico' ? 'Como a família está hoje e como queremos que esteja depois do plano, nos oito indicadores.' : (CAPS_PLANO.find(c => c[0] === id) || [])[2];
+  return `<p class="cap-sub">${esc(sub || '')}</p>${corpo}
+    <div class="cap-nav">${ant ? `<button class="btn" data-ir="plano:${ant[0]}">&#8249; ${ant[1]}</button>` : '<span></span>'}<button class="btn link peq" data-acao="toast" data-txt="Abre o capítulo no livro completo, com as páginas de detalhe.">Ver no livro</button>${prox ? `<button class="btn" data-ir="plano:${prox[0]}">${prox[1]} &#8250;</button>` : '<span></span>'}</div>`;
 }
 function telaPlano(d) {
-  const temLivro = C.degrau === 'completo' && !d.montagem;
-  const aba = S.ui.planoAba || 'status';
-  const abas = temLivro ? `<div class="alterna" style="margin-bottom:12px"><button class="${aba === 'status' ? 'on' : ''}" data-acao="ui" data-k="planoAba" data-v="status">Status</button><button class="${aba === 'livro' ? 'on' : ''}" data-acao="ui" data-k="planoAba" data-v="livro">O livro</button></div>` : '';
-  if (temLivro && aba === 'livro') return abas + livro(d);
-  // a explicação da tela vai para o rodapé; o primeiro dado do cliente vem primeiro
-  const pe = `<p class="mut" style="margin:14px 0 0">${C.degrau === 'completo' ? (d.montagem ? 'O resumo do que já existe. O livro do plano chega na apresentação de 12/11.' : 'O resumo do livro, com os números do plano vigente.') : C.degrau === 'clinica' ? 'Cada vertical com os seus valores. As combinadas na clínica vêm primeiro.' : `Cada vertical com os seus valores, levando à calculadora. ${pl(d, 'O que vocês ainda não preencheram', 'O que você ainda não preencheu')} não aparece aqui.`}</p>`;
-  if (S.tela === 'desk') {
-    const f = S.ui.statusForma;
-    const alt = `<div class="alterna" style="margin-bottom:10px"><button class="${f === 'bolhas' ? 'on' : ''}" data-acao="ui" data-k="statusForma" data-v="bolhas">Bolhas</button><button class="${f === 'radar' ? 'on' : ''}" data-acao="ui" data-k="statusForma" data-v="radar">Radar</button><button class="${f === 'duas' ? 'on' : ''}" data-acao="ui" data-k="statusForma" data-v="duas">As duas, lado a lado</button></div>`;
-    const formas = f === 'duas' ? `<div class="status-desk"><div class="card">${bolhas(d)}</div><div class="card">${radar(d)}</div></div>` : `<div class="card">${f === 'radar' ? radar(d) : bolhas(d)}</div>`;
-    return abas + alt + formas + `<div style="max-width:760px">${listaStatus(d)}</div>` + `<div style="margin-top:10px"><button class="btn" data-ir="utilitarios">Utilitários</button></div>` + pe;
-  }
-  return abas + listaStatus(d) + `<div style="margin-top:10px"><button class="btn" data-ir="utilitarios">Utilitários: calculadoras sem guardar nada</button></div>` + pe;
+  const arg = S.rota.split(':')[1], temLivro = C.degrau === 'completo' && !d.montagem && d.id === 'padrao';
+  if (temLivro) return arg ? telaCapitulo(d, arg) : planoCartoes(d);
+  // Clínica, Cadastrado e o plano em montagem: o Status, vertical por vertical
+  const pe = `<p class="mut" style="margin:14px 0 0">${C.degrau === 'completo' ? 'O resumo do que já existe. O livro do plano chega na apresentação de 12/11.' : C.degrau === 'clinica' ? 'Cada vertical com os seus valores. As combinadas na clínica vêm primeiro.' : `Cada vertical com os seus valores, levando à calculadora. ${pl(d, 'O que vocês ainda não preencheram', 'O que você ainda não preencheu')} não aparece aqui.`}</p>`;
+  return `<div style="${S.tela === 'desk' ? 'max-width:760px' : ''}">${listaStatus(d)}</div><div style="margin-top:10px"><button class="btn" data-ir="utilitarios">Utilitários: calculadoras sem guardar nada</button></div>` + pe;
 }
 
 // =====================================================================================================
@@ -2076,7 +2365,8 @@ function telaJornada(d) {
     <div class="card" style="margin-top:12px"><span class="label" style="margin:0 0 6px">Marcos do mundo atual</span>${E.marcos.map(r => `<div class="peq">${esc(r)}</div>`).join('')}</div>`;
   // os três números do ano vêm primeiro, acima da dobra
   const tres = `<div class="card destaque"><span class="label" style="margin:0 0 8px">2026 em três números</span><div class="grade3"><div class="mini"><span>Caminho até a liberdade</span><b style="font-size:14px">${esc(E.tres.caminho)}</b></div><div class="mini"><span>O ano</span><b style="font-size:14px">${esc(E.tres.ano)}</b></div><div class="mini"><span>Ritmo</span><b style="font-size:14px">${esc(E.tres.ritmo)}</b></div></div><div class="mut" style="margin-top:8px">${MUNDOS[E.atual]}: ${esc(PERGUNTAS_MUNDO[E.atual])} <button class="btn link peq" data-acao="abre" data-id="j-esc">ver a escalada</button></div></div>`;
-  return tres + secao('j-reun', J.reunioes.length ? 'As reuniões com o planejador' : 'A relação até aqui', reun, true) + secao('j-rel', 'A relação com a Nord', rel, false) + `<div id="escalada"></div>` + secao('j-esc', 'A escalada', esc3, false);
+  const topo = sobrio() ? paisagem('travessia', 'A escalada', `${pl(d, 'Vocês estão', 'Você está')} em <em>${MUNDOS[E.atual]}</em>`, esc(PERGUNTAS_MUNDO[E.atual])) : '';
+  return topo + tres + secao('j-reun', J.reunioes.length ? 'As reuniões com o planejador' : 'A relação até aqui', reun, true) + secao('j-rel', 'A relação com a Nord', rel, false) + `<div id="escalada"></div>` + secao('j-esc', 'A escalada', esc3, false);
 }
 
 // =====================================================================================================
@@ -2141,7 +2431,9 @@ function vCab(titulo) {
 // o aviso do visitante vai no pé da tela, depois do conteúdo (nenhuma explicação antes do primeiro dado)
 const vAviso = () => `<div class="aviso neutro" style="margin-top:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span style="flex:1">Nada é guardado; crie a conta para não perder.</span><button class="btn link" data-acao="v-continuar">Continuar no computador</button></div>`;
 function vEntrada() {
-  return `<p class="mut" style="margin:0 0 6px">Nord Liberta</p><div class="medio" style="font-size:22px;line-height:1.25;margin-bottom:12px">Um plano para os seus objetivos e um lembrete do que fazer a cada mês.</div>
+  const topo = sobrio() ? paisagem('nevoa', 'Nord Liberta', 'Um plano para os seus objetivos e <em>um lembrete</em> do que fazer a cada mês.')
+    : `<p class="mut" style="margin:0 0 6px">Nord Liberta</p><div class="medio" style="font-size:22px;line-height:1.25;margin-bottom:12px">Um plano para os seus objetivos e um lembrete do que fazer a cada mês.</div>`;
+  return `${topo}
     <div class="card"><span class="label" style="margin:0 0 6px">Quando você não consegue guardar</span><div class="aviso" style="background:#fff;border:1px solid var(--areia)"><b style="color:var(--marinho)">Não fiz</b> · R$ 1.500 para a casa própria<p style="margin:6px 0 0;color:var(--marinho)">Sem esse aporte, a casa fica para agosto de 2030 em vez de julho. Para manter a data, os próximos 45 meses passam de R$ 1.500 para R$ 1.533.</p><div class="chips" style="margin-top:8px" aria-hidden="true"><span class="chip">Manter a data</span><span class="chip">Adiar</span><span class="chip">Ajustar ao que coube</span></div></div><p class="mut" style="margin:8px 0 0">É a resposta que a área dá a cada "não fiz": o efeito no seu objetivo e uma saída que cabe no bolso.</p></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px"><button class="btn" style="min-height:52px" data-acao="v-ir" data-v="exame">Explorar: exame de 5 min</button><button class="pilula" style="min-height:52px" data-acao="v-ir" data-v="cadastro">Criar a minha conta</button></div>
     <p class="mut" style="margin:8px 0 0">Explorar não guarda nada. A conta guarda o que você responder para montar o seu planejamento.</p>
@@ -2501,6 +2793,7 @@ function renderBarra() {
     ${S.degrau === 'visitante' ? `<span class="grp"><span class="rot">Origem</span>${seg('origem', [['sem', 'Sem origem'], ['postagem', 'Por uma postagem'], ['empresa', 'Pelo programa da empresa']], S.origem)}</span>`
     : `<span class="grp"><span class="rot">Situação</span><select data-barra-sel="sit">${Object.entries(SITUACOES).map(([k, s]) => `<option value="${k}"${S.sit === k ? ' selected' : ''}>${s.nome} (${s.degraus.map(x => DEGRAUS.find(y => y[0] === x)[1]).join(', ')})</option>`).join('')}</select></span>`}` : ''}
     <span class="grp"><span class="rot">Tela</span>${seg('tela', [['cel', 'Celular'], ['desk', 'Desktop']], S.tela)}</span>
+    <span class="grp"><span class="rot">Tom</span>${seg('tom', [['atual', 'Atual'], ['sobrio', 'Sóbrio']], S.tom)}</span>
     <span class="grp" style="position:relative"><button class="btn-barra" data-barra="whats">Ver como chega no WhatsApp</button><button class="btn-barra" data-barra="estados">Estados &#9662;</button>${S.menuEstados ? `<div id="menu-estados" style="top:34px;right:0">${ESTADOS.map(([k, n]) => `<button data-barra="estado" data-v="${k}">${n}${(k === 'offline' && S.estados.offline) || (k === 'revisao' && S.estados.revisao) || (k === 'convite' && S.estados.convite) ? ' · ligado' : ''}</button>`).join('')}</div>` : ''}</span>
     <span class="mes">Mês de referência: outubro de 2026 (hoje, 20/10)</span>
     <span class="sit-desc">${S.lado === 'consultor' ? 'O lado da consultora: a fila, o registro da clínica e a área do cliente em só leitura.' : S.degrau === 'visitante' ? 'Sem área logada: a entrada, que continua a conversa de onde a pessoa veio.' : esc(sit.desc)}${S.estados.offline ? ' · sem conexão' : ''}</span>`;
@@ -2535,7 +2828,7 @@ function render() {
   const frame = document.getElementById('frame'), app = document.getElementById('app'), mi = document.getElementById('miolo');
   const chaveRota = S.lado + S.degrau + S.sit + S.rota + S.visit.tela + S.consultor.tela + S.tela;
   const topo = mi && ultimaRota === chaveRota ? mi.scrollTop : 0;
-  frame.className = S.tela;
+  frame.className = S.tela + (sobrio() ? ' sobrio' : '');
   let html;
   try {
     if (S.lado === 'consultor') html = telaConsultor();
@@ -2562,7 +2855,8 @@ function ajustaEscala() {
 function ir(r) {
   if (r === S.rota) { S.folha = null; return; }
   const topLevel = ['painel', 'objetivos', 'tarefas', 'plano', 'mais', 'realizado', 'conteudos', 'jornada', 'utilitarios'].includes(r) && S.tela === 'desk' || ['painel', 'objetivos', 'tarefas', 'plano', 'mais'].includes(r);
-  if (topLevel) S.pilha = []; else S.pilha.push(S.rota);
+  // de um capítulo do Plano para outro, o voltar continua levando aos cartões
+  if (topLevel) S.pilha = []; else if (!(r.startsWith('plano:') && S.rota.startsWith('plano:'))) S.pilha.push(S.rota);
   S.rota = r; S.folha = null; ultimaRota = null;
 }
 let toastTimer = null;
@@ -2587,6 +2881,7 @@ document.addEventListener('click', ev => {
     }
     if (k === 'origem') { S.origem = v; S.visit.tela = v === 'postagem' ? 'liberdade' : v === 'empresa' ? 'empresa' : 'entrada'; }
     if (k === 'tela') S.tela = v;
+    if (k === 'tom') { S.tom = v; history.replaceState(null, '', (v === 'sobrio' ? '?tom=sobrio' : location.pathname) + location.hash); }
     if (k === 'whats') { if (S.degrau === 'visitante' && S.lado === 'cliente') { S.degrau = 'completo'; S.sit = 'padrao'; } S.whats = { cena: 'lembrete' }; }
     if (k === 'estados') { S.menuEstados = !S.menuEstados; render(); return; }
     if (k === 'estado') {
@@ -2624,8 +2919,7 @@ document.addEventListener('click', ev => {
     case 'orc-mes': S.ui.orcMes = (S.ui.orcMes || 0) + (+a.dataset.dir); break;
     case 'ponte-ok': S.ui.ponteVista = true; break;
     case 'ir-escalada': ir('jornada'); S.ui.abertos['j-esc'] = true; S.ui.abertos['j-reun'] = false; break;
-    case 'livro': S.ui.planoAba = 'livro'; break;
-    case 'livro-pag': toast(`${(CAPITULOS.find(c => c[0] === a.dataset.v) || ['', ''])[1]}: no mock, a página aberta é a de Objetivos.`); break;
+    case 'livro': ir('plano:' + ({ dividas: 'patrimonio', orcamento: 'gestao', saude: 'diagnostico', objetivos: 'objetivos', reserva: 'politica', politica: 'politica', seguros: 'riscos', carteira: 'tributario', patrimonio: 'patrimonio', sucessao: 'tributario' }[a.dataset.v] || 'diagnostico')); break;
     case 'origem': S.folha = { tipo: 'origem', id: a.dataset.id }; break;
     case 'numeros-todos': S.folha = { tipo: 'numeros' }; break;
     case 'calc': S.folha = { tipo: 'calc', nome: a.dataset.nome, campo: a.dataset.campo, valor: a.dataset.valor }; break;

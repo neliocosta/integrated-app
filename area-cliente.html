@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!--
+  ÁREA DO CLIENTE (Nord Liberta) · area-cliente.html · primeira versão de produção, degrau Clínica (30/10/2026)
+
+  O que é: a área logada que o cliente da clínica financeira abre pelo link do WhatsApp ou pelo site. Sai do mock
+  (area-logada/mock/index.html) no tom sóbrio aprovado em 30/10, mas é código de produto: sem barra de demonstração,
+  com o hoje vindo do relógio e com os dados num armazém que a plataforma troca pelo dela (mesma interface do
+  evolucao-patrimonial.html: iniciar, ler, ouvir, gravar).
+
+  Os dois documentos de cada cliente (README › Premissa 2, os dois ambientes):
+    clinicas/<cliente>  o registro da clínica, que só a consultora grava (UX.md › Registrar a clínica): os focos, os
+                        alvos, o que pedir no ritmo da renda (pedidos), as orientações em frases, os temas para uma
+                        próxima conversa, os passos e o check-up. É o ambiente de planejamento.
+    execucao/<cliente>  o que aconteceu, gravado pelo cliente (e pelo consultor ou open banking, com a origem): as
+                        respostas de cada ocorrência de tarefa, os ajustes que ele fez ao plano (cada um uma versão
+                        datada), os valores que atualizou e as conversas. É o ambiente de execução.
+  Tudo o mais é derivado e nunca gravado: as ocorrências das tarefas, o guardado de cada objetivo, o passo atual, o
+  efeito de uma falta.
+
+  Endereço: area-cliente.html?cliente=<id>[&membro=<id>][&hoje=AAAA-MM-DD]#<tela>[/<arg>]. Sem cliente, abre o exemplo
+  (Ana e Marcos, a clínica de 12/09). As telas: painel, tarefas, tarefa/<ocorrência>, objetivos, objetivo/<id>, passo,
+  plano, jornada, conversas. O link do lembrete abre direto a tarefa (#tarefa/aporte:2026-10).
+
+  Fica para as próximas etapas (ETAPAS.md): o Completo (o livro em cartões do mock), o Cadastrado, o Realizado, os
+  Conteúdos e os Utilitários; a página da tarefa com edição e comentários; o casal com dois logins de verdade.
+-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Área do cliente — Nord Liberta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ===== Tokens: DESIGN.md no tom sóbrio (neutro de fundo, borda fina no lugar da sombra, serifa nos títulos e nos
+   números grandes, rótulos em mono, ação principal em marinho, laranja só no passo e no futuro dos gráficos) ===== */
+:root{
+  --laranja:#FA7A35; --laranja-txt:#E06600; --marinho:#20344C; --noite:#131F2E;
+  --fundo:#F7F6F3; --branco:#FFFFFF; --grafite:#555555; --legenda:#6B6A66; --nevoa:#8A8A8A;
+  --areia:#ECEAE5; --borda:#E3E0DA; --trilho:#ECEAE5; --ardosia:#DCE3EC; --neutro-bg:#EDEBE6;
+  --verde:#2E9E5B; --verde-txt:#22794A; --ok-bg:#E3F3E9; --atencao:#D9952A; --atencao-txt:#964400; --at-bg:#F5EDE6;
+  --critico:#D64545; --critico-txt:#B53434; --crit-bg:#FBE6E6;
+  --fixas:#4B6584; --ajust:#9FB0C4; --liberdade:#77C094;
+  --serifa:'Newsreader',Georgia,serif; --mono:'IBM Plex Mono',ui-monospace,monospace; --sans:'DM Sans',system-ui,sans-serif;
+  --raio:12px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;padding:0}
+body{background:var(--fundo);font-family:var(--sans);color:var(--grafite);font-size:15px;line-height:1.5;font-variant-numeric:lining-nums tabular-nums}
+button{font-family:inherit;cursor:pointer;color:inherit}
+input,select,textarea{font-family:inherit;font-size:15px;color:var(--marinho)}
+a{color:var(--marinho)}
+:focus-visible{outline:2px solid var(--marinho);outline-offset:2px}
+
+/* ===== A casca: menu lateral no desktop, barra inferior no celular ===== */
+.casca{display:flex;min-height:100vh}
+.lateral{display:none;flex:none;width:232px;padding:22px 14px;border-right:1px solid var(--areia);flex-direction:column;position:sticky;top:0;height:100vh}
+.lateral .marca{font:500 21px var(--serifa);color:var(--marinho);padding:0 10px 2px}
+.lateral .quem{font-size:12.5px;color:var(--legenda);padding:0 10px 20px}
+.item{border:0;background:transparent;text-align:left;padding:9px 10px;border-radius:8px;font:500 14px var(--sans);color:var(--grafite);display:flex;align-items:center;gap:10px;text-decoration:none}
+.item svg,.nav-baixo svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.item.on{background:var(--neutro-bg);color:var(--marinho);font-weight:600}
+.lateral .pe{margin-top:auto;border-top:1px solid var(--areia);padding-top:12px}
+.coluna{flex:1;min-width:0;display:flex;flex-direction:column}
+.cab{display:flex;align-items:center;gap:10px;padding:16px 16px 12px;position:sticky;top:0;background:var(--fundo);z-index:5;border-bottom:1px solid var(--areia)}
+.cab h1{font:400 26px/1.15 var(--serifa);color:var(--marinho);margin:0;flex:1;min-width:0;letter-spacing:-.01em}
+.voltar{border:0;background:transparent;font-size:24px;line-height:1;color:var(--marinho);min-width:36px;min-height:36px;padding:0}
+.falar{position:relative;flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--borda);background:#fff;display:flex;align-items:center;justify-content:center;color:var(--marinho)}
+.falar svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7}
+.falar .cont{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:9999px;background:var(--marinho);color:#fff;font:600 11px var(--sans);display:flex;align-items:center;justify-content:center;padding:0 5px}
+main{flex:1;padding:16px 16px 96px;width:100%;max-width:1120px}
+.nav-baixo{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);background:#fff;border-top:1px solid var(--areia);padding:6px 4px calc(8px + env(safe-area-inset-bottom,0px));z-index:10}
+.nav-baixo a{display:flex;flex-direction:column;align-items:center;gap:3px;font:600 11px var(--sans);color:var(--legenda);text-decoration:none;min-height:44px;justify-content:center}
+.nav-baixo a.on{color:var(--marinho)}
+@media (min-width:900px){
+  .lateral{display:flex}
+  .nav-baixo{display:none}
+  .cab{padding:22px 32px 16px}
+  .cab h1{font-size:32px}
+  main{padding:24px 32px 48px}
+}
+
+/* ===== Componentes ===== */
+.card{background:#fff;border:1px solid var(--borda);border-radius:var(--raio);padding:16px 18px;margin-bottom:12px}
+.card h3{font:600 15px/1.3 var(--sans);color:var(--marinho);margin:0 0 8px}
+.rotulo{font:500 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--legenda);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.rotulo:first-child{margin-top:2px}
+.rotulo .mais{margin-left:auto;font:600 12.5px var(--sans);letter-spacing:0;text-transform:none}
+.mut{color:var(--legenda);font-size:13px}
+.peq{font-size:13.5px}
+.entre{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.linha{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sep{border-top:1px solid var(--areia);margin:12px 0}
+.num{font-family:var(--serifa);font-weight:500;color:var(--marinho);letter-spacing:-.01em}
+.grande{font:500 30px/1.1 var(--serifa);color:var(--marinho)}
+.btn{border:1px solid var(--borda);background:#fff;color:var(--marinho);border-radius:8px;padding:8px 13px;font:600 13.5px var(--sans);min-height:40px}
+.btn:hover{border-color:#C9C3B8}
+.btn.terc{background:var(--neutro-bg);border-color:transparent}
+.btn.peq{min-height:32px;padding:5px 10px;font-size:12.5px}
+.btn.link{border:0;background:transparent;padding:4px 0;min-height:0;text-decoration:underline;text-underline-offset:3px}
+.primaria{border:0;background:var(--marinho);color:#fff;border-radius:8px;padding:11px 18px;font:600 14px var(--sans);min-height:44px}
+.primaria:hover{background:var(--noite)}
+.btn[disabled],.primaria[disabled]{opacity:.45;cursor:not-allowed}
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:9999px;padding:3px 10px;font:600 11.5px var(--sans);white-space:nowrap;background:var(--neutro-bg);color:var(--legenda)}
+.chip.ok{background:var(--ok-bg);color:var(--verde-txt)}
+.chip.at{background:var(--at-bg);color:var(--atencao-txt)}
+.chip.crit{background:var(--crit-bg);color:var(--critico-txt)}
+.chip.mar{background:var(--ardosia);color:var(--marinho)}
+.trilho{height:4px;border-radius:9999px;background:var(--trilho);overflow:hidden}
+.trilho i{display:block;height:100%;border-radius:9999px;background:var(--marinho)}
+.trilho.fut i{background:var(--laranja)}
+.aviso{background:var(--neutro-bg);border-radius:10px;padding:10px 12px;font-size:13.5px;color:var(--marinho)}
+.aviso.ok{background:var(--ok-bg);color:var(--verde-txt)}
+.aviso.at{background:var(--at-bg);color:var(--atencao-txt)}
+.grade2{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+@media (min-width:900px){.grade2{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}.painel{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(320px,1fr);gap:20px;align-items:start}}
+.leg{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:8px;font-size:11.5px;color:var(--legenda)}
+.leg i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+.leg i.tracejado{width:0;height:10px;border-left:1.5px dashed var(--marinho);border-radius:0;vertical-align:-1px}
+.toque{cursor:pointer}
+
+/* paisagem: os momentos de pausa (o propósito); nunca nas telas de dado */
+.paisagem{position:relative;border-radius:var(--raio);background-size:cover;background-position:center;color:#fff;padding:24px 28px;margin-bottom:18px;min-height:168px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+.paisagem .r{font:500 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.9}
+.paisagem h2{font:400 29px/1.2 var(--serifa);margin:6px 0 0;max-width:30ch;text-wrap:balance}
+.paisagem .credito{position:absolute;right:12px;bottom:8px;font-size:10px;opacity:.6}
+.proposito{font:italic 400 15px var(--serifa);color:var(--legenda);margin:0 0 8px}
+
+/* Painel */
+.faixa-obj{display:flex;gap:10px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none}
+.faixa-obj::-webkit-scrollbar{display:none}
+.obj-mini{flex:none;width:168px;background:#fff;border:1px solid var(--borda);border-radius:var(--raio);overflow:hidden;text-align:left;padding:0;text-decoration:none;color:inherit}
+.obj-mini .foto{height:64px;background-size:cover;background-position:center;filter:saturate(.75) contrast(.96)}
+.obj-mini .tx{padding:8px 11px 10px}
+.obj-mini b{display:block;font:600 13.5px var(--sans);color:var(--marinho);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.obj-mini small{display:block;font-size:11.5px;color:var(--legenda);margin:2px 0 6px}
+.passo{background:#fff;border:1px solid var(--borda);border-radius:var(--raio);padding:18px 18px 16px;margin:12px 0}
+.passo .valor{font:500 40px/1.05 var(--serifa);color:var(--marinho);margin:8px 0 10px;letter-spacing:-.01em}
+.passo .valor small{font:400 18px var(--serifa);color:var(--legenda)}
+.passo p{margin:10px 0 14px;color:var(--marinho);font-size:14.5px;line-height:1.4}
+.numeros{display:grid;grid-template-columns:1fr 1fr;background:#fff;border:1px solid var(--borda);border-radius:var(--raio);padding:12px 6px}
+@media (min-width:600px){.numeros{grid-template-columns:repeat(4,1fr)}}
+.numero{border:0;background:transparent;text-align:center;padding:6px 4px}
+.numero span{display:block;font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--legenda)}
+.numero b{display:block;font:500 21px/1.2 var(--serifa);color:var(--marinho);margin-top:4px}
+.numero small{display:block;font-size:11.5px;color:var(--legenda)}
+.encontro{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--borda);border-radius:9999px;padding:10px 16px;font:600 13px var(--sans);color:var(--marinho);margin-top:12px;min-height:44px;text-decoration:none}
+
+/* Tarefas */
+.tarefa{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--borda);border-radius:var(--raio);padding:12px 14px;margin-bottom:8px;width:100%;text-align:left}
+.tarefa .tx{flex:1;min-width:0}
+.tarefa .cat{display:block;font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--legenda)}
+.tarefa b{display:block;font:600 14.5px/1.3 var(--sans);color:var(--marinho);margin-top:2px}
+.tarefa small{display:block;font-size:12.5px;color:var(--legenda);margin-top:2px}
+.tarefa.feita{opacity:.72}
+.tarefa.feita b{text-decoration:line-through;text-decoration-color:#B9B6B0}
+.filtros{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:6px}
+.filtro{border:1px solid var(--borda);background:#fff;border-radius:9999px;padding:6px 12px;font:600 12.5px var(--sans);color:var(--marinho);white-space:nowrap;min-height:34px}
+.filtro.on{background:var(--marinho);border-color:var(--marinho);color:#fff}
+.semanas{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;align-items:end;height:96px;margin:10px 0 4px}
+.semanas div{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative}
+.semanas i{display:block;width:70%;border-radius:4px 4px 0 0;background:var(--ajust)}
+.semanas i.passou{background:var(--critico)}
+.semanas i.vazio{background:transparent;border:1.5px dashed #C9C3B8;border-bottom:0}
+.semanas u{position:absolute;left:8%;right:8%;border-top:1.5px dashed var(--marinho)}
+.semanas small{font-size:10.5px;color:var(--legenda);margin-top:4px;white-space:nowrap}
+.semanas div.atual small{color:var(--marinho);font-weight:600}
+
+/* Objetivos */
+.obj-card{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:center;background:#fff;border:1px solid var(--borda);border-radius:var(--raio);padding:12px;margin-bottom:10px;text-decoration:none;color:inherit}
+.obj-card .thumb{width:72px;height:72px;border-radius:10px;background-size:cover;background-position:center;filter:saturate(.75) contrast(.96)}
+.obj-card b{display:block;font:600 15px var(--sans);color:var(--marinho)}
+.obj-foto{height:200px;border-radius:var(--raio);background-size:cover;background-position:center;position:relative;margin-bottom:14px;overflow:hidden}
+.obj-foto .sobre{position:absolute;inset:auto 0 0 0;padding:16px 18px;background:linear-gradient(transparent,rgba(19,31,46,.7));color:#fff}
+.obj-foto .sobre b{display:block;font:400 28px/1.15 var(--serifa)}
+.par-barra{position:relative;height:8px;margin:8px 0 4px;background:var(--trilho);border-radius:4px}
+.par-barra i{position:absolute;left:0;top:-3px;bottom:-3px;border-right:1.5px dashed var(--marinho)}
+.par-barra em{position:absolute;left:0;top:0;bottom:0;background:var(--marinho);border-radius:4px}
+.nums{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px}
+@media (min-width:600px){.nums{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.nums > div{background:#fff;border:1px solid var(--borda);border-radius:var(--raio);padding:14px 16px}
+.nums span{display:block;font:500 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--legenda)}
+.nums b{display:block;font:500 28px/1.1 var(--serifa);color:var(--marinho);margin:6px 0 2px}
+.nums b.fut{color:var(--laranja-txt)}
+.nums b.ok{color:var(--verde-txt)}
+.nums small{font-size:12.5px;color:var(--legenda)}
+
+/* Plano: as verticais em cartões com gráfico */
+.cap-grade{display:grid;grid-template-columns:1fr;gap:12px}
+@media (min-width:900px){.cap-grade{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}}
+.cap{display:flex;flex-direction:column;gap:4px;background:#fff;border:1px solid var(--borda);border-radius:var(--raio);padding:16px 18px;min-height:170px}
+.cap .r{display:flex;justify-content:space-between;gap:8px;align-items:center;font:500 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--legenda)}
+.cap .big{font:500 29px/1.1 var(--serifa);color:var(--marinho);margin-top:4px}
+.cap .big small{font:500 13px var(--sans);color:var(--legenda)}
+.cap .sub{font-size:13px;color:var(--legenda);line-height:1.35}
+.cap .viz{margin-top:auto;padding-top:12px}
+.b100{position:relative;display:flex;gap:2px}
+.b100 i{display:block;min-width:3px;border-radius:2px}
+.b100 u{position:absolute;top:-4px;bottom:-4px;border-left:1.5px dashed var(--marinho)}
+.marcas{position:relative;height:16px;font-size:10.5px;color:var(--legenda)}
+.marcas span{position:absolute;transform:translateX(-50%);white-space:nowrap;top:3px}
+.pilares div{display:grid;grid-template-columns:96px 1fr 28px;gap:8px;align-items:center;font-size:12px;padding:2px 0}
+.pilares i{display:block;height:6px;border-radius:3px;background:var(--trilho);overflow:hidden}
+.pilares em{display:block;height:100%;background:var(--marinho);border-radius:3px}
+.pilares b{text-align:right;color:var(--marinho);font-weight:600}
+.orientacao{display:grid;grid-template-columns:20px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--areia);font-size:14.5px;color:var(--marinho)}
+.orientacao:first-of-type{border-top:0}
+.orientacao .p{width:14px;height:14px;border-radius:50%;border:2px solid var(--borda);margin-top:3px}
+.orientacao.feita .p{background:var(--verde);border-color:var(--verde)}
+.orientacao.agora .p{border:3px solid var(--marinho)}
+
+/* Jornada */
+.trilha-h{display:flex;gap:4px;margin:6px 0 4px}
+.trilha-h > div{flex:1;min-width:0}
+.trilha-h i{display:block;height:6px;border-radius:3px;background:var(--trilho)}
+.trilha-h .feito i{background:var(--ajust)}
+.trilha-h .atual i{background:var(--marinho)}
+.trilha-h .na i{background:repeating-linear-gradient(90deg,var(--trilho) 0 4px,transparent 4px 7px)}
+.trilha-h span{display:block;font-size:11.5px;margin-top:6px;color:var(--legenda);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trilha-h .atual span{color:var(--marinho);font-weight:600}
+.etapa{display:flex;gap:12px;align-items:flex-start;padding:8px 0;position:relative}
+.etapa .p{width:14px;height:14px;border-radius:50%;border:2px solid var(--borda);background:#fff;flex:none;margin-top:3px;position:relative;z-index:1}
+.etapa.feita .p{background:var(--marinho);border-color:var(--marinho)}
+.etapa.agora .p{border:3px solid var(--marinho)}
+.etapa::before{content:'';position:absolute;left:6px;top:22px;bottom:-8px;width:2px;background:var(--areia)}
+.etapa:last-child::before{display:none}
+.etapa b{color:var(--marinho);font-size:14.5px}
+
+/* Conversas */
+.msg{max-width:560px;border-radius:12px;padding:10px 14px;margin:8px 0;font-size:14.5px;line-height:1.45}
+.msg.dela{background:#fff;border:1px solid var(--borda);color:var(--marinho)}
+.msg.minha{background:var(--ardosia);color:var(--marinho);margin-left:auto}
+.msg small{display:block;font-size:11.5px;color:var(--legenda);margin-top:4px}
+textarea{width:100%;min-height:96px;border:1px solid var(--borda);border-radius:8px;padding:10px 12px;background:#fff;resize:vertical}
+
+/* A folha (respostas de uma tarefa): de baixo no celular, no centro no desktop */
+.veu{position:fixed;inset:0;background:rgba(19,31,46,.38);z-index:30;display:flex;align-items:flex-end;justify-content:center;animation:aparece .2s ease}
+.folha{background:var(--fundo);width:100%;max-height:90vh;overflow-y:auto;border-radius:18px 18px 0 0;padding:18px 18px 22px;animation:sobe .25s ease}
+.folha .alca{width:40px;height:4px;border-radius:9999px;background:var(--borda);margin:-6px auto 12px}
+.folha h2{font:500 23px/1.2 var(--serifa);color:var(--marinho);margin:2px 0 6px}
+@media (min-width:900px){.veu{align-items:center}.folha{width:580px;border-radius:16px;max-height:86vh}.folha .alca{display:none}}
+.resp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.resp button{min-height:52px;border-radius:10px;border:1px solid var(--borda);background:#fff;font:600 14.5px var(--sans);color:var(--marinho)}
+.resp button.fiz{background:var(--marinho);border-color:var(--marinho);color:#fff}
+.saida{display:block;width:100%;text-align:left;border:1px solid var(--borda);background:#fff;border-radius:10px;padding:11px 13px;margin-top:8px;color:var(--grafite);font-size:13.5px;min-height:48px}
+.saida b{display:block;color:var(--marinho);font-size:14.5px;margin-bottom:2px}
+.saida.sug{border:2px solid var(--marinho)}
+.saida.on{background:var(--ardosia);border:2px solid var(--marinho)}
+.campo{display:flex;flex-direction:column;gap:5px;margin:12px 0}
+.campo label{font:600 13px var(--sans);color:var(--marinho)}
+.campo input,.campo select{border:1px solid var(--borda);border-radius:8px;padding:10px 12px;background:#fff;width:100%}
+.antesdepois{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.antesdepois div{background:#fff;border:1px solid var(--borda);border-radius:10px;padding:10px 12px}
+.antesdepois span{display:block;font-size:11.5px;color:var(--legenda)}
+.antesdepois b{font:500 19px var(--serifa);color:var(--marinho)}
+.hist{font-size:12.5px;color:var(--legenda);padding:5px 0;border-top:1px solid var(--areia)}
+
+.toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%);background:var(--marinho);color:#fff;border-radius:12px;padding:11px 16px;font-size:13.5px;z-index:40;display:flex;gap:14px;align-items:center;max-width:min(520px,calc(100% - 32px));animation:aparece .25s ease}
+.toast button{border:0;background:transparent;color:#FCD9C2;font-weight:600;text-decoration:underline;white-space:nowrap}
+@media (min-width:900px){.toast{bottom:28px}}
+.vazio{text-align:center;padding:40px 16px;color:var(--legenda)}
+.vazio h2{font:400 26px var(--serifa);color:var(--marinho);margin:0 0 8px}
+
+@keyframes aparece{from{opacity:0}to{opacity:1}}
+@keyframes sobe{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){.veu,.folha,.toast{animation:aparece .2s ease both!important}}
+</style>
+</head>
+<body>
+<div id="raiz"></div>
+<div id="folha-raiz"></div>
+<div id="toast-raiz" aria-live="polite"></div>
+
+<!-- O registro da clínica de exemplo (Ana e Marcos, 12/09/2026), no formato de clinicas/<cliente>. Os números vêm do
+     plano de exemplo (ux/plano-exemplo.json) e são os mesmos do mock na situação Padrão, degrau Clínica. -->
+<script type="application/json" id="clinica-exemplo">
+{
+  "publicadaEm": "2026-09-12",
+  "consultora": { "nome": "Patrícia", "completo": "Patrícia Lemos", "cert": "CFP®", "whatsapp": "+55 11 99999-0000" },
+  "domicilio": { "titulo": "Ana e Marcos", "casal": true, "membros": [{ "id": "ana", "nome": "Ana" }, { "id": "marcos", "nome": "Marcos" }] },
+  "proposito": "Uma casa que seja de vocês, viagens com a Luiza e a liberdade aos 57.",
+  "exame": { "data": "2026-08-19", "nota": 71, "anterior": { "nota": 64, "data": "2026-01" }, "pilares": { "Patrimônio": 78, "Atitude": 70, "Consciência": 74, "Proteção": 52, "Poupança": 68 }, "fase": "Consolidação" },
+  "rendas": [{ "membro": "ana", "nome": "Salário da Ana", "valor": 9000, "dia": 5 }, { "membro": "marcos", "nome": "Pró-labore do Marcos", "valor": 6000, "dia": 5 }],
+  "custo": { "fixas": 6300, "ajustaveis": 6200, "corteAjustaveis": 900 },
+  "reserva": { "atual": 60000, "ideal": 102133, "meses": 8, "origem": "liquidez diária informada na clínica de 12/09" },
+  "patrimonio": { "liquido": 1702000, "esperadoFase": 387506, "origem": "patrimônio informado no exame; a papelaria à parte" },
+  "focos": ["reserva", "objetivos"],
+  "objetivos": [
+    { "id": "casa", "nome": "Casa própria", "tipo": "montante", "valor": 180000, "data": "2030-07", "guardado": 45000, "aporte": 1500, "taxa": 0.005, "foto": "fotos/casa.jpg",
+      "porque": "Sair do aluguel e ter um lugar que seja da família.",
+      "estrategia": "A entrada de R$ 180 mil para o apartamento de R$ 600 mil, com o restante financiado. O aporte de hoje não fecha a entrada inteira na data: a diferença sai da reserva excedente ou a data anda alguns meses." },
+    { "id": "liberdade", "nome": "Liberdade financeira", "tipo": "liberdade", "valor": 5200000, "data": "2048-05", "idade": 57, "desejada": 25000, "guardado": 689000, "aporte": 1000, "taxa": 0.004,
+      "porque": "Parar de trabalhar aos 57, com R$ 25.000 por mês.",
+      "estrategia": "Começar agora com o que sobra depois da Casa própria. O número da liberdade é a renda que falta, além do INSS, dividida pela rentabilidade real do plano." }
+  ],
+  "pedidos": [
+    { "id": "aporte", "cat": "dinheiro", "ritmo": "mensal", "dia": 5, "desde": "2026-10", "resp": "os dois", "divisao": [{ "obj": "casa" }, { "obj": "liberdade" }] },
+    { "id": "teto", "cat": "comportamental", "ritmo": "semanal", "desde": "2026-10", "resp": "os dois", "tetoMes": 5300, "obj": "casa" },
+    { "id": "resgate", "cat": "carteira", "ritmo": "unica", "data": "2026-10-23", "resp": "ana", "valor": 42133, "titulo": "Resgatar R$ 42.133 do BTG para a reserva, em liquidez diária", "serve": "para completar a reserva ideal", "risco": "Sem a reserva ideal, um imprevisto de oito meses de custo sai do dinheiro da Casa própria.", "efeito": { "reserva": 42133 } },
+    { "id": "live-nov", "cat": "educacional", "ritmo": "unica", "data": "2026-11-18", "resp": "os dois", "titulo": "Assistir à live de novembro: a reserva e a liberdade", "serve": "para o passo da reserva", "quando": "18/11, às 19h" }
+  ],
+  "passos": [
+    { "id": "reserva", "titulo": "Completar a reserva ideal", "criterio": "reserva", "pedido": "resgate", "porque": "Com a reserva ideal, um imprevisto de até oito meses de custo não toca no dinheiro da Casa própria nem no da liberdade." },
+    { "id": "sequencia", "titulo": "Três meses seguidos de aporte", "criterio": "sequencia", "pedido": "aporte", "meses": 3, "porque": "Três meses seguidos fazem do aporte um hábito: é o que leva a Casa própria e a liberdade adiante." }
+  ],
+  "orientacoes": [
+    { "txt": "Separar a reserva ideal de R$ 102 mil numa aplicação de liquidez diária, longe dos objetivos.", "pedido": "resgate" },
+    { "txt": "Todo dia 5, guardar R$ 2.500: R$ 1.500 para a Casa própria e R$ 1.000 para a liberdade.", "pedido": "aporte" },
+    { "txt": "Gastar até R$ 5.300 por mês nas despesas ajustáveis, acompanhando semana a semana.", "pedido": "teto" }
+  ],
+  "temas": ["O seguro de vida do Marcos", "A carteira de investimentos e o IR", "A retirada da papelaria"],
+  "aprofundamento": null,
+  "mundo": 2,
+  "checkup": "2027-09-12"
+}
+</script>
+<!-- O que já aconteceu no exemplo (execucao/<cliente>): as três primeiras semanas do teto de outubro e a mensagem da
+     consultora depois da clínica. O aporte de outubro e o resgate ficaram sem resposta. -->
+<script type="application/json" id="execucao-exemplo">
+{
+  "respostas": {
+    "teto:2026-10:0": [{ "em": "2026-10-05T09:12:00", "quem": "ana", "canal": "whatsapp", "estado": "feita", "valor": 650 }],
+    "teto:2026-10:1": [{ "em": "2026-10-12T08:40:00", "quem": "marcos", "canal": "whatsapp", "estado": "naofiz", "valor": 1460 }],
+    "teto:2026-10:2": [{ "em": "2026-10-19T09:05:00", "quem": "ana", "canal": "area", "estado": "feita", "valor": 1100 }]
+  },
+  "ajustes": [],
+  "conversas": [
+    { "em": "2026-09-12T18:20:00", "quem": "consultora", "txt": "Ana e Marcos, deixei aqui o que combinamos hoje. O primeiro passo é separar a reserva ideal: uma transferência só, do BTG para uma aplicação de liquidez diária. Qualquer dúvida, é só escrever por aqui." }
+  ]
+}
+</script>
+<script>
+'use strict';
+// =====================================================================================================================
+// 1. FORMATOS E DATAS. O hoje vem do relógio (PENDENCIAS.md, item 20); ?hoje=AAAA-MM-DD fixa outra data para testes.
+// =====================================================================================================================
+const PARAMS = new URLSearchParams(location.search);
+const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const HOJE = /^\d{4}-\d{2}-\d{2}$/.test(PARAMS.get('hoje') || '') ? PARAMS.get('hoje') : iso(new Date());
+const MES = HOJE.slice(0, 7);
+const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+const MESES_L = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+const nf0 = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }), nf1 = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 });
+const brl = v => (v < -0.5 ? '− ' : '') + 'R$ ' + nf0.format(Math.abs(Math.round(v)));
+const brlC = v => { const a = Math.abs(v), s = v < -0.5 ? '− ' : ''; if (a >= 1e6) return s + 'R$ ' + nf1.format(a / 1e6) + (a >= 2e6 ? ' milhões' : ' milhão'); if (a >= 10000) return s + 'R$ ' + nf1.format(a / 1000) + ' mil'; return brl(v); };
+const pct = v => nf0.format(Math.round(v * 100)) + '%';
+const soma = a => a.reduce((x, y) => x + (+y || 0), 0);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ym = (y, m) => y + '-' + String(m).padStart(2, '0');
+const addM = (s, n) => { const [y, m] = s.split('-').map(Number), t = y * 12 + (m - 1) + n; return ym(Math.floor(t / 12), (t % 12) + 1); };
+const difM = (a, b) => { const [ay, am] = a.split('-').map(Number), [by, bm] = b.split('-').map(Number); return (by - ay) * 12 + (bm - am); };
+const dia = s => new Date(s.slice(0, 10) + 'T00:00:00');
+const addD = (s, n) => { const d = dia(s); d.setDate(d.getDate() + n); return iso(d); };
+const difD = (a, b) => Math.round((dia(b) - dia(a)) / 86400000);
+const mesAno = s => MESES[+s.slice(5, 7) - 1] + '/' + s.slice(0, 4);
+const mesAnoL = s => MESES_L[+s.slice(5, 7) - 1] + ' de ' + s.slice(0, 4);
+const dataBR = s => +s.slice(8, 10) + '/' + s.slice(5, 7);
+const dataBRano = s => s.slice(8, 10) + '/' + s.slice(5, 7) + '/' + s.slice(0, 4);
+const diasNoMes = s => new Date(+s.slice(0, 4), +s.slice(5, 7), 0).getDate();
+// matemática financeira: valor futuro, aporte para chegar a um alvo, meses para chegar
+const fvDe = (pv, pmt, r, n) => r ? pv * Math.pow(1 + r, n) + pmt * (Math.pow(1 + r, n) - 1) / r : pv + pmt * n;
+const pmtPara = (alvo, pv, r, n) => n <= 0 ? Infinity : Math.max(0, r ? (alvo - pv * Math.pow(1 + r, n)) * r / (Math.pow(1 + r, n) - 1) : (alvo - pv) / n);
+const nperPara = (alvo, pv, pmt, r, max) => { let s = pv; for (let k = 0; k <= (max || 1200); k++) { if (s >= alvo - 0.5) return k; s = s * (1 + r) + pmt; } return Infinity; };
+
+// =====================================================================================================================
+// 2. ARMAZÉM. Mesma interface do evolucao-patrimonial.html (iniciar, ler, ouvir, gravar); na plataforma, este bloco
+// inteiro é trocado pelo armazém dela. Aqui: o armazenamento do navegador, um documento por chave e por cliente, e a
+// cópia na memória para quando o localStorage não existe. O registro da clínica é só leitura para o cliente.
+// =====================================================================================================================
+const ARMAZEM = (() => {
+  const CLIENTE = PARAMS.get('cliente') || 'exemplo';
+  const DOC = { clinica: 'clinicas/' + CLIENTE, execucao: 'execucao/' + CLIENTE }, ouvintes = { clinica: [], execucao: [] }, memoria = {};
+  const chave = k => 'nl-db:' + DOC[k];
+  const ler = k => { if (k in memoria) return memoria[k]; try { const d = JSON.parse(localStorage.getItem(chave(k)) || 'null'); return d && d.dados; } catch (e) { return null; } };
+  return {
+    cliente: CLIENTE,
+    async iniciar() {
+      // o exemplo nasce do JSON embutido na primeira vez; um cliente real sem clínica publicada fica sem registro
+      // ?reiniciar volta o exemplo ao estado inicial
+      if (CLIENTE === 'exemplo') for (const k of ['clinica', 'execucao']) if (!ler(k) || PARAMS.has('reiniciar')) await this.gravar(k, JSON.parse(document.getElementById(k + '-exemplo').textContent));
+      addEventListener('storage', e => { for (const k in DOC) if (e.key === chave(k)) { delete memoria[k]; ouvintes[k].forEach(f => f(ler(k))); } });
+    },
+    ler,
+    ouvir(k, f) { ouvintes[k].push(f); },
+    async gravar(k, v) {
+      memoria[k] = v;
+      try { localStorage.setItem(chave(k), JSON.stringify({ dados: v, em: new Date().toISOString() })); } catch (e) { }
+    },
+  };
+})();
+
+// =====================================================================================================================
+// 3. O MODELO. O registro da clínica (R) e a execução (X) entram; tudo o mais sai daqui, derivado e nunca gravado.
+// =====================================================================================================================
+let R = null, X = null;
+const MEMBRO = () => PARAMS.get('membro') || (R && R.domicilio.membros[0].id);
+const nomeDe = id => id === 'consultora' ? R.consultora.nome : id === 'os dois' ? 'os dois' : ((R.domicilio.membros.find(m => m.id === id) || {}).nome || id);
+const casal = () => R.domicilio.casal;
+const pl = (plural, singular) => casal() ? plural : singular;
+const pedidoDe = id => R.pedidos.find(p => p.id === id);
+const CATS = { dinheiro: 'Dedicar dinheiro', comportamental: 'Comportamental', burocratica: 'Burocrática', interacao: 'Interação com a Nord', educacional: 'Educacional', carteira: 'Carteira' };
+const renda = () => soma(R.rendas.map(r => r.valor));
+const custo = () => R.custo.fixas + R.custo.ajustaveis;
+const sobra = () => renda() - custo();
+
+// Os objetivos como estão hoje: o registro da clínica com os ajustes do cliente por cima (cada ajuste é uma versão datada)
+function objetivos() {
+  return R.objetivos.map(o => {
+    const a = Object.assign({}, o, { versoes: [] });
+    X.ajustes.filter(j => j.obj === o.id).forEach(j => { a.versoes.push(j); a[j.campo] = j.para; });
+    return a;
+  });
+}
+const objDe = id => objetivos().find(o => o.id === id);
+// o aporte pedido a um objetivo num mês: o da divisão do pedido ou o do último ajuste que já valia naquele mês
+function aporteNoMes(objId, mes) {
+  // o valor de partida é o aporte do objetivo na clínica: um número num lugar só
+  let v = (R.objetivos.find(o => o.id === objId) || {}).aporte || 0;
+  X.ajustes.filter(j => j.obj === objId && j.campo === 'aporte' && j.desde <= mes).forEach(j => { v = j.para; });
+  return v;
+}
+
+// ---------- As ocorrências das tarefas: os pedidos da clínica no ritmo da renda, até o fim da semana que vem ----------
+// Semanas de segunda a domingo, cortadas no mês (outubro de 2026: 1 a 4, 5 a 11, 12 a 18, 19 a 25, 26 a 31)
+function semanasDoMes(mes) {
+  const n = diasNoMes(mes), s = [];
+  for (let d = 1; d <= n; d++) { const data = mes + '-' + String(d).padStart(2, '0'); if (d === 1 || dia(data).getDay() === 1) s.push({ de: data, ate: data, dias: 0 }); const w = s[s.length - 1]; w.ate = data; w.dias++; }
+  return s;
+}
+// O teto de cada semana: o do mês repartido pelos dias; depois de uma semana respondida, o que resta do mês é repartido
+// pelas semanas seguintes, nunca acima do teto de origem da semana
+function tetosDoMes(p, mes) {
+  const sem = semanasDoMes(mes), n = diasNoMes(mes);
+  let resta = p.tetoMes, diasRestantes = n;
+  return sem.map((w, k) => {
+    const base = p.tetoMes * w.dias / n, r = ultimaResposta('teto:' + mes + ':' + k);
+    const teto = Math.max(0, Math.min(base, resta * w.dias / Math.max(1, diasRestantes)));
+    const gasto = r && r.valor != null ? r.valor : null;
+    if (gasto != null) resta -= gasto; else resta -= Math.min(teto, resta);
+    diasRestantes -= w.dias;
+    return Object.assign({}, w, { k, base, teto, gasto, atual: w.de <= HOJE && HOJE <= w.ate });
+  });
+}
+function ocorrencias() {
+  const fim = addD(HOJE, 14), lista = [];
+  R.pedidos.forEach(p => {
+    if (p.ritmo === 'mensal') {
+      for (let m = p.desde; m <= fim.slice(0, 7); m = addM(m, 1)) {
+        const data = m + '-' + String(Math.min(p.dia, diasNoMes(m))).padStart(2, '0');
+        if (data > fim) break;
+        const divisao = p.divisao.map(d => ({ obj: d.obj, valor: aporteNoMes(d.obj, m) }));
+        lista.push({ id: p.id + ':' + m, pedido: p, cat: p.cat, mes: m, data, divisao, valor: soma(divisao.map(d => d.valor)),
+          titulo: `Aporte de ${MESES_L[+m.slice(5) - 1]}: ${brl(soma(divisao.map(d => d.valor)))}`, serve: 'para ' + divisao.map(d => objDe(d.obj).nome).join(' e '),
+          quando: `dia ${p.dia}, quando ${casal() ? 'os salários caem' : 'o salário cai'}`, resp: p.resp });
+      }
+    } else if (p.ritmo === 'semanal') {
+      for (let m = p.desde; m <= MES; m = addM(m, 1)) tetosDoMes(p, m).forEach(w => {
+        if (w.de > HOJE) return;
+        lista.push({ id: 'teto:' + m + ':' + w.k, pedido: p, cat: p.cat, mes: m, data: w.ate, valor: w.teto, semana: w,
+          titulo: `Teto da semana: até ${brl(w.teto)} de gastos ajustáveis`, serve: 'para fechar o mês e liberar o aporte da ' + objDe(p.obj).nome,
+          quando: `de ${dataBR(w.de)} a ${dataBR(w.ate)}, em qualquer meio: cartão, Pix, débito`, resp: p.resp });
+      });
+    } else lista.push({ id: p.id, pedido: p, cat: p.cat, data: p.data, valor: p.valor, titulo: p.titulo, serve: p.serve, quando: p.quando || 'até ' + dataBR(p.data) + ', uma vez', resp: p.resp });
+  });
+  // o estado vem da primeira resposta que fecha a ocorrência; adiar só muda a data
+  return lista.map(o => {
+    const rs = X.respostas[o.id] || [], fecha = rs.find(r => r.estado !== 'adiada'), adiamentos = rs.filter(r => r.estado === 'adiada');
+    const data = adiamentos.length ? adiamentos[adiamentos.length - 1].novaData : o.data;
+    return Object.assign(o, { respostas: rs, estado: fecha ? fecha.estado : adiamentos.length ? 'adiada' : 'pendente', resposta: fecha || null, data, aberta: !fecha });
+  }).sort((a, b) => a.data < b.data ? -1 : a.data > b.data ? 1 : 0);
+}
+const ultimaResposta = id => { const rs = (X.respostas[id] || []).filter(r => r.estado !== 'adiada'); return rs[0] || null; };
+const atrasada = o => o.aberta && o.data < HOJE;
+const ocorrenciaDe = id => ocorrencias().find(o => o.id === id);
+// quanto do aporte de uma ocorrência chegou a cada objetivo
+function feitoPorObjetivo(o) {
+  if (!o.resposta || !o.divisao) return {};
+  const r = o.resposta, f = r.estado === 'feita' ? (r.valor != null ? r.valor / o.valor : 1) : r.estado === 'parcial' ? (r.valor || 0) / o.valor : 0;
+  return Object.fromEntries(o.divisao.map(d => [d.obj, d.valor * f]));
+}
+// o guardado de cada objetivo: o da clínica mais o que foi aportado desde então
+function guardado(objId) {
+  const o = objDe(objId);
+  return o.guardado + soma(ocorrencias().filter(x => x.divisao).map(x => feitoPorObjetivo(x)[objId] || 0));
+}
+// a reserva de hoje: a da clínica mais o que as tarefas de carteira levaram para ela
+const reservaAtual = () => R.reserva.atual + soma(ocorrencias().filter(o => o.pedido.efeito && o.pedido.efeito.reserva && o.estado === 'feita').map(o => o.resposta.valor != null ? o.resposta.valor : o.pedido.efeito.reserva));
+// meses seguidos com o aporte inteiro, contando para trás a partir do último mês já vencido
+function sequenciaDeAportes() {
+  const aps = ocorrencias().filter(o => o.pedido.id === 'aporte' && o.data <= HOJE).reverse();
+  let n = 0; for (const a of aps) { if (a.estado === 'feita') n++; else if (a.aberta && a.data >= addD(HOJE, -3)) continue; else break; }
+  return n;
+}
+// o passo atual: o primeiro dos passos da clínica que ainda não está cumprido (o foco da consultora prevalece sobre a régua)
+function passoAtual() {
+  for (const p of R.passos) {
+    if (p.criterio === 'reserva') { const at = reservaAtual(); if (at < R.reserva.ideal - 0.5) return Object.assign({}, p, { atual: at, alvo: R.reserva.ideal, valor: `${brlC(at)} <small>de ${brlC(R.reserva.ideal)}</small>`, fracao: at / R.reserva.ideal }); }
+    if (p.criterio === 'sequencia') { const n = sequenciaDeAportes(); if (n < p.meses) return Object.assign({}, p, { atual: n, alvo: p.meses, valor: `${n} <small>de ${p.meses} meses</small>`, fracao: n / p.meses }); }
+  }
+  return null;
+}
+
+// ---------- O efeito de uma falta (UX.md › A tarefa em si): pela categoria e pelo horizonte ----------
+// Num aporte: para cada objetivo, o que a falta faz e o novo aporte que mantém a data (o mesmo valor na data)
+function efeitoDoAporte(o, coube) {
+  return o.divisao.map(d => {
+    const ob = objDe(d.obj), r = ob.taxa || 0, n = Math.max(1, difM(o.mes, ob.data)), g = guardado(d.obj) - (feitoPorObjetivo(o)[d.obj] || 0);
+    const veio = coube != null ? d.valor * coube / o.valor : 0, falta = d.valor - veio;
+    const comAporte = fvDe(g + d.valor, d.valor, r, n - 1), novo = pmtPara(comAporte, g + veio, r, n - 1);
+    const longo = ob.tipo === 'liberdade' || n >= 120;
+    const mesesAntes = nperPara(ob.valor, g + d.valor, d.valor, r), mesesDepois = nperPara(ob.valor, g + veio, d.valor, r);
+    return { obj: ob, de: d.valor, para: novo, falta, longo, aMenosNaData: falta * Math.pow(1 + r, n), meses: n,
+      chegaAntes: isFinite(mesesAntes) ? addM(o.mes, mesesAntes + 1) : null, chegaDepois: isFinite(mesesDepois) ? addM(o.mes, mesesDepois + 1) : null };
+  });
+}
+function fraseDoEfeito(e) {
+  if (e.longo) return `${brl(e.falta)} a menos hoje são ${brlC(e.aMenosNaData)} a menos ${e.obj.idade ? 'aos ' + e.obj.idade : 'em ' + mesAno(e.obj.data)}.`;
+  const ritmo = e.chegaAntes && e.chegaDepois && e.chegaDepois !== e.chegaAntes ? ` No ritmo de hoje, ${artigo(e.obj)} ${e.obj.nome} chega em ${mesAno(e.chegaDepois)} em vez de ${mesAno(e.chegaAntes)}.` : '';
+  return `Para manter a data de ${mesAnoL(e.obj.data)}, os próximos ${e.meses - 1} meses passam de ${brl(e.de)} para ${brl(e.para)}.${ritmo}`;
+}
+const artigo = ob => ob.tipo === 'liberdade' || /^Casa|^Viagem|^Reserva/.test(ob.nome) ? 'a' : 'o';
+// duas faltas seguidas do mesmo pedido: a área sugere ajustar ao que coube, nunca subir o aporte
+function faltasSeguidas(o) {
+  const aps = ocorrencias().filter(x => x.pedido.id === o.pedido.id && x.data < o.data).reverse();
+  let n = 0; for (const a of aps) { if (a.estado === 'naofiz' || a.estado === 'parcial') n++; else break; }
+  return n;
+}
+
+// =====================================================================================================================
+// 4. ROTAS E ESTADO DA TELA. A tela vem do endereço (#tarefas, #objetivo/casa), para o link do WhatsApp abrir direto.
+// =====================================================================================================================
+const UI = { folha: null, toast: null, filtro: 'todas', rascunho: '' };
+const rota = () => { const h = decodeURIComponent(location.hash.slice(1)) || 'painel', i = h.indexOf('/'); return i < 0 ? { tela: h, arg: null } : { tela: h.slice(0, i), arg: h.slice(i + 1) }; };
+const ICONES = {
+  painel: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>',
+  objetivos: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg>',
+  tarefas: '<svg viewBox="0 0 24 24"><path d="M4 6h3M4 12h3M4 18h3"/><path d="M10 6h10M10 12h10M10 18h10"/></svg>',
+  plano: '<svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6M9 18h3"/></svg>',
+  jornada: '<svg viewBox="0 0 24 24"><path d="M4 19c4 0 4-6 8-6s4-6 8-6"/><circle cx="4" cy="19" r="1.5"/><circle cx="20" cy="7" r="1.5"/></svg>',
+  conversas: '<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>',
+};
+const DESTINOS = [['painel', 'Painel'], ['objetivos', 'Objetivos'], ['tarefas', 'Tarefas'], ['plano', 'Plano'], ['jornada', 'Jornada']];
+const TITULOS = { painel: 'Painel', objetivos: 'Objetivos', tarefas: 'Tarefas', plano: 'Plano', jornada: 'Jornada', conversas: 'Conversas', passo: 'O próximo passo', tarefa: 'Tarefa' };
+const PAI = { objetivo: 'objetivos', passo: 'painel', tarefa: 'tarefas', conversas: 'painel' };
+const aguardando = () => X.conversas.filter(c => c.quem !== 'consultora' && !c.respondida).length;
+
+function casca(conteudo) {
+  const { tela, arg } = rota(), ativo = PAI[tela] && tela !== 'conversas' ? PAI[tela] : tela;
+  let titulo = TITULOS[tela] || 'Painel';
+  if (tela === 'objetivo') titulo = (objDe(arg) || {}).nome || 'Objetivo';
+  const n = aguardando(), voltar = PAI[tela] ? `<a class="voltar" href="#${PAI[tela]}" aria-label="Voltar">&#8249;</a>` : '';
+  const falar = `<a class="falar" href="#conversas" aria-label="Falar com a ${esc(R.consultora.nome)}${n ? ', ' + n + ' esperando resposta' : ''}" title="Falar com a ${esc(R.consultora.nome)}">${ICONES.conversas}${n ? `<span class="cont">${n}</span>` : ''}</a>`;
+  return `<div class="casca"><nav class="lateral" aria-label="Menu"><div class="marca">Nord Liberta</div><div class="quem">${esc(R.domicilio.titulo)} · clínica financeira</div>
+      ${DESTINOS.map(([id, nome]) => `<a class="item${ativo === id ? ' on' : ''}" href="#${id}">${ICONES[id]}${nome}</a>`).join('')}
+      <div class="pe"><a class="item${tela === 'conversas' ? ' on' : ''}" href="#conversas">${ICONES.conversas}Conversas${n ? ` <span class="chip mar">${n}</span>` : ''}</a></div></nav>
+    <div class="coluna"><header class="cab">${voltar}<h1>${esc(titulo)}</h1>${falar}</header><main id="miolo">${conteudo}</main></div></div>
+    <nav class="nav-baixo" aria-label="Menu">${DESTINOS.map(([id, nome]) => `<a class="${ativo === id ? 'on' : ''}" href="#${id}">${ICONES[id]}${nome}</a>`).join('')}</nav>`;
+}
+
+// =====================================================================================================================
+// 5. AS TELAS
+// =====================================================================================================================
+const DESK = () => matchMedia('(min-width: 900px)').matches;
+const FOTO = f => f ? `url('${f}')` : '';
+const FUNDO_OBJ = o => o.foto ? FOTO(o.foto) : o.tipo === 'liberdade' ? 'linear-gradient(135deg,#CFE8D9,#77C094)' : 'linear-gradient(135deg,#EEF1F5,#9FB0C4)';
+const PAISAGEM = 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1600&q=70&auto=format&fit=crop';   // colinas com névoa ao amanhecer (Unsplash, licença livre); no produto, guardada com a marca
+const progresso = o => clamp(guardado(o.id) / o.valor, 0, 1);
+const tomDoObj = o => { const nec = necessario(o); return o.aporte >= nec - 0.5 ? ['ok', 'no caminho'] : ['at', pct(o.aporte / nec) + ' do necessário']; };
+const necessario = o => pmtPara(o.valor, guardado(o.id), o.taxa || 0, Math.max(1, difM(MES, o.data)));
+const b100 = (partes, alt, marcas) => `<div class="b100" style="height:${alt || 10}px">${partes.filter(p => p[0] > 0).map(([v, c, r]) => `<i style="flex:${v};background:${c}" title="${esc(r)}: ${brl(v)}"></i>`).join('')}${(marcas || []).map(([f, r]) => `<u style="left:${f * 100}%" title="${esc(r)}"></u>`).join('')}</div>`;
+const legenda = itens => `<div class="leg">${itens.map(([n, c]) => `<span><i${c ? ` style="background:${c}"` : ' class="tracejado"'}></i>${esc(n)}</span>`).join('')}</div>`;
+const quandoTxt = o => o.aberta ? (atrasada(o) ? `atrasada há ${difD(o.data, HOJE)} ${difD(o.data, HOJE) === 1 ? 'dia' : 'dias'}` : o.data === HOJE ? 'hoje' : 'até ' + dataBR(o.data)) : '';
+const ESTADO_TXT = { feita: 'fiz', parcial: 'fiz parte', naofiz: 'não fiz', outro: 'usei em outro objetivo', adiada: 'adiada' };
+const estadoTxt = o => o.cat === 'comportamental' ? ({ feita: 'fiquei dentro', naofiz: 'passei', parcial: 'informei o valor' }[o.estado] || ESTADO_TXT[o.estado]) : ESTADO_TXT[o.estado];
+
+function cartaoTarefa(o) {
+  const quem = casal() && o.resp ? ' · ' + nomeDe(o.resp) : '';
+  const fim = o.aberta ? (atrasada(o) ? `<span class="chip at">${quandoTxt(o)}</span>` : '<span class="mut" style="font-size:18px">&#8250;</span>') : `<span class="chip ${o.estado === 'feita' || o.estado === 'outro' ? 'ok' : 'at'}">${estadoTxt(o)}</span>`;
+  return `<button class="tarefa${o.aberta ? '' : ' feita'}" data-acao="abrir" data-id="${esc(o.id)}"><span class="tx"><span class="cat">${CATS[o.cat]}${esc(quem)}</span><b>${esc(o.titulo)}</b><small>${esc(o.serve)}${o.aberta && !atrasada(o) ? ' · ' + quandoTxt(o) : ''}</small></span>${fim}</button>`;
+}
+
+// ---------- Painel ----------
+function telaPainel() {
+  const objs = objetivos(), oc = ocorrencias(), abertas = oc.filter(o => o.aberta), prox = abertas[0], passo = passoAtual();
+  const semana = abertas.filter(o => o.data <= addD(HOJE, 7)).length - (prox ? 1 : 0);
+  const topo = `<section class="paisagem" style="background-image:linear-gradient(100deg,rgba(19,31,46,.62),rgba(19,31,46,.12) 75%),url('${PAISAGEM}')"><span class="r">O propósito</span><h2>${esc(R.proposito)}</h2><span class="credito">Unsplash</span></section>`;
+  const faixa = `${DESK() ? '' : `<p class="proposito">${esc(R.proposito)}</p>`}<div class="rotulo">O que combinamos em ${dataBR(R.publicadaEm)}</div><div class="faixa-obj">${objs.map(o => `<a class="obj-mini" href="#objetivo/${o.id}"><div class="foto" style="background-image:${FUNDO_OBJ(o)}"></div><div class="tx"><b>${esc(o.nome)}</b><small>${o.tipo === 'liberdade' ? 'aos ' + o.idade : mesAno(o.data)} · ${pct(progresso(o))} ${o.tipo === 'liberdade' ? 'do caminho' : 'guardado'}</small><div class="trilho"><i style="width:${(progresso(o) * 100).toFixed(1)}%"></i></div></div></a>`).join('')}</div>`;
+  const cartaoPasso = passo ? `<section class="passo"><span class="rotulo" style="margin:0">O passo agora</span><div class="valor">${passo.valor}</div><div class="trilho fut" style="height:8px"><i style="width:${(clamp(passo.fracao, 0, 1) * 100).toFixed(1)}%"></i></div>
+      <p>${esc(passo.titulo)}${passo.pedido && ocorrenciaDe(passo.pedido) && ocorrenciaDe(passo.pedido).aberta ? ' · ' + esc(ocorrenciaDe(passo.pedido).quando) : ''}</p><a class="primaria" href="#passo" style="display:inline-flex;align-items:center;text-decoration:none">Ver o passo</a></section>`
+    : `<section class="passo"><span class="rotulo" style="margin:0">O passo agora</span><p style="margin-top:10px">Os passos combinados na clínica estão cumpridos. O próximo é conversar com a ${esc(R.consultora.nome)} no check-up.</p></section>`;
+  const tarefa = `<div class="rotulo">A próxima tarefa</div>${prox ? cartaoTarefa(prox) + `<a class="btn link peq" href="#tarefas">${semana > 0 ? `mais ${semana} nesta semana` : 'Todas as tarefas'} &#8250;</a>` : '<div class="aviso">Nada em aberto agora.</div>'}`;
+  const nums = [['Sobra do mês', brl(sobra()), pct(sobra() / renda()) + ' da renda', 'Exame de ' + dataBRano(R.exame.data)], ['Reserva', brlC(reservaAtual()), 'alvo ' + brlC(R.reserva.ideal) + ' (ideal)', R.reserva.origem],
+    ['Patrimônio', brlC(R.patrimonio.liquido), 'esperado: ' + brlC(R.patrimonio.esperadoFase), R.patrimonio.origem], ['Saúde financeira', String(R.exame.nota), `era ${R.exame.anterior.nota} em ${mesAno(R.exame.anterior.data + '-01')}`, 'Exame de ' + dataBRano(R.exame.data)]];
+  const numeros = `<div class="rotulo">Os números</div><div class="numeros">${nums.map(([r, v, s, o]) => `<button class="numero" data-acao="toast" data-txt="${esc(r)}: ${esc(o)}."><span>${r}</span><b>${v}</b><small>${s}</small></button>`).join('')}</div>`;
+  // o ritmo: o que foi aportado desde a clínica contra o planejado, mês a mês
+  const aps = oc.filter(o => o.pedido.id === 'aporte' && o.data <= HOJE), plan = soma(aps.map(o => o.valor)), feito = soma(aps.map(o => soma(Object.values(feitoPorObjetivo(o)))));
+  const ritmo = aps.length ? `<div class="rotulo">O ritmo</div><a class="card" href="#tarefas" style="display:block;text-decoration:none"><div class="num" style="font-size:21px">${brl(feito)} <span class="mut" style="font-family:var(--sans)">de ${brl(plan)} desde ${MESES_L[+aps[0].mes.slice(5) - 1]}</span></div><div class="trilho" style="margin:8px 0 6px"><i style="width:${plan ? (feito / plan * 100).toFixed(1) : 0}%"></i></div><div class="mut">${aps.map(a => `${MESES[+a.mes.slice(5) - 1]}: ${a.aberta ? 'aguardando' : estadoTxt(a)}`).join(' · ')}</div></a>` : '';
+  const encontro = `<a class="encontro" href="#jornada">Check-up anual disponível em ${dataBRano(R.checkup)} &#8250;</a>`;
+  // no celular, o passo logo depois dos objetivos, acima da dobra (UX.md › Painel); no desktop, à direita
+  if (!DESK()) return faixa + cartaoPasso + tarefa + numeros + ritmo + encontro;
+  return `<div class="painel"><div>${topo}${faixa}${tarefa}${numeros}${ritmo}</div><div>${cartaoPasso}${encontro}</div></div>`;
+}
+
+// ---------- A tela do passo ----------
+function telaPasso() {
+  const p = passoAtual();
+  if (!p) return `<div class="vazio"><h2>Passos cumpridos</h2><p>O que combinamos na clínica está feito. O próximo encontro é o check-up de ${dataBRano(R.checkup)}.</p></div>`;
+  const o = p.pedido ? ocorrencias().filter(x => x.pedido.id === p.pedido && x.aberta)[0] : null;
+  return `<div style="max-width:720px"><div class="card"><span class="rotulo" style="margin:0">O passo agora · foco combinado na clínica de ${dataBR(R.publicadaEm)}</span><div class="grande" style="margin:10px 0">${esc(p.titulo)}</div>
+      <div class="num" style="font-size:24px">${p.valor}</div><div class="trilho fut" style="height:8px;margin:10px 0"><i style="width:${(clamp(p.fracao, 0, 1) * 100).toFixed(1)}%"></i></div>
+      <p style="color:var(--marinho);margin:12px 0 0">${esc(p.porque)}</p></div>
+    ${o ? `<div class="rotulo">O que fazer agora</div>${cartaoTarefa(o)}` : ''}
+    <div class="rotulo">Depois deste</div>${R.passos.filter(x => x.id !== p.id && R.passos.indexOf(x) > R.passos.indexOf(R.passos.find(y => y.id === p.id))).map(x => `<div class="card peq">${esc(x.titulo)}</div>`).join('') || '<div class="mut">O check-up anual, com a ' + esc(R.consultora.nome) + '.</div>'}</div>`;
+}
+
+// ---------- Tarefas ----------
+function telaTarefas() {
+  const oc = ocorrencias(), f = UI.filtro, vis = oc.filter(o => f === 'todas' || o.cat === f);
+  const grupos = [['Agora', vis.filter(o => o.aberta && o.data <= HOJE)], ['Nesta semana', vis.filter(o => o.aberta && o.data > HOJE && o.data <= addD(HOJE, 7))], ['Depois', vis.filter(o => o.aberta && o.data > addD(HOJE, 7))], ['Respondidas', vis.filter(o => !o.aberta).reverse()]];
+  const cats = ['todas', ...new Set(oc.map(o => o.cat))];
+  const feitas = oc.filter(o => o.data.slice(0, 7) === MES && !o.aberta).length, doMes = oc.filter(o => o.data.slice(0, 7) === MES).length;
+  return `<div style="max-width:760px"><div class="filtros">${cats.map(c => `<button class="filtro${f === c ? ' on' : ''}" data-acao="filtro" data-v="${c}">${c === 'todas' ? 'Todas' : CATS[c]}</button>`).join('')}</div>
+    ${grupos.map(([n, l]) => l.length ? `<div class="rotulo">${n}</div>${l.map(cartaoTarefa).join('')}` : '').join('')}
+    <p class="mut" style="margin-top:16px">Em ${MESES_L[+MES.slice(5) - 1]}: ${feitas} de ${doMes} respondidas. Os lembretes chegam no WhatsApp; a resposta pode ser dada lá, com um toque, ou aqui.</p></div>`;
+}
+
+// ---------- A folha de respostas de uma ocorrência ----------
+function folhaTarefa(o) {
+  const F = UI.folha, quem = nomeDe(MEMBRO());
+  const cab = `<div class="alca"></div><span class="rotulo" style="margin:0">${CATS[o.cat]}${casal() && o.resp ? ' · ' + esc(nomeDe(o.resp)) : ''}</span><h2>${esc(o.titulo)}</h2><div class="mut">${esc(o.serve)} · ${esc(o.quando)}</div>`;
+  const hist = o.respostas.length ? `<div class="rotulo">Histórico</div>${o.respostas.map(r => `<div class="hist">${dataBR(r.em)} · ${esc(nomeDe(r.quem))} ${r.estado === 'adiada' ? `adiou para ${dataBR(r.novaData)}${r.motivo ? ': "' + esc(r.motivo) + '"' : ''}` : `respondeu: ${esc(o.cat === 'comportamental' ? ({ feita: 'fiquei dentro', naofiz: 'passei', parcial: 'informei o valor' }[r.estado]) : ESTADO_TXT[r.estado])}${r.valor != null ? ', ' + brl(r.valor) : ''}${r.saida ? ' · ' + esc(SAIDAS[r.saida]) : ''}`} ${r.canal === 'whatsapp' ? '(pelo WhatsApp)' : ''}</div>`).join('')}` : '';
+  const divisao = o.divisao ? `<div class="sep"></div>${o.divisao.map(d => `<div class="entre peq" style="padding:3px 0"><span>${esc(objDe(d.obj).nome)}</span><b class="num" style="font-size:16px">${brl(d.valor)}</b></div>`).join('')}` : '';
+  const risco = o.pedido.risco && o.aberta ? `<div class="aviso at" style="margin-top:10px">${esc(o.pedido.risco)}</div>` : '';
+  const semanas = o.semana ? barrasTeto(o) : '';
+  if (!o.aberta) return cab + divisao + semanas + `<div class="aviso ok" style="margin-top:12px">Respondida: ${esc(estadoTxt(o))}${o.resposta.valor != null ? ', ' + brl(o.resposta.valor) : ''}.</div>` + hist + `<div style="margin-top:14px"><button class="btn" data-acao="fechar">Fechar</button></div>`;
+  let corpo = '';
+  if (!F.modo) {
+    corpo = o.cat === 'comportamental'
+      ? `<div class="resp"><button class="fiz" data-acao="modo" data-v="dentro">Fiquei dentro</button><button data-acao="modo" data-v="passei">Passei</button></div><button class="btn link peq" data-acao="modo" data-v="valor" style="margin-top:8px">Informar o valor gasto</button>`
+      : `<div class="resp"><button class="fiz" data-acao="responder" data-v="feita">Fiz</button>${o.cat === 'dinheiro' ? '<button data-acao="modo" data-v="parte">Fiz parte</button>' : '<button data-acao="modo" data-v="adiar">Adiar</button>'}<button data-acao="modo" data-v="naofiz">Não fiz</button>${o.cat === 'dinheiro' ? '<button data-acao="modo" data-v="adiar">Adiar</button>' : ''}</div>`;
+  } else if (F.modo === 'parte' || F.modo === 'valor' || F.modo === 'passei') {
+    const rot = o.cat === 'comportamental' ? 'Quanto ' + pl('vocês gastaram', 'você gastou') + ' nesta semana' : 'Quanto ' + pl('vocês guardaram', 'você guardou');
+    corpo = `<div class="campo"><label for="valor">${rot}</label><input id="valor" inputmode="decimal" placeholder="R$" value="${F.valor != null ? F.valor : ''}" data-campo="valor"></div>${F.modo === 'parte' ? efeitoHtml(o, F.valor) : ''}${o.cat === 'comportamental' && F.valor != null ? efeitoTeto(o, F.valor) : ''}
+      <div class="linha"><button class="primaria" data-acao="responder" data-v="${F.modo === 'parte' ? 'parcial' : F.modo === 'passei' ? 'naofiz' : (F.valor != null && F.valor > o.valor + 0.5 ? 'naofiz' : 'feita')}" ${F.valor == null ? 'disabled' : ''}>Gravar</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`;
+  } else if (F.modo === 'dentro') {
+    corpo = `<div class="campo"><label for="valor">Quanto ${pl('gastaram', 'gastou')} (opcional)</label><input id="valor" inputmode="decimal" placeholder="até ${brl(o.valor)}" value="${F.valor != null ? F.valor : ''}" data-campo="valor"></div><div class="linha"><button class="primaria" data-acao="responder" data-v="feita">Gravar</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`;
+  } else if (F.modo === 'naofiz') {
+    corpo = naoFizHtml(o);
+  } else if (F.modo === 'adiar') {
+    corpo = `<div class="campo"><label for="nova">Para quando</label><input id="nova" type="date" min="${addD(o.data > HOJE ? o.data : HOJE, 1)}" value="${F.novaData || addD(o.data > HOJE ? o.data : HOJE, 7)}" data-campo="novaData"></div>
+      <div class="campo"><label for="motivo">O motivo, para a ${esc(R.consultora.nome)}</label><input id="motivo" maxlength="120" placeholder="uma frase curta" value="${esc(F.motivo || '')}" data-campo="motivo"></div>
+      ${o.respostas.filter(r => r.estado === 'adiada').length ? `<div class="aviso at">É o segundo adiamento desta tarefa: a ${esc(R.consultora.nome)} vai ver e pode ajudar.</div>` : ''}
+      <div class="linha" style="margin-top:12px"><button class="primaria" data-acao="responder" data-v="adiada">Adiar</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`;
+  }
+  return cab + divisao + semanas + risco + corpo + `<p class="mut" style="margin:14px 0 0">Respondendo como ${esc(quem)}.</p>` + hist;
+}
+const SAIDAS = { manter: 'Manter a data', adiar: 'Adiar o objetivo', coube: 'Ajustar ao que coube', outro: 'Usei em outro objetivo' };
+function efeitoHtml(o, coube) {
+  if (!o.divisao || coube == null) return '';
+  return `<div class="aviso" style="margin:8px 0 12px">${efeitoDoAporte(o, coube).map(fraseDoEfeito).join(' ')}</div>`;
+}
+// "Não fiz": o efeito somado, a saída sugerida em destaque e as outras, sempre na mesma ordem
+function naoFizHtml(o) {
+  const F = UI.folha;
+  if (o.cat === 'dinheiro') {
+    const ef = efeitoDoAporte(o, 0), duas = faltasSeguidas(o) >= 1, sug = duas ? 'coube' : 'manter', sobe = soma(ef.filter(e => !e.longo).map(e => e.para - e.de));
+    const resumo = `Sem este aporte, ${ef.map(e => e.longo ? `a liberdade fica com ${brlC(e.aMenosNaData)} a menos ${e.obj.idade ? 'aos ' + e.obj.idade : ''}` : `${artigo(e.obj)} ${e.obj.nome} precisa de ${brl(e.para - e.de)} a mais por mês para manter ${mesAno(e.obj.data)}`).join('; ')}.`;
+    const opcoes = [['manter', `Os próximos aportes sobem ${brl(sobe)} no total, até cada data.`], ['adiar', 'As datas andam; o aporte continua o mesmo.'], ['coube', 'Guardar o que cabe por mês e a data se estica.'], ['outro', 'O dinheiro foi para outro destino: conta como coberto, não como falta.']];
+    return `<div class="aviso" style="margin-top:12px">${esc(resumo)}</div>${duas ? '<p class="mut" style="margin:8px 0 0">É a segunda falta seguida: a sugestão é ajustar o aporte ao que cabe, não aumentar.</p>' : ''}
+      <button class="btn link peq" data-acao="ver-por-obj" style="margin-top:6px">${F.porObj ? 'esconder' : 'ver por objetivo'}</button>${F.porObj ? `<div class="peq" style="margin-top:6px">${ef.map(e => `<p style="margin:4px 0"><b style="color:var(--marinho)">${esc(e.obj.nome)}.</b> ${esc(fraseDoEfeito(e))}</p>`).join('')}</div>` : ''}
+      ${[opcoes.find(x => x[0] === sug), ...opcoes.filter(x => x[0] !== sug)].map(([k, t]) => `<button class="saida${k === sug ? ' sug' : ''}${F.saida === k ? ' on' : ''}" aria-pressed="${F.saida === k}" data-acao="saida" data-v="${k}"><b>${SAIDAS[k]}${k === sug ? ' (sugerida)' : ''}</b>${t}</button>`).join('')}
+      ${F.saida === 'coube' ? `<div class="campo"><label for="coube">Quanto cabe por mês</label><input id="coube" inputmode="decimal" value="${F.coube != null ? F.coube : Math.round(o.valor * 0.6)}" data-campo="coube"></div>` : ''}
+      ${F.saida ? antesDepois(o, F.saida) + `<div class="linha"><button class="primaria" data-acao="responder" data-v="${F.saida === 'outro' ? 'outro' : 'naofiz'}">Confirmar</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>` : `<div style="margin-top:10px"><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`}`;
+  }
+  // as outras categorias: o risco que segue aberto (ou nada, na educacional) e a nova data
+  const txt = o.cat === 'educacional' ? 'Sem problema: escolha uma nova data.' : o.pedido.risco ? o.pedido.risco : 'O que esta tarefa resolve continua em aberto.';
+  return `<div class="aviso at" style="margin-top:12px">${esc(txt)}</div><div class="campo"><label for="nova">Nova data</label><input id="nova" type="date" min="${addD(HOJE, 1)}" value="${F.novaData || addD(HOJE, 7)}" data-campo="novaData"></div>
+    <div class="linha"><button class="primaria" data-acao="responder" data-v="adiada">Marcar a nova data</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`;
+}
+// o antes e o depois de cada objetivo, para a escolha virar um ajuste direto (Clínica: sem aprovação, com versão datada)
+function antesDepois(o, saida) {
+  if (saida === 'outro') return '<p class="mut" style="margin:10px 0">Nada muda nos objetivos: este mês conta como coberto.</p>';
+  const F = UI.folha, ajustes = ajustesDaSaida(o, saida, F.coube);
+  if (!ajustes.length) return '';
+  return `<div class="antesdepois">${ajustes.map(j => `<div><span>${esc(objDe(j.obj).nome)}: ${j.campo === 'aporte' ? 'aporte' : 'data'}</span><b>${j.campo === 'aporte' ? brl(j.de) + ' → ' + brl(j.para) : mesAno(j.de) + ' → ' + mesAno(j.para)}</b></div>`).join('')}</div>`;
+}
+function ajustesDaSaida(o, saida, coube) {
+  const ef = efeitoDoAporte(o, 0), desde = addM(o.mes, 1);
+  if (saida === 'manter') return ef.filter(e => !e.longo).map(e => ({ obj: e.obj.id, campo: 'aporte', de: e.de, para: Math.round(e.para), desde }));
+  if (saida === 'adiar') return ef.filter(e => !e.longo).map(e => ({ obj: e.obj.id, campo: 'data', de: e.obj.data, para: addM(e.obj.data, 1), desde }));
+  if (saida === 'coube') { const f = clamp((coube != null ? coube : o.valor * 0.6) / o.valor, 0, 1); return ef.map(e => ({ obj: e.obj.id, campo: 'aporte', de: e.de, para: Math.round(e.de * f), desde })); }
+  return [];
+}
+// o teto: as semanas do mês como barras, o combinado tracejado e o gasto de cada uma
+function barrasTeto(o) {
+  const ws = tetosDoMes(o.pedido, o.mes), max = Math.max(...ws.map(w => Math.max(w.base, w.gasto || 0))) * 1.1;
+  return `<div class="semanas" role="img" aria-label="O teto e o gasto de cada semana">${ws.map(w => `<div class="${w.atual ? 'atual' : ''}"><u style="bottom:${w.teto / max * 76 + 18}px"></u><i class="${w.gasto == null ? 'vazio' : w.gasto > w.teto + 0.5 ? 'passou' : ''}" style="height:${(w.gasto == null ? w.teto : w.gasto) / max * 76}px" title="${esc(dataBR(w.de))} a ${esc(dataBR(w.ate))}: ${w.gasto == null ? 'teto ' + brl(w.teto) : brl(w.gasto) + ' de ' + brl(w.teto)}"></i><small>${dataBR(w.de)}</small></div>`).join('')}</div>
+    ${legenda([['gasto', 'var(--ajust)'], ['passou do teto', 'var(--critico)'], ['teto da semana', null]])}`;
+}
+function efeitoTeto(o, gasto) {
+  const ws = tetosDoMes(o.pedido, o.mes), depois = ws.filter(w => w.de > o.semana.ate), gastoAntes = soma(ws.filter(w => w.ate < o.semana.de).map(w => w.gasto || 0));
+  const resta = o.pedido.tetoMes - gastoAntes - gasto;
+  if (!depois.length) return `<div class="aviso" style="margin:8px 0">${resta >= 0 ? `O mês fecha ${brl(resta)} abaixo do teto.` : `O mês fecha ${brl(-resta)} acima do teto: esse valor sai da sobra do mês.`}</div>`;
+  const diasD = soma(depois.map(w => w.dias));
+  return `<div class="aviso" style="margin:8px 0">Para fechar o mês no teto de ${brl(o.pedido.tetoMes)}, ${depois.length === 1 ? 'a última semana fica' : `as ${depois.length} semanas seguintes ficam`} com ${depois.map(w => brl(Math.max(0, resta * w.dias / diasD))).join(', ')}.</div>`;
+}
+
+// ---------- Objetivos ----------
+function telaObjetivos() {
+  const objs = objetivos(), pedem = soma(objs.map(necessario)), poe = soma(objs.map(o => o.aporte));
+  return `<div style="max-width:760px">${objs.map(o => { const t = tomDoObj(o), nec = necessario(o), max = Math.max(nec, o.aporte);
+      return `<a class="obj-card" href="#objetivo/${o.id}"><span class="thumb" style="background-image:${FUNDO_OBJ(o)}"></span><span style="min-width:0"><span class="entre"><b>${esc(o.nome)}</b><span class="chip ${t[0]}">${t[1]}</span></span>
+        <span class="mut">${o.tipo === 'liberdade' ? 'aos ' + o.idade + ', ' + mesAno(o.data) : mesAno(o.data)} · ${brlC(guardado(o.id))} de ${brlC(o.valor)}</span><div class="trilho" style="margin:8px 0 4px"><i style="width:${(progresso(o) * 100).toFixed(1)}%"></i></div>
+        <span class="mut">${brl(o.aporte)} por mês, de ${brl(nec)} necessários</span></span></a>`; }).join('')}
+    <div class="card"><div class="entre"><span class="peq" style="color:var(--marinho)">Os objetivos juntos pedem <b>${brl(pedem)}</b> por mês</span><span class="mut">${pl('vocês põem', 'você põe')} ${brl(poe)} de ${brl(sobra())} de sobra</span></div>${b100([[poe, 'var(--marinho)', 'O que vai para os objetivos'], [Math.max(0, pedem - poe), 'var(--trilho)', 'O que falta para o necessário']], 10)}${legenda([['o que vai para os objetivos', 'var(--marinho)'], ['o que falta para o necessário', 'var(--trilho)']])}</div></div>`;
+}
+// o caminho até a data: no ritmo de hoje (laranja) e o necessário (tracejado)
+function curvaObjetivo(o) {
+  const n = Math.max(1, difM(MES, o.data)), g = guardado(o.id), r = o.taxa || 0, nec = necessario(o);
+  const W = DESK() ? 640 : 340, H = DESK() ? 190 : 150, px = 12, py = 16, fim = Math.max(o.valor, fvDe(g, o.aporte, r, n)), y = v => H - 26 - (H - 26 - py) * v / fim, x = k => px + (W - 2 * px) * k / n, passo = Math.max(1, Math.round(n / 60));
+  let ritmo = '', necP = ''; for (let k = 0; k <= n; k += passo) { ritmo += (k ? 'L' : 'M') + x(k).toFixed(1) + ' ' + y(fvDe(g, o.aporte, r, k)).toFixed(1); necP += (k ? 'L' : 'M') + x(k).toFixed(1) + ' ' + y(fvDe(g, nec, r, k)).toFixed(1); }
+  ritmo += 'L' + x(n).toFixed(1) + ' ' + y(fvDe(g, o.aporte, r, n)).toFixed(1); necP += 'L' + x(n).toFixed(1) + ' ' + y(o.valor).toFixed(1);
+  const naData = fvDe(g, o.aporte, r, n);
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="O caminho até a data"><line x1="${px}" x2="${W - px}" y1="${H - 26}" y2="${H - 26}" stroke="var(--trilho)"/>
+    <path d="${necP}" fill="none" stroke="var(--marinho)" stroke-opacity=".5" stroke-width="1.5" stroke-dasharray="4 4"/><path d="${ritmo}" fill="none" stroke="var(--laranja)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="${x(0)}" cy="${y(g)}" r="4" fill="var(--marinho)"/><circle cx="${x(n)}" cy="${y(o.valor)}" r="4.5" fill="#fff" stroke="var(--marinho)" stroke-width="2"/><circle cx="${x(n)}" cy="${y(naData)}" r="4.5" fill="var(--laranja)"/>
+    <text x="${x(n) - 8}" y="${y(o.valor) - 9}" text-anchor="end" font-size="12" fill="var(--marinho)" font-weight="600">${brlC(o.valor)}</text>${Math.abs(y(naData) - y(o.valor)) > 14 ? `<text x="${x(n) - 8}" y="${y(naData) + 16}" text-anchor="end" font-size="12" fill="var(--laranja-txt)" font-weight="600">${brlC(naData)}</text>` : ''}
+    <text x="${px}" y="${H - 8}" font-size="11" fill="var(--legenda)">hoje</text><text x="${W - px}" y="${H - 8}" font-size="11" fill="var(--legenda)" text-anchor="end">${mesAno(o.data)}</text></svg>
+    ${legenda([['no ritmo de hoje', 'var(--laranja)'], ['o necessário', null]])}`;
+}
+function telaObjetivo(id) {
+  const o = objDe(id); if (!o) return '<div class="vazio"><h2>Objetivo não encontrado</h2></div>';
+  const g = guardado(o.id), nec = necessario(o), t = tomDoObj(o), n = Math.max(1, difM(MES, o.data)), naData = fvDe(g, o.aporte, o.taxa || 0, n);
+  const aps = ocorrencias().filter(x => x.divisao && x.divisao.some(d => d.obj === o.id) && x.data <= addD(HOJE, 14));
+  return `<div style="max-width:820px"><div class="obj-foto" style="background-image:${FUNDO_OBJ(o)}"><div class="sobre"><b>${esc(o.nome)}</b><span>${esc(o.porque)}</span></div></div>
+    <div class="nums"><div><span>Guardado</span><b>${brlC(g)}</b><small>de ${brlC(o.valor)} · ${pct(g / o.valor)}</small></div><div><span>Por mês</span><b class="fut">${brl(o.aporte)}</b><small>de ${brl(nec)} necessários · ${t[1]}</small></div><div><span>${o.tipo === 'liberdade' ? 'A data' : 'Na data'}</span><b>${o.tipo === 'liberdade' ? 'aos ' + o.idade : mesAno(o.data)}</b><small>${o.tipo === 'liberdade' ? mesAnoL(o.data) + ', com ' + brl(o.desejada) + ' por mês' : 'no ritmo de hoje, ' + brlC(naData)}</small></div></div>
+    <div class="card"><h3>O caminho até lá</h3>${curvaObjetivo(o)}</div>
+    <div class="grade2"><div class="card"><h3>A estratégia</h3><p class="peq" style="margin:0">${esc(o.estrategia)}</p><p class="mut" style="margin:8px 0 0">Combinado na clínica de ${dataBRano(R.publicadaEm)} com a ${esc(R.consultora.completo)}.</p></div>
+      <div class="card"><h3>Os aportes</h3>${aps.length ? aps.map(a => `<div class="entre peq" style="padding:5px 0;border-top:1px solid var(--areia)"><span>${mesAnoL(a.mes)}</span><span>${a.aberta ? `<span class="chip ${atrasada(a) ? 'at' : ''}">${atrasada(a) ? 'atrasado' : 'aguardando'}</span>` : `<span class="chip ${a.estado === 'feita' ? 'ok' : 'at'}">${estadoTxt(a)} · ${brl(feitoPorObjetivo(a)[o.id] || 0)}</span>`}</span></div>`).join('') : '<div class="mut">O primeiro aporte ainda não venceu.</div>'}
+        ${o.versoes.length ? `<div class="rotulo">Ajustes de ${pl('vocês', 'você')}</div>${o.versoes.map(v => `<div class="hist">${dataBR(v.em)} · ${v.campo === 'aporte' ? `aporte de ${brl(v.de)} para ${brl(v.para)}` : `data de ${mesAno(v.de)} para ${mesAno(v.para)}`} (${esc(SAIDAS[v.saida] || 'ajuste')})</div>`).join('')}` : ''}</div></div></div>`;
+}
+
+// ---------- Plano: o que combinamos e as verticais, cada uma com um gráfico ----------
+function telaPlano() {
+  const oc = ocorrencias(), estadoDoPedido = id => { const l = oc.filter(o => o.pedido.id === id && o.data <= HOJE); if (!l.length) return ['', 'começa em breve']; const ab = l.filter(o => o.aberta), ult = l[l.length - 1];
+    if (ab.length) return ['agora', ab.some(atrasada) ? 'em aberto, atrasado' : 'em aberto'];
+    return ult.estado === 'naofiz' || ult.estado === 'parcial' ? ['agora', 'da última vez: ' + estadoTxt(ult)] : ['feita', 'em dia']; };
+  const combinado = `<div class="card"><span class="rotulo" style="margin:0 0 4px">O que combinamos em ${dataBRano(R.publicadaEm)} · com a ${esc(R.consultora.completo)}</span>${R.orientacoes.map(x => { const [st, txt] = x.pedido ? estadoDoPedido(x.pedido) : ['', '']; return `<div class="orientacao ${st}"><span class="p"></span><span>${esc(x.txt)}${txt ? ` <span class="mut">· ${txt}</span>` : ''}</span></div>`; }).join('')}</div>`;
+  const reserva = reservaAtual(), ideal = R.reserva.ideal, topoR = Math.max(ideal, reserva) * 1.05;
+  const cards = [
+    ['Reserva', R.focos.includes('reserva'), `${brlC(reserva)} <small>de ${brlC(ideal)}</small>`, `a ideal: ${R.reserva.meses} meses de custo de vida`,
+      `${b100([[reserva, 'var(--fixas)', 'Hoje'], [Math.max(0, topoR - reserva), 'var(--trilho)', 'Até a ideal']], 12, [[ideal * 0.4 / topoR, 'mínima'], [ideal * 0.7 / topoR, 'aceitável'], [ideal / topoR, 'ideal']])}<div class="marcas">${[['mínima', 0.4], ['aceitável', 0.7], ['ideal', 1]].map(([n, f]) => `<span style="left:${ideal * f / topoR * 100}%">${n}</span>`).join('')}</div>`],
+    ['Objetivos e liberdade', R.focos.includes('objetivos'), `${brl(soma(objetivos().map(o => o.aporte)))} <small>por mês</small>`, objetivos().map(o => `${o.nome}: ${brl(o.aporte)}`).join(' · '),
+      objetivos().map(o => `<div style="margin:6px 0"><div class="entre mut"><span>${esc(o.nome)}</span><span>${pct(progresso(o))}</span></div><div class="trilho"><i style="width:${(progresso(o) * 100).toFixed(1)}%"></i></div></div>`).join('')],
+    ['Orçamento e sobra', R.focos.includes('orcamento'), `${pct(sobra() / renda())} <small>para o futuro</small>`, `${brl(sobra())} de ${brl(renda())} por mês; a referência é 20%`,
+      b100([[R.custo.fixas, 'var(--fixas)', 'Fixas'], [R.custo.ajustaveis, 'var(--ajust)', 'Ajustáveis'], [sobra(), 'var(--laranja)', 'Sobra']], 12, [[0.8, 'referência: 20% para o futuro']]) + legenda([['fixas', 'var(--fixas)'], ['ajustáveis', 'var(--ajust)'], ['sobra', 'var(--laranja)']])],
+    ['Saúde financeira', false, `${R.exame.nota} <small>era ${R.exame.anterior.nota}</small>`, `exame de ${dataBRano(R.exame.data)} · fase: ${esc(R.exame.fase.toLowerCase())}`,
+      `<div class="pilares">${Object.entries(R.exame.pilares).map(([k, v]) => `<div><span>${k}</span><i><em style="width:${v}%;${v < 60 ? 'background:var(--atencao)' : ''}"></em></i><b>${v}</b></div>`).join('')}</div>`],
+  ].sort((a, b) => b[1] - a[1]);
+  return `<div class="grade2" style="align-items:start"><div>${combinado}</div><div class="card"><span class="rotulo" style="margin:0 0 6px">Para uma próxima conversa</span>${R.temas.map(t => `<div class="peq" style="padding:6px 0;border-top:1px solid var(--areia);color:var(--marinho)">${esc(t)}</div>`).join('')}
+      <p class="mut" style="margin:10px 0 0">Ficaram de fora de propósito na clínica. ${R.aprofundamento ? 'A conversa de aprofundamento está marcada para ' + dataBRano(R.aprofundamento) + '.' : 'O próximo encontro é o check-up anual, em ' + dataBRano(R.checkup) + '.'}</p></div></div>
+    <div class="rotulo">Os números de cada área</div><div class="cap-grade">${cards.map(([nome, foco, big, sub, viz]) => `<div class="cap"><span class="r">${nome}${foco ? '<span class="chip mar">foco da clínica</span>' : ''}</span><div class="big">${big}</div><div class="sub">${esc(sub)}</div><div class="viz">${viz}</div></div>`).join('')}</div>`;
+}
+
+// ---------- Jornada: a relação com a Nord (o pipeline da clínica) e a escalada ----------
+const MUNDOS = ['Sobreviver', 'Descobrir', 'Construir', 'Focar', 'Proteger', 'Otimizar', 'Desfrutar'];
+const PERGUNTAS_MUNDO = ['Consigo fechar o mês sem afundar?', 'Onde estou e para onde quero ir?', 'Tenho base para subir?', 'Estou pondo o dinheiro onde o sonho está?', 'Um imprevisto derruba o que construí?', 'O dinheiro trabalha mais do que eu?', 'Vivo do que construí?'];
+function telaJornada() {
+  const etapas = [['Exame de saúde financeira', dataBRano(R.exame.data), 'feita', `Nota ${R.exame.nota}.`], ['Clínica financeira', dataBRano(R.publicadaEm), 'feita', `Com a ${R.consultora.completo}: ${R.orientacoes.length} orientações combinadas.`]]
+    .concat(R.aprofundamento ? [['Conversa de aprofundamento', dataBRano(R.aprofundamento), R.aprofundamento < HOJE ? 'feita' : 'agora', '']] : [])
+    .concat([['Check-up anual', 'disponível em ' + dataBRano(R.checkup), R.checkup <= HOJE ? 'agora' : '', 'Rever o que combinamos, com o exame de novo.']]);
+  const atual = R.mundo != null ? R.mundo : 2, passo = passoAtual();
+  return `<div class="grade2" style="align-items:start"><div class="card"><span class="rotulo" style="margin:0 0 8px">A relação com a Nord</span>${etapas.map(([n, d, st, obs]) => `<div class="etapa ${st}"><span class="p"></span><div><b>${esc(n)}</b> <span class="mut">${esc(d)}</span>${obs ? `<div class="mut">${esc(obs)}</div>` : ''}</div></div>`).join('')}</div>
+    <div class="card"><span class="rotulo" style="margin:0 0 8px">A escalada</span><div class="trilha-h">${MUNDOS.map((m, i) => `<div class="${i < atual ? 'feito' : i === atual ? 'atual' : ''}"><i></i><span title="${m}">${m}</span></div>`).join('')}</div>
+      <p class="peq" style="margin:12px 0 0;color:var(--marinho)">${pl('Vocês estão', 'Você está')} em <b>${MUNDOS[atual]}</b>. ${PERGUNTAS_MUNDO[atual]}${passo ? ' O passo agora: ' + esc(passo.titulo.toLowerCase()) + '.' : ''}</p>
+      <p class="mut" style="margin:6px 0 0">Na clínica, o foco escolhido pela ${esc(R.consultora.nome)} vale acima da régua.</p></div></div>`;
+}
+
+// ---------- Conversas ----------
+function telaConversas() {
+  return `<div style="max-width:720px">${X.conversas.map(c => `<div class="msg ${c.quem === 'consultora' ? 'dela' : 'minha'}">${esc(c.txt)}<small>${c.quem === 'consultora' ? esc(R.consultora.completo) : esc(nomeDe(c.quem))} · ${dataBR(c.em)}${c.quem !== 'consultora' && !c.respondida ? ' · aguardando a resposta, em até 2 dias úteis' : ''}</small></div>`).join('')}
+    <div class="card" style="margin-top:16px"><div class="campo" style="margin-top:0"><label for="msg">Escrever para a ${esc(R.consultora.nome)}</label><textarea id="msg" data-campo="rascunho" placeholder="Uma dúvida, um pedido de conversa ou uma mudança na vida de ${pl('vocês', 'você')}">${esc(UI.rascunho)}</textarea></div>
+      <div class="entre"><span class="mut">A resposta chega aqui e no WhatsApp.</span><button class="primaria" data-acao="enviar">Enviar</button></div></div>
+    <p class="mut">Para algo urgente, o WhatsApp da ${esc(R.consultora.nome)}: ${esc(R.consultora.whatsapp)}.</p></div>`;
+}
+
+// =====================================================================================================================
+// 6. DESENHO E EVENTOS
+// =====================================================================================================================
+function desenhar() {
+  const raiz = document.getElementById('raiz');
+  if (!R) { raiz.innerHTML = `<div class="vazio" style="padding-top:20vh"><h2>A sua área está sendo preparada</h2><p>Assim que a sua consultora registrar a clínica financeira, o que vocês combinaram aparece aqui.</p></div>`; return; }
+  const { tela, arg } = rota(), mi = document.getElementById('miolo'), topo = mi && desenhar.ultima === location.hash ? window.scrollY : 0;
+  let html;
+  try {
+    html = ({ painel: telaPainel, passo: telaPasso, tarefas: telaTarefas, tarefa: telaTarefas, objetivos: telaObjetivos, objetivo: () => telaObjetivo(arg), plano: telaPlano, jornada: telaJornada, conversas: telaConversas }[tela] || telaPainel)();
+  } catch (e) { console.error(e); html = `<div class="aviso at">Não foi possível mostrar esta tela agora. ${esc(e.message)}</div>`; }
+  raiz.innerHTML = casca(html);
+  document.title = (tela === 'objetivo' ? (objDe(arg) || {}).nome || 'Objetivo' : TITULOS[tela] || 'Painel') + ' — Nord Liberta';
+  // a tarefa aberta pelo endereço (o link do lembrete): #tarefa/aporte:2026-10
+  if (tela === 'tarefa' && arg && (!UI.folha || UI.folha.id !== arg)) UI.folha = { id: arg };
+  desenharFolha();
+  document.getElementById('toast-raiz').innerHTML = UI.toast ? `<div class="toast" role="status"><span>${esc(UI.toast.txt)}</span>${UI.toast.desfazer ? '<button data-acao="desfazer">Desfazer</button>' : ''}</div>` : '';
+  if (desenhar.ultima === location.hash) window.scrollTo(0, topo);
+  desenhar.ultima = location.hash;
+}
+function desenharFolha() {
+  const f = document.getElementById('folha-raiz'), o = UI.folha && ocorrenciaDe(UI.folha.id);
+  f.innerHTML = o ? `<div class="veu" data-acao="fechar-fora"><div class="folha" role="dialog" aria-modal="true" aria-label="${esc(o.titulo)}">${folhaTarefa(o)}</div></div>` : '';
+}
+let toastTimer = null;
+function avisar(txt, desfazer) { UI.toast = { txt, desfazer }; clearTimeout(toastTimer); toastTimer = setTimeout(() => { UI.toast = null; desenhar(); }, desfazer ? 8000 : 5000); }
+const numero = s => { const v = parseFloat(String(s).replace(/[^\d,.-]/g, '').replace(/\.(?=\d{3}(\D|$))/g, '').replace(',', '.')); return isFinite(v) ? v : null; };
+
+// gravar uma resposta: a primeira que fecha a ocorrência vale; a segunda não sobrescreve (a ocorrência já está fechada)
+async function responder(estado) {
+  const F = UI.folha, o = ocorrenciaDe(F.id); if (!o) return;
+  if (!o.aberta && estado !== 'adiada') { avisar('Esta tarefa já foi respondida.'); return; }
+  const r = { em: new Date().toISOString().slice(0, 19), quem: MEMBRO(), canal: 'area', estado };
+  if (F.valor != null && ['feita', 'parcial', 'naofiz'].includes(estado) && (o.cat !== 'dinheiro' || estado !== 'naofiz')) r.valor = F.valor;
+  if (estado === 'adiada') { r.novaData = F.novaData || addD(o.data > HOJE ? o.data : HOJE, 7); if (F.motivo) r.motivo = F.motivo; }
+  if (o.cat === 'dinheiro' && F.saida) r.saida = F.saida;
+  const antes = JSON.stringify(X);
+  X.respostas[o.id] = (X.respostas[o.id] || []).concat(r);
+  // a saída escolhida no "não fiz" vira ajuste direto do plano (Clínica), com data: uma versão nova
+  if (o.cat === 'dinheiro' && F.saida && F.saida !== 'outro') ajustesDaSaida(o, F.saida, F.coube).forEach(j => X.ajustes.push(Object.assign(j, { em: r.em, quem: r.quem, saida: F.saida, ocorrencia: o.id })));
+  await ARMAZEM.gravar('execucao', X);
+  UI.folha = null; UI.desfazer = antes;
+  if (location.hash.startsWith('#tarefa/')) history.replaceState(null, '', '#tarefas');
+  avisar(estado === 'adiada' ? `Adiada para ${dataBR(r.novaData)}.` : estado === 'feita' ? (o.pedido.efeito && o.pedido.efeito.reserva ? 'Feito. A reserva e o passo se ajustaram.' : 'Feito. O plano se ajustou.') : F.saida ? `Gravado: ${SAIDAS[F.saida].toLowerCase()}.` : 'Gravado.', true);
+  desenhar();
+}
+
+document.addEventListener('click', async ev => {
+  const a = ev.target.closest('[data-acao]'); if (!a) return;
+  const acao = a.dataset.acao;
+  if (acao === 'fechar-fora' && ev.target !== a) return;
+  if (acao === 'abrir') { UI.folha = { id: a.dataset.id }; desenharFolha(); return; }
+  if (acao === 'fechar' || acao === 'fechar-fora') { UI.folha = null; if (location.hash.startsWith('#tarefa/')) history.replaceState(null, '', '#tarefas'); desenhar(); return; }
+  if (acao === 'modo') { Object.assign(UI.folha, { modo: a.dataset.v || null, saida: null }); desenharFolha(); return; }
+  if (acao === 'saida') { UI.folha.saida = a.dataset.v; desenharFolha(); return; }
+  if (acao === 'ver-por-obj') { UI.folha.porObj = !UI.folha.porObj; desenharFolha(); return; }
+  if (acao === 'responder') { await responder(a.dataset.v); return; }
+  if (acao === 'filtro') { UI.filtro = a.dataset.v; desenhar(); return; }
+  if (acao === 'toast') { avisar(a.dataset.txt); desenhar(); return; }
+  if (acao === 'desfazer') { if (UI.desfazer) { X = JSON.parse(UI.desfazer); UI.desfazer = null; await ARMAZEM.gravar('execucao', X); } UI.toast = null; desenhar(); return; }
+  if (acao === 'enviar') {
+    const txt = UI.rascunho.trim(); if (!txt) return;
+    X.conversas.push({ em: new Date().toISOString().slice(0, 19), quem: MEMBRO(), txt, origem: 'Conversas' }); UI.rascunho = '';
+    await ARMAZEM.gravar('execucao', X); avisar(`Enviado. A ${R.consultora.nome} responde em até 2 dias úteis.`); desenhar(); return;
+  }
+});
+// os campos guardam o valor sem redesenhar a cada tecla (o foco não se perde); o efeito é recalculado ao sair do campo
+document.addEventListener('input', ev => {
+  const c = ev.target.dataset && ev.target.dataset.campo; if (!c) return;
+  if (c === 'rascunho') { UI.rascunho = ev.target.value; return; }
+  if (UI.folha) UI.folha[c] = ['valor', 'coube'].includes(c) ? numero(ev.target.value) : ev.target.value;
+  const g = document.querySelector('.folha [data-acao="responder"]'); if (g && c === 'valor') g.disabled = UI.folha.valor == null;
+});
+document.addEventListener('change', ev => { const c = ev.target.dataset && ev.target.dataset.campo; if (c && ['valor', 'coube'].includes(c) && UI.folha) { const id = ev.target.id; desenharFolha(); const n = document.getElementById(id); if (n) n.focus(); } });
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && UI.folha) { UI.folha = null; desenhar(); } });
+addEventListener('hashchange', () => { UI.folha = null; desenhar(); window.scrollTo(0, 0); });
+// cruzar o ponto de quebra muda a ordem do Painel: redesenha
+matchMedia('(min-width: 900px)').addEventListener('change', () => desenhar());
+
+(async () => {
+  await ARMAZEM.iniciar();
+  R = ARMAZEM.ler('clinica'); X = Object.assign({ respostas: {}, ajustes: [], conversas: [] }, ARMAZEM.ler('execucao') || {});
+  ARMAZEM.ouvir('clinica', v => { R = v; desenhar(); });
+  ARMAZEM.ouvir('execucao', v => { X = Object.assign({ respostas: {}, ajustes: [], conversas: [] }, v || {}); desenhar(); });
+  desenhar();
+})();
+</script>
+</body>
+</html>
