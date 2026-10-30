@@ -45,10 +45,12 @@ fotos de natureza continuam as mesmas; a escolha vira tokens no `DESIGN.md` só 
   lembrada no navegador. Os pares alternativos carregam do Google Fonts só quando escolhidos.
 - **O seletor Resumo | Em detalhe** substitui o botão "Ver todos em detalhe": uma cápsula fina com o pino que desliza
   (no Livro, os rótulos em Newsreader e a cápsula sem fundo).
-- **A transformação** do Plano compacto nos cartões completos ficou mais lenta e em sequência: cada cartão cresce um
-  pouco depois do anterior (View Transition de 0,85 s, 40 ms entre cartões); dentro, a frase, o estado e o gráfico chegam
-  depois e os gráficos se enchem (barras crescem da esquerda, a curva se traça, a teia se abre do centro, os pontos
-  pingam). Dura cerca de 2,5 s até o último cartão. Com "menos movimento" pedido, nada disso anima.
+- **A transformação** do Plano compacto nos cartões completos é um carrossel: cada área passa no centro da tela,
+  uma de cada vez, e o gráfico dela se enche (barras crescem da esquerda, a curva se traça, a teia se abre do centro,
+  os pontos pingam); as que já passaram recuam para trás, à esquerda, menores e mais apagadas. Depois da última, todas
+  vão para o seu lugar na grade. Cerca de 1 s por área com gráfico e 0,6 s por área sem gráfico; um toque ou Esc pula
+  para o fim. No Resumo, os cartões se recolhem um a um, rápido (cerca de 0,6 s), e os compactos aparecem em sequência.
+  Com "menos movimento" pedido, nada disso anima.
 - **O menu no alto mostra só o ícone do logo**, sem o nome escrito ao lado: o nome já é parte do logo. O arquivo do logo
   completo que existe em `marca/` é a versão negativa (nome em branco), que não serve sobre o papel claro; para usar o
   logo inteiro no alto falta a versão positiva.
