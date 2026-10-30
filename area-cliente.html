@@ -364,7 +364,7 @@ body[class*="v-"] .trilho.fut i{background:linear-gradient(90deg,var(--anel-a),v
 .v-livro :focus-visible{outline:2px solid var(--laranja);outline-offset:3px}
 .v-livro :is(.cab h1,.paisagem h2,.obj-foto .sobre b,.folha h2,.vazio h2){font-family:var(--serifa);font-weight:500;letter-spacing:-.015em}
 /* The Numbers Speak Sora: todo valor que é o assunto do cartão */
-.v-livro :is(.passo .valor,.grande,.cap .big,.numero b,.nums b,.num,.prof b){font-family:'Sora',sans-serif;font-weight:600;letter-spacing:-.02em}
+.v-livro :is(.passo .valor,.grande,.cap .big,.numero b,.nums b,.num){font-family:'Sora',sans-serif;font-weight:600;letter-spacing:-.02em}
 .v-livro :is(.passo .valor small,.cap .big small,.grande small){font-family:var(--sans);font-weight:500;font-size:14px;letter-spacing:0;color:var(--legenda)}
 .v-livro .passo .valor{font-size:34px}
 .v-livro .cab h1{font-size:30px;line-height:1.1}
@@ -394,6 +394,16 @@ body.v-livro .rotulo .mais{font:600 13px var(--sans);letter-spacing:0}
 .v-livro :is(a.cap,a.tarefa,a.obj-card,a.obj-mini,button.tarefa,.mais-lista a):hover{box-shadow:var(--sombra-alta);transform:translateY(-1px)}
 .v-livro .cap.semdado{background:transparent;box-shadow:none;border:1.5px dashed #DCCFBD}
 .v-livro .passo{box-shadow:var(--sombra-alta)}
+/* o Painel em duas colunas que começam na mesma linha: cada bloco é o título da seção e, embaixo, o cartão */
+.v-livro .passo{margin:0 0 12px;padding:20px 22px}
+.v-livro .passo .valor{margin:0 0 14px}
+.v-livro .passo p{margin:12px 0 16px}
+.v-livro .prof{margin:0 0 12px;padding:16px 22px}
+.v-livro .prof b{font:600 16px/1.3 var(--sans);letter-spacing:0}
+.v-livro .encontro{display:flex;width:100%;justify-content:space-between;border-radius:var(--raio);padding:14px 22px;margin:0;font-size:13.5px}
+/* a faixa dos objetivos: a sombra inteira à mostra e a borda direita se desfazendo, para dizer que continua */
+.v-livro .faixa-obj{gap:12px;margin:-6px -6px 0;padding:6px 48px 16px 6px;scroll-snap-type:x mandatory;scroll-padding-left:6px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 56px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 56px),transparent)}
+.v-livro .obj-mini{scroll-snap-align:start}
 /* a ação principal: a pílula laranja com o texto marinho, como o "Próximo" do relatório */
 .v-livro .primaria{background:var(--laranja);color:var(--marinho);border-radius:9999px;padding:11px 22px;transition:filter .2s ease,transform .1s ease}
 .v-livro .primaria:hover{background:var(--laranja);filter:brightness(.94)}
@@ -1487,9 +1497,9 @@ function telaPainel() {
   const topo = frase ? `<section class="paisagem" style="background-image:linear-gradient(100deg,rgba(19,31,46,.62),rgba(19,31,46,.12) 75%),url('${PAISAGEM}')"><span class="r">${R.proposito ? 'O propósito' : 'Comece por aqui'}</span><h2>${esc(frase)}</h2></section>` : '';
   const faixa = objs.length ? `${DESK() || !R.proposito ? '' : `<p class="proposito">${esc(R.proposito)}</p>`}<div class="rotulo">Os objetivos</div><div class="faixa-obj">${objs.map(o => `<a class="obj-mini" href="#objetivo/${o.id}"><div class="foto" style="background-image:${FUNDO_OBJ(o)}"></div><div class="tx"><b>${esc(o.nome)}</b><small>${o.tipo === 'liberdade' ? 'aos ' + o.idade : mesAno(o.data + '-01')} · ${pct(progresso(o))} ${o.tipo === 'liberdade' ? 'do caminho' : 'guardado'}</small><div class="trilho"><i style="width:${(progresso(o) * 100).toFixed(1)}%"></i></div></div></a>`).join('')}</div>`
     : `<div class="rotulo">Os objetivos</div><a class="card" href="#cartao/objetivos" style="display:block;text-decoration:none"><b style="color:var(--marinho)">Dar nome, valor e data ao primeiro objetivo</b><div class="mut">Pode ser uma viagem, a entrada de uma casa, quitar uma dívida ou a primeira reserva.</div></a>`;
-  const cartaoPasso = passo ? `<section class="passo"><span class="rotulo" style="margin:0">O passo agora</span><div class="valor">${passo.valor || esc(passo.titulo)}</div>${passo.fracao != null ? `<div class="trilho fut" style="height:8px"><i style="width:${(clamp(passo.fracao, 0, 1) * 100).toFixed(1)}%"></i></div>` : ''}
+  const cartaoPasso = passo ? `<div class="rotulo">O passo agora</div><section class="passo"><div class="valor">${passo.valor || esc(passo.titulo)}</div>${passo.fracao != null ? `<div class="trilho fut" style="height:8px"><i style="width:${(clamp(passo.fracao, 0, 1) * 100).toFixed(1)}%"></i></div>` : ''}
       <p>${esc(passo.titulo)}${passo.pedido && ocorrenciaDe(passo.pedido) && ocorrenciaDe(passo.pedido).aberta ? ' · ' + esc(ocorrenciaDe(passo.pedido).quando) : ''}</p><a class="primaria" href="${passo.acao && !passo.pedido ? passo.acao[1] : '#passo'}" style="display:inline-flex;align-items:center;text-decoration:none">${passo.acao && !passo.pedido ? esc(passo.acao[0]) : 'Ver o passo'}</a></section>`
-    : `<section class="passo"><span class="rotulo" style="margin:0">O passo agora</span><p style="margin-top:10px">Os passos de agora estão cumpridos. O próximo é ${R.consultora ? 'conversar com a ' + esc(R.consultora.nome) : 'aprofundar o plano'}.</p></section>`;
+    : `<div class="rotulo">O passo agora</div><section class="passo"><p style="margin-top:10px">Os passos de agora estão cumpridos. O próximo é ${R.consultora ? 'conversar com a ' + esc(R.consultora.nome) : 'aprofundar o plano'}.</p></section>`;
   const semTarefa = R.degrau === 'visitante' ? 'As tarefas nascem do plano e chegam com lembrete no WhatsApp. Para recebê-las, crie a sua conta.' : 'Nada em aberto agora.';
   const tarefa = `<div class="rotulo">A próxima tarefa</div>${prox ? cartaoTarefa(prox) + `<a class="btn link peq" href="#tarefas">${semana > 0 ? `mais ${semana} nesta semana` : 'Todas as tarefas'} &#8250;</a>` : `<div class="aviso">${semTarefa}</div>`}`;
   // os quatro números, cada um com a origem no toque; só os que existem
