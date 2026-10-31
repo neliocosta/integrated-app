@@ -324,6 +324,32 @@ a.cap{text-decoration:none;color:inherit}
 .tbl th{font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--legenda);border-top:0}
 .tbl td.v{text-align:right;color:var(--marinho);font-weight:600;white-space:nowrap}
 .mais-lista a{display:flex;align-items:center;gap:12px;background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);padding:14px 16px;margin-bottom:8px;text-decoration:none;color:var(--marinho);font-weight:600}
+/* Atendimento: quem atende, o nível de serviço e os níveis da Nord lado a lado */
+.quem-atende{display:flex;gap:14px;align-items:flex-start}
+.quem-atende img,.quem-atende .ini{width:48px;height:48px;border-radius:50%;flex:none;object-fit:cover}
+.quem-atende .ini{display:flex;align-items:center;justify-content:center;background:var(--marinho);color:#fff;font:600 18px var(--sans)}
+.quem-atende b{display:block;color:var(--marinho);font-size:15px}
+.quem-atende small{display:block;color:var(--legenda);font-size:13px;margin-top:2px}
+.quem-atende .contatos{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:8px;font:600 13.5px var(--sans)}
+.quem-atende .contatos a{text-underline-offset:3px}
+.etiqueta{display:block;font:600 11px/1.35 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--marinho);margin:0 0 4px}
+.nivel-nome{font:600 18px/1.3 var(--sans);color:var(--marinho);margin:6px 0 2px}
+.inclui{margin:8px 0 10px;padding:0;list-style:none}
+.inclui li{position:relative;padding:3px 0 3px 18px;font-size:14px;color:var(--grafite);line-height:1.45}
+.inclui li::before{content:"";position:absolute;left:2px;top:11px;width:7px;height:7px;border-radius:50%;background:var(--ajust)}
+.niveis{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+@media (min-width:900px){.niveis{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
+.niveis .card{margin:0;display:flex;flex-direction:column}
+.niveis .card > .entre b{color:var(--marinho);font-size:15.5px}
+.nivel.meu{outline:2px solid var(--marinho);outline-offset:-2px}
+.nivel.meu .inclui li::before{background:var(--laranja)}
+.atend{display:block;text-decoration:none;color:inherit}
+.atend .atend-tit{display:block;color:var(--marinho);font-size:15.5px;margin:2px 0 6px}
+.atend p{margin:0 0 12px}
+.atend .linha{gap:14px}
+.v-livro :is(.quem-atende b,.niveis .card > .entre b,.atend .atend-tit,.nivel-nome){font-family:"Sora",sans-serif;font-weight:600;letter-spacing:-.01em}
+.v-livro .atend{margin:0;padding:16px 22px}
+.v-livro .nivel.meu{outline:0;box-shadow:var(--sombra-alta),inset 0 0 0 2px var(--marinho)}
 .mais-lista svg{width:22px;height:22px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .barra-exame{position:sticky;bottom:72px;z-index:4;background:var(--fundo);padding:10px 0;border-top:1px solid var(--areia)}
 @media (min-width:900px){.barra-exame{bottom:0;padding:14px 0}}
@@ -808,7 +834,7 @@ const EXEMPLOS = {
     vetor: () => ({ domicilio: DOMICILIO_ANA, campos: {}, objetivos: [], exames: structuredClone(EXAMES_ANA).concat([{ data: '2027-03-20', nota: 76, pilares: { Poupança: 72, Patrimônio: 80, Proteção: 61, Consciência: 78, Atitude: 76 }, quem: 'Ana' }]) }),
     versoes: () => { const p1 = jsonDe('plano-exemplo'), p2 = structuredClone(p1);
       p2.objectives.find(o => o.id === 'casa').planned = 1800; p2.dataRelatorio = '2027-03-22';
-      return { lista: [{ id: 'v2', n: 2, em: '2027-03-22T18:00:00', comentario: 'Reunião semestral: a Casa própria passa a R$ 1.800 por mês', consultor: 'Patrícia Lemos', dados: p2 },
+      return { lista: [{ id: 'v2', n: 2, em: '2027-03-22T18:00:00', comentario: '1º acompanhamento: a Casa própria passa a R$ 1.800 por mês', consultor: 'Patrícia Lemos', dados: p2 },
         { id: 'v1', n: 1, em: '2026-09-26T18:00:00', comentario: 'Apresentação do plano', consultor: 'Patrícia Lemos', dados: p1 }] }; },
     execucao: () => jsonDe('execucao-completo'),
   },
@@ -966,11 +992,11 @@ function montar() {
   F = fatos();
   const dg = degrau(), vs = versoesVigentes(), v0 = vs[0];
   let dom = (V && V.domicilio) || (C && C.domicilio) || { titulo: 'Você', casal: false, membros: [{ id: 'voce', nome: 'Você' }] };
-  let consultora = C ? C.consultora : null, objetivos = [], pedidos = [], passos = [], proposito = C ? C.proposito : null, encontro = null, publicadaEm = C ? C.publicadaEm : null;
+  let consultora = C ? C.consultora : null, objetivos = [], pedidos = [], passos = [], proposito = C ? C.proposito : null, publicadaEm = C ? C.publicadaEm : null;
   if (dg === 'completo' && RS) {
     const fam = RS.familia;
     dom = { titulo: fam.casal ? fam.titular + ' e ' + fam.conjuge : fam.titular, casal: fam.casal, membros: [{ id: 'titular', nome: fam.titular }].concat(fam.casal ? [{ id: 'conjuge', nome: fam.conjuge }] : []) };
-    consultora = RS.consultor ? { nome: primeiro(RS.consultor.nome), completo: RS.consultor.nome, cert: RS.consultor.certificacao || '', whatsapp: RS.consultor.telefone || '' } : null;
+    consultora = RS.consultor ? { nome: primeiro(RS.consultor.nome), completo: RS.consultor.nome, cert: RS.consultor.certificacao || '', whatsapp: RS.consultor.telefone || '', email: RS.consultor.email || '', foto: RS.consultor.foto || '' } : null;
     proposito = null; publicadaEm = v0.em.slice(0, 10);
     // o aporte de partida de cada objetivo é o da versão mais antiga carregada; as versões seguintes entram como ajustes datados
     const base = RES[(vs.slice().reverse().find(v => RES[v.n]) || v0).n] || RS;
@@ -985,19 +1011,19 @@ function montar() {
     if (comAporte.length) pedidos.push({ id: 'aporte', cat: 'dinheiro', ritmo: 'mensal', dia: 5, desde, resp: 'os dois', divisao: comAporte.map(x => ({ obj: x.id })) });
     const meta = RS.gestao.combinado && RS.gestao.combinado.ajustaveis ? RS.gestao.combinado.ajustaveis.meta : null, alvo = comAporte[0];
     if (meta != null && alvo) pedidos.push({ id: 'teto', cat: 'comportamental', ritmo: 'semanal', desde, resp: 'os dois', tetoMes: Math.round(RS.gestao.ajustaveis - meta), obj: (comAporte.find(x => x.id === 'casa') || alvo).id });
-    encontro = { txt: `Reunião semestral em ${dataBRano(addD(v0.em.slice(0, 10), 182))} com a ${consultora ? consultora.nome : 'consultora'}`, href: '#jornada' };
+    const k = calendarioCompleto(vs), prox = !k.acomp1.feito ? ['1º acompanhamento', k.acomp1] : !k.anual.feito ? ['acompanhamento anual', k.anual] : null;
+    if (prox && HOJE >= prox[1].lembrete) pedidos.push({ id: 'agendar:' + prox[1].data, cat: 'interacao', ritmo: 'unica', data: prox[1].data, resp: fam.casal ? 'os dois' : 'titular',
+      titulo: `Agendar o ${prox[0]}${consultora ? ' com a ' + consultora.nome : ''}`, serve: 'para rever o plano com quem o montou', quando: 'até ' + dataBR(prox[1].data) + ', pelo link da agenda' });
   } else if (dg === 'clinica') {
     const o = 'combinado com a ' + C.consultora.completo + ' em ' + dataBRano(C.publicadaEm);
     objetivos = C.objetivos.map(x => Object.assign({}, x, { origem: o })); pedidos = C.pedidos; passos = C.passos;
-    encontro = { txt: (C.aprofundamento ? 'Conversa de aprofundamento em ' + dataBRano(C.aprofundamento) : 'Check-up anual disponível em ' + dataBRano(C.checkup)), href: '#jornada' };
   } else {
     objetivos = ((V && V.objetivos) || []).map(x => Object.assign({}, x, { origem: `criado por ${x.quem || 'você'} em ${dataBRano(x.criado)}` }));
     // o cadastrado recebe a tarefa do aporte dos objetivos que ele criou; o visitante, sem conta, não tem onde guardar tarefas
     const comAporte = objetivos.filter(x => x.aporte > 0);
     if (dg === 'cadastrado' && comAporte.length) pedidos.push({ id: 'aporte', cat: 'dinheiro', ritmo: 'mensal', dia: 5, desde: addM(comAporte.map(x => x.criado.slice(0, 7)).sort()[0], 1), resp: dom.casal ? 'os dois' : dom.membros[0].id, divisao: comAporte.map(x => ({ obj: x.id })) });
-    encontro = { txt: 'Agendar uma clínica financeira', href: '#conversas' };
   }
-  return { degrau: dg, domicilio: dom, consultora, objetivos, pedidos, passos, proposito, encontro, publicadaEm,
+  return { degrau: dg, domicilio: dom, consultora, objetivos, pedidos, passos, proposito, publicadaEm,
     orientacoes: C ? C.orientacoes : [], temas: C ? C.temas : [], checkup: C ? C.checkup : null, aprofundamento: C ? C.aprofundamento : null };
 }
 const MEMBRO = () => PARAMS.get('membro') || R.domicilio.membros[0].id;
@@ -1453,7 +1479,7 @@ const ICONES = {
 };
 const LATERAL = [['painel', 'Painel'], ['objetivos', 'Objetivos'], ['tarefas', 'Tarefas'], ['plano', 'Plano'], ['realizado', 'Realizado'], ['jornada', 'Jornada']];
 const BAIXO = [['painel', 'Painel'], ['objetivos', 'Objetivos'], ['tarefas', 'Tarefas'], ['plano', 'Plano'], ['mais', 'Mais']];
-const TITULOS = { painel: 'Painel', objetivos: 'Objetivos', tarefas: 'Tarefas', plano: 'Plano', realizado: 'Realizado', jornada: 'Jornada', conversas: 'Conversas', passo: 'O passo agora', tarefa: 'Tarefa', exame: 'Exame de saúde financeira', mais: 'Mais' };
+const TITULOS = { painel: 'Painel', objetivos: 'Objetivos', tarefas: 'Tarefas', plano: 'Plano', realizado: 'Realizado', jornada: 'Jornada', conversas: 'Atendimento', passo: 'O passo agora', tarefa: 'Tarefa', exame: 'Exame de saúde financeira', mais: 'Mais' };
 const PAI = { objetivo: 'objetivos', passo: 'painel', tarefa: 'tarefas', conversas: 'painel', cartao: 'plano', exame: 'plano', realizado: 'mais', jornada: 'mais' };
 const aguardando = () => X.conversas.filter(c => c.quem !== 'consultora' && !c.respondida).length;
 const falarCom = () => R.consultora ? 'Falar com a ' + R.consultora.nome : 'Falar com alguém';
@@ -1467,7 +1493,7 @@ function casca(conteudo) {
   const selo = voltar ? '' : `<img class="selo" src="${ICONE_MARCA(false)}" alt="Nord Liberta">`;
   return `${barraDemo()}<div class="casca"><nav class="lateral" aria-label="Menu"><div class="marca"><img src="${LOGO_MARCA}" alt="Nord Liberta"></div><div class="quem">${esc(R.domicilio.titulo)}</div>
       ${LATERAL.map(([id, nome]) => `<a class="item${ativo === id ? ' on' : ''}" href="#${id}">${ICONES[id]}${nome}</a>`).join('')}
-      <div class="pe"><a class="item${tela === 'conversas' ? ' on' : ''}" href="#conversas">${ICONES.conversas}Conversas${n ? ` <span class="chip mar">${n}</span>` : ''}</a></div></nav>
+      <div class="pe"><a class="item${tela === 'conversas' ? ' on' : ''}" href="#conversas">${ICONES.conversas}Atendimento${n ? ` <span class="chip mar">${n}</span>` : ''}</a></div></nav>
     <div class="coluna"><header class="cab">${voltar}${selo}<h1>${esc(titulo)}</h1>${falar}</header><main id="miolo">${conteudo}</main></div></div>
     <nav class="nav-baixo" aria-label="Menu">${BAIXO.map(([id, nome]) => `<a class="${ativo === id || (id === 'mais' && ['realizado', 'jornada'].includes(tela)) ? 'on' : ''}" href="#${id}">${ICONES[id]}${nome}</a>`).join('')}</nav>`;
 }
@@ -1525,7 +1551,7 @@ function telaPainel() {
     : nums.length ? `<div class="rotulo">Os números</div><div class="numeros">${nums.map(([r, v, s, o]) => `<button class="numero" data-acao="toast" data-txt="${esc(r)}: ${esc(o || 'informado por você')}."><span>${r}</span><b>${v}</b><small>${esc(s)}</small></button>`).join('')}</div>` : '';
   const aps = oc.filter(o => o.pedido.id === 'aporte' && o.data <= HOJE), plan = soma(aps.map(o => o.valor)), feito = soma(aps.map(o => soma(Object.values(feitoPorObjetivo(o)))));
   const ritmo = aps.length ? `<div class="rotulo">O ritmo</div><a class="card" href="#realizado" style="display:block;text-decoration:none"><div class="num" style="font-size:21px">${brl(feito)} <span class="mut" style="font-family:var(--sans)">de ${brl(plan)} desde ${MESES_L[+aps[0].mes.slice(5) - 1]}${aps[0].mes.slice(0, 4) !== MES.slice(0, 4) ? ' de ' + aps[0].mes.slice(0, 4) : ''}</span></div><div class="trilho" style="margin:8px 0 6px"><i style="width:${plan ? (clamp(feito / plan, 0, 1) * 100).toFixed(1) : 0}%"></i></div><div class="mut">${aps.slice(-6).map(a => `${MESES[+a.mes.slice(5) - 1]}: ${a.aberta ? 'aguardando' : estadoTxt(a)}`).join(' · ')}</div></a>` : '';
-  const encontro = R.encontro ? `<a class="encontro" href="${R.encontro.href}">${esc(R.encontro.txt)} &#8250;</a>` : '';
+  const encontro = cartaoAtendimento();
   if (!DESK()) return faixaVisitante() + faixa + cartaoPasso + linhaProfundidade(A, true) + tarefa + numeros + ritmo + encontro;
   // no computador, o guia do plano ocupa a largura toda, no centro da página, depois dos objetivos, do passo e da tarefa
   if (VISUAL !== 'sobrio') return faixaVisitante() + `<div class="painel"><div>${topo}${faixa}${tarefa}</div><div>${cartaoPasso}${linhaProfundidade(A)}${encontro}</div></div>${numeros}${ritmo}`;
@@ -1969,29 +1995,106 @@ function telaJornada() {
   const ex = exames(), vs = versoesVigentes().slice().reverse(), dg = R.degrau;
   const hist = ex.map(x => [x.data, 'Exame de saúde financeira', `Nota ${x.nota}${x.quem ? ', respondido por ' + x.quem : ''}.`])
     .concat(C ? [[C.publicadaEm, 'Clínica financeira', `Com a ${C.consultora.completo}: ${C.orientacoes.map(o => o.txt).join(' ')}`]] : [])
-    .concat(vs.map((v, i) => [v.em.slice(0, 10), i ? 'Reunião semestral' : 'Apresentação do plano', v.comentario || '']))
+    .concat(vs.map((v, i) => [v.em.slice(0, 10), ['Apresentação do relatório', '1º acompanhamento', 'Acompanhamento anual'][i] || 'Acompanhamento', v.comentario || '']))
     .sort((a, b) => a[0] < b[0] ? -1 : 1);
-  const rel = dg === 'completo' ? [['Embarque', 'feita'], ['Coleta de dados', 'feita'], ['Apresentação do plano', 'feita'], ['Execução', 'agora'], ['Reunião semestral', vs.length > 1 ? 'feita' : ''], ['Reunião semestral', ''], ['Renovação', '']]
+  // o Completo segue o calendário de 30/10: cada etapa com a data (feita ou prevista); a tarefa e o WhatsApp lembram de
+  // agendar cada acompanhamento duas semanas antes
+  const k = dg === 'completo' ? calendarioCompleto(versoesVigentes()) : null, marco = (m, nome) => [nome, m.feito ? 'feita' : '', m.feito ? dataBRano(m.data) : `previsto para ${dataBRano(m.data)}; o lembrete para agendar chega no WhatsApp em ${dataBRano(m.lembrete)}`];
+  const rel = k ? [['Reunião de onboarding', 'feita'], ['Montagem do plano', 'feita'], ['Apresentação do relatório', 'feita', dataBRano(k.apres)],
+      ['Comitês de investimentos mensais', k.anual.feito ? 'feita' : 'agora', `desde ${mesAno(k.apres.slice(0, 7) + '-01')}, todo mês`], marco(k.acomp1, '1º acompanhamento, aos 6 meses'), marco(k.anual, 'Acompanhamento anual, aos 12 meses')]
     : dg === 'clinica' ? [['Exame de saúde financeira', 'feita'], ['Clínica financeira', 'feita']].concat(C.aprofundamento ? [['Conversa de aprofundamento', C.aprofundamento < HOJE ? 'feita' : 'agora']] : []).concat([['Check-up anual, em ' + dataBRano(C.checkup), C.checkup <= HOJE ? 'agora' : '']])
-      : dg === 'cadastrado' ? [['Cadastro', 'feita'], ['Exame de saúde financeira', ex.length ? 'feita' : 'agora'], ['A clínica financeira, quando quiser', '']] : [['Explorar o plano por conta própria', 'agora'], ['Criar a conta, para guardar', ''], ['A clínica financeira', '']];
+      : dg === 'cadastrado' ? [['Cadastro', 'feita'], ['Exame de saúde financeira', ex.length ? 'feita' : 'agora'], ['Reunião de avaliação do planejamento e da carteira', '', 'quando quiser']] : [['Explorar o plano por conta própria', 'agora'], ['Criar a conta, para guardar', ''], ['Reunião de avaliação do planejamento e da carteira', '']];
   const atual = mundoAtual(), passo = passoAtual();
-  return `<div class="grade2" style="align-items:start"><div><div class="card"><span class="rotulo" style="margin:0 0 8px">A relação com a Nord</span>${rel.map(([n, st]) => `<div class="etapa ${st}"><span class="p"></span><div><b>${esc(n)}</b></div></div>`).join('')}</div>
+  return `<div class="grade2" style="align-items:start"><div><div class="card"><span class="rotulo" style="margin:0 0 8px">A relação com a Nord</span>${rel.map(([n, st, sub]) => `<div class="etapa ${st}"><span class="p"></span><div><b>${esc(n)}</b>${sub ? `<div class="mut">${esc(sub)}</div>` : ''}</div></div>`).join('')}</div>
       ${hist.length ? `<div class="card"><span class="rotulo" style="margin:0 0 8px">O histórico</span>${hist.map(([d, n, t]) => `<div class="etapa feita"><span class="p"></span><div><b>${esc(n)}</b> <span class="mut">${dataBRano(d)}</span><div class="mut">${esc(t)}</div></div></div>`).join('')}</div>` : ''}
       ${R.temas && R.temas.length ? `<div class="card"><span class="rotulo" style="margin:0 0 6px">Para uma próxima conversa</span>${R.temas.map(t => `<div class="peq" style="padding:6px 0;border-top:1px solid var(--areia);color:var(--marinho)">${esc(t)}</div>`).join('')}</div>` : ''}</div>
     <div class="card"><span class="rotulo" style="margin:0 0 8px">A escalada</span><div class="trilha-h">${MUNDOS.map((m, i) => `<div class="${i < atual ? 'feito' : i === atual ? 'atual' : ''}"><i></i><span title="${m}">${m}</span></div>`).join('')}</div>
       <p class="peq" style="margin:12px 0 0;color:var(--marinho)">${pl('Vocês estão', 'Você está')} em <b>${MUNDOS[atual]}</b>. ${PERGUNTAS_MUNDO[atual]}${passo ? ' O passo agora: ' + esc(passo.titulo.charAt(0).toLowerCase() + passo.titulo.slice(1)) + '.' : ''}</p></div></div>`;
 }
 
-// ---------- Conversas: com quem falar muda por degrau; o resto é igual ----------
-function telaConversas() {
-  if (!R.consultora) return `<div style="max-width:720px"><div class="card"><h3>Agendar uma clínica financeira</h3><p class="peq" style="margin:0 0 10px">Uma conversa com uma planejadora da Nord, que olha os números de ${pl('vocês', 'você')}, escolhe onde focar e deixa as primeiras tarefas com lembrete. O que ${pl('vocês já preencheram', 'você já preencheu')} aqui vai junto.</p><button class="primaria" data-acao="toast" data-txt="No produto, abre a agenda das clínicas.">Ver os horários</button></div>
-    <div class="card"><h3>As lives mensais de planejamento</h3><p class="peq" style="margin:0">Uma vez por mês, ao vivo e gravada, com o passo de cada momento de vida.</p></div></div>`;
-  return `<div style="max-width:720px">${X.conversas.map(c => `<div class="msg ${c.quem === 'consultora' ? 'dela' : 'minha'}">${esc(c.txt)}<small>${c.quem === 'consultora' ? esc(R.consultora.completo) : esc(nomeDe(c.quem))} · ${dataBR(c.em)}${c.quem !== 'consultora' && !c.respondida ? ' · aguardando a resposta, em até 2 dias úteis' : ''}</small></div>`).join('') || '<div class="mut">Nenhuma conversa ainda.</div>'}
-    <div class="card" style="margin-top:16px"><div class="campo" style="margin-top:0"><label for="msg">Escrever para a ${esc(R.consultora.nome)}</label><textarea id="msg" data-campo="rascunho" placeholder="Uma dúvida, um pedido de conversa ou uma mudança na vida de ${pl('vocês', 'você')}">${esc(UI.rascunho)}</textarea></div>
-      <div class="entre"><span class="mut">A resposta chega aqui e no WhatsApp.</span><button class="primaria" data-acao="enviar">Enviar</button></div></div>
-    ${R.consultora.whatsapp ? `<p class="mut">Para algo urgente, o WhatsApp da ${esc(R.consultora.nome)}: ${esc(R.consultora.whatsapp)}.</p>` : ''}</div>`;
+// ---------- O atendimento (decisão de 30/10): o nível de serviço de cada degrau, quem atende e o próximo encontro, com o
+// link da agenda. Clínica: o check-up anual abre 12 meses depois da clínica. Completo: onboarding, montagem, apresentação,
+// os comitês de investimentos mensais, o 1º acompanhamento aos 6 meses (o lembrete para agendar chega no WhatsApp duas
+// semanas antes) e o acompanhamento anual aos 12. Visitante e cadastrado: o convite à reunião de avaliação do
+// planejamento e da carteira. A mesma tela para todo degrau; muda o que cada um tem ----------
+// a agenda dos planejadores ainda não tem endereço: sem ele, o botão diz o que fará no produto
+const LINKS = { agenda: null, comite: 'https://members.nordinvestimentos.com.br/conteudo/326-nord-alocacao' };
+const ANTECEDENCIA = 14;   // dias antes do acompanhamento em que o lembrete para agendar chega
+const NIVEIS = [
+  { id: 'plataforma', nome: 'Plataforma', ritmo: 'Apoio pelas lives mensais de planejamento',
+    inclui: ['As calculadoras, os objetivos e as tarefas, com lembrete no WhatsApp', 'As lives mensais de planejamento, com gente da Nord respondendo'] },
+  { id: 'clinica', nome: 'Clínica financeira', ritmo: 'Check-up anual, 12 meses depois da clínica',
+    inclui: ['Tudo da plataforma', 'Uma conversa com um planejador da Nord, que escolhe o foco e deixa as primeiras tarefas', 'O apoio desse planejador pelas mensagens daqui'] },
+  { id: 'completo', nome: 'Planejamento completo', ritmo: 'Acompanhamento semestral',
+    inclui: ['O plano de vida completo, montado e apresentado por um planejador', 'O contato direto desse planejador, pelo WhatsApp e pelo e-mail', 'Os comitês de investimentos mensais'] }];
+const nivelDe = dg => ({ completo: 'completo', clinica: 'clinica', cadastrado: 'plataforma' })[dg] || null;
+const maisMeses = (d, n) => { const m = addM(d.slice(0, 7), n); return m + '-' + String(Math.min(+d.slice(8, 10), diasNoMes(m))).padStart(2, '0'); };
+// o calendário do Completo, a partir das versões vigentes (da mais nova para a mais antiga): a primeira é a apresentação,
+// a segunda nasce no 1º acompanhamento, a terceira no anual
+function calendarioCompleto(vs) {
+  if (!vs.length) return null;
+  const ord = vs.slice().reverse(), apres = ord[0].em.slice(0, 10), marco = (k, meses) => {
+    const data = ord[k] ? ord[k].em.slice(0, 10) : maisMeses(apres, meses); return { data, feito: !!ord[k], lembrete: addD(data, -ANTECEDENCIA) }; };
+  return { apres, acomp1: marco(1, 6), anual: marco(2, 12) };
 }
-const telaMais = () => `<div class="mais-lista" style="max-width:560px"><a href="#realizado">${ICONES.realizado}<span>Realizado<small>O planejado e o que aconteceu, no orçamento e no patrimônio</small></span></a><a href="#jornada">${ICONES.jornada}<span>Jornada<small>O histórico, a relação com a Nord e a escalada</small></span></a><a href="#conversas">${ICONES.conversas}<span>Conversas<small>${esc(falarCom())}</small></span></a></div>`;
+const comA = () => R.consultora ? 'com a ' + R.consultora.nome : 'com um planejador da Nord';
+function proximoEncontro() {
+  const dg = R.degrau;
+  if (dg === 'completo') {
+    const k = calendarioCompleto(versoesVigentes()), m = !k.acomp1.feito ? ['1º acompanhamento', k.acomp1, 'o 1º acompanhamento'] : !k.anual.feito ? ['Acompanhamento anual', k.anual, 'o acompanhamento anual'] : null;
+    if (!m) return { titulo: 'Renovação do planejamento', texto: `O ano do plano se fechou. A renovação é combinada ${comA()}.` };
+    return { titulo: m[0], data: m[1].data, abre: m[1].lembrete, acao: 'Agendar ' + m[2],
+      texto: m[1].lembrete > HOJE ? `Previsto para ${dataBRano(m[1].data)}. O lembrete para agendar chega no WhatsApp em ${dataBRano(m[1].lembrete)}, duas semanas antes.` : `Previsto para ${dataBRano(m[1].data)}. Já dá para agendar ${comA()}.` };
+  }
+  if (dg === 'clinica') {
+    if (R.aprofundamento && R.aprofundamento >= HOJE) return { titulo: 'Conversa de aprofundamento', data: R.aprofundamento, texto: `Já marcada ${comA()}.` };
+    return { titulo: 'Check-up anual', data: R.checkup, abre: R.checkup, acao: 'Agendar o check-up anual',
+      texto: R.checkup > HOJE ? `Abre em ${dataBRano(R.checkup)}, 12 meses depois da clínica.` : `Já dá para agendar ${comA()}.` };
+  }
+  return { titulo: 'Reunião de avaliação do planejamento e da carteira', convite: true, abre: HOJE, acao: 'Marcar a reunião de avaliação',
+    texto: `Uma conversa com um planejador da Nord, que olha ${pl('o planejamento e a carteira de investimentos de vocês', 'o seu planejamento e a sua carteira de investimentos')} e mostra qual atendimento faz sentido.` };
+}
+// o botão da agenda só aparece quando o encontro já pode ser marcado
+const botaoAgendar = (e, cls) => !e.acao || !e.abre || e.abre > HOJE ? '' : LINKS.agenda
+  ? `<a class="${cls}" href="${LINKS.agenda}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;text-decoration:none">${esc(e.acao)}</a>`
+  : `<button class="${cls}" data-acao="toast" data-txt="No produto, abre a agenda ${R.consultora ? 'da ' + esc(R.consultora.nome) : 'dos planejadores da Nord'} para escolher o horário.">${esc(e.acao)}</button>`;
+// quem atende: o contato direto é do Completo; na clínica, o apoio vem pelas mensagens daqui
+function quemAtende() {
+  const c = R.consultora, dg = R.degrau;
+  if (!c) return `<div class="quem-atende"><span class="ini" aria-hidden="true">N</span><div><b>A equipe de planejadores da Nord</b><small>Ela vê o que ${pl('vocês já preencheram', 'você já preencheu')} aqui antes da conversa.</small></div></div>`;
+  const wa = dg === 'completo' && c.whatsapp ? c.whatsapp.replace(/\D/g, '') : '';
+  return `<div class="quem-atende">${c.foto ? `<img src="${esc(c.foto)}" alt="">` : `<span class="ini" aria-hidden="true">${esc(c.nome.charAt(0))}</span>`}<div><b>${esc(c.completo)}${c.cert ? ', ' + esc(c.cert) : ''}</b>
+    <small>${dg === 'completo' ? 'Quem acompanha o plano de ' + pl('vocês', 'você') : 'Quem fez a clínica; responde pelas mensagens daqui em até 2 dias úteis'}</small>
+    ${dg === 'completo' ? `<div class="contatos">${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp ${esc(c.whatsapp)}</a>` : ''}${c.email ? `<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>` : ''}</div>` : ''}</div></div>`;
+}
+// o cartão do Painel: quem atende e o próximo encontro; no visitante e no cadastrado, o convite
+function cartaoAtendimento() {
+  const e = proximoEncontro();
+  if (e.convite) return `<div class="card atend"><b class="atend-tit">${esc(e.titulo)}</b><p class="peq">${esc(e.texto)}</p><div class="linha">${botaoAgendar(e, 'btn')}<a class="btn link peq" href="#conversas">Os níveis de atendimento &#8250;</a></div></div>`;
+  return `<a class="card atend" href="#conversas"><div class="entre"><div><small class="mut">${R.degrau === 'completo' ? 'Quem acompanha ' + pl('vocês', 'você') : 'Quem fez a clínica'}</small><b class="atend-tit">${esc(R.consultora.completo)}</b></div><span aria-hidden="true">&#8250;</span></div>
+    <div class="peq" style="color:var(--marinho)">${esc(e.titulo)}${e.data ? ' · ' + dataBRano(e.data) : ''}</div></a>`;
+}
+
+// ---------- Atendimento (a rota segue "conversas"): o nível de serviço, quem atende, o próximo encontro e as conversas ----------
+function telaConversas() {
+  const dg = R.degrau, e = proximoEncontro(), nv = nivelDe(dg), meu = NIVEIS.find(n => n.id === nv), c = R.consultora;
+  const lista = n => `<ul class="inclui">${n.inclui.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`;
+  const servico = `<div class="card"><span class="etiqueta">${meu ? 'O seu atendimento' : 'Sem conta, por enquanto'}</span>
+      ${meu ? `<div class="nivel-nome">${meu.nome}</div>${lista(meu)}<p class="mut" style="margin:0">${meu.ritmo}.</p>` : `<p class="peq" style="margin:6px 0 0">Daqui dá para explorar as calculadoras à vontade. Com a conta, o que ${pl('vocês preenchem', 'você preenche')} fica guardado e as tarefas ganham lembrete no WhatsApp.</p>`}
+      <div class="sep"></div>${quemAtende()}</div>`;
+  const comite = dg === 'completo' ? `<div class="sep"></div><div class="entre"><span class="peq" style="color:var(--marinho)">Entre um encontro e outro, os comitês de investimentos mensais.</span><a class="btn link peq" href="${LINKS.comite}" target="_blank" rel="noopener">Assistir &#8250;</a></div>` : '';
+  const encontro = `<div class="card"><span class="etiqueta">${e.convite ? 'Um convite' : 'O próximo encontro'}</span><div class="nivel-nome">${esc(e.titulo)}</div>
+      ${e.data ? `<div class="num" style="font-size:24px;margin:2px 0 6px">${dataBRano(e.data)}</div>` : ''}<p class="peq" style="margin:6px 0 14px;color:var(--marinho)">${esc(e.texto)}</p>${botaoAgendar(e, 'primaria')}${comite}</div>`;
+  // o convite ao completo, para quem está na clínica, fica escondido enquanto a família está em Sobreviver
+  const subir = n => n.id === 'completo' && dg === 'clinica' && mundoAtual() > 0 ? `<button class="btn peq" style="margin-top:10px" data-acao="toast" data-txt="No produto, abre a agenda da reunião de avaliação do planejamento e da carteira.">Conhecer numa reunião de avaliação</button>` : '';
+  const niveis = `<div class="rotulo">Os níveis de atendimento da Nord</div><div class="niveis">${NIVEIS.map(n => `<div class="card nivel${n.id === nv ? ' meu' : ''}"><div class="entre"><b>${n.nome}</b>${n.id === nv ? `<span class="chip mar">o ${pl('de vocês', 'seu')}</span>` : ''}</div>${lista(n)}<p class="mut" style="margin:0">${n.ritmo}.</p>${subir(n)}</div>`).join('')}</div>`;
+  const conversas = c ? `<div class="rotulo">As conversas</div><div style="max-width:720px">${X.conversas.map(m => `<div class="msg ${m.quem === 'consultora' ? 'dela' : 'minha'}">${esc(m.txt)}<small>${m.quem === 'consultora' ? esc(c.completo) : esc(nomeDe(m.quem))} · ${dataBR(m.em)}${m.quem !== 'consultora' && !m.respondida ? ' · aguardando a resposta, em até 2 dias úteis' : ''}</small></div>`).join('') || '<div class="mut">Nenhuma conversa ainda.</div>'}
+      <div class="card" style="margin-top:16px"><div class="campo" style="margin-top:0"><label for="msg">Escrever para a ${esc(c.nome)}</label><textarea id="msg" data-campo="rascunho" placeholder="Uma dúvida, um pedido de conversa ou uma mudança na vida de ${pl('vocês', 'você')}">${esc(UI.rascunho)}</textarea></div>
+      <div class="entre"><span class="mut">A resposta chega aqui e no WhatsApp.</span><button class="btn" data-acao="enviar">Enviar</button></div></div></div>`
+    : `<div class="rotulo">Enquanto isso</div><div class="card" style="max-width:720px"><h3>As lives mensais de planejamento</h3><p class="peq" style="margin:0">Uma vez por mês, ao vivo e gravada, com o passo de cada momento de vida e gente da Nord respondendo.</p></div>`;
+  return `<div class="grade2" style="align-items:stretch">${servico}${encontro}</div>${niveis}${conversas}`;
+}
+const telaMais = () => `<div class="mais-lista" style="max-width:560px"><a href="#realizado">${ICONES.realizado}<span>Realizado<small>O planejado e o que aconteceu, no orçamento e no patrimônio</small></span></a><a href="#jornada">${ICONES.jornada}<span>Jornada<small>O histórico, a relação com a Nord e a escalada</small></span></a><a href="#conversas">${ICONES.conversas}<span>Atendimento<small>Quem atende, o próximo encontro e as conversas</small></span></a></div>`;
 
 // =====================================================================================================================
 // 10. DESENHO E EVENTOS

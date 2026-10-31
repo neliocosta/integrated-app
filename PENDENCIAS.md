@@ -33,6 +33,26 @@ estrutura (seção 15). Em aberto, para o dono do produto decidir:
 - **O financiamento do exemplo** aparece com 360 parcelas restantes porque o plano de exemplo não tem a data de início do
   contrato; o relatório mostra o mesmo.
 
+### Atendimento e calendário do Completo (30/10/2026)
+
+A tela Conversas virou **Atendimento** (a rota segue `#conversas`), aberta pelo botão de conversa do alto de toda tela:
+o nível de serviço do degrau, quem atende, o próximo encontro com o botão da agenda, os três níveis da Nord lado a lado e
+as conversas. O Painel troca a pílula da reunião por um cartão de atendimento; no visitante e no cadastrado é o convite à
+**reunião de avaliação do planejamento e da carteira**. Regras: a clínica marca o check-up anual 12 meses depois; o
+Completo segue onboarding, montagem, apresentação, comitês de investimentos mensais, 1º acompanhamento aos 6 meses e
+acompanhamento anual aos 12, e a tarefa "Agendar o … acompanhamento" entra duas semanas antes (`ANTECEDENCIA`). O contato
+direto (WhatsApp e e-mail) é só do Completo; a clínica fala pelas mensagens da área. Em aberto:
+
+- **O link da agenda.** `LINKS.agenda` está vazio; sem ele, o botão mostra o aviso do que fará. Falta a Nord dizer qual
+  ferramenta de agendamento usa (e se há uma agenda por planejador).
+- **O lembrete no WhatsApp, duas semanas antes.** A área mostra a data e cria a tarefa; o envio é do serviço
+  `liberta-whatsapp`, que precisa ganhar a regra (a mensagem com o link da agenda).
+- **A renovação.** A plataforma mostra "Renovação" depois do Acompanhamento #2; o calendário pedido termina no
+  acompanhamento anual. Decidir se a renovação vira etapa própria e o que acontece com os comitês depois dela.
+- **A plataforma.** O bloco "Sua jornada" de `/arealogada` ainda diz Embarque → Entrega do Relatório → Acompanhamento #1
+  → #2 → Renovação, com datas "a definir"; alinhar os nomes e as datas com a área.
+- **O convite ao Completo para quem está na clínica** fica escondido em Sobreviver (UX.md › Jornada); confirmar.
+
 ## Feedback da apresentação real (21/10/2026)
 
 O usuário apresentou um plano a um cliente e trouxe:
