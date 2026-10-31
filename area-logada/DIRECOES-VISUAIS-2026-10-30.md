@@ -79,3 +79,17 @@ identidade do DESIGN.md no resto:
   seta desenhada, fora da linha do título no computador largo.
 - **Acessibilidade:** alvos de 44px no celular, nenhum texto abaixo de 11px, tarefa feita sem perder contraste, e o
   carrossel do Plano pula também com Enter e Espaço, com a página atrás do véu inerte.
+
+## A escala de texto e o respiro do Livro (30/10, a partir das referências do Appshots)
+
+Comparando com Imprint, Dime, Robinhood, Lemonade, Todoist e Open, a área tinha de 7 a 14 tamanhos de texto por tela
+(de 10,5 a 15,5px) e 16px de margem no celular. O Livro passa a ter quatro degraus de texto, além dos números e títulos:
+
+- **Rótulo:** 11px, maiúsculas, espaçado, marinho (o da montagem).
+- **Detalhe:** 12,5px, o mínimo para legendas, eixos, etiquetas e o dia da semana.
+- **Secundário e controles:** 14px (notas, datas, botões, filtros).
+- **Texto e itens:** 15,5px (o corpo, o nome da tarefa, a etapa, a mensagem).
+
+Um número principal por tela, grande: o passo agora (44px no computador, 38px no celular) e o número da área na página
+dela (40px e 34px). A comparação que acompanha o número vira etiqueta com a cor do sentido ("+7 · era 64"). No celular,
+20px de margem, 14px entre cartões e 18px dentro deles.

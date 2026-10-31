@@ -440,7 +440,7 @@ body[class*="v-"] .trilho.fut i{background:linear-gradient(90deg,var(--anel-a),v
 .v-livro :is(.guia,.cap-grade.compacta) .cap .big{font-size:20px}
 /* a escada da montagem: o título em serifa, o rótulo (11px, maiúsculas, marinho) e o número em Sora */
 body.v-livro :is(.cap .r,.nums span,.numero span),body.v-livro :is(.guia,.cap-grade.compacta) .cap .r{font:600 11px/1.35 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--marinho)}
-body.v-livro .cap .r .prof-mini{font-size:12px;letter-spacing:0;text-transform:none;font-weight:500;color:var(--legenda)}
+body.v-livro .cap .r .prof-mini{font-size:12.5px;letter-spacing:0;text-transform:none;font-weight:500;color:var(--legenda)}
 /* :not(._) só soma peso: a regra geral dos visuais, com :is(.cap .r,…), pesa três classes */
 body.v-livro :is(.rotulo:not(._),.plano-cab h2){font:500 22px/1.25 var(--serifa);color:var(--marinho);letter-spacing:-.01em}
 body.v-livro .rotulo:not(._){margin:30px 0 12px}
@@ -487,6 +487,41 @@ body.v-livro .rotulo .mais{font:600 13px var(--sans);letter-spacing:0}
 .v-livro a{text-decoration-color:#D9CCBA;text-underline-offset:3px}
 .v-livro .paisagem h2{font-style:italic}
 .v-livro .obj-mini .foto,.v-livro .obj-card .thumb{filter:none}
+/* ---------- A escala de texto do Livro (30/10, a partir das referências): quatro degraus em vez de doze. Rótulo 11px em
+   maiúsculas; detalhe 12,5px (legendas, eixos, etiquetas); secundário 14px; texto e itens 15,5px. Os números e os títulos
+   seguem a escala própria ---------- */
+.v-livro{font-size:15.5px;line-height:1.55}
+.v-livro :is(.mut,.quem-atende small,.sp-num small,.nums small,.numero small,.prof small,.obj-card small,.tarefa small,.etapa .mut,.atend .mut,.msg small){font-size:14px;line-height:1.45}
+.v-livro :is(.peq,.inclui li,.aviso,.passo p){font-size:15px;line-height:1.5}
+.v-livro :is(.tarefa b,.etapa b,.obj-card b,.quem-atende b){font-size:15.5px}
+.v-livro .msg{font-size:15.5px}
+.v-livro :is(.chip,.leg,.obj-mini small,.tarefa .cat,.cap .prof-mini,.sp-dias li,.marcas,.semanas small,.trilha-h span,.grupo > summary .conta){font-size:12.5px}
+.v-livro .tarefa .cat{letter-spacing:0}
+.v-livro .obj-mini b{font-size:14px}
+.v-livro :is(.pilares div,.linha-tempo span){font-size:12.5px}
+.v-livro .cap .sub{font-size:14px}
+.v-livro .sp-dias i{font-size:14px}
+/* os controles: 14px, um degrau só */
+.v-livro :is(.btn,.filtro,.opcoes button,.campo label,.quem-atende .contatos){font-size:14px}
+body.v-livro .alterna button{font-size:13.5px}
+.v-livro .cap .big small,.v-livro .grande small{font-size:14px}
+/* o número principal de cada tela: um só, grande; o resto fica menor */
+.v-livro #miolo > .grade2 > .card:first-child .grande,.v-livro .card[style*="view-transition-name:cap-"] .grande{font-size:40px;line-height:1.05}
+.v-livro .delta{display:inline-flex;align-items:center;vertical-align:middle;margin-left:6px;padding:3px 9px;border-radius:9999px;font:600 12.5px var(--sans)!important;letter-spacing:0}
+.v-livro .delta.sobe{background:var(--ok-bg);color:var(--verde-txt)}
+.v-livro .delta.desce{background:var(--at-bg);color:var(--atencao-txt)}
+/* ---------- O respiro no celular: 20px de margem, 14px entre cartões, o cartão com 18px por dentro ---------- */
+@media (max-width:899px){
+  .v-livro main{padding-left:20px;padding-right:20px}
+  .v-livro .cab{padding-left:20px;padding-right:20px}
+  .v-livro :is(.grade2,.niveis,.cap-grade){gap:14px}
+  .v-livro :is(.guia,.cap-grade.compacta){gap:12px}
+  .v-livro :is(.card,.cap:not(.compacto),.passo,.prof,.atend,.semana-painel){padding:18px 18px}
+  .v-livro :is(.card,.passo,.prof,.tarefa,.obj-card){margin-bottom:14px}
+  .v-livro .passo .valor{font-size:38px}
+  .v-livro #miolo > .grade2 > .card:first-child .grande,.v-livro .card[style*="view-transition-name:cap-"] .grande{font-size:34px}
+  .v-livro .cab h1{font-size:30px}
+}
 /* ajustes dos pares de fontes alternativos (?fonte=): a Instrument Serif é menor no olho e só tem um peso */
 body.f-instrument :is(.cab h1,.cap .big,.grande,.passo .valor,.rotulo,.cap .r,.plano-cab h2){font-weight:400}
 body.f-instrument .cap .big{font-size:33px}
@@ -1327,7 +1362,7 @@ function areas() {
   if (fase) put('saude', 'fase', fase.nome, RS ? oP : fo('comecou'));
   if (RS) put('saude', 'diagnostico', `${RS.diagnostico.presente.emDia} de ${RS.diagnostico.presente.de} em dia hoje; ${RS.diagnostico.futuro.emDia} de ${RS.diagnostico.futuro.de} depois do plano`, oP);
   if (ult) { const baixo = PILARES.slice().sort((a, b) => ult.pilares[a] - ult.pilares[b])[0];
-    A.saude.capa = { big: `${ult.nota} <small>${ant ? 'era ' + ant.nota : 'de 100'}</small>`, sub: `exame de ${dataBRano(ult.data)}${fase ? ' · fase: ' + fase.nome.toLowerCase() : ''}`, viz: pilaresHtml(ult.pilares),
+    A.saude.capa = { big: `${ult.nota} ${ant ? `<small class="delta ${ult.nota >= ant.nota ? 'sobe' : 'desce'}">${ult.nota >= ant.nota ? '+' : ''}${ult.nota - ant.nota} · era ${ant.nota}</small>` : '<small>de 100</small>'}`, sub: `exame de ${dataBRano(ult.data)}${fase ? ' · fase: ' + fase.nome.toLowerCase() : ''}`, viz: pilaresHtml(ult.pilares),
       tom: ult.pilares[baixo] < 60 ? ['at', `${baixo} em ${ult.pilares[baixo]}`] : ['ok', 'os cinco pilares acima de 60'] }; }
 
   // Gestão financeira
