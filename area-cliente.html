@@ -324,6 +324,12 @@ a.cap{text-decoration:none;color:inherit}
 .tbl th{font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--legenda);border-top:0}
 .tbl td.v{text-align:right;color:var(--marinho);font-weight:600;white-space:nowrap}
 .mais-lista a{display:flex;align-items:center;gap:12px;background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);padding:14px 16px;margin-bottom:8px;text-decoration:none;color:var(--marinho);font-weight:600}
+.mais-lista svg{width:22px;height:22px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.barra-exame{position:sticky;bottom:72px;z-index:4;background:var(--fundo);padding:10px 0;border-top:1px solid var(--areia)}
+@media (min-width:900px){.barra-exame{bottom:0;padding:14px 0}}
+.card .entre{flex-wrap:wrap;row-gap:8px}
+.card .entre > .rotulo{flex:1 1 240px}
+.card .entre > .mut{white-space:nowrap}
 .mais-lista a small{display:block;font-weight:400;color:var(--legenda);font-size:12.5px}
 .carregando{color:var(--legenda);padding:40px 0;text-align:center}
 .obj-card .entre{flex-wrap:wrap;row-gap:4px}
@@ -374,9 +380,14 @@ body[class*="v-"] .trilho.fut i{background:linear-gradient(90deg,var(--anel-a),v
 /* a escada da montagem: o título em serifa, o rótulo (11px, maiúsculas, marinho) e o número em Sora */
 body.v-livro :is(.cap .r,.nums span,.numero span),body.v-livro :is(.guia,.cap-grade.compacta) .cap .r{font:600 11px/1.35 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--marinho)}
 body.v-livro .cap .r .prof-mini{font-size:12px;letter-spacing:0;text-transform:none;font-weight:500;color:var(--legenda)}
-body.v-livro :is(.rotulo,.plano-cab h2){font:500 22px/1.25 var(--serifa);color:var(--marinho);letter-spacing:-.01em}
-body.v-livro .rotulo{margin:30px 0 12px}
-body.v-livro .rotulo:first-child{margin-top:4px}
+/* :not(._) só soma peso: a regra geral dos visuais, com :is(.cap .r,…), pesa três classes */
+body.v-livro :is(.rotulo:not(._),.plano-cab h2){font:500 22px/1.25 var(--serifa);color:var(--marinho);letter-spacing:-.01em}
+body.v-livro .rotulo:not(._){margin:30px 0 12px}
+body.v-livro .rotulo:not(._):first-child{margin-top:4px}
+/* o título dentro de um cartão: um só, como o h3 da montagem (Sora 600, marinho) */
+body.v-livro :is(.card,.passo,.mes,.folha) .rotulo:not(._),body.v-livro :is(.card,.mes) h3{font:600 17px/1.3 "Sora",sans-serif;color:var(--marinho);letter-spacing:-.01em;text-transform:none}
+body.v-livro :is(.card,.mes) h3{font-size:15.5px}
+.v-livro .barra-exame{background:rgba(248,244,238,.94);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 body.v-livro .rotulo .mais{font:600 13px var(--sans);letter-spacing:0}
 .v-livro :is(.faixa-obj,.nums){gap:12px}
 .v-livro .cap.compacto{padding:14px 16px}
@@ -1751,7 +1762,7 @@ function telaExame() {
   };
   return `<div style="max-width:720px"><div class="aviso" style="margin-bottom:12px">${ult ? `O último exame é de ${dataBRano(ult.data)}. As respostas dele já estão aqui: mude o que mudou e grave uma fotografia nova.` : 'São 33 perguntas, algumas só aparecem conforme as respostas. Leva uns 8 minutos.'} ${R.degrau === 'visitante' ? 'Sem conta, o resultado fica só nesta aba.' : ''}</div>
     ${vis.map((q, i) => `<div class="pergunta"><span class="n">${i + 1} DE ${vis.length}</span><p>${esc(q.q)}</p>${campo(q)}</div>`).join('')}
-    <div class="entre" style="position:sticky;bottom:72px;background:var(--fundo);padding:10px 0"><span class="mut">${feitas} de ${vis.length} respondidas</span><button class="primaria" data-acao="gravar-exame" ${feitas < 12 ? 'disabled' : ''}>Ver o resultado</button></div></div>`;
+    <div class="entre barra-exame"><span class="mut">${feitas} de ${vis.length} respondidas</span><button class="primaria" data-acao="gravar-exame" ${feitas < 12 ? 'disabled' : ''}>Ver o resultado</button></div></div>`;
 }
 const opcoesHtml = (c, ops, atual) => `<div class="opcoes">${ops.map(([v, n]) => `<button type="button" class="${String(atual) === String(v) ? 'on' : ''}" data-acao="ex-op" data-c="${c}" data-v="${esc(v)}">${esc(n)}</button>`).join('')}</div>`;
 
