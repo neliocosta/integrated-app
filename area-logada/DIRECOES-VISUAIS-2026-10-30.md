@@ -93,3 +93,11 @@ Comparando com Imprint, Dime, Robinhood, Lemonade, Todoist e Open, a área tinha
 Um número principal por tela, grande: o passo agora (44px no computador, 38px no celular) e o número da área na página
 dela (40px e 34px). A comparação que acompanha o número vira etiqueta com a cor do sentido ("+7 · era 64"). No celular,
 20px de margem, 14px entre cartões e 18px dentro deles.
+
+**Ajuste do mesmo dia:** o dono do produto achou a fonte grande ("soa brusca"). A escala desceu um degrau: texto 15px,
+secundário e controles 13,5px, títulos de seção 20px, título da página 34px (26px no celular), título de cartão 15,5px, o
+número do passo 36px (28px no celular) e o da área 32px (28px). No exame, a pergunta vai em peso médio, 16px.
+
+**Máscara de moeda:** todo campo de valor em reais (atributo `data-moeda`) formata enquanto se digita, no padrão
+#.###.###,##. O ponto digitado ou colado como decimal vira vírgula, apagar um ponto de milhar apaga o dígito ao lado, e o
+valor que já existe entra formatado. A leitura continua pela mesma `numero()`.

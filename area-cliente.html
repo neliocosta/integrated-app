@@ -190,7 +190,7 @@ main{flex:1;padding:16px 16px 96px;width:100%;max-width:1120px}
 .tarefa small .quando{color:var(--marinho);font-weight:600}
 /* as seções das tarefas: título com a contagem; cada uma se recolhe */
 .semana-painel{display:flex;flex-wrap:wrap;align-items:center;gap:14px 32px;background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);padding:16px 20px;margin:0 0 8px}
-.sp-num b{display:block;font:600 22px/1.15 var(--sans);color:var(--marinho);margin:2px 0 1px}
+.sp-num b{display:block;font:600 19px/1.2 var(--sans);color:var(--marinho);margin:2px 0 1px}
 .sp-num small{display:block;font-size:13px;color:var(--legenda)}
 .sp-dias{display:flex;gap:6px;margin:0 0 0 auto;padding:0;list-style:none}
 .sp-dias li{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:38px;font-size:11.5px;color:var(--legenda)}
@@ -207,7 +207,7 @@ body.v-livro .grupo > summary.rotulo:not(._){margin:30px 0 12px}
 .v-livro .semana-painel{border-color:transparent;box-shadow:var(--sombra);padding:18px 24px}
 .v-livro .sp-num b{font-family:"Sora",sans-serif;letter-spacing:-.01em}
 @media (max-width:599px){.v-livro .passo .primaria{width:100%;justify-content:center}}
-@media (min-width:900px){.v-livro .painel .principal .passo{padding:26px 30px}.v-livro .painel .principal .passo .valor{font-size:44px}}
+@media (min-width:900px){.v-livro .painel .principal .passo{padding:26px 30px}.v-livro .painel .principal .passo .valor{font-size:36px}}
 .grupo > summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px}
 .grupo > summary::-webkit-details-marker{display:none}
 .grupo > summary .conta{font:600 12px var(--sans);color:var(--legenda);background:var(--neutro-bg);border-radius:9999px;padding:2px 8px;letter-spacing:0}
@@ -365,24 +365,24 @@ a.cap{text-decoration:none;color:inherit}
 .cv-msg{display:flex;gap:10px;align-items:flex-end;margin:0 0 10px}
 .cv-av{width:34px;height:34px;flex:none;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(32,52,76,.12)}
 .cv-bolha{background:var(--cartao);border:1px solid var(--borda);border-radius:18px 18px 18px 6px;padding:13px 16px;color:var(--marinho);font-size:15.5px;line-height:1.5;max-width:min(520px,86%)}
-.cv-msg.atual .cv-bolha{font-size:18px;font-weight:600;line-height:1.4;padding:16px 18px}
+.cv-msg.atual .cv-bolha{font-size:16px;font-weight:500;line-height:1.45;padding:14px 18px}
 .cv-msg.passada{opacity:.62}
 .cv-msg.passada .cv-bolha{font-size:14px}
 .cv-msg.minha{justify-content:flex-end}
 .cv-resp{background:var(--marinho);color:#fff;border-radius:18px 18px 6px 18px;padding:9px 14px;font-size:14px;max-width:75%}
 .cv-hist{margin-bottom:6px}
 .cv-opcoes{display:grid;gap:10px;margin:16px 0 0 44px}
-.cv-opcoes button{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:52px;text-align:left;background:var(--cartao);border:1.5px solid var(--borda);border-radius:14px;padding:12px 16px;font:600 15.5px var(--sans);color:var(--marinho);cursor:pointer;transition:border-color .15s ease,background .15s ease}
+.cv-opcoes button{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:52px;text-align:left;background:var(--cartao);border:1.5px solid var(--borda);border-radius:14px;padding:11px 16px;font:500 15px var(--sans);color:var(--marinho);cursor:pointer;transition:border-color .15s ease,background .15s ease}
 .cv-opcoes button:hover{border-color:var(--marinho)}
 .cv-opcoes button.on{border-color:var(--marinho);background:#F4F6F9;box-shadow:inset 0 0 0 1px var(--marinho)}
 .cv-opcoes button.on::after{content:"";width:18px;height:18px;flex:none;border-radius:50%;background:var(--marinho) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat}
 .cv-opcoes.escala{grid-template-columns:repeat(5,minmax(0,1fr))}
-.cv-opcoes.escala button{justify-content:center;font-size:18px;padding:12px 0}
+.cv-opcoes.escala button{justify-content:center;font-size:16px;padding:11px 0}
 .cv-opcoes.escala button.on::after{display:none}
 .cv-opcoes.multi{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
 .cv-escala-leg{display:flex;justify-content:space-between;margin:6px 0 0 44px;font-size:12.5px;color:var(--legenda)}
 .cv-campo{margin:16px 0 0 44px}
-.cv-campo input{width:100%;max-width:360px;font:600 22px "Sora",sans-serif;color:var(--marinho);background:var(--cartao);border:1.5px solid var(--borda);border-radius:14px;padding:14px 16px}
+.cv-campo input{width:100%;max-width:360px;font:500 18px "Sora",sans-serif;color:var(--marinho);background:var(--cartao);border:1.5px solid var(--borda);border-radius:14px;padding:14px 16px}
 .cv-campo input:focus{outline:none;border-color:var(--marinho);box-shadow:0 0 0 3px #FFE3CC}
 .cv-acoes{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin:22px 0 0 44px}
 .cv-acoes .primaria{min-width:220px;justify-content:center}
@@ -421,7 +421,7 @@ a.cap{text-decoration:none;color:inherit}
 .quem-atende .contatos{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:8px;font:600 13.5px var(--sans)}
 .quem-atende .contatos a{text-underline-offset:3px}
 .etiqueta{display:block;font:600 11px/1.35 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--marinho);margin:0 0 4px}
-.nivel-nome{font:600 18px/1.3 var(--sans);color:var(--marinho);margin:6px 0 2px}
+.nivel-nome{font:600 16px/1.3 var(--sans);color:var(--marinho);margin:6px 0 2px}
 .inclui{margin:8px 0 10px;padding:0;list-style:none}
 .inclui li{position:relative;padding:3px 0 3px 18px;font-size:14px;color:var(--grafite);line-height:1.45}
 .inclui li::before{content:"";position:absolute;left:2px;top:11px;width:7px;height:7px;border-radius:50%;background:var(--ajust)}
@@ -432,7 +432,7 @@ a.cap{text-decoration:none;color:inherit}
 .nivel.meu{outline:2px solid var(--marinho);outline-offset:-2px}
 .nivel.meu .inclui li::before{background:var(--laranja)}
 .atend{display:block;text-decoration:none;color:inherit}
-.atend .atend-tit{display:block;color:var(--marinho);font-size:15.5px;margin:2px 0 6px}
+.atend .atend-tit{display:block;color:var(--marinho);font-size:15px;margin:2px 0 6px}
 .atend p{margin:0 0 12px}
 .atend .linha{gap:14px}
 .v-livro :is(.quem-atende b,.niveis .card > .entre b,.atend .atend-tit,.nivel-nome){font-family:"Sora",sans-serif;font-weight:600;letter-spacing:-.01em}
@@ -486,21 +486,22 @@ body[class*="v-"] .trilho.fut i{background:linear-gradient(90deg,var(--anel-a),v
 /* The Numbers Speak Sora: todo valor que é o assunto do cartão */
 .v-livro :is(.passo .valor,.grande,.cap .big,.numero b,.nums b,.num){font-family:'Sora',sans-serif;font-weight:600;letter-spacing:-.02em}
 .v-livro :is(.passo .valor small,.cap .big small,.grande small){font-family:var(--sans);font-weight:500;font-size:14px;letter-spacing:0;color:var(--legenda)}
-.v-livro .passo .valor{font-size:34px}
-.v-livro .cab h1{font-size:30px;line-height:1.1}
-@media (min-width:900px){.v-livro .cab h1{font-size:38px}}
-.v-livro .cap .big{font-size:26px}
-.v-livro :is(.guia,.cap-grade.compacta) .cap .big{font-size:20px}
+.v-livro .passo .valor{font-size:30px}
+.v-livro .cab h1{font-size:27px;line-height:1.12}
+@media (min-width:900px){.v-livro .cab h1{font-size:34px}}
+.v-livro .cap .big{font-size:22px}
+.v-livro :is(.guia,.cap-grade.compacta) .cap .big{font-size:18px}
+.v-livro .nums b{font-size:24px}
 /* a escada da montagem: o título em serifa, o rótulo (11px, maiúsculas, marinho) e o número em Sora */
 body.v-livro :is(.cap .r,.nums span,.numero span),body.v-livro :is(.guia,.cap-grade.compacta) .cap .r{font:600 11px/1.35 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--marinho)}
 body.v-livro .cap .r .prof-mini{font-size:12.5px;letter-spacing:0;text-transform:none;font-weight:500;color:var(--legenda)}
 /* :not(._) só soma peso: a regra geral dos visuais, com :is(.cap .r,…), pesa três classes */
-body.v-livro :is(.rotulo:not(._),.plano-cab h2){font:500 22px/1.25 var(--serifa);color:var(--marinho);letter-spacing:-.01em}
+body.v-livro :is(.rotulo:not(._),.plano-cab h2){font:500 20px/1.25 var(--serifa);color:var(--marinho);letter-spacing:-.01em}
 body.v-livro .rotulo:not(._){margin:30px 0 12px}
 body.v-livro .rotulo:not(._):first-child{margin-top:4px}
 /* o título dentro de um cartão: um só, como o h3 da montagem (Sora 600, marinho) */
-body.v-livro :is(.card,.passo,.mes,.folha) .rotulo:not(._),body.v-livro :is(.card,.mes) h3{font:600 17px/1.3 "Sora",sans-serif;color:var(--marinho);letter-spacing:-.01em;text-transform:none}
-body.v-livro :is(.card,.mes) h3{font-size:15.5px}
+body.v-livro :is(.card,.passo,.mes,.folha) .rotulo:not(._),body.v-livro :is(.card,.mes) h3{font:600 15.5px/1.35 "Sora",sans-serif;color:var(--marinho);letter-spacing:-.01em;text-transform:none}
+body.v-livro :is(.card,.mes) h3{font-size:14.5px}
 .v-livro .barra-exame{background:rgba(248,244,238,.94);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 body.v-livro .rotulo .mais{font:600 13px var(--sans);letter-spacing:0}
 .v-livro :is(.faixa-obj,.nums){gap:12px}
@@ -543,11 +544,11 @@ body.v-livro .rotulo .mais{font:600 13px var(--sans);letter-spacing:0}
 /* ---------- A escala de texto do Livro (30/10, a partir das referências): quatro degraus em vez de doze. Rótulo 11px em
    maiúsculas; detalhe 12,5px (legendas, eixos, etiquetas); secundário 14px; texto e itens 15,5px. Os números e os títulos
    seguem a escala própria ---------- */
-.v-livro{font-size:15.5px;line-height:1.55}
-.v-livro :is(.mut,.quem-atende small,.sp-num small,.nums small,.numero small,.prof small,.obj-card small,.tarefa small,.etapa .mut,.atend .mut,.msg small){font-size:14px;line-height:1.45}
-.v-livro :is(.peq,.inclui li,.aviso,.passo p){font-size:15px;line-height:1.5}
-.v-livro :is(.tarefa b,.etapa b,.obj-card b,.quem-atende b){font-size:15.5px}
-.v-livro .msg{font-size:15.5px}
+.v-livro{font-size:15px;line-height:1.55}
+.v-livro :is(.mut,.quem-atende small,.sp-num small,.nums small,.numero small,.prof small,.obj-card small,.tarefa small,.etapa .mut,.atend .mut,.msg small){font-size:13.5px;line-height:1.45}
+.v-livro :is(.peq,.inclui li,.aviso,.passo p){font-size:14.5px;line-height:1.5}
+.v-livro :is(.tarefa b,.etapa b,.obj-card b,.quem-atende b){font-size:15px}
+.v-livro .msg{font-size:15px}
 .v-livro :is(.chip,.leg,.obj-mini small,.tarefa .cat,.cap .prof-mini,.sp-dias li,.marcas,.semanas small,.trilha-h span,.grupo > summary .conta){font-size:12.5px}
 .v-livro .tarefa .cat{letter-spacing:0}
 .v-livro .obj-mini b{font-size:14px}
@@ -559,7 +560,7 @@ body.v-livro .rotulo .mais{font:600 13px var(--sans);letter-spacing:0}
 body.v-livro .alterna button{font-size:13.5px}
 .v-livro .cap .big small,.v-livro .grande small{font-size:14px}
 /* o número principal de cada tela: um só, grande; o resto fica menor */
-.v-livro #miolo > .grade2 > .card:first-child .grande,.v-livro .card[style*="view-transition-name:cap-"] .grande{font-size:40px;line-height:1.05}
+.v-livro #miolo > .grade2 > .card:first-child .grande,.v-livro .card[style*="view-transition-name:cap-"] .grande{font-size:32px;line-height:1.1}
 .v-livro .delta{display:inline-flex;align-items:center;vertical-align:middle;margin-left:6px;padding:3px 9px;border-radius:9999px;font:600 12.5px var(--sans)!important;letter-spacing:0}
 .v-livro .delta.sobe{background:var(--ok-bg);color:var(--verde-txt)}
 .v-livro .delta.desce{background:var(--at-bg);color:var(--atencao-txt)}
@@ -571,9 +572,9 @@ body.v-livro .alterna button{font-size:13.5px}
   .v-livro :is(.guia,.cap-grade.compacta){gap:12px}
   .v-livro :is(.card,.cap:not(.compacto),.passo,.prof,.atend,.semana-painel){padding:18px 18px}
   .v-livro :is(.card,.passo,.prof,.tarefa,.obj-card){margin-bottom:14px}
-  .v-livro .passo .valor{font-size:38px}
-  .v-livro #miolo > .grade2 > .card:first-child .grande,.v-livro .card[style*="view-transition-name:cap-"] .grande{font-size:34px}
-  .v-livro .cab h1{font-size:30px}
+  .v-livro .passo .valor{font-size:28px}
+  .v-livro #miolo > .grade2 > .card:first-child .grande,.v-livro .card[style*="view-transition-name:cap-"] .grande{font-size:28px}
+  .v-livro .cab h1{font-size:26px}
 }
 /* ajustes dos pares de fontes alternativos (?fonte=): a Instrument Serif é menor no olho e só tem um peso */
 body.f-instrument :is(.cab h1,.cap .big,.grande,.passo .valor,.rotulo,.cap .r,.plano-cab h2){font-weight:400}
@@ -1946,13 +1947,13 @@ const CALCS = {
 function campoCalc(area, [k, rot, t, ajuda]) {
   const atual = UI.calc[area] && k in UI.calc[area] ? UI.calc[area][k] : fv(k);
   const input = t === 'opcoes' ? `<div class="opcoes">${ajuda.map(([v, n]) => `<button type="button" class="${atual === v ? 'on' : ''}" data-acao="calc-op" data-area="${area}" data-c="${esc(k)}" data-v="${esc(v)}">${esc(n)}</button>`).join('')}</div>`
-    : `<input id="c-${esc(k)}" ${t === 'data' ? 'type="date"' : 'inputmode="decimal"'} data-calc="${esc(area)}" data-c="${esc(k)}" value="${atual != null ? esc(t === 'data' ? atual : String(atual).replace('.', ',')) : ''}" placeholder="${t === 'reais' ? 'R$' : t === 'pct' ? '%' : ''}">`;
+    : `<input id="c-${esc(k)}" ${t === 'data' ? 'type="date"' : 'inputmode="decimal"'}${t === 'reais' ? ' data-moeda' : ''} data-calc="${esc(area)}" data-c="${esc(k)}" value="${atual != null ? esc(t === 'data' ? atual : t === 'reais' ? moedaTxt(atual) : String(atual).replace('.', ',')) : ''}" placeholder="${t === 'reais' ? 'R$' : t === 'pct' ? '%' : ''}">`;
   return `<div class="campo"><label for="c-${esc(k)}">${esc(rot)}</label>${input}${t !== 'opcoes' && ajuda ? `<small>${esc(ajuda)}</small>` : ''}${tem(fv(k)) ? `<small>hoje: ${esc(t === 'reais' ? brl(+fv(k)) : String(fv(k)))} · ${esc(fo(k))}</small>` : ''}</div>`;
 }
 function calculadora(c) {
   if (c.id === 'saude') { const ex = exames(); return `<div class="card"><h3>O exame de saúde financeira</h3><p class="peq" style="margin:0 0 10px">${ex.length ? `${ex.length} ${ex.length === 1 ? 'exame respondido' : 'exames respondidos'}, o último em ${dataBRano(ex[ex.length - 1].data)}. Responder de novo cria uma fotografia nova; as antigas ficam para comparar.` : '33 perguntas, uns 8 minutos. Preenche, de uma vez, o começo de quase todas as áreas.'}</p><a class="primaria" href="#exame" style="display:inline-flex;align-items:center;text-decoration:none">${ex.length ? 'Responder de novo' : 'Fazer o exame'}</a></div>`; }
   if (c.id === 'objetivos') return `<div class="card calc"><h3>Um objetivo novo</h3>${[['obj.nome', 'O que é', 'texto'], ['obj.valor', 'Quanto custa, em valores de hoje', 'reais'], ['obj.data', 'Para quando', 'mes'], ['obj.guardado', 'Quanto já está guardado para ele', 'reais'], ['obj.aporte', 'Quanto pode guardar por mês', 'reais']]
-      .map(([k, rot, t]) => `<div class="campo"><label for="c-${k}">${rot}</label><input id="c-${k}" ${t === 'mes' ? 'type="month"' : t === 'texto' ? '' : 'inputmode="decimal" placeholder="R$"'} data-calc="objetivos" data-c="${k}" value="${esc((UI.calc.objetivos || {})[k] || '')}"></div>`).join('')}
+      .map(([k, rot, t]) => `<div class="campo"><label for="c-${k}">${rot}</label><input id="c-${k}" ${t === 'mes' ? 'type="month"' : t === 'texto' ? '' : 'inputmode="decimal" data-moeda placeholder="R$"'} data-calc="objetivos" data-c="${k}" value="${esc((UI.calc.objetivos || {})[k] || '')}"></div>`).join('')}
     ${(() => { const d = UI.calc.objetivos || {}, v = numero(d['obj.valor']), g = numero(d['obj.guardado']) || 0, dt = d['obj.data']; return v && dt ? `<div class="aviso" style="margin-bottom:10px">Para chegar a ${brl(v)} em ${mesAnoL(dt)}: ${reaisMes(pmtPara(v, g, 0.005, Math.max(1, difM(MES, dt))))}, rendendo 0,5% ao mês.</div>` : ''; })()}
     <button class="primaria" data-acao="criar-objetivo">Criar o objetivo</button></div>`;
   const campos = CALCS[c.id]; if (!campos) return '';
@@ -1974,7 +1975,7 @@ function telaExame() {
     if (q.t === 'opcoes') return opcoesHtml(q.c, q.o, r[q.c]);
     if (q.t === 'escala') return opcoesHtml(q.c, [1, 2, 3, 4, 5].map(n => [n, String(n)]), r[q.c]);
     if (q.t === 'multi') return `<div class="opcoes">${(typeof q.o === 'function' ? q.o(r) : q.o).map(o => `<button type="button" class="${(r[q.c] || []).includes(o) ? 'on' : ''}" data-acao="ex-multi" data-c="${q.c}" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>`;
-    return `<input data-ex="${q.c}" ${q.t === 'data' ? 'type="date"' : q.t === 'email' ? 'type="email"' : 'inputmode="decimal"'} value="${r[q.c] != null ? esc(String(r[q.c])) : ''}" placeholder="${q.t === 'reais' ? 'R$' : q.t === 'anos' ? 'anos' : ''}">`;
+    return `<input data-ex="${q.c}" ${q.t === 'data' ? 'type="date"' : q.t === 'email' ? 'type="email"' : 'inputmode="decimal"'}${q.t === 'reais' ? ' data-moeda' : ''} value="${r[q.c] != null ? esc(q.t === 'reais' ? moedaTxt(r[q.c]) : String(r[q.c])) : ''}" placeholder="${q.t === 'reais' ? 'R$' : q.t === 'anos' ? 'anos' : ''}">`;
   };
   if (UI.exame.conversa) return conversaExame(vis, r, feitas, ult);
   return `<div style="max-width:720px"><button class="btn link peq" data-acao="ex-modo" style="margin-bottom:10px">Responder uma pergunta de cada vez</button><div class="aviso" style="margin-bottom:12px">${ult ? `O último exame é de ${dataBRano(ult.data)}. As respostas dele já estão aqui: mude o que mudou e grave uma fotografia nova.` : 'São 33 perguntas, algumas só aparecem conforme as respostas. Leva uns 8 minutos.'} ${R.degrau === 'visitante' ? 'Sem conta, o resultado fica só nesta aba.' : ''}</div>
@@ -2015,7 +2016,7 @@ function conversaExame(vis, r, feitas, ult) {
   let resposta;
   if (unica) resposta = `<div class="cv-opcoes${q.t === 'escala' ? ' escala' : ''}">${opcoesDe(q).map(([x, n]) => `<button type="button" class="${String(v) === String(x) ? 'on' : ''}" aria-pressed="${String(v) === String(x)}" data-acao="ex-op" data-c="${q.c}" data-v="${esc(x)}">${esc(n)}</button>`).join('')}</div>${q.t === 'escala' ? '<div class="cv-escala-leg"><span>pouco</span><span>muito</span></div>' : ''}`;
   else if (q.t === 'multi') resposta = `<div class="cv-opcoes multi">${(typeof q.o === 'function' ? q.o(r) : q.o).map(o => `<button type="button" class="${(v || []).includes(o) ? 'on' : ''}" aria-pressed="${(v || []).includes(o)}" data-acao="ex-multi" data-c="${q.c}" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>`;
-  else resposta = `<div class="cv-campo"><input data-ex="${q.c}" aria-label="${esc(q.q)}" ${q.t === 'data' ? 'type="date"' : q.t === 'email' ? 'type="email" autocomplete="email"' : 'inputmode="decimal"'} value="${v != null ? esc(String(v)) : ''}" placeholder="${q.t === 'reais' ? 'R$ 0' : q.t === 'anos' ? 'idade, em anos' : ''}"></div>`;
+  else resposta = `<div class="cv-campo"><input data-ex="${q.c}" aria-label="${esc(q.q)}" ${q.t === 'data' ? 'type="date"' : q.t === 'email' ? 'type="email" autocomplete="email"' : 'inputmode="decimal"'}${q.t === 'reais' ? ' data-moeda' : ''} value="${v != null ? esc(q.t === 'reais' ? moedaTxt(v) : String(v)) : ''}" placeholder="${q.t === 'reais' ? 'R$ 0' : q.t === 'anos' ? 'idade, em anos' : ''}"></div>`;
   const temV = q.t === 'multi' ? (v || []).length > 0 : tem(v);
   const acoes = `<div class="cv-acoes">${unica ? '' : `<button class="primaria" data-acao="ex-prox">Continuar</button>`}<button class="btn link peq" data-acao="ex-prox">${temV ? (unica ? 'Manter e seguir' : '') : 'Pular esta pergunta'}</button>${k > 0 ? anterior : ''}</div>`;
   return `<div class="conversa">${topo}<div class="cv-hist">${antes.map(x => fala(esc(x.q), 'passada') + minha(respostaTxt(x, r[x.c]))).join('')}</div>${fala(esc(q.q), 'atual')}${resposta}${acoes.replace('<button class="btn link peq" data-acao="ex-prox"></button>', '')}</div>`;
@@ -2028,6 +2029,7 @@ function andaExame(passo) {
   desenhar(); window.scrollTo(0, 0);
   const campo = document.querySelector('.cv-campo input'); if (campo && DESK()) campo.focus();
 }
+const moedaTxt = v => { const n = numero(v); return n == null ? '' : n.toLocaleString('pt-BR', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }); };
 const opcoesHtml = (c, ops, atual) => `<div class="opcoes">${ops.map(([v, n]) => `<button type="button" class="${String(atual) === String(v) ? 'on' : ''}" data-acao="ex-op" data-c="${c}" data-v="${esc(v)}">${esc(n)}</button>`).join('')}</div>`;
 
 // ---------- A folha de respostas de uma ocorrência (Fiz, Fiz parte, Não fiz, Adiar) ----------
@@ -2048,10 +2050,10 @@ function folhaTarefa(o) {
       : `<div class="resp"><button class="fiz" data-acao="responder" data-v="feita">Fiz</button>${o.cat === 'dinheiro' ? '<button data-acao="modo" data-v="parte">Fiz parte</button>' : '<button data-acao="modo" data-v="adiar">Adiar</button>'}<button data-acao="modo" data-v="naofiz">Não fiz</button>${o.cat === 'dinheiro' ? '<button data-acao="modo" data-v="adiar">Adiar</button>' : ''}</div>`;
   } else if (F_.modo === 'parte' || F_.modo === 'valor' || F_.modo === 'passei') {
     const rot = o.cat === 'comportamental' ? 'Quanto ' + pl('vocês gastaram', 'você gastou') + ' nesta semana' : 'Quanto ' + pl('vocês guardaram', 'você guardou');
-    corpo = `<div class="campo"><label for="valor">${rot}</label><input id="valor" inputmode="decimal" placeholder="R$" value="${F_.valor != null ? F_.valor : ''}" data-campo="valor"></div>${F_.modo === 'parte' ? efeitoHtml(o, F_.valor) : ''}${o.cat === 'comportamental' && F_.valor != null ? efeitoTeto(o, F_.valor) : ''}
+    corpo = `<div class="campo"><label for="valor">${rot}</label><input id="valor" inputmode="decimal" data-moeda placeholder="R$" value="${F_.valor != null ? moedaTxt(F_.valor) : ''}" data-campo="valor"></div>${F_.modo === 'parte' ? efeitoHtml(o, F_.valor) : ''}${o.cat === 'comportamental' && F_.valor != null ? efeitoTeto(o, F_.valor) : ''}
       <div class="linha"><button class="primaria" data-acao="responder" data-v="${F_.modo === 'parte' ? 'parcial' : F_.modo === 'passei' ? 'naofiz' : (F_.valor != null && F_.valor > o.valor + 0.5 ? 'naofiz' : 'feita')}" ${F_.valor == null ? 'disabled' : ''}>Gravar</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`;
   } else if (F_.modo === 'dentro') {
-    corpo = `<div class="campo"><label for="valor">Quanto ${pl('gastaram', 'gastou')} (opcional)</label><input id="valor" inputmode="decimal" placeholder="até ${brl(o.valor)}" value="${F_.valor != null ? F_.valor : ''}" data-campo="valor"></div><div class="linha"><button class="primaria" data-acao="responder" data-v="feita">Gravar</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`;
+    corpo = `<div class="campo"><label for="valor">Quanto ${pl('gastaram', 'gastou')} (opcional)</label><input id="valor" inputmode="decimal" data-moeda placeholder="até ${brl(o.valor)}" value="${F_.valor != null ? moedaTxt(F_.valor) : ''}" data-campo="valor"></div><div class="linha"><button class="primaria" data-acao="responder" data-v="feita">Gravar</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`;
   } else if (F_.modo === 'naofiz') corpo = naoFizHtml(o);
   else if (F_.modo === 'adiar') {
     corpo = `<div class="campo"><label for="nova">Para quando</label><input id="nova" type="date" min="${addD(o.data > HOJE ? o.data : HOJE, 1)}" value="${F_.novaData || addD(o.data > HOJE ? o.data : HOJE, 7)}" data-campo="novaData"></div>
@@ -2091,7 +2093,7 @@ function naoFizHtml(o) {
     return `<div class="aviso" style="margin-top:12px">${esc(resumo)}</div>${duas ? '<p class="mut" style="margin:8px 0 0">É a segunda falta seguida: a sugestão é ajustar o aporte ao que cabe, não aumentar.</p>' : ''}
       <button class="btn link peq" data-acao="ver-por-obj" style="margin-top:6px">${F_.porObj ? 'esconder' : 'ver por objetivo'}</button>${F_.porObj ? `<div class="peq" style="margin-top:6px">${ef.map(e => `<p style="margin:4px 0"><b style="color:var(--marinho)">${esc(e.obj.nome)}.</b> ${esc(fraseDoEfeito(e))}</p>`).join('')}</div>` : ''}
       ${[opcoes.find(x => x[0] === sug), ...opcoes.filter(x => x[0] !== sug)].map(([k, t]) => `<button class="saida${k === sug ? ' sug' : ''}${F_.saida === k ? ' on' : ''}" aria-pressed="${F_.saida === k}" data-acao="saida" data-v="${k}"><b>${SAIDAS[k]}${k === sug ? ' (sugerida)' : ''}</b>${t}</button>`).join('')}
-      ${F_.saida === 'coube' ? `<div class="campo"><label for="coube">Quanto cabe por mês</label><input id="coube" inputmode="decimal" value="${F_.coube != null ? F_.coube : Math.round(o.valor * 0.6)}" data-campo="coube"></div>` : ''}
+      ${F_.saida === 'coube' ? `<div class="campo"><label for="coube">Quanto cabe por mês</label><input id="coube" inputmode="decimal" data-moeda value="${moedaTxt(F_.coube != null ? F_.coube : Math.round(o.valor * 0.6))}" data-campo="coube"></div>` : ''}
       ${F_.saida ? antesDepois(o, F_.saida) + (completo && F_.saida !== 'outro' ? `<p class="mut" style="margin:6px 0">No planejamento completo, o ajuste vale como provisório até a ${esc(R.consultora ? R.consultora.nome : 'consultora')} aprovar.</p>` : '') + `<div class="linha"><button class="primaria" data-acao="responder" data-v="${F_.saida === 'outro' ? 'outro' : 'naofiz'}">Confirmar</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>` : `<div style="margin-top:10px"><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`}`;
   }
   const txt = o.cat === 'educacional' ? 'Sem problema: escolha uma nova data.' : o.pedido.risco ? o.pedido.risco : 'O que esta tarefa resolve continua em aberto.';
@@ -2220,7 +2222,7 @@ function telaRealizado() {
     ${R.degrau !== 'visitante' ? `<div style="margin-top:14px"><button class="btn" data-acao="lancar">Lançar um mês</button></div>` : ''}</div>`;
 }
 function folhaLancar() {
-  const L = UI.folha, mes = L.mes || addM(MES, -1), c = (k, rot) => `<div class="campo"><label for="l-${k}">${rot}</label><input id="l-${k}" inputmode="decimal" placeholder="R$" data-lanc="${k}" value="${L[k] != null ? L[k] : ''}"></div>`;
+  const L = UI.folha, mes = L.mes || addM(MES, -1), c = (k, rot) => `<div class="campo"><label for="l-${k}">${rot}</label><input id="l-${k}" inputmode="decimal" data-moeda placeholder="R$" data-lanc="${k}" value="${L[k] != null ? esc(moedaTxt(L[k])) : ''}"></div>`;
   return `<div class="alca"></div><h2>Lançar ${mesAnoL(mes)}</h2><p class="mut">Sem open banking, os totais do mês por grupo. ${orcadoNoMes(mes) ? 'O orçado deste mês: ' + brl(orcadoNoMes(mes).entradas) + ' de entradas, ' + brl(orcadoNoMes(mes).fixas) + ' de fixas e ' + brl(orcadoNoMes(mes).ajustaveis) + ' de ajustáveis.' : ''}</p>
     <div class="campo"><label for="l-mes">O mês</label><input id="l-mes" type="month" max="${addM(MES, -1)}" value="${mes}" data-lanc="mes"></div>
     ${c('entradas', 'Entradas')}${c('fixas', 'Despesas fixas')}${c('ajustaveis', 'Despesas ajustáveis')}
@@ -2458,6 +2460,28 @@ document.addEventListener('click', async ev => {
     try { localStorage.setItem('nl-db:vetor/' + id, JSON.stringify({ dados: v, em: new Date().toISOString() })); sessionStorage.removeItem('nl-visitante:vetor'); } catch (e) { }
     location.href = '?cliente=' + id + (PARAMS.has('demo') ? '&demo' : '') + '#painel'; return; }
 });
+function mascaraMoeda(ev) {
+  const t = ev.target; if (!t.matches || !t.matches('input[data-moeda]')) return;
+  let v = t.value, pos = t.selectionStart == null ? v.length : t.selectionStart;
+  // o ponto que acabou de entrar (comparado com o valor anterior do campo) é a vírgula decimal, se ainda não houver uma
+  const ant = t._moeda == null ? t.defaultValue : t._moeda;
+  if (!v.includes(',') && pos > 0 && v[pos - 1] === '.' && v.slice(0, pos - 1) + v.slice(pos) === ant) v = v.slice(0, pos - 1) + ',' + v.slice(pos);
+  // colado com ponto decimal ("2500.5"): o último ponto seguido de um ou dois dígitos é a vírgula
+  else if (!v.includes(',') && /\.\d{1,2}$/.test(v)) { const k = v.lastIndexOf('.'); v = v.slice(0, k) + ',' + v.slice(k + 1); }
+  // apagar um ponto de milhar apaga o dígito ao lado (senão a máscara o devolve e nada some)
+  if (ev.inputType === 'deleteContentBackward' && ant[pos] === '.' && v === ant.slice(0, pos) + ant.slice(pos + 1) && pos > 0) { v = v.slice(0, pos - 1) + v.slice(pos); pos--; }
+  if (ev.inputType === 'deleteContentForward' && ant[pos] === '.' && v === ant.slice(0, pos) + ant.slice(pos + 1)) v = v.slice(0, pos) + v.slice(pos + 1);
+  const antes = v.slice(0, pos).replace(/[^\d,]/g, '').replace(/^0+(?=\d)/, '').length;
+  const s = v.replace(/[^\d,]/g, ''), i = s.indexOf(',');
+  const inteiro = (i < 0 ? s : s.slice(0, i)).replace(/^0+(?=\d)/, ''), dec = i < 0 ? null : s.slice(i + 1).replace(/,/g, '').slice(0, 2);
+  const fmt = (inteiro || (dec != null ? '0' : '')).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + (dec != null ? ',' + dec : '');
+  t._moeda = fmt;
+  if (fmt === t.value) return;
+  t.value = fmt;
+  let n = 0, p = 0; while (p < fmt.length && n < antes) { if (/[\d,]/.test(fmt[p])) n++; p++; }
+  try { t.setSelectionRange(p, p); } catch (e) { }
+}
+document.addEventListener('input', mascaraMoeda, true);
 document.addEventListener('input', ev => {
   const t = ev.target, d = t.dataset || {};
   if (d.campo === 'rascunho') { UI.rascunho = t.value; return; }
