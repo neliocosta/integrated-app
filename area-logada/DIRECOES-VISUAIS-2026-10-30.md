@@ -101,3 +101,19 @@ número do passo 36px (28px no celular) e o da área 32px (28px). No exame, a pe
 **Máscara de moeda:** todo campo de valor em reais (atributo `data-moeda`) formata enquanto se digita, no padrão
 #.###.###,##. O ponto digitado ou colado como decimal vira vírgula, apagar um ponto de milhar apaga o dígito ao lado, e o
 valor que já existe entra formatado. A leitura continua pela mesma `numero()`.
+
+## O Livro discreto (30/10, noite): o que faz uma interface parecer barata, e a correção
+
+A pesquisa (Refactoring UI e artigos sobre design "premium" em fintech) repete os mesmos sinais de interface barata:
+fonte grande demais, pesos em excesso (o negrito em tudo), uma cor de destaque espalhada, etiquetas, bordas e sombras
+demais, e tela apertada. Medida a área, o Painel tinha 60 dos 113 textos em semibold (600), 13 tamanhos, 25 sombras e
+13 rótulos em maiúsculas. Regras do Livro a partir daqui:
+
+- **Pesos:** texto em 400; títulos, números e botões em 500; nada em 600 ou 700.
+- **Tamanhos:** corpo 14,5px; secundário 13px; detalhe 12px; rótulo em maiúsculas 10,5px; título da página 28px (23px no
+  celular); seção 18px; título de cartão 14,5px; o número do passo 30px e o da área 28px (24px no celular).
+- **Rótulos em maiúsculas** em cinza, não em marinho: organizam sem competir.
+- **Etiquetas de estado** como ponto e texto, sem fundo colorido.
+- **Profundidade:** uma linha fina com uma sombra quase nula; o cartão em destaque ganha só um pouco mais.
+- **Cor:** o laranja fica na ação principal e no progresso; a aba ativa é sublinhada em marinho fino.
+- **Espaço:** 40px entre seções, cartões com 22–24px por dentro e grades com 20px no computador.

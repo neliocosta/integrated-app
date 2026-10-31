@@ -714,6 +714,85 @@ body.v-livro .alterna .pino{background:var(--marinho);box-shadow:none}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.3s}
 ::view-transition-old(*),::view-transition-new(*){height:100%;object-fit:cover;object-position:left top}
 @media (prefers-reduced-motion: reduce){html:not(.movimento)::view-transition-group(*),html:not(.movimento)::view-transition-old(*),html:not(.movimento)::view-transition-new(*){animation:none!important}}
+
+/* =====================================================================================================================
+   O Livro discreto (30/10, depois da pesquisa sobre o que faz uma interface parecer barata): fonte grande, pesos em
+   excesso, cor de destaque espalhada, etiquetas, sombras e densidade. As regras abaixo vêm por último e valem só no
+   Livro: o texto em 400, títulos e números em 500 (nada em 600), um degrau a menos em tudo, os rótulos em cinza, as
+   etiquetas como ponto e texto, a sombra como uma linha fina, o laranja só na ação e no progresso, mais ar entre seções
+   ===================================================================================================================== */
+body.v-livro{--sombra:0 0 0 1px rgba(32,52,76,.06),0 1px 2px rgba(32,52,76,.04);--sombra-alta:0 0 0 1px rgba(32,52,76,.08),0 6px 18px -8px rgba(32,52,76,.14);font-size:14.5px;line-height:1.6}
+/* os pesos: o negrito fica para quase nada */
+body.v-livro :is(b,strong){font-weight:500}
+body.v-livro :is(.tarefa b,.obj-mini b,.obj-card b,.etapa b,.quem-atende b,.atend .atend-tit,.niveis .card > .entre b,.card h3,.prof b,.pilares b,.nivel-nome,.mais-lista a){font-weight:500}
+body.v-livro :is(.btn,.filtro,.opcoes button,.chip,.alterna button,.cv-opcoes button,.lateral .item,.lateral .item.on,.encontro,.campo label){font-weight:500}
+body.v-livro .primaria{font-weight:500;font-size:13.5px;padding:10px 20px;min-height:40px}
+/* os títulos: a serifa em 400; o da página e o das seções menores */
+body.v-livro .cab h1{font-size:28px;font-weight:400;letter-spacing:-.01em}
+body.v-livro :is(.rotulo:not(._),.plano-cab h2){font-size:18px;font-weight:400;letter-spacing:0}
+body.v-livro .rotulo:not(._){margin:40px 0 14px}
+body.v-livro .rotulo:not(._):first-child{margin-top:4px}
+body.v-livro .grupo > summary.rotulo:not(._){margin:36px 0 12px}
+body.v-livro :is(.card,.passo,.mes,.folha) .rotulo:not(._),body.v-livro :is(.card,.mes) h3{font-size:14.5px;font-weight:500;letter-spacing:0}
+/* os rótulos em maiúsculas: menores e em cinza, para não competir com o conteúdo */
+body.v-livro :is(.cap .r,.nums span,.numero span,.etiqueta,.cv-quem),body.v-livro :is(.guia,.cap-grade.compacta) .cap .r{font-size:10.5px;font-weight:500;letter-spacing:.12em;color:var(--legenda)}
+body.v-livro .ic-area{width:16px;height:16px;stroke:var(--legenda)}
+/* os números: Sora em 500, um degrau abaixo */
+body.v-livro :is(.passo .valor,.grande,.cap .big,.numero b,.nums b,.num,.sp-num b){font-weight:500;letter-spacing:-.015em}
+body.v-livro .passo .valor{font-size:26px}
+body.v-livro .painel .principal .passo .valor{font-size:30px}
+body.v-livro #miolo > .grade2 > .card:first-child .grande,body.v-livro .card[style*="view-transition-name:cap-"] .grande{font-size:28px}
+body.v-livro .cap .big{font-size:20px}
+body.v-livro :is(.guia,.cap-grade.compacta) .cap .big{font-size:17px}
+body.v-livro .nums b{font-size:20px}
+body.v-livro .sp-num b{font-size:17px}
+body.v-livro :is(.passo .valor small,.cap .big small,.grande small){font-size:13px;font-weight:400}
+/* o texto: corpo 14,5; secundário 13; detalhe 12 */
+body.v-livro :is(.mut,.quem-atende small,.sp-num small,.nums small,.numero small,.prof small,.obj-card small,.tarefa small,.etapa .mut,.atend .mut,.msg small,.cv-prog span){font-size:13px}
+body.v-livro :is(.peq,.inclui li,.aviso,.passo p,.cap .sub){font-size:14px}
+body.v-livro :is(.tarefa b,.etapa b,.obj-card b,.quem-atende b,.msg,.atend .atend-tit,.niveis .card > .entre b){font-size:14.5px}
+body.v-livro :is(.chip,.leg,.obj-mini small,.tarefa .cat,.cap .prof-mini,.sp-dias li,.marcas,.semanas small,.trilha-h span,.pilares div,.linha-tempo span,.grupo > summary .conta){font-size:12px}
+body.v-livro .cap .r .prof-mini{font-size:12px}
+body.v-livro .obj-mini b{font-size:13.5px}
+body.v-livro :is(.btn,.filtro,.opcoes button,.campo label,.quem-atende .contatos,.lateral .item){font-size:13.5px}
+body.v-livro .alterna button{font-size:13px}
+body.v-livro .nivel-nome{font-size:15px}
+/* as etiquetas de estado: ponto e texto, sem fundo colorido */
+body.v-livro .chip{background:transparent!important;padding:0;gap:6px;border-radius:0;letter-spacing:0}
+body.v-livro .chip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+body.v-livro .chip:not(.ok):not(.at):not(.crit):not(.mar){color:var(--legenda)}
+body.v-livro .delta{background:transparent!important;padding:0;margin-left:8px;font-size:12px!important;font-weight:500!important}
+/* o menu: a aba ativa sublinhada em marinho fino; o laranja fica para a ação */
+@media (min-width:900px){body.v-livro .lateral .item.on{border-bottom:1.5px solid var(--marinho);color:var(--marinho)}}
+body.v-livro .lateral .item{color:var(--legenda)}
+/* o progresso mais fino */
+body.v-livro .passo .trilho.fut{height:6px!important}
+/* mais ar: cartões com mais respiro e grades mais abertas no computador */
+@media (min-width:900px){
+  body.v-livro :is(.card,.cap:not(.compacto)){padding:22px 24px}
+  body.v-livro :is(.grade2,.niveis,.cap-grade:not(.compacta)){gap:20px}
+  body.v-livro .painel{gap:28px}
+}
+/* os que ainda pesavam: o título da página (uma regra antiga pesa três classes), o menu, os dias, a profundidade */
+body.v-livro .cab h1:not(._){font-weight:400}
+body.v-livro .lateral .item:not(.on){font-weight:400}
+body.v-livro :is(.sp-dias i,.sp-dias li.hoje span,.cap .prof-mini,.tarefa .cat,.tarefa small .quando,.quem-atende .contatos,.trilha-h .atual span){font-weight:400}
+body.v-livro :is(.sp-dias li.hoje span,.tarefa small .quando,.trilha-h .atual span){color:var(--marinho)}
+/* o exame em conversa, mais leve */
+body.v-livro .cv-msg.atual .cv-bolha{font-size:15px;font-weight:400}
+body.v-livro .cv-bolha{font-size:14px}
+body.v-livro .cv-campo input{font-size:16px;font-weight:400}
+body.v-livro .cv-opcoes button{font-size:14px;min-height:46px}
+body.v-livro .cv-opcoes.escala button{font-size:15px}
+/* a saudação e a semana */
+body.v-livro .sp-dias i{font-size:13px;font-weight:500;width:32px;height:32px}
+@media (max-width:899px){
+  body.v-livro .cab h1{font-size:23px}
+  body.v-livro .passo .valor,body.v-livro .painel .principal .passo .valor{font-size:24px}
+  body.v-livro #miolo > .grade2 > .card:first-child .grande,body.v-livro .card[style*="view-transition-name:cap-"] .grande{font-size:24px}
+  body.v-livro :is(.rotulo:not(._),.plano-cab h2){font-size:17px}
+  body.v-livro .rotulo:not(._){margin:32px 0 12px}
+}
 </style>
 </head>
 <body>
