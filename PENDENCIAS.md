@@ -27,7 +27,7 @@ estrutura (seção 15). Em aberto, para o dono do produto decidir:
   precisam pesar mais, ou o "sem dívidas" não pode contar como área inteira.
 - **A fórmula da nota do exame.** A área usa uma conta provisória (`notaDoExame`), avisada na tela; a oficial está no
   servidor da plataforma (COLETA.md, "o que falta").
-- **As fotos de natureza** continuam vindo do Unsplash pelo endereço; no produto, escolher e guardar com a marca.
+- **As fotos de natureza — resolvido (30/10/2026).** A faixa do propósito usa a ilustração da travessia, desenhada no código; as fotos ficam só nos objetivos. Os ícones das onze áreas e as ilustrações dos estados vazios estão em `ICONES_AREA` e `ILUSTRA`.
 - **O mock** (`area-logada/mock/index.html`) não foi atualizado: o Plano e o Painel dele estão superados pela base única,
   e ele fica só como referência das telas que ela ainda não tem (Conteúdos, Utilitários, o lado do consultor, o WhatsApp).
 - **O financiamento do exemplo** aparece com 360 parcelas restantes porque o plano de exemplo não tem a data de início do

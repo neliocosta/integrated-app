@@ -132,7 +132,22 @@ main{flex:1;padding:16px 16px 96px;width:100%;max-width:1120px}
 .paisagem{position:relative;border-radius:var(--raio);background-size:cover;background-position:center;color:#fff;padding:24px 28px;margin-bottom:18px;min-height:168px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
 .paisagem .r{font:500 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.9}
 .paisagem h2{font:400 29px/1.2 var(--serifa);margin:6px 0 0;max-width:30ch;text-wrap:balance}
-.paisagem .credito{position:absolute;right:12px;bottom:8px;font-size:10px;opacity:.6}
+/* a faixa da travessia: papel pêssego, o texto em marinho e a ilustração à direita, presa no pé */
+.paisagem{background:linear-gradient(180deg,#FFF3EB 0%,#FDF8F2 100%);color:var(--marinho)}
+.paisagem{min-height:196px;justify-content:flex-start}
+.paisagem > *:not(svg){position:relative;z-index:1;max-width:min(26ch,52%)}
+.paisagem .ilu-travessia{position:absolute;right:0;bottom:0;width:min(340px,48%);height:auto;z-index:0}
+@media (max-width:599px){.paisagem{min-height:250px}.paisagem > *:not(svg){max-width:100%}.paisagem .ilu-travessia{width:80%}}
+.vazio .ilu{display:block;width:170px;height:auto;margin:0 auto 18px}
+.vazio p{max-width:52ch;margin:0 auto 18px;line-height:1.55}
+/* no Livro, a faixa do visitante leva o botão secundário: a ação principal da tela é a do passo */
+.v-livro .faixa-visitante .primaria{background:var(--cartao);color:var(--marinho);box-shadow:inset 0 0 0 1.5px var(--marinho)}
+.v-livro .faixa-visitante .primaria:hover{filter:none;background:#fff}
+/* o ícone de cada área no cabeçalho do cartão; a área sem dado fica apagada */
+.ar-nome{display:inline-flex;align-items:center;gap:8px;min-width:0}
+.ic-area{flex:none;width:18px;height:18px;fill:none;stroke:var(--marinho);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.cap.semdado .ic-area{stroke:var(--nevoa)}
+.cap.semdado .ar-nome{color:var(--legenda)}
 .proposito{font:italic 400 15px var(--serifa);color:var(--legenda);margin:0 0 8px}
 
 /* Painel */
@@ -460,7 +475,7 @@ body.v-livro .rotulo .mais{font:600 13px var(--sans);letter-spacing:0}
 .v-livro .tarefa.feita{opacity:1}
 .v-livro .tarefa.feita :is(b,small,.cat){color:var(--legenda)}
 .v-livro :is(.marcas,.semanas small){font-size:11px}
-.v-livro .paisagem .credito{font-size:11px;opacity:.85}
+
 .v-livro :is(.card,.cap,.tarefa,.obj-card,.obj-mini,.passo,.numeros,.prof,.nums>div,.mes,.pergunta,.mais-lista a,.encontro){border-color:transparent;box-shadow:var(--sombra)}
 .v-livro :is(a.cap,a.obj-card,a.obj-mini,.tarefa,.mais-lista a){transition:box-shadow .25s ease,transform .25s ease}
 .v-livro :is(a.cap,a.obj-card,a.obj-mini,.tarefa:has(.abre:hover),.mais-lista a):hover{box-shadow:var(--sombra-alta);transform:translateY(-1px)}
@@ -1238,6 +1253,44 @@ const mundoAtual = () => { const p = passoAtual(); return p && p.mundo != null ?
 // cliente self-service poderá responder os mesmos questionários no futuro). 'paginas' são as páginas do relatório que
 // formam a versão expandida no Completo.
 // =====================================================================================================================
+// os ícones das onze áreas (traço de 1,6, o mesmo do menu): mostram de relance o que o plano cobre; a área sem dado
+// fica apagada, como num quadro de coberturas
+const ICONES_AREA = {
+  saude: '<path d="M12 20s-7-4.3-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.7-7 10-7 10z"/><path d="M7 12h2.5l1.5-2.5 2 4.5 1.5-2H17"/>',
+  gestao: '<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18"/><path d="M15.5 14.5h2.5"/>',
+  dividas: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8.5h6M9 12.5h4"/>',
+  objetivos: '<path d="M5.5 21V4"/><path d="M5.5 4.5h11l-2.2 3.5 2.2 3.5h-11"/>',
+  reserva: '<path d="M3 12a9 9 0 0 1 18 0z"/><path d="M12 12v6a2 2 0 0 0 4 0"/>',
+  riscos: '<path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',
+  patrimonio: '<path d="M4 11l8-7 8 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/>',
+  politica: '<path d="M20.5 13A8.5 8.5 0 1 1 11 3.5V13z"/><path d="M14 3.6A8.5 8.5 0 0 1 20.4 10H14z"/>',
+  tributario: '<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10.5 17l4-6"/><circle cx="10.5" cy="11.5" r=".8"/><circle cx="14.5" cy="16.5" r=".8"/>',
+  liberdade: '<path d="M3 17h18"/><path d="M7 17a5 5 0 0 1 10 0"/><path d="M12 7V4.5M5.8 10.3 4 8.5M18.2 10.3 20 8.5"/><path d="M7 20.5h10"/>',
+  evolucao: '<path d="M3.5 20h17"/><path d="M5 16l4.5-4.5 3.5 2.5 6-7"/><path d="M15 7h4v4"/>' };
+const iconeArea = id => ICONES_AREA[id] ? `<svg class="ic-area" viewBox="0 0 24 24" aria-hidden="true">${ICONES_AREA[id]}</svg>` : '';
+
+// as ilustrações de traço, no lugar das fotos de banco de imagem: marinho no traço, laranja no que está à frente
+const ILUSTRA = {
+  // a travessia: o horizonte, o sol que nasce e o caminho pontilhado com os marcos
+  travessia: `<svg class="ilu-travessia" viewBox="0 0 360 160" aria-hidden="true"><circle cx="292" cy="80" r="34" fill="#FCD9C2"/><circle cx="292" cy="80" r="20" fill="#F6A06B"/>
+    <path d="M0 122C60 100 110 106 160 117s110 16 200-12" fill="none" stroke="#20344C" stroke-width="1.6"/><path d="M0 142c80-16 150-12 220-2s90 4 140-8" fill="none" stroke="#9FB0C4" stroke-width="1.4"/>
+    <path d="M24 152c66-10 126-24 176-40s62-26 92-32" fill="none" stroke="#E06600" stroke-width="1.8" stroke-dasharray="1 7" stroke-linecap="round"/>
+    <circle cx="24" cy="152" r="4.5" fill="#20344C"/><circle cx="138" cy="128" r="4" fill="#fff" stroke="#20344C" stroke-width="1.6"/><circle cx="214" cy="106" r="4" fill="#fff" stroke="#20344C" stroke-width="1.6"/></svg>`,
+  // a lista: três tarefas, a primeira feita
+  tarefas: `<svg class="ilu" viewBox="0 0 160 110" aria-hidden="true"><rect x="36" y="10" width="88" height="90" rx="12" fill="#fff" stroke="#20344C" stroke-width="1.6"/>
+    <circle cx="56" cy="34" r="7" fill="#F6A06B"/><path d="M52.5 34l2.5 2.5 4.5-5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M70 34h38" stroke="#9FB0C4" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="56" cy="56" r="7" fill="none" stroke="#20344C" stroke-width="1.6"/><path d="M70 56h30" stroke="#DCE3EC" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="56" cy="78" r="7" fill="none" stroke="#20344C" stroke-width="1.6"/><path d="M70 78h34" stroke="#DCE3EC" stroke-width="3" stroke-linecap="round"/></svg>`,
+  // o objetivo: a bandeira no alto, o caminho pontilhado até ela
+  objetivos: `<svg class="ilu" viewBox="0 0 160 110" aria-hidden="true"><path d="M8 98c30-6 52-30 74-54s44-26 70-10" fill="none" stroke="#20344C" stroke-width="1.6"/>
+    <path d="M18 100c26-6 44-20 62-38" fill="none" stroke="#E06600" stroke-width="1.8" stroke-dasharray="1 7" stroke-linecap="round"/>
+    <path d="M86 40V12" stroke="#20344C" stroke-width="1.8" stroke-linecap="round"/><path d="M86 13h22l-5 7 5 7H86" fill="#F6A06B" stroke="#E06600" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="18" cy="100" r="4" fill="#20344C"/></svg>`,
+  // o passo cumprido: o cume com a bandeira e o sol atrás
+  cumprido: `<svg class="ilu" viewBox="0 0 160 110" aria-hidden="true"><circle cx="112" cy="40" r="18" fill="#FCD9C2"/>
+    <path d="M10 100l46-58 22 26 16-16 56 48z" fill="#fff" stroke="#20344C" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M56 42V18" stroke="#20344C" stroke-width="1.8" stroke-linecap="round"/><path d="M56 19h18l-4 6 4 6H56" fill="#F6A06B" stroke="#E06600" stroke-width="1.4" stroke-linejoin="round"/></svg>` };
+
 const CARTOES = [
   { id: 'saude', nome: 'Saúde financeira', pergunta: 'Como está a sua saúde financeira, e para onde ela está indo?', paginas: [['hoje-depois', 'Hoje e depois do plano']],
     ind: [['nota', 'A nota geral', 'exame'], ['pilares', 'Os cinco pilares', 'exame'], ['fase', 'A fase da vida financeira', 'exame'], ['evolucao', 'A evolução desde o exame anterior', 'exame'], ['diagnostico', 'Hoje e depois do plano, em oito indicadores', 'consultor'], ['respostas', 'As respostas do exame', 'exame']] },
@@ -1583,7 +1636,6 @@ function barraDemo() {
 // =====================================================================================================================
 const DESK = () => matchMedia('(min-width: 900px)').matches;
 const FUNDO_OBJ = o => o.foto ? `url('${o.foto}')` : o.tipo === 'liberdade' ? 'linear-gradient(135deg,#CFE8D9,#77C094)' : 'linear-gradient(135deg,#EEF1F5,#9FB0C4)';
-const PAISAGEM = 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1600&q=70&auto=format&fit=crop';   // colinas com névoa ao amanhecer (Unsplash, licença livre); no produto, escolhida e guardada com a marca
 const tomDoObj = o => { const nec = necessario(o); return o.aporte >= nec - 0.5 ? ['ok', 'no caminho'] : ['at', `aporte em ${pct(o.aporte / Math.max(1, nec))} do necessário`]; };
 const quandoTxt = o => o.aberta ? (atrasada(o) ? `atrasada há ${difD(o.data, HOJE)} ${difD(o.data, HOJE) === 1 ? 'dia' : 'dias'}` : o.data === HOJE ? 'hoje' : 'até ' + dataBR(o.data)) : '';
 const ESTADO_TXT = { feita: 'fiz', parcial: 'fiz parte', naofiz: 'não fiz', outro: 'usei em outro objetivo', adiada: 'adiada' };
@@ -1607,7 +1659,7 @@ function telaPainel() {
   const A = areas(), objs = objetivos(), oc = ocorrencias(), abertas = oc.filter(o => o.aberta), prox = abertas[0], passo = passoAtual();
   const semana = abertas.filter(o => o.data <= addD(HOJE, 7)).length - (prox ? 1 : 0);
   const frase = R.proposito || (R.degrau === 'visitante' ? 'Um plano para a vida que você quer viver começa por saber onde você está.' : null);
-  const topo = frase ? `<section class="paisagem" style="background-image:linear-gradient(100deg,rgba(19,31,46,.62),rgba(19,31,46,.12) 75%),url('${PAISAGEM}')"><span class="r">${R.proposito ? 'O propósito' : 'Comece por aqui'}</span><h2>${esc(frase)}</h2></section>` : '';
+  const topo = frase ? `<section class="paisagem">${ILUSTRA.travessia}<span class="r">${R.proposito ? 'O propósito' : 'Comece por aqui'}</span><h2>${esc(frase)}</h2></section>` : '';
   const faixa = objs.length ? `${DESK() || !R.proposito ? '' : `<p class="proposito">${esc(R.proposito)}</p>`}<div class="rotulo">Os objetivos</div><div class="faixa-obj">${objs.map(o => `<a class="obj-mini" href="#objetivo/${o.id}"><div class="foto" style="background-image:${FUNDO_OBJ(o)}"></div><div class="tx"><b>${esc(o.nome)}</b><small>${o.tipo === 'liberdade' ? 'aos ' + o.idade : mesAno(o.data + '-01')} · ${pct(progresso(o))} ${o.tipo === 'liberdade' ? 'do caminho' : 'guardado'}</small><div class="trilho"><i style="width:${(progresso(o) * 100).toFixed(1)}%"></i></div></div></a>`).join('')}</div>`
     : `<div class="rotulo">Os objetivos</div><a class="card" href="#cartao/objetivos" style="display:block;text-decoration:none"><b style="color:var(--marinho)">Dar nome, valor e data ao primeiro objetivo</b><div class="mut">Pode ser uma viagem, a entrada de uma casa, quitar uma dívida ou a primeira reserva.</div></a>`;
   const cartaoPasso = passo ? `<div class="rotulo">O passo agora</div><section class="passo"><div class="valor">${passo.valor || esc(passo.titulo)}</div>${passo.fracao != null ? `<div class="trilho fut" style="height:8px"><i style="width:${(clamp(passo.fracao, 0, 1) * 100).toFixed(1)}%"></i></div>` : ''}
@@ -1661,7 +1713,7 @@ const saudacao = () => { const hr = new Date().getHours(), s = hr < 12 ? 'Bom di
 // ---------- A tela do passo: o que ele pede, por que importa e de onde veio ----------
 function telaPasso() {
   const p = passoAtual();
-  if (!p) return `<div class="vazio"><h2>Passos cumpridos</h2><p>${R.consultora ? 'O próximo encontro é com a ' + esc(R.consultora.nome) + '.' : 'O próximo é aprofundar o plano.'}</p></div>`;
+  if (!p) return `<div class="vazio">${ILUSTRA.cumprido}<h2>Passos cumpridos</h2><p>${R.consultora ? 'O próximo encontro é com a ' + esc(R.consultora.nome) + '.' : 'O próximo é aprofundar o plano.'}</p></div>`;
   const o = p.pedido ? ocorrencias().filter(x => x.pedido.id === p.pedido && x.aberta)[0] : null;
   return `<div style="max-width:720px"><div class="card"><span class="rotulo" style="margin:0">O passo agora · ${MUNDOS[mundoAtual()]}</span><div class="grande" style="margin:10px 0">${esc(p.titulo)}</div>
       ${p.valor ? `<div class="num" style="font-size:24px">${p.valor}</div>` : ''}${p.fracao != null ? `<div class="trilho fut" style="height:8px;margin:10px 0"><i style="width:${(clamp(p.fracao, 0, 1) * 100).toFixed(1)}%"></i></div>` : ''}
@@ -1673,7 +1725,7 @@ function telaPasso() {
 // ---------- Tarefas ----------
 function telaTarefas() {
   const oc = ocorrencias();
-  if (!R.pedidos.length) return `<div class="vazio"><h2>Ainda sem tarefas</h2><p>${R.degrau === 'visitante' ? 'As tarefas nascem do plano: os aportes de cada objetivo, o teto da semana, os próximos passos. Com a conta, elas chegam com lembrete no WhatsApp.' : 'As tarefas nascem dos objetivos com aporte. Dê valor, data e aporte a um objetivo e o primeiro aporte vira tarefa.'}</p>
+  if (!R.pedidos.length) return `<div class="vazio">${ILUSTRA.tarefas}<h2>Ainda sem tarefas</h2><p>${R.degrau === 'visitante' ? 'As tarefas nascem do plano: os aportes de cada objetivo, o teto da semana, os próximos passos. Com a conta, elas chegam com lembrete no WhatsApp.' : 'As tarefas nascem dos objetivos com aporte. Dê valor, data e aporte a um objetivo e o primeiro aporte vira tarefa.'}</p>
     ${R.degrau === 'visitante' ? '<button class="primaria" data-acao="criar-conta">Criar a minha conta</button>' : '<a class="primaria" href="#cartao/objetivos" style="display:inline-flex;align-items:center;text-decoration:none">Criar um objetivo</a>'}</div>`;
   const f = UI.filtro, vis = oc.filter(o => f === 'todas' || o.cat === f);
   const grupos = [['Agora', vis.filter(o => o.aberta && o.data <= HOJE)], ['Nesta semana', vis.filter(o => o.aberta && o.data > HOJE && o.data <= addD(HOJE, 7))], ['Depois', vis.filter(o => o.aberta && o.data > addD(HOJE, 7))], ['Respondidas', vis.filter(o => !o.aberta).reverse().slice(0, 12)]];
@@ -1781,16 +1833,16 @@ function cartaoArea(c, a, compacto, i) {
   const f = profundidade(c, a), n = Object.keys(a.ind).length, mini = `<span class="prof-mini" title="${n} de ${c.ind.length} informações">${n} de ${c.ind.length}<i><em style="width:${(f * 100).toFixed(0)}%"></em></i></span>`;
   const vt = `style="view-transition-name:cap-${c.id};--i:${i || 0}"`;   // --i: a posição no plano, para a sequência da transformação
   if (compacto) {
-    if (!a.capa) return `<a class="cap compacto semdado" data-area="${c.id}" href="#cartao/${c.id}" ${vt}><span class="r">${esc(c.nome)}${mini}</span><span class="convite">${!exames().length && c.ind.some(([, , m]) => m === 'exame') ? 'Começar pelo exame' : 'Começar'} &#8250;</span></a>`;
+    if (!a.capa) return `<a class="cap compacto semdado" data-area="${c.id}" href="#cartao/${c.id}" ${vt}><span class="r"><span class="ar-nome">${iconeArea(c.id)}${esc(c.nome)}</span>${mini}</span><span class="convite">${!exames().length && c.ind.some(([, , m]) => m === 'exame') ? 'Começar pelo exame' : 'Começar'} &#8250;</span></a>`;
     const t = a.capa.tom;
-    return `<a class="cap compacto" data-area="${c.id}" href="#cartao/${c.id}" ${vt}><span class="r">${esc(c.nome)}${mini}</span><div class="big">${a.capa.big}</div>${t ? `<span class="chip ${t[0]}" title="${esc(t[1])}">${esc(t[1])}</span>` : ''}</a>`;
+    return `<a class="cap compacto" data-area="${c.id}" href="#cartao/${c.id}" ${vt}><span class="r"><span class="ar-nome">${iconeArea(c.id)}${esc(c.nome)}</span>${mini}</span><div class="big">${a.capa.big}</div>${t ? `<span class="chip ${t[0]}" title="${esc(t[1])}">${esc(t[1])}</span>` : ''}</a>`;
   }
   if (!a.capa) {
     const primeiraCalc = c.ind.find(([id, , m]) => !a.ind[id] && m !== 'consultor'), convite = !exames().length && c.ind.some(([, , m]) => m === 'exame') ? 'Começar pelo exame' : primeiraCalc ? (primeiraCalc[2] === 'exame' ? 'Responder o exame' : 'Abrir a calculadora') : 'Ver o que esta área responde';
-    return `<a class="cap semdado" href="#cartao/${c.id}" ${vt}><span class="r">${esc(c.nome)}${mini}</span><div class="sub" style="margin-top:8px;color:var(--marinho);font-size:14px">${esc(c.pergunta)}</div>${n ? `<div class="sub" style="margin-top:6px">${esc(Object.values(a.ind)[0].txt)}</div>` : ''}<span class="convite">${convite} &#8250;</span></a>`;
+    return `<a class="cap semdado" href="#cartao/${c.id}" ${vt}><span class="r"><span class="ar-nome">${iconeArea(c.id)}${esc(c.nome)}</span>${mini}</span><div class="sub" style="margin-top:8px;color:var(--marinho);font-size:14px">${esc(c.pergunta)}</div>${n ? `<div class="sub" style="margin-top:6px">${esc(Object.values(a.ind)[0].txt)}</div>` : ''}<span class="convite">${convite} &#8250;</span></a>`;
   }
   const t = a.capa.tom;
-  return `<a class="cap" data-area="${c.id}" href="#cartao/${c.id}" ${vt}><span class="r">${esc(c.nome)}${mini}</span><div class="big">${a.capa.big}</div><div class="sub">${esc(a.capa.sub)}</div>${t ? `<span class="chip ${t[0]} estado">${esc(t[1])}</span>` : ''}<div class="viz">${a.capa.viz || ''}</div></a>`;
+  return `<a class="cap" data-area="${c.id}" href="#cartao/${c.id}" ${vt}><span class="r"><span class="ar-nome">${iconeArea(c.id)}${esc(c.nome)}</span>${mini}</span><div class="big">${a.capa.big}</div><div class="sub">${esc(a.capa.sub)}</div>${t ? `<span class="chip ${t[0]} estado">${esc(t[1])}</span>` : ''}<div class="viz">${a.capa.viz || ''}</div></a>`;
 }
 
 // ---------- A página de uma área: o resumo maior, as informações (as que existem, com a origem, e as que faltam, com o
@@ -1987,7 +2039,7 @@ function efeitoTeto(o, gasto) {
 // ---------- Objetivos ----------
 function telaObjetivos() {
   const objs = objetivos();
-  if (!objs.length) return `<div class="vazio"><h2>Ainda sem objetivos</h2><p>Um objetivo com valor e data diz para onde vai o dinheiro. Pode ser uma viagem, a entrada de uma casa, quitar uma dívida ou a primeira reserva.</p><a class="primaria" href="#cartao/objetivos" style="display:inline-flex;align-items:center;text-decoration:none">Criar o primeiro</a></div>`;
+  if (!objs.length) return `<div class="vazio">${ILUSTRA.objetivos}<h2>Ainda sem objetivos</h2><p>Um objetivo com valor e data diz para onde vai o dinheiro. Pode ser uma viagem, a entrada de uma casa, quitar uma dívida ou a primeira reserva.</p><a class="primaria" href="#cartao/objetivos" style="display:inline-flex;align-items:center;text-decoration:none">Criar o primeiro</a></div>`;
   const pedem = soma(objs.filter(o => !o.complementar).map(necessario)), poe = soma(objs.filter(o => !o.complementar).map(o => o.aporte));
   return `<div style="max-width:760px">${objs.map(o => { const t = tomDoObj(o), nec = necessario(o);
       return `<a class="obj-card" href="#objetivo/${o.id}"><span class="thumb" style="background-image:${FUNDO_OBJ(o)}"></span><span style="min-width:0"><span class="entre"><b>${esc(o.nome)}</b><span class="chip ${t[0]}">${t[1]}</span></span>
