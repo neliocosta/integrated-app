@@ -163,6 +163,41 @@ main{flex:1;padding:16px 16px 96px;width:100%;max-width:1120px}
 .tarefa small{display:block;font-size:12.5px;color:var(--legenda);margin-top:2px}
 .tarefa.feita{opacity:.72}
 .tarefa.feita b{text-decoration:line-through;text-decoration-color:#B9B6B0}
+.tarefa .abre{flex:1;min-width:0;display:flex;gap:12px;align-items:center;border:0;background:transparent;padding:0;margin:0;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.tarefa .marca{position:relative;flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--marinho);background:transparent;padding:0;display:flex;align-items:center;justify-content:center;color:var(--marinho)}
+.tarefa .marca::before{content:"";position:absolute;inset:-9px}
+.tarefa .marca svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity .15s ease}
+.tarefa button.marca:hover svg,.tarefa button.marca:focus-visible svg{opacity:.55}
+.tarefa button.marca:hover{background:#FFF3EB;border-color:var(--laranja);color:var(--laranja-txt)}
+.tarefa .marca.ok{background:var(--verde);border-color:var(--verde);color:#fff}
+.tarefa .marca.ok svg{opacity:1}
+.tarefa .marca.nao{border-color:var(--borda);border-style:dashed}
+.tarefa small .quando{color:var(--marinho);font-weight:600}
+/* as seções das tarefas: título com a contagem; cada uma se recolhe */
+.semana-painel{display:flex;flex-wrap:wrap;align-items:center;gap:14px 32px;background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);padding:16px 20px;margin:0 0 8px}
+.sp-num b{display:block;font:600 22px/1.15 var(--sans);color:var(--marinho);margin:2px 0 1px}
+.sp-num small{display:block;font-size:13px;color:var(--legenda)}
+.sp-dias{display:flex;gap:6px;margin:0 0 0 auto;padding:0;list-style:none}
+.sp-dias li{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:38px;font-size:11.5px;color:var(--legenda)}
+.sp-dias i{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;font:600 13px var(--sans);font-style:normal;color:var(--legenda);border:1.5px solid transparent}
+.sp-dias li.feito i{background:var(--marinho);color:#fff}
+.sp-dias li.pendente i{border-color:var(--laranja);color:var(--marinho)}
+.sp-dias li.atraso i{background:var(--at-bg);border-color:var(--laranja);color:var(--atencao-txt)}
+.sp-dias li.respondido i{border-color:var(--borda);border-style:dashed;color:var(--marinho)}
+.sp-dias li.hoje span{color:var(--marinho);font-weight:700}
+.sp-dias li.hoje i{box-shadow:0 0 0 2px var(--cartao),0 0 0 4px var(--ajust)}
+@media (max-width:599px){.semana-painel{gap:12px 24px;padding:14px 16px}.sp-dias{margin:0;width:100%;justify-content:space-between}.sp-dias li{min-width:0}.sp-dias i{width:32px;height:32px}}
+.grupo > summary.rotulo{margin:20px 0 8px}
+body.v-livro .grupo > summary.rotulo:not(._){margin:30px 0 12px}
+.v-livro .semana-painel{border-color:transparent;box-shadow:var(--sombra);padding:18px 24px}
+.v-livro .sp-num b{font-family:"Sora",sans-serif;letter-spacing:-.01em}
+@media (max-width:599px){.v-livro .passo .primaria{width:100%;justify-content:center}}
+@media (min-width:900px){.v-livro .painel .principal .passo{padding:26px 30px}.v-livro .painel .principal .passo .valor{font-size:44px}}
+.grupo > summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px}
+.grupo > summary::-webkit-details-marker{display:none}
+.grupo > summary .conta{font:600 12px var(--sans);color:var(--legenda);background:var(--neutro-bg);border-radius:9999px;padding:2px 8px;letter-spacing:0}
+.grupo > summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--legenda);border-bottom:2px solid var(--legenda);transform:rotate(45deg) translateY(-3px);margin-left:4px;transition:transform .2s ease}
+.grupo:not([open]) > summary::after{transform:rotate(-45deg)}
 .filtros{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:6px}
 .filtro{border:1px solid var(--borda);background:var(--cartao);border-radius:9999px;padding:6px 12px;font:600 12.5px var(--sans);color:var(--marinho);white-space:nowrap;min-height:34px}
 .filtro.on{background:var(--marinho);border-color:var(--marinho);color:#fff}
@@ -427,8 +462,8 @@ body.v-livro .rotulo .mais{font:600 13px var(--sans);letter-spacing:0}
 .v-livro :is(.marcas,.semanas small){font-size:11px}
 .v-livro .paisagem .credito{font-size:11px;opacity:.85}
 .v-livro :is(.card,.cap,.tarefa,.obj-card,.obj-mini,.passo,.numeros,.prof,.nums>div,.mes,.pergunta,.mais-lista a,.encontro){border-color:transparent;box-shadow:var(--sombra)}
-.v-livro :is(a.cap,a.tarefa,a.obj-card,a.obj-mini,button.tarefa,.mais-lista a){transition:box-shadow .25s ease,transform .25s ease}
-.v-livro :is(a.cap,a.tarefa,a.obj-card,a.obj-mini,button.tarefa,.mais-lista a):hover{box-shadow:var(--sombra-alta);transform:translateY(-1px)}
+.v-livro :is(a.cap,a.obj-card,a.obj-mini,.tarefa,.mais-lista a){transition:box-shadow .25s ease,transform .25s ease}
+.v-livro :is(a.cap,a.obj-card,a.obj-mini,.tarefa:has(.abre:hover),.mais-lista a):hover{box-shadow:var(--sombra-alta);transform:translateY(-1px)}
 .v-livro .cap.semdado{background:transparent;box-shadow:none;border:1.5px dashed #DCCFBD}
 .v-livro .passo{box-shadow:var(--sombra-alta)}
 /* o Painel em duas colunas que começam na mesma linha: cada bloco é o título da seção e, embaixo, o cartão */
@@ -1465,7 +1500,7 @@ function proximaArea(A) {
 // 8. ROTAS E A CASCA: a mesma para os quatro degraus. Celular: Painel, Objetivos, Tarefas, Plano e Mais; desktop: tudo no
 // menu lateral. O degrau não aparece no menu; aparece só onde é informação (Jornada e Conversas).
 // =====================================================================================================================
-const UI = { folha: null, toast: null, filtro: 'todas', rascunho: '', exame: null, calc: {}, horizonte: null, aba: {} };
+const UI = { grupos: {}, folha: null, toast: null, filtro: 'todas', rascunho: '', exame: null, calc: {}, horizonte: null, aba: {} };
 const rota = () => { const h = decodeURIComponent(location.hash.slice(1)) || 'painel', i = h.indexOf('/'); return i < 0 ? { tela: h, arg: null } : { tela: h.slice(0, i), arg: h.slice(i + 1) }; };
 const ICONES = {
   painel: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>',
@@ -1486,6 +1521,7 @@ const falarCom = () => R.consultora ? 'Falar com a ' + R.consultora.nome : 'Fala
 function casca(conteudo) {
   const { tela, arg } = rota(), ativo = (DESK() && ['realizado', 'jornada'].includes(tela)) ? tela : PAI[tela] && tela !== 'conversas' ? PAI[tela] : tela;
   let titulo = TITULOS[tela] || 'Painel';
+  if (tela === 'painel') titulo = saudacao();
   if (tela === 'objetivo') titulo = (objDe(arg) || {}).nome || 'Objetivo';
   if (tela === 'cartao') titulo = (CARTOES.find(c => c.id === arg) || {}).nome || 'Plano';
   const n = aguardando(), voltar = PAI[tela] && !(DESK() && ['realizado', 'jornada'].includes(tela)) ? `<a class="voltar" href="#${PAI[tela]}" aria-label="Voltar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>` : '';
@@ -1520,7 +1556,12 @@ const estadoTxt = o => o.cat === 'comportamental' ? ({ feita: 'fiquei dentro', n
 function cartaoTarefa(o) {
   const quem = casal() && o.resp ? ' · ' + nomeDe(o.resp) : '';
   const fim = o.aberta ? (atrasada(o) ? `<span class="chip at">${quandoTxt(o)}</span>` : '<span class="mut" style="font-size:18px">&#8250;</span>') : `<span class="chip ${o.estado === 'feita' || o.estado === 'outro' ? 'ok' : 'at'}">${estadoTxt(o)}</span>`;
-  return `<button class="tarefa${o.aberta ? '' : ' feita'}" data-acao="abrir" data-id="${esc(o.id)}"><span class="tx"><span class="cat">${CATS[o.cat]}${esc(quem)}</span><b>${esc(o.titulo)}</b><small>${esc(o.serve)}${o.aberta && !atrasada(o) ? ' · ' + quandoTxt(o) : ''}</small></span>${fim}</button>`;
+  // o círculo responde "fiz" (na comportamental, "fiquei dentro") com um toque, como numa lista de tarefas; o resto abre a
+  // tarefa, com as outras respostas. Respondida, o círculo mostra o estado
+  const rotFiz = o.cat === 'comportamental' ? 'Fiquei dentro' : 'Fiz', ok = ['feita', 'outro'].includes(o.estado);
+  const marca = o.aberta ? `<button class="marca" data-acao="fiz-rapido" data-id="${esc(o.id)}" aria-label="${rotFiz}: ${esc(o.titulo)}" title="${rotFiz}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12.5l4 4 8-9"/></svg></button>`
+    : `<span class="marca ${ok ? 'ok' : 'nao'}" aria-hidden="true">${ok ? '<svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9"/></svg>' : ''}</span>`;
+  return `<div class="tarefa${o.aberta ? '' : ' feita'}">${marca}<button class="abre" data-acao="abrir" data-id="${esc(o.id)}"><span class="tx"><span class="cat">${CATS[o.cat]}${esc(quem)}</span><b>${esc(o.titulo)}</b><small>${esc(o.serve)}${o.aberta && !atrasada(o) ? ' · <span class="quando">' + quandoTxt(o) + '</span>' : ''}</small></span>${fim}</button></div>`;
 }
 const faixaVisitante = () => R.degrau === 'visitante' ? `<div class="faixa-visitante"><span>Você está explorando sem conta: o que preencher fica só nesta aba e some ao fechar.</span><button class="primaria" data-acao="criar-conta" style="min-height:38px;padding:8px 14px">Criar a minha conta</button></div>` : '';
 const linhaProfundidade = (A, compacta) => { const f = profundidadeDoPlano(A), px = proximaArea(A);
@@ -1552,11 +1593,35 @@ function telaPainel() {
   const aps = oc.filter(o => o.pedido.id === 'aporte' && o.data <= HOJE), plan = soma(aps.map(o => o.valor)), feito = soma(aps.map(o => soma(Object.values(feitoPorObjetivo(o)))));
   const ritmo = aps.length ? `<div class="rotulo">O ritmo</div><a class="card" href="#realizado" style="display:block;text-decoration:none"><div class="num" style="font-size:21px">${brl(feito)} <span class="mut" style="font-family:var(--sans)">de ${brl(plan)} desde ${MESES_L[+aps[0].mes.slice(5) - 1]}${aps[0].mes.slice(0, 4) !== MES.slice(0, 4) ? ' de ' + aps[0].mes.slice(0, 4) : ''}</span></div><div class="trilho" style="margin:8px 0 6px"><i style="width:${plan ? (clamp(feito / plan, 0, 1) * 100).toFixed(1) : 0}%"></i></div><div class="mut">${aps.slice(-6).map(a => `${MESES[+a.mes.slice(5) - 1]}: ${a.aberta ? 'aguardando' : estadoTxt(a)}`).join(' · ')}</div></a>` : '';
   const encontro = cartaoAtendimento();
-  if (!DESK()) return faixaVisitante() + faixa + cartaoPasso + linhaProfundidade(A, true) + tarefa + numeros + ritmo + encontro;
-  // no computador, o guia do plano ocupa a largura toda, no centro da página, depois dos objetivos, do passo e da tarefa
-  if (VISUAL !== 'sobrio') return faixaVisitante() + `<div class="painel"><div>${topo}${faixa}${tarefa}</div><div>${cartaoPasso}${linhaProfundidade(A)}${encontro}</div></div>${numeros}${ritmo}`;
-  return faixaVisitante() + `<div class="painel"><div>${topo}${faixa}${tarefa}${numeros}${ritmo}</div><div>${cartaoPasso}${linhaProfundidade(A)}${encontro}</div></div>`;
+  // o Painel abre pelo dia (a saudação no título e a semana) e o passo é o destaque: o que fazer agora vem antes do resto
+  const aSemana = semanaPainel(oc);
+  if (!DESK()) return faixaVisitante() + aSemana + cartaoPasso + tarefa + faixa + linhaProfundidade(A, true) + numeros + ritmo + encontro;
+  // no computador, o passo e a tarefa na coluna larga; os objetivos, o aprofundamento e o atendimento ao lado; o guia do
+  // plano ocupa a largura toda embaixo
+  if (VISUAL !== 'sobrio') return faixaVisitante() + aSemana + `<div class="painel"><div class="principal">${topo}${cartaoPasso}${tarefa}</div><div>${faixa}${linhaProfundidade(A)}${encontro}</div></div>${numeros}${ritmo}`;
+  return faixaVisitante() + aSemana + `<div class="painel"><div>${topo}${faixa}${tarefa}${numeros}${ritmo}</div><div>${cartaoPasso}${linhaProfundidade(A)}${encontro}</div></div>`;
 }
+
+// ---------- A semana no alto do Painel: quantas tarefas da semana já foram respondidas, a sequência de meses com o
+// aporte feito e os sete dias, cada um com o estado das tarefas que vencem nele ----------
+const DIAS_CURTOS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+function semanaPainel(oc) {
+  if (!R.pedidos.length) return '';
+  const seg = addD(HOJE, -((dia(HOJE).getDay() + 6) % 7)), dom = addD(seg, 6), daSemana = oc.filter(o => o.data >= seg && o.data <= dom);
+  const dias = DIAS_CURTOS.map((n, i) => { const data = addD(seg, i), l = daSemana.filter(o => o.data === data);
+    const st = !l.length ? '' : l.some(o => o.aberta) ? (data < HOJE ? 'atraso' : 'pendente') : l.every(o => ['feita', 'outro'].includes(o.estado)) ? 'feito' : 'respondido';
+    const txt = !l.length ? 'sem tarefa' : l.map(o => o.titulo + (o.aberta ? ' (em aberto)' : ' (' + estadoTxt(o) + ')')).join('; ');
+    return `<li class="${st}${data === HOJE ? ' hoje' : ''}" title="${esc(txt)}"><span>${n}</span><i>${+data.slice(8)}</i></li>`; }).join('');
+  // a sequência conta os meses seguidos com o aporte feito, do mais recente para trás; o do mês ainda em aberto não quebra
+  const aps = oc.filter(o => o.pedido.id === 'aporte' && o.data <= HOJE).sort((a, b) => a.data < b.data ? 1 : -1);
+  let seq = 0; for (const [i, o] of aps.entries()) { if (o.estado === 'feita') seq++; else if (!(i === 0 && o.aberta)) break; }
+  const resp = daSemana.filter(o => !o.aberta).length;
+  return `<section class="semana-painel" aria-label="A semana"><div class="sp-num"><span class="etiqueta">Nesta semana</span><b>${daSemana.length ? resp + ' de ' + daSemana.length : 'Livre'}</b><small>${daSemana.length ? (daSemana.length === 1 ? 'tarefa respondida' : 'tarefas respondidas') : 'nenhuma tarefa vence'}</small></div>
+    ${seq ? `<div class="sp-num"><span class="etiqueta">Sequência</span><b>${seq} ${seq === 1 ? 'mês' : 'meses'}</b><small>com o aporte feito</small></div>` : ''}
+    <ol class="sp-dias" aria-label="Os dias da semana">${dias}</ol></section>`;
+}
+const saudacao = () => { const hr = new Date().getHours(), s = hr < 12 ? 'Bom dia' : hr < 18 ? 'Boa tarde' : 'Boa noite', n = R.domicilio && R.domicilio.titulo !== 'Você' ? R.domicilio.titulo : '';
+  return n ? s + ', ' + n : s; };
 
 // ---------- A tela do passo: o que ele pede, por que importa e de onde veio ----------
 function telaPasso() {
@@ -1580,7 +1645,7 @@ function telaTarefas() {
   const cats = ['todas', ...new Set(oc.map(o => o.cat))];
   const feitas = oc.filter(o => o.data.slice(0, 7) === MES && !o.aberta).length, doMes = oc.filter(o => o.data.slice(0, 7) === MES).length;
   return `<div style="max-width:760px"><div class="filtros">${cats.map(c => `<button class="filtro${f === c ? ' on' : ''}" data-acao="filtro" data-v="${c}">${c === 'todas' ? 'Todas' : CATS[c]}</button>`).join('')}</div>
-    ${grupos.map(([n, l]) => l.length ? `<div class="rotulo">${n}</div>${l.map(cartaoTarefa).join('')}` : '').join('') || '<div class="aviso">Nenhuma tarefa nesta categoria.</div>'}
+    ${grupos.map(([n, l]) => l.length ? `<details class="grupo" data-g="${n}" ${(UI.grupos[n] ?? n !== 'Respondidas') ? 'open' : ''} ontoggle="UI.grupos[this.dataset.g]=this.open"><summary class="rotulo">${n} <span class="conta">${l.length}</span></summary>${l.map(cartaoTarefa).join('')}</details>` : '').join('') || '<div class="aviso">Nenhuma tarefa nesta categoria.</div>'}
     <p class="mut" style="margin-top:16px">Em ${MESES_L[+MES.slice(5) - 1]}: ${feitas} de ${doMes} respondidas. Os lembretes chegam no WhatsApp; a resposta pode ser dada lá, com um toque, ou aqui.</p></div>`;
 }
 
@@ -2162,6 +2227,7 @@ document.addEventListener('click', async ev => {
   const acao = a.dataset.acao;
   if (acao === 'fechar-fora' && ev.target !== a) return;
   if (acao === 'abrir') { UI.folha = { id: a.dataset.id }; desenharFolha(); return; }
+  if (acao === 'fiz-rapido') { UI.folha = { id: a.dataset.id }; await responder('feita'); return; }
   if (acao === 'fechar' || acao === 'fechar-fora') { UI.folha = null; if (location.hash.startsWith('#tarefa/')) history.replaceState(null, '', '#tarefas'); desenhar(); return; }
   if (acao === 'modo') { Object.assign(UI.folha, { modo: a.dataset.v || null, saida: null }); desenharFolha(); return; }
   if (acao === 'saida') { UI.folha.saida = a.dataset.v; desenharFolha(); return; }
