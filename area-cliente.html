@@ -353,6 +353,44 @@ a.cap{text-decoration:none;color:inherit}
 .ind small{display:block;color:var(--legenda);font-size:12px}
 .abas{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:4px 0 10px}
 .quadro{width:100%;height:calc(100vh - 170px);min-height:560px;border:1px solid var(--borda);border-radius:var(--raio);background:var(--cartao);display:block}
+/* o exame em conversa */
+.conversa{max-width:640px}
+.cv-quem{font:600 11px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--marinho);margin:0 0 10px 44px}
+.cv-topo{display:flex;align-items:center;gap:14px;margin:0 0 22px}
+.cv-topo .voltar{width:40px;height:40px;min-width:40px;border-radius:50%;background:var(--cartao);border:1px solid var(--borda)}
+.cv-prog{flex:1;min-width:0}
+.cv-prog span{display:block;font:600 13px var(--sans);color:var(--legenda);margin-bottom:6px}
+.cv-barra{height:6px;border-radius:9999px;background:var(--trilho);overflow:hidden}
+.cv-barra i{display:block;height:100%;border-radius:9999px;background:var(--laranja);transition:width .35s cubic-bezier(.22,.9,.26,1)}
+.cv-msg{display:flex;gap:10px;align-items:flex-end;margin:0 0 10px}
+.cv-av{width:34px;height:34px;flex:none;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(32,52,76,.12)}
+.cv-bolha{background:var(--cartao);border:1px solid var(--borda);border-radius:18px 18px 18px 6px;padding:13px 16px;color:var(--marinho);font-size:15.5px;line-height:1.5;max-width:min(520px,86%)}
+.cv-msg.atual .cv-bolha{font-size:18px;font-weight:600;line-height:1.4;padding:16px 18px}
+.cv-msg.passada{opacity:.62}
+.cv-msg.passada .cv-bolha{font-size:14px}
+.cv-msg.minha{justify-content:flex-end}
+.cv-resp{background:var(--marinho);color:#fff;border-radius:18px 18px 6px 18px;padding:9px 14px;font-size:14px;max-width:75%}
+.cv-hist{margin-bottom:6px}
+.cv-opcoes{display:grid;gap:10px;margin:16px 0 0 44px}
+.cv-opcoes button{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:52px;text-align:left;background:var(--cartao);border:1.5px solid var(--borda);border-radius:14px;padding:12px 16px;font:600 15.5px var(--sans);color:var(--marinho);cursor:pointer;transition:border-color .15s ease,background .15s ease}
+.cv-opcoes button:hover{border-color:var(--marinho)}
+.cv-opcoes button.on{border-color:var(--marinho);background:#F4F6F9;box-shadow:inset 0 0 0 1px var(--marinho)}
+.cv-opcoes button.on::after{content:"";width:18px;height:18px;flex:none;border-radius:50%;background:var(--marinho) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat}
+.cv-opcoes.escala{grid-template-columns:repeat(5,minmax(0,1fr))}
+.cv-opcoes.escala button{justify-content:center;font-size:18px;padding:12px 0}
+.cv-opcoes.escala button.on::after{display:none}
+.cv-opcoes.multi{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+.cv-escala-leg{display:flex;justify-content:space-between;margin:6px 0 0 44px;font-size:12.5px;color:var(--legenda)}
+.cv-campo{margin:16px 0 0 44px}
+.cv-campo input{width:100%;max-width:360px;font:600 22px "Sora",sans-serif;color:var(--marinho);background:var(--cartao);border:1.5px solid var(--borda);border-radius:14px;padding:14px 16px}
+.cv-campo input:focus{outline:none;border-color:var(--marinho);box-shadow:0 0 0 3px #FFE3CC}
+.cv-acoes{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin:22px 0 0 44px}
+.cv-acoes .primaria{min-width:220px;justify-content:center}
+.cv-anterior{display:inline-flex;align-items:center;gap:4px;color:var(--legenda)}
+.cv-anterior svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:599px){.cv-hist .cv-msg:nth-last-child(n+3){display:none}.cv-topo{margin-bottom:14px}.cv-opcoes,.cv-campo,.cv-acoes,.cv-escala-leg{margin-left:0}.cv-campo input{max-width:none}.cv-acoes .primaria{width:100%}.cv-quem{margin-left:0}.cv-opcoes.multi{grid-template-columns:1fr 1fr}}
+.v-livro .cv-bolha{border-color:transparent;box-shadow:var(--sombra)}
+.v-livro .cv-msg.atual .cv-bolha{font-family:"Sora",sans-serif;letter-spacing:-.01em}
 .pergunta{background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);padding:14px 16px;margin-bottom:10px}
 .pergunta .n{font:500 10.5px var(--mono);color:var(--legenda);letter-spacing:.08em}
 .pergunta p{margin:4px 0 10px;color:var(--marinho);font-weight:600;font-size:14.5px}
@@ -1929,7 +1967,7 @@ function telaExame() {
     return `<div style="max-width:720px"><div class="card"><span class="rotulo" style="margin:0">O resultado · ${dataBRano(r.data)}</span><div class="grande" style="margin:10px 0">${r.nota} <small class="mut" style="font-size:16px">de 100${ant ? ' · era ' + ant.nota + ' em ' + mesAno(ant.data) : ''}</small></div>${pilaresHtml(r.pilares)}
       <p class="mut" style="margin:10px 0 0">Nota provisória: a fórmula oficial da Nord ainda vai substituir esta conta. As respostas já preencheram o começo das áreas do plano.</p></div>
       <a class="primaria" href="#plano" style="display:inline-flex;align-items:center;text-decoration:none">Ver o plano</a> <button class="btn" data-acao="exame-de-novo">Responder de novo</button></div>`; }
-  if (!UI.exame) UI.exame = { resp: Object.assign({}, ult && ult.respostas || {}) };
+  if (!UI.exame) UI.exame = { resp: Object.assign({}, ult && ult.respostas || {}), conversa: true, atual: null };
   const r = UI.exame.resp, vis = EXAME.filter(q => !q.se || q.se(r)), feitas = vis.filter(q => tem(r[q.c])).length;
   const campo = q => {
     if (q.t === 'simnao') return opcoesHtml(q.c, SIMNAO, r[q.c]);
@@ -1938,9 +1976,57 @@ function telaExame() {
     if (q.t === 'multi') return `<div class="opcoes">${(typeof q.o === 'function' ? q.o(r) : q.o).map(o => `<button type="button" class="${(r[q.c] || []).includes(o) ? 'on' : ''}" data-acao="ex-multi" data-c="${q.c}" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>`;
     return `<input data-ex="${q.c}" ${q.t === 'data' ? 'type="date"' : q.t === 'email' ? 'type="email"' : 'inputmode="decimal"'} value="${r[q.c] != null ? esc(String(r[q.c])) : ''}" placeholder="${q.t === 'reais' ? 'R$' : q.t === 'anos' ? 'anos' : ''}">`;
   };
-  return `<div style="max-width:720px"><div class="aviso" style="margin-bottom:12px">${ult ? `O último exame é de ${dataBRano(ult.data)}. As respostas dele já estão aqui: mude o que mudou e grave uma fotografia nova.` : 'São 33 perguntas, algumas só aparecem conforme as respostas. Leva uns 8 minutos.'} ${R.degrau === 'visitante' ? 'Sem conta, o resultado fica só nesta aba.' : ''}</div>
+  if (UI.exame.conversa) return conversaExame(vis, r, feitas, ult);
+  return `<div style="max-width:720px"><button class="btn link peq" data-acao="ex-modo" style="margin-bottom:10px">Responder uma pergunta de cada vez</button><div class="aviso" style="margin-bottom:12px">${ult ? `O último exame é de ${dataBRano(ult.data)}. As respostas dele já estão aqui: mude o que mudou e grave uma fotografia nova.` : 'São 33 perguntas, algumas só aparecem conforme as respostas. Leva uns 8 minutos.'} ${R.degrau === 'visitante' ? 'Sem conta, o resultado fica só nesta aba.' : ''}</div>
     ${vis.map((q, i) => `<div class="pergunta"><span class="n">${i + 1} DE ${vis.length}</span><p>${esc(q.q)}</p>${campo(q)}</div>`).join('')}
     <div class="entre barra-exame"><span class="mut">${feitas} de ${vis.length} respondidas</span><button class="primaria" data-acao="gravar-exame" ${feitas < 12 ? 'disabled' : ''}>Ver o resultado</button></div></div>`;
+}
+// ---------- O exame em conversa (30/10, a partir das referências): uma pergunta por tela, quem pergunta é a Nord, a
+// resposta de escolha única avança com um toque, as duas últimas trocas ficam à vista, a barra mostra o caminho. A lista
+// com todas as perguntas continua, para revisar ----------
+const opcoesDe = q => q.t === 'simnao' ? SIMNAO : q.t === 'escala' ? [1, 2, 3, 4, 5].map(n => [n, String(n)]) : q.o;
+const respostaTxt = (q, v) => {
+  if (q.t === 'reais') return brl(numero(v));
+  if (q.t === 'anos') return numero(v) + ' anos';
+  if (q.t === 'data') return dataBRano(v);
+  if (q.t === 'multi') return (v || []).join(', ');
+  if (q.t === 'escala') return v + ' de 5';
+  const o = (opcoesDe(q) || []).find(([x]) => String(x) === String(v)); return o ? o[1] : String(v);
+};
+const SETA_VOLTA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
+function conversaExame(vis, r, feitas, ult) {
+  const E = UI.exame, k = E.atual == null ? -1 : E.atual === 'fim' ? vis.length : Math.max(0, vis.findIndex(q => q.c === E.atual));
+  const av = `<img class="cv-av" src="${ICONE_MARCA(false)}" alt="">`;
+  const fala = (t, cls) => `<div class="cv-msg${cls ? ' ' + cls : ''}">${av}<div class="cv-bolha">${t}</div></div>`;
+  const minha = t => `<div class="cv-msg minha"><div class="cv-resp">${esc(t)}</div></div>`;
+  const lista = `<button class="btn link peq" data-acao="ex-modo">Ver todas as perguntas numa lista</button>`;
+  if (k < 0) return `<div class="conversa"><div class="cv-quem">Nord Liberta</div>
+      ${fala(`Este exame mostra, de 0 a 100, como está a sua saúde financeira. São ${vis.length} perguntas curtas, uma de cada vez: uns 8 minutos.`)}
+      ${ult ? fala(`As respostas do último exame, de ${dataBRano(ult.data)}, já vêm marcadas. É só confirmar o que não mudou.`) : ''}
+      ${fala(R.consultora ? `O resultado também fica com a ${esc(R.consultora.nome)}, para a próxima conversa.` : R.degrau === 'visitante' ? 'Sem conta, o resultado fica só nesta aba.' : 'Toda pergunta pode ser pulada; para a nota, bastam 12 respostas.')}
+      <div class="cv-acoes"><button class="primaria" data-acao="ex-comecar">Começar</button>${lista}</div></div>`;
+  const pct_ = Math.round(Math.min(k, vis.length) / vis.length * 100);
+  const anterior = `<button class="btn link peq cv-anterior" data-acao="ex-volta">${SETA_VOLTA}Pergunta anterior</button>`;
+  const topo = `<div class="cv-topo"><div class="cv-prog"><span>${k < vis.length ? `Pergunta ${k + 1} de ${vis.length}` : 'Tudo pronto'}</span><div class="cv-barra" role="progressbar" aria-valuenow="${pct_}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct_}%"></i></div></div></div>`;
+  if (k >= vis.length) return `<div class="conversa">${topo}${fala(`Pronto. Você respondeu ${feitas} de ${vis.length} perguntas.`)}${feitas < 12 ? fala(`Para calcular a nota, são pelo menos 12 respostas: faltam ${12 - feitas}. Dá para voltar e responder as que ficaram para trás.`) : ''}
+      <div class="cv-acoes"><button class="primaria" data-acao="gravar-exame" ${feitas < 12 ? 'disabled' : ''}>Ver o resultado</button><button class="btn link peq" data-acao="ex-modo">Revisar as respostas numa lista</button>${anterior}</div></div>`;
+  const q = vis[k], v = r[q.c], antes = vis.slice(Math.max(0, k - 2), k).filter(x => tem(x.t === 'multi' ? (r[x.c] || []).length || null : r[x.c]));
+  const unica = ['simnao', 'opcoes', 'escala'].includes(q.t);
+  let resposta;
+  if (unica) resposta = `<div class="cv-opcoes${q.t === 'escala' ? ' escala' : ''}">${opcoesDe(q).map(([x, n]) => `<button type="button" class="${String(v) === String(x) ? 'on' : ''}" aria-pressed="${String(v) === String(x)}" data-acao="ex-op" data-c="${q.c}" data-v="${esc(x)}">${esc(n)}</button>`).join('')}</div>${q.t === 'escala' ? '<div class="cv-escala-leg"><span>pouco</span><span>muito</span></div>' : ''}`;
+  else if (q.t === 'multi') resposta = `<div class="cv-opcoes multi">${(typeof q.o === 'function' ? q.o(r) : q.o).map(o => `<button type="button" class="${(v || []).includes(o) ? 'on' : ''}" aria-pressed="${(v || []).includes(o)}" data-acao="ex-multi" data-c="${q.c}" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>`;
+  else resposta = `<div class="cv-campo"><input data-ex="${q.c}" aria-label="${esc(q.q)}" ${q.t === 'data' ? 'type="date"' : q.t === 'email' ? 'type="email" autocomplete="email"' : 'inputmode="decimal"'} value="${v != null ? esc(String(v)) : ''}" placeholder="${q.t === 'reais' ? 'R$ 0' : q.t === 'anos' ? 'idade, em anos' : ''}"></div>`;
+  const temV = q.t === 'multi' ? (v || []).length > 0 : tem(v);
+  const acoes = `<div class="cv-acoes">${unica ? '' : `<button class="primaria" data-acao="ex-prox">Continuar</button>`}<button class="btn link peq" data-acao="ex-prox">${temV ? (unica ? 'Manter e seguir' : '') : 'Pular esta pergunta'}</button>${k > 0 ? anterior : ''}</div>`;
+  return `<div class="conversa">${topo}<div class="cv-hist">${antes.map(x => fala(esc(x.q), 'passada') + minha(respostaTxt(x, r[x.c]))).join('')}</div>${fala(esc(q.q), 'atual')}${resposta}${acoes.replace('<button class="btn link peq" data-acao="ex-prox"></button>', '')}</div>`;
+}
+// anda para a pergunta seguinte (ou a anterior) na lista visível, que muda conforme as respostas
+function andaExame(passo) {
+  const r = UI.exame.resp, vis = EXAME.filter(q => !q.se || q.se(r)), E = UI.exame;
+  const k = E.atual == null ? -1 : E.atual === 'fim' ? vis.length : Math.max(0, vis.findIndex(q => q.c === E.atual)), n = k + passo;
+  E.atual = n < 0 ? null : n >= vis.length ? 'fim' : vis[n].c;
+  desenhar(); window.scrollTo(0, 0);
+  const campo = document.querySelector('.cv-campo input'); if (campo && DESK()) campo.focus();
 }
 const opcoesHtml = (c, ops, atual) => `<div class="opcoes">${ops.map(([v, n]) => `<button type="button" class="${String(atual) === String(v) ? 'on' : ''}" data-acao="ex-op" data-c="${c}" data-v="${esc(v)}">${esc(n)}</button>`).join('')}</div>`;
 
@@ -2342,7 +2428,10 @@ document.addEventListener('click', async ev => {
     V = V || vazioV(); V.objetivos.push({ id: 'o' + Date.now().toString(36), nome, tipo: 'montante', valor, data, guardado: numero(d['obj.guardado']) || 0, aporte: numero(d['obj.aporte']) || 0, taxa: 0.005, criado: HOJE, quem: quemGrava() });
     await ARMAZEM.gravar('vetor', V); UI.calc.objetivos = {}; avisar(`${nome} criado. O plano se ajustou.`); desenhar(); return; }
   // o exame
-  if (acao === 'ex-op') { const q = EXAME.find(x => x.c === a.dataset.c); UI.exame.resp[q.c] = q.t === 'escala' ? +a.dataset.v : a.dataset.v; desenhar(); return; }
+  if (acao === 'ex-op') { const q = EXAME.find(x => x.c === a.dataset.c); UI.exame.resp[q.c] = q.t === 'escala' ? +a.dataset.v : a.dataset.v; if (UI.exame.conversa) andaExame(1); else desenhar(); return; }
+  if (acao === 'ex-comecar' || acao === 'ex-prox') { andaExame(1); return; }
+  if (acao === 'ex-volta') { andaExame(-1); return; }
+  if (acao === 'ex-modo') { UI.exame.conversa = !UI.exame.conversa; desenhar(); window.scrollTo(0, 0); return; }
   if (acao === 'ex-multi') { const c = a.dataset.c, l = UI.exame.resp[c] = (UI.exame.resp[c] || []).slice(), v = a.dataset.v, i = l.indexOf(v);
     if (i >= 0) l.splice(i, 1); else { if (v === 'Nenhum' || v === 'Não possuo') l.length = 0; else { ['Nenhum', 'Não possuo'].forEach(n => { const j = l.indexOf(n); if (j >= 0) l.splice(j, 1); }); } l.push(v); } desenhar(); return; }
   if (acao === 'gravar-exame') { const r = UI.exame.resp, vis = EXAME.filter(q => !q.se || q.se(r)), resp = {};
@@ -2382,8 +2471,10 @@ document.addEventListener('input', ev => {
 document.addEventListener('change', ev => { const t = ev.target, d = t.dataset || {};
   if (d.campo && ['valor', 'coube'].includes(d.campo) && UI.folha) { const id = t.id; desenharFolha(); const n = document.getElementById(id); if (n) n.focus(); }
   if (d.calc === 'objetivos' || d.lanc === 'mes') { if (d.lanc) desenharFolha(); else desenhar(); }
-  if (d.ex) desenhar(); });
-document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && UI.folha) { UI.folha = null; desenhar(); } });
+  if (d.ex && !(UI.exame && UI.exame.conversa)) desenhar(); });
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && UI.folha) { UI.folha = null; desenhar(); }
+  // no exame em conversa, o Enter no campo responde e segue
+  if (ev.key === 'Enter' && ev.target.closest && ev.target.closest('.cv-campo') && UI.exame) { ev.preventDefault(); UI.exame.resp[ev.target.dataset.ex] = ev.target.value; andaExame(1); } });
 addEventListener('hashchange', () => transicao(() => { UI.folha = null; if (rota().tela !== 'exame') UI.exame = UI.exame && UI.exame.resultado ? null : UI.exame; desenhar(); window.scrollTo(0, 0); }));
 matchMedia('(min-width: 900px)').addEventListener('change', () => desenhar());
 

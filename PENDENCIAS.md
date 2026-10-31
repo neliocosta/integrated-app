@@ -33,6 +33,14 @@ estrutura (seção 15). Em aberto, para o dono do produto decidir:
 - **O financiamento do exemplo** aparece com 360 parcelas restantes porque o plano de exemplo não tem a data de início do
   contrato; o relatório mostra o mesmo.
 
+### O exame em conversa (30/10/2026)
+
+O exame de saúde financeira é uma conversa: a Nord pergunta (o ícone, não a foto do planejador, porque não é ele quem
+pergunta), uma pergunta por tela, com a barra de progresso, as duas últimas trocas à vista (uma no celular) e a escolha
+única avançando com um toque; valores, datas e múltipla escolha seguem pelo "Continuar" ou pelo Enter. Toda pergunta pode
+ser pulada; a nota pede 12 respostas. A lista com todas as perguntas continua, para revisar (`UI.exame.conversa`). Em
+aberto: o texto de abertura e o tom das perguntas, que hoje são os do exame da plataforma.
+
 ### Atendimento e calendário do Completo (30/10/2026)
 
 A tela Conversas virou **Atendimento** (a rota segue `#conversas`), aberta pelo botão de conversa do alto de toda tela:
