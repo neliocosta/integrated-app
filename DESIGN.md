@@ -318,6 +318,34 @@ seguem três convenções:
 Ao aparecer, o gráfico se revela uma vez, por exemplo com as marquinhas do relógio acendendo em sequência. Com menos
 movimento no sistema, ele só aparece pela opacidade.
 
+### Ilustrações das capas (headers de página)
+A abertura de cada área (o capítulo) leva uma ilustração do Midjourney em **vetor plano**, escolhida em 31/10/2026. A
+referência é [ilustras/referencia/vetor-plano.webp](ilustras/referencia/vetor-plano.webp): uma pessoa relaxando numa
+plataforma flutuante, com uma planta, um café e o notebook fechado.
+
+- **Onde:** só na capa da área (`CAPA_AREA`). O objetivo do cliente leva a foto dele, nunca uma ilustração.
+- **Formato:** é uma faixa na largura toda, baixa (`height:clamp(140px,22vw,220px)`), com `object-fit:cover` e um foco
+  vertical por imagem (`object-position:50% Y%`) no trecho do assunto. Gere a imagem em 16:9.
+- **O estilo:** vetor chapado sem contorno, formas arredondadas e personagem de braços e pernas alongados em pose relaxada,
+  com muito céu.
+- **As cores:** fundo azul-claro, branco quente e pêssego. O laranja #FA7A35 entra nos objetos de destaque, e o marinho
+  #20344C só em detalhes como cabelo, notebook e sapatos.
+
+Para montar o prompt, use o molde abaixo e troque só a cena:
+
+```
+contemporary flat illustration of [CENA DA ÁREA], open bright sky, friendly modern SaaS illustration style with simple rounded shapes, palette of warm white, light blue, soft peach and vivid orange #FA7A35, minimal navy #20344C details, airy and joyful, subject on the right, empty sky on the left --ar 16:9 --sref <link da referência> --sw 200 --no text, outlines, gradients, photorealistic
+```
+
+- O `--sref` aponta para a imagem de referência e é o que mantém as capas da mesma família. O link é o da imagem no
+  midjourney.com, do job `c31e42a1-9fbc-4b43-9003-c69b33d54caf`, opção 2.
+- O `--sw` (100 a 300) diz o quanto a geração segue a referência.
+- Para deixar as capas ainda mais parecidas, repita o mesmo `--seed`.
+- O prompt original da referência:
+  ```
+  contemporary flat illustration of a person relaxing on a floating platform with a plant and a coffee cup, laptop closed beside them, a kite flying above, open bright sky, friendly modern SaaS illustration style with simple rounded shapes, palette of warm white, light blue, soft peach and vivid orange #FA7A35, minimal navy #20344C details, airy and joyful, space on the left for text --ar 16:9
+  ```
+
 ## Do's and Don'ts
 
 ### Do:
