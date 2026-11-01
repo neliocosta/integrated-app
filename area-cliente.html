@@ -35,7 +35,7 @@
 <title>Área do cliente — Nord Liberta</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Sora:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Sora:wght@500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
 /* ===== Tokens: DESIGN.md no tom sóbrio (neutro de fundo, borda fina no lugar da sombra, serifa nos títulos e nos
    números grandes, rótulos em mono, ação principal em marinho, laranja só no passo e no futuro dos gráficos) ===== */
@@ -46,7 +46,7 @@
   --verde:#2E9E5B; --verde-txt:#22794A; --ok-bg:#E3F3E9; --atencao:#D9952A; --atencao-txt:#964400; --at-bg:#F5EDE6;
   --critico:#D64545; --critico-txt:#B53434; --crit-bg:#FBE6E6;
   --fixas:#4B6584; --ajust:#9FB0C4; --liberdade:#77C094;
-  --serifa:'Newsreader',Georgia,serif; --mono:'IBM Plex Mono',ui-monospace,monospace; --sans:'DM Sans',system-ui,sans-serif;
+  --serifa:'Literata',Georgia,serif; --mono:'IBM Plex Mono',ui-monospace,monospace; --sans:'DM Sans',system-ui,sans-serif;
   --raio:12px; --cartao:#FFFFFF; --anel-a:var(--marinho); --anel-b:var(--marinho);
 }
 *{box-sizing:border-box}
@@ -150,24 +150,10 @@ main{flex:1;padding:16px 16px 96px;width:100%;max-width:1120px}
 .cap.semdado .ar-nome{color:var(--legenda)}
 .proposito{font:italic 400 15px var(--serifa);color:var(--legenda);margin:0 0 8px}
 
-/* Painel */
-.faixa-obj{display:flex;gap:10px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none}
-.faixa-obj::-webkit-scrollbar{display:none}
-.obj-mini{flex:none;width:168px;background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);overflow:hidden;text-align:left;padding:0;text-decoration:none;color:inherit}
-.obj-mini .foto{height:64px;background-size:cover;background-position:center;filter:saturate(.75) contrast(.96)}
-.obj-mini .tx{padding:8px 11px 10px}
-.obj-mini b{display:block;font:600 13.5px var(--sans);color:var(--marinho);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.obj-mini small{display:block;font-size:11.5px;color:var(--legenda);margin:2px 0 6px}
 .passo{background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);padding:18px 18px 16px;margin:12px 0}
 .passo .valor{font:500 40px/1.05 var(--serifa);color:var(--marinho);margin:8px 0 10px;letter-spacing:-.01em}
 .passo .valor small{font:400 18px var(--serifa);color:var(--legenda)}
 .passo p{margin:10px 0 14px;color:var(--marinho);font-size:14.5px;line-height:1.4}
-.numeros{display:grid;grid-template-columns:1fr 1fr;background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);padding:12px 6px}
-@media (min-width:600px){.numeros{grid-template-columns:repeat(4,1fr)}}
-.numero{border:0;background:transparent;text-align:center;padding:6px 4px}
-.numero span{display:block;font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--legenda)}
-.numero b{display:block;font:500 21px/1.2 var(--serifa);color:var(--marinho);margin-top:4px}
-.numero small{display:block;font-size:11.5px;color:var(--legenda)}
 .encontro{display:inline-flex;align-items:center;gap:8px;background:var(--cartao);border:1px solid var(--borda);border-radius:9999px;padding:10px 16px;font:600 13px var(--sans);color:var(--marinho);margin-top:12px;min-height:44px;text-decoration:none}
 
 /* Tarefas */
@@ -189,25 +175,10 @@ main{flex:1;padding:16px 16px 96px;width:100%;max-width:1120px}
 .tarefa .marca.nao{border-color:var(--borda);border-style:dashed}
 .tarefa small .quando{color:var(--marinho);font-weight:600}
 /* as seções das tarefas: título com a contagem; cada uma se recolhe */
-.semana-painel{display:flex;flex-wrap:wrap;align-items:center;gap:14px 32px;background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);padding:16px 20px;margin:0 0 8px}
-.sp-num b{display:block;font:600 19px/1.2 var(--sans);color:var(--marinho);margin:2px 0 1px}
-.sp-num small{display:block;font-size:13px;color:var(--legenda)}
-.sp-dias{display:flex;gap:6px;margin:0 0 0 auto;padding:0;list-style:none}
-.sp-dias li{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:38px;font-size:11.5px;color:var(--legenda)}
-.sp-dias i{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;font:600 13px var(--sans);font-style:normal;color:var(--legenda);border:1.5px solid transparent}
-.sp-dias li.feito i{background:var(--marinho);color:#fff}
-.sp-dias li.pendente i{border-color:var(--laranja);color:var(--marinho)}
-.sp-dias li.atraso i{background:var(--at-bg);border-color:var(--laranja);color:var(--atencao-txt)}
-.sp-dias li.respondido i{border-color:var(--borda);border-style:dashed;color:var(--marinho)}
-.sp-dias li.hoje span{color:var(--marinho);font-weight:700}
-.sp-dias li.hoje i{box-shadow:0 0 0 2px var(--cartao),0 0 0 4px var(--ajust)}
-@media (max-width:599px){.semana-painel{gap:12px 24px;padding:14px 16px}.sp-dias{margin:0;width:100%;justify-content:space-between}.sp-dias li{min-width:0}.sp-dias i{width:32px;height:32px}}
 .grupo > summary.rotulo{margin:20px 0 8px}
 body.v-livro .grupo > summary.rotulo:not(._){margin:30px 0 12px}
-.v-livro .semana-painel{border-color:transparent;box-shadow:var(--sombra);padding:18px 24px}
-.v-livro .sp-num b{font-family:"Sora",sans-serif;letter-spacing:-.01em}
 @media (max-width:599px){.v-livro .passo .primaria{width:100%;justify-content:center}}
-@media (min-width:900px){.v-livro .painel .principal .passo{padding:26px 30px}.v-livro .painel .principal .passo .valor{font-size:36px}}
+@media (min-width:900px){.v-livro .heroi .passo{padding:22px 24px}}
 .grupo > summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px}
 .grupo > summary::-webkit-details-marker{display:none}
 .grupo > summary .conta{font:600 12px var(--sans);color:var(--legenda);background:var(--neutro-bg);border-radius:9999px;padding:2px 8px;letter-spacing:0}
@@ -232,6 +203,8 @@ body.v-livro .grupo > summary.rotulo:not(._){margin:30px 0 12px}
 .obj-foto{height:200px;border-radius:var(--raio);background-size:cover;background-position:center;position:relative;margin-bottom:14px;overflow:hidden}
 .obj-foto .sobre{position:absolute;inset:auto 0 0 0;padding:16px 18px;background:linear-gradient(transparent,rgba(19,31,46,.7));color:#fff}
 .obj-foto .sobre b{display:block;font:400 28px/1.15 var(--serifa)}
+/* a capa do capítulo: a ilustração na largura toda; o foco (object-position) escolhe o trecho com o assunto */
+.capa-area{display:block;width:100%;height:clamp(140px,22vw,220px);object-fit:cover;border-radius:var(--raio);margin-bottom:14px}
 .par-barra{position:relative;height:8px;margin:8px 0 4px;background:var(--trilho);border-radius:4px}
 .par-barra i{position:absolute;left:0;top:-3px;bottom:-3px;border-right:1.5px dashed var(--marinho)}
 .par-barra em{position:absolute;left:0;top:0;bottom:0;background:var(--marinho);border-radius:4px}
@@ -461,11 +434,11 @@ a.cap{text-decoration:none;color:inherit}
 ::selection{background:#FCD9C2;color:#131F2E}
 
 /* os rótulos viram títulos de seção, em sans, sem caixa alta e sem mono */
-body[class*="v-"] :is(.rotulo,.cap .r,.nums span,.numero span,.tarefa .cat,.pergunta .n,.mes .cab,.tbl th,.paisagem .r){font-family:var(--sans);letter-spacing:0;text-transform:none}
+body[class*="v-"] :is(.rotulo,.cap .r,.nums span,.tarefa .cat,.pergunta .n,.mes .cab,.tbl th,.paisagem .r){font-family:var(--sans);letter-spacing:0;text-transform:none}
 body[class*="v-"] .rotulo{font-size:15.5px;font-weight:600;color:var(--marinho);margin:28px 0 10px}
 body[class*="v-"] .rotulo:first-child{margin-top:4px}
 body[class*="v-"] .cap .r{font-size:14.5px;font-weight:600;color:var(--marinho)}
-body[class*="v-"] :is(.nums span,.numero span){font-size:12.5px;font-weight:600;color:var(--legenda)}
+body[class*="v-"] :is(.nums span){font-size:12.5px;font-weight:600;color:var(--legenda)}
 body[class*="v-"] .tarefa .cat{font-size:12px;font-weight:600;color:var(--legenda)}
 body[class*="v-"] :is(.pergunta .n,.mes .cab,.tbl th){font-size:12px;font-weight:600;color:var(--legenda)}
 body[class*="v-"] .paisagem .r{font-size:13.5px;font-weight:600;opacity:1}
@@ -476,7 +449,7 @@ body[class*="v-"] .trilho.fut i{background:linear-gradient(90deg,var(--anel-a),v
 .v-aurora .passo .valor small{font-family:var(--sans);font-weight:500;font-size:15px;letter-spacing:0}
 
 /* ---------- Livro: a área como o relatório, com a identidade da montagem (DESIGN.md). Papel creme quente, cartões
-   brancos de 16px com a sombra leve, os números em Sora, o texto em DM Sans e a Newsreader só na voz do livro (o título
+   brancos de 16px com a sombra leve, os números em Sora, o texto em DM Sans e a Literata só na voz do livro (o título
    da página e os títulos das seções); o laranja só no futuro e na ação principal, o marinho no que é firme ---------- */
 .v-livro{--fundo:#F8F4EE;--cartao:#FFFFFF;--borda:#E9E1D5;--areia:#F1ECE4;--trilho:#EEE8DF;--neutro-bg:#F3EEE6;--legenda:#6B6359;--grafite:#4F4A44;--marinho:#20344C;--ardosia:#DCE3EC;--at-bg:#FFF3EB;--raio:16px;--anel-a:#FA7A35;--anel-b:#E06600;
   --sombra:0 1px 3px rgba(32,52,76,.06),0 4px 12px rgba(32,52,76,.05);--sombra-alta:0 4px 10px rgba(32,52,76,.08),0 12px 28px rgba(32,52,76,.10)}
@@ -484,16 +457,16 @@ body[class*="v-"] .trilho.fut i{background:linear-gradient(90deg,var(--anel-a),v
 .v-livro :focus-visible{outline:2px solid var(--laranja);outline-offset:3px}
 .v-livro :is(.cab h1,.paisagem h2,.obj-foto .sobre b,.folha h2,.vazio h2){font-family:var(--serifa);font-weight:500;letter-spacing:-.015em}
 /* The Numbers Speak Sora: todo valor que é o assunto do cartão */
-.v-livro :is(.passo .valor,.grande,.cap .big,.numero b,.nums b,.num){font-family:'Sora',sans-serif;font-weight:600;letter-spacing:-.02em}
+.v-livro :is(.passo .valor,.grande,.cap .big,.nums b,.num){font-family:'Sora',sans-serif;font-weight:600;letter-spacing:-.02em}
 .v-livro :is(.passo .valor small,.cap .big small,.grande small){font-family:var(--sans);font-weight:500;font-size:14px;letter-spacing:0;color:var(--legenda)}
 .v-livro .passo .valor{font-size:30px}
 .v-livro .cab h1{font-size:27px;line-height:1.12}
 @media (min-width:900px){.v-livro .cab h1{font-size:34px}}
 .v-livro .cap .big{font-size:22px}
-.v-livro :is(.guia,.cap-grade.compacta) .cap .big{font-size:18px}
+.v-livro :is(.cap-grade.compacta) .cap .big{font-size:18px}
 .v-livro .nums b{font-size:24px}
 /* a escada da montagem: o título em serifa, o rótulo (11px, maiúsculas, marinho) e o número em Sora */
-body.v-livro :is(.cap .r,.nums span,.numero span),body.v-livro :is(.guia,.cap-grade.compacta) .cap .r{font:600 11px/1.35 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--marinho)}
+body.v-livro :is(.cap .r,.nums span),body.v-livro :is(.cap-grade.compacta) .cap .r{font:600 11px/1.35 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--marinho)}
 body.v-livro .cap .r .prof-mini{font-size:12.5px;letter-spacing:0;text-transform:none;font-weight:500;color:var(--legenda)}
 /* :not(._) só soma peso: a regra geral dos visuais, com :is(.cap .r,…), pesa três classes */
 body.v-livro :is(.rotulo:not(._),.plano-cab h2){font:500 20px/1.25 var(--serifa);color:var(--marinho);letter-spacing:-.01em}
@@ -515,9 +488,9 @@ body.v-livro .rotulo .mais{font:600 13px var(--sans);letter-spacing:0}
 .v-livro .tarefa.feita :is(b,small,.cat){color:var(--legenda)}
 .v-livro :is(.marcas,.semanas small){font-size:11px}
 
-.v-livro :is(.card,.cap,.tarefa,.obj-card,.obj-mini,.passo,.numeros,.prof,.nums>div,.mes,.pergunta,.mais-lista a,.encontro){border-color:transparent;box-shadow:var(--sombra)}
-.v-livro :is(a.cap,a.obj-card,a.obj-mini,.tarefa,.mais-lista a){transition:box-shadow .25s ease,transform .25s ease}
-.v-livro :is(a.cap,a.obj-card,a.obj-mini,.tarefa:has(.abre:hover),.mais-lista a):hover{box-shadow:var(--sombra-alta);transform:translateY(-1px)}
+.v-livro :is(.card,.cap,.tarefa,.obj-card,.passo,.prof,.nums>div,.mes,.pergunta,.mais-lista a,.encontro){border-color:transparent;box-shadow:var(--sombra)}
+.v-livro :is(a.cap,a.obj-card,.tarefa,.mais-lista a){transition:box-shadow .25s ease,transform .25s ease}
+.v-livro :is(a.cap,a.obj-card,.tarefa:has(.abre:hover),.mais-lista a):hover{box-shadow:var(--sombra-alta);transform:translateY(-1px)}
 .v-livro .cap.semdado{background:transparent;box-shadow:none;border:1.5px dashed #DCCFBD}
 .v-livro .passo{box-shadow:var(--sombra-alta)}
 /* o Painel em duas colunas que começam na mesma linha: cada bloco é o título da seção e, embaixo, o cartão */
@@ -528,8 +501,6 @@ body.v-livro .rotulo .mais{font:600 13px var(--sans);letter-spacing:0}
 .v-livro .prof b{font:600 16px/1.3 var(--sans);letter-spacing:0}
 .v-livro .encontro{display:flex;width:100%;justify-content:space-between;border-radius:var(--raio);padding:14px 22px;margin:0;font-size:13.5px}
 /* a faixa dos objetivos: a sombra inteira à mostra e a borda direita se desfazendo, para dizer que continua */
-.v-livro .faixa-obj{gap:12px;margin:-6px -6px 0;padding:6px 48px 16px 6px;scroll-snap-type:x mandatory;scroll-padding-left:6px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 56px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 56px),transparent)}
-.v-livro .obj-mini{scroll-snap-align:start}
 /* a ação principal: a pílula laranja com o texto marinho, como o "Próximo" do relatório */
 .v-livro .primaria{background:var(--laranja);color:var(--marinho);border-radius:9999px;padding:11px 22px;transition:filter .2s ease,transform .1s ease}
 .v-livro .primaria:hover{background:var(--laranja);filter:brightness(.94)}
@@ -540,21 +511,19 @@ body.v-livro .rotulo .mais{font:600 13px var(--sans);letter-spacing:0}
 .v-livro .chip{font-weight:600;padding:4px 11px}
 .v-livro a{text-decoration-color:#D9CCBA;text-underline-offset:3px}
 .v-livro .paisagem h2{font-style:italic}
-.v-livro .obj-mini .foto,.v-livro .obj-card .thumb{filter:none}
+.v-livro .v-livro .obj-card .thumb{filter:none}
 /* ---------- A escala de texto do Livro (30/10, a partir das referências): quatro degraus em vez de doze. Rótulo 11px em
    maiúsculas; detalhe 12,5px (legendas, eixos, etiquetas); secundário 14px; texto e itens 15,5px. Os números e os títulos
    seguem a escala própria ---------- */
 .v-livro{font-size:15px;line-height:1.55}
-.v-livro :is(.mut,.quem-atende small,.sp-num small,.nums small,.numero small,.prof small,.obj-card small,.tarefa small,.etapa .mut,.atend .mut,.msg small){font-size:13.5px;line-height:1.45}
+.v-livro :is(.mut,.quem-atende small,.nums small,.prof small,.obj-card small,.tarefa small,.etapa .mut,.atend .mut,.msg small){font-size:13.5px;line-height:1.45}
 .v-livro :is(.peq,.inclui li,.aviso,.passo p){font-size:14.5px;line-height:1.5}
 .v-livro :is(.tarefa b,.etapa b,.obj-card b,.quem-atende b){font-size:15px}
 .v-livro .msg{font-size:15px}
-.v-livro :is(.chip,.leg,.obj-mini small,.tarefa .cat,.cap .prof-mini,.sp-dias li,.marcas,.semanas small,.trilha-h span,.grupo > summary .conta){font-size:12.5px}
+.v-livro :is(.chip,.leg,.tarefa .cat,.cap .prof-mini,.marcas,.semanas small,.trilha-h span,.grupo > summary .conta){font-size:12.5px}
 .v-livro .tarefa .cat{letter-spacing:0}
-.v-livro .obj-mini b{font-size:14px}
 .v-livro :is(.pilares div,.linha-tempo span){font-size:12.5px}
 .v-livro .cap .sub{font-size:14px}
-.v-livro .sp-dias i{font-size:14px}
 /* os controles: 14px, um degrau só */
 .v-livro :is(.btn,.filtro,.opcoes button,.campo label,.quem-atende .contatos){font-size:14px}
 body.v-livro .alterna button{font-size:13.5px}
@@ -569,15 +538,16 @@ body.v-livro .alterna button{font-size:13.5px}
   .v-livro main{padding-left:20px;padding-right:20px}
   .v-livro .cab{padding-left:20px;padding-right:20px}
   .v-livro :is(.grade2,.niveis,.cap-grade){gap:14px}
-  .v-livro :is(.guia,.cap-grade.compacta){gap:12px}
-  .v-livro :is(.card,.cap:not(.compacto),.passo,.prof,.atend,.semana-painel){padding:18px 18px}
+  .v-livro :is(.cap-grade.compacta){gap:12px}
+  .v-livro :is(.card,.cap:not(.compacto),.passo,.prof,.atend){padding:18px 18px}
   .v-livro :is(.card,.passo,.prof,.tarefa,.obj-card){margin-bottom:14px}
   .v-livro .passo .valor{font-size:28px}
   .v-livro #miolo > .grade2 > .card:first-child .grande,.v-livro .card[style*="view-transition-name:cap-"] .grande{font-size:28px}
   .v-livro .cab h1{font-size:26px}
 }
 /* ajustes dos pares de fontes alternativos (?fonte=): a Instrument Serif é menor no olho e só tem um peso */
-body.f-instrument :is(.cab h1,.cap .big,.grande,.passo .valor,.rotulo,.cap .r,.plano-cab h2){font-weight:400}
+/* Young Serif e Gloock só têm o peso 400: sem ele, o navegador engrossa a letra */
+body:is(.f-instrument,.f-young,.f-gloock) :is(.cab h1,.cap .big,.grande,.passo .valor,.rotulo,.cap .r,.plano-cab h2){font-weight:400}
 body.f-instrument .cap .big{font-size:33px}
 body.f-instrument .cab h1{font-size:36px}
 @media (min-width:900px){body.f-instrument .cab h1{font-size:50px}}
@@ -586,12 +556,12 @@ body.f-instrument .cab h1{font-size:36px}
    sombras quentes, a barra do celular flutuando; o degradê do anel nas ações. Para o cliente que começa e precisa de
    ânimo, sem virar jogo ---------- */
 .v-aurora{--fundo:#FFF8F2;--cartao:#FFFFFF;--borda:#F2E3D5;--areia:#F5EADF;--trilho:#F4E9DF;--neutro-bg:#FDEFE4;--legenda:#6E655D;--raio:20px;--anel-a:#F2A93B;--anel-b:#E2702A}
-.v-aurora :is(.cab h1,.paisagem h2,.passo .valor,.grande,.cap .big,.numero b,.nums b,.num,.prof b,.obj-foto .sobre b,.folha h2,.vazio h2,.marca){font-family:'Sora',sans-serif;font-weight:600;letter-spacing:-.02em}
+.v-aurora :is(.cab h1,.paisagem h2,.passo .valor,.grande,.cap .big,.nums b,.num,.prof b,.obj-foto .sobre b,.folha h2,.vazio h2,.marca){font-family:'Sora',sans-serif;font-weight:600;letter-spacing:-.02em}
 .v-aurora .cab h1{font-size:26px}
 @media (min-width:900px){.v-aurora .cab h1{font-size:32px}}
 .v-aurora .cap .big{font-size:26px}
 .v-aurora .proposito{font-family:var(--sans);font-style:normal}
-.v-aurora :is(.card,.cap,.tarefa,.obj-card,.obj-mini,.numeros,.prof,.nums>div,.mes,.pergunta,.mais-lista a,.encontro){border-color:transparent;box-shadow:0 2px 4px rgba(179,74,18,.04),0 14px 34px -14px rgba(179,74,18,.20)}
+.v-aurora :is(.card,.cap,.tarefa,.obj-card,.prof,.nums>div,.mes,.pergunta,.mais-lista a,.encontro){border-color:transparent;box-shadow:0 2px 4px rgba(179,74,18,.04),0 14px 34px -14px rgba(179,74,18,.20)}
 .v-aurora .cap{background:linear-gradient(180deg,var(--tinta,#fff) 0,var(--cartao) 62%)}
 .v-aurora .cap.semdado{background:transparent;box-shadow:none;border:1.5px dashed #EBCDB5}
 .v-aurora .cap[data-area="saude"]{--tinta:#EAF0F8} .v-aurora .cap[data-area="gestao"]{--tinta:#FFEEDF}
@@ -638,18 +608,17 @@ body.f-instrument .cab h1{font-size:36px}
   .v-aurora .lateral .item.on{background:#FFE9DA;color:#8E3A10}
 }
 
-/* ---------- O guia do plano no Painel e o Plano compacto: as onze áreas só com o número principal; um toque abre a
-   página da área. "Ver todos em detalhe" troca o Plano para os cartões completos ---------- */
-.guia,.cap-grade.compacta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-@media (min-width:600px){.guia,.cap-grade.compacta{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}}
+/* ---------- O Plano compacto: as onze áreas só com o número principal; um toque abre a página da área. "Em detalhe"
+   troca o Plano para os cartões completos ---------- */
+.cap-grade.compacta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:600px){.cap-grade.compacta{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}}
 @media (min-width:1100px){.cap-grade.compacta{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .cap.compacto{min-height:0;padding:13px 15px 14px;gap:3px}
-:is(.guia,.cap-grade.compacta) .cap .big{font-size:21px;line-height:1.15;margin-top:6px}
-:is(.guia,.cap-grade.compacta) .cap .big small{font-size:12.5px}
-:is(.guia,.cap-grade.compacta) .cap .r{font-size:13.5px}
+:is(.cap-grade.compacta) .cap .big{font-size:21px;line-height:1.15;margin-top:6px}
+:is(.cap-grade.compacta) .cap .big small{font-size:12.5px}
+:is(.cap-grade.compacta) .cap .r{font-size:13.5px}
 .cap.compacto .chip{margin-top:8px;max-width:100%;white-space:normal;line-height:1.3;align-self:flex-start}
 .cap.compacto .r{flex-direction:column;align-items:flex-start;gap:5px}
-@media (min-width:1100px){.guia{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .cap.compacto .convite{padding-top:8px;font-size:12.5px}
 .cap.compacto .prof-mini i{width:28px}
 .plano-cab{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:18px 0 12px}
@@ -701,7 +670,6 @@ body.v-livro .alterna .pino{background:var(--marinho);box-shadow:none}
 @keyframes traca{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
 @keyframes pinga{from{transform:scale(0);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion: reduce){html:not(.movimento) .cap-grade.enche .cap *{animation:none!important}}
-.guia-pe{display:flex;justify-content:flex-end;margin-top:8px}
 
 /* ---------- As transições (View Transitions): o cartão cresce até a página da área e volta; o Plano compacto se abre
    nos cartões completos. O menu fica parado; o resto da tela troca num esmaecer curto. Sem animação para quem pede
@@ -724,7 +692,7 @@ body.v-livro .alterna .pino{background:var(--marinho);box-shadow:none}
 body.v-livro{--sombra:0 0 0 1px rgba(32,52,76,.06),0 1px 2px rgba(32,52,76,.04);--sombra-alta:0 0 0 1px rgba(32,52,76,.08),0 6px 18px -8px rgba(32,52,76,.14);font-size:14.5px;line-height:1.6}
 /* os pesos: o negrito fica para quase nada */
 body.v-livro :is(b,strong){font-weight:500}
-body.v-livro :is(.tarefa b,.obj-mini b,.obj-card b,.etapa b,.quem-atende b,.atend .atend-tit,.niveis .card > .entre b,.card h3,.prof b,.pilares b,.nivel-nome,.mais-lista a){font-weight:500}
+body.v-livro :is(.tarefa b,.obj-card b,.etapa b,.quem-atende b,.atend .atend-tit,.niveis .card > .entre b,.card h3,.prof b,.pilares b,.nivel-nome,.mais-lista a){font-weight:500}
 body.v-livro :is(.btn,.filtro,.opcoes button,.chip,.alterna button,.cv-opcoes button,.lateral .item,.lateral .item.on,.encontro,.campo label){font-weight:500}
 body.v-livro .primaria{font-weight:500;font-size:13.5px;padding:10px 20px;min-height:40px}
 /* os títulos: a serifa em 400; o da página e o das seções menores */
@@ -735,25 +703,23 @@ body.v-livro .rotulo:not(._):first-child{margin-top:4px}
 body.v-livro .grupo > summary.rotulo:not(._){margin:36px 0 12px}
 body.v-livro :is(.card,.passo,.mes,.folha) .rotulo:not(._),body.v-livro :is(.card,.mes) h3{font-size:14.5px;font-weight:500;letter-spacing:0}
 /* os rótulos em maiúsculas: menores e em cinza, para não competir com o conteúdo */
-body.v-livro :is(.cap .r,.nums span,.numero span,.etiqueta,.cv-quem),body.v-livro :is(.guia,.cap-grade.compacta) .cap .r{font-size:10.5px;font-weight:500;letter-spacing:.12em;color:var(--legenda)}
+body.v-livro :is(.cap .r,.nums span,.etiqueta,.cv-quem),body.v-livro :is(.cap-grade.compacta) .cap .r{font-size:10.5px;font-weight:500;letter-spacing:.12em;color:var(--legenda)}
 body.v-livro .ic-area{width:16px;height:16px;stroke:var(--legenda)}
 /* os números: Sora em 500, um degrau abaixo */
-body.v-livro :is(.passo .valor,.grande,.cap .big,.numero b,.nums b,.num,.sp-num b){font-weight:500;letter-spacing:-.015em}
+body.v-livro :is(.passo .valor,.grande,.cap .big,.nums b,.num){font-weight:500;letter-spacing:-.015em}
 body.v-livro .passo .valor{font-size:26px}
-body.v-livro .painel .principal .passo .valor{font-size:30px}
+body.v-livro .heroi .passo .valor{font-size:30px}
 body.v-livro #miolo > .grade2 > .card:first-child .grande,body.v-livro .card[style*="view-transition-name:cap-"] .grande{font-size:28px}
 body.v-livro .cap .big{font-size:20px}
-body.v-livro :is(.guia,.cap-grade.compacta) .cap .big{font-size:17px}
+body.v-livro :is(.cap-grade.compacta) .cap .big{font-size:17px}
 body.v-livro .nums b{font-size:20px}
-body.v-livro .sp-num b{font-size:17px}
 body.v-livro :is(.passo .valor small,.cap .big small,.grande small){font-size:13px;font-weight:400}
 /* o texto: corpo 14,5; secundário 13; detalhe 12 */
-body.v-livro :is(.mut,.quem-atende small,.sp-num small,.nums small,.numero small,.prof small,.obj-card small,.tarefa small,.etapa .mut,.atend .mut,.msg small,.cv-prog span){font-size:13px}
+body.v-livro :is(.mut,.quem-atende small,.nums small,.prof small,.obj-card small,.tarefa small,.etapa .mut,.atend .mut,.msg small,.cv-prog span){font-size:13px}
 body.v-livro :is(.peq,.inclui li,.aviso,.passo p,.cap .sub){font-size:14px}
 body.v-livro :is(.tarefa b,.etapa b,.obj-card b,.quem-atende b,.msg,.atend .atend-tit,.niveis .card > .entre b){font-size:14.5px}
-body.v-livro :is(.chip,.leg,.obj-mini small,.tarefa .cat,.cap .prof-mini,.sp-dias li,.marcas,.semanas small,.trilha-h span,.pilares div,.linha-tempo span,.grupo > summary .conta){font-size:12px}
+body.v-livro :is(.chip,.leg,.tarefa .cat,.cap .prof-mini,.marcas,.semanas small,.trilha-h span,.pilares div,.linha-tempo span,.grupo > summary .conta){font-size:12px}
 body.v-livro .cap .r .prof-mini{font-size:12px}
-body.v-livro .obj-mini b{font-size:13.5px}
 body.v-livro :is(.btn,.filtro,.opcoes button,.campo label,.quem-atende .contatos,.lateral .item){font-size:13.5px}
 body.v-livro .alterna button{font-size:13px}
 body.v-livro .nivel-nome{font-size:15px}
@@ -776,8 +742,8 @@ body.v-livro .passo .trilho.fut{height:6px!important}
 /* os que ainda pesavam: o título da página (uma regra antiga pesa três classes), o menu, os dias, a profundidade */
 body.v-livro .cab h1:not(._){font-weight:400}
 body.v-livro .lateral .item:not(.on){font-weight:400}
-body.v-livro :is(.sp-dias i,.sp-dias li.hoje span,.cap .prof-mini,.tarefa .cat,.tarefa small .quando,.quem-atende .contatos,.trilha-h .atual span){font-weight:400}
-body.v-livro :is(.sp-dias li.hoje span,.tarefa small .quando,.trilha-h .atual span){color:var(--marinho)}
+body.v-livro :is(.cap .prof-mini,.tarefa .cat,.tarefa small .quando,.quem-atende .contatos,.trilha-h .atual span){font-weight:400}
+body.v-livro :is(.tarefa small .quando,.trilha-h .atual span){color:var(--marinho)}
 /* o exame em conversa, mais leve */
 body.v-livro .cv-msg.atual .cv-bolha{font-size:15px;font-weight:400}
 body.v-livro .cv-bolha{font-size:14px}
@@ -785,13 +751,222 @@ body.v-livro .cv-campo input{font-size:16px;font-weight:400}
 body.v-livro .cv-opcoes button{font-size:14px;min-height:46px}
 body.v-livro .cv-opcoes.escala button{font-size:15px}
 /* a saudação e a semana */
-body.v-livro .sp-dias i{font-size:13px;font-weight:500;width:32px;height:32px}
 @media (max-width:899px){
   body.v-livro .cab h1{font-size:23px}
-  body.v-livro .passo .valor,body.v-livro .painel .principal .passo .valor{font-size:24px}
+  body.v-livro .passo .valor,body.v-livro .heroi .passo .valor{font-size:24px}
   body.v-livro #miolo > .grade2 > .card:first-child .grande,body.v-livro .card[style*="view-transition-name:cap-"] .grande{font-size:24px}
   body.v-livro :is(.rotulo:not(._),.plano-cab h2){font-size:17px}
   body.v-livro .rotulo:not(._){margin:32px 0 12px}
+}
+
+/* ---------- Painel: a tela inicial. A paisagem com o propósito e o passo em vidro; o placar do que resolver; a poupança
+   mês a mês; os objetivos em linhas. Só o que importa agora; o plano área por área fica na aba Plano ---------- */
+.heroi{position:relative;border-radius:var(--raio);overflow:hidden;min-height:290px;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,360px);gap:24px;align-items:end;padding:26px 28px;color:#fff;background:var(--marinho) center/cover no-repeat;margin-bottom:28px}
+.heroi::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(19,31,46,.62),rgba(19,31,46,.18) 55%,rgba(19,31,46,.36))}
+.heroi > *{position:relative}
+.heroi .r{display:block;font:500 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.82)}
+.heroi h2{font:italic 400 30px/1.2 var(--serifa);margin:8px 0 2px;max-width:24ch;text-wrap:balance;letter-spacing:-.01em;color:#fff;text-shadow:0 1px 14px rgba(19,31,46,.4)}
+.heroi .chaves{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:18px}
+.heroi .chaves a{text-decoration:none;color:#fff}
+.heroi .chaves small{display:block;font:500 10.5px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.heroi .chaves b{display:block;font:500 17px 'Sora',sans-serif;letter-spacing:-.01em;color:#fff;margin-top:2px}
+.heroi .chaves b small{display:inline;font:400 12px var(--sans);letter-spacing:0;text-transform:none;color:rgba(255,255,255,.78)}
+.heroi .passo{margin:0;padding:20px 22px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.14);box-shadow:none;color:#fff;-webkit-backdrop-filter:blur(18px) saturate(1.3);backdrop-filter:blur(18px) saturate(1.3)}
+.heroi .passo .valor{margin:8px 0 10px;color:#fff}
+.heroi .passo .valor small{color:rgba(255,255,255,.82)}
+.heroi .passo p{margin:10px 0 14px;color:#fff}
+.heroi .passo .trilho{height:5px;background:rgba(255,255,255,.24)}
+.heroi .passo .trilho i{background:var(--laranja)}
+.heroi .passo .onde{font-size:12.5px;line-height:1.45;color:rgba(255,255,255,.78);margin:-6px 0 14px}
+.heroi .passo .junto{display:block;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.22);color:#fff;text-decoration:none;font-size:13.5px;line-height:1.4}
+.heroi .passo .junto .r{margin-bottom:3px}
+.doze,.teto{display:block;text-decoration:none;color:inherit}
+:is(.doze,.teto) .num{font-size:22px}
+:is(.doze,.teto) .num small{font:400 13px var(--sans);color:var(--legenda);letter-spacing:0}
+.doze .partes{display:flex;gap:3px;height:10px;margin:14px 0 8px}
+.doze .partes i{border-radius:3px;background:var(--marinho)}
+.doze .partes i.fut,.doze .leg2 i.fut{background:var(--laranja)}
+.doze .leg2{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:13px;color:var(--grafite)}
+.doze .leg2 i{display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--marinho);margin-right:6px}
+.doze .balanco{margin-top:14px;padding-top:12px;border-top:1px solid var(--areia);font-size:13px;color:var(--legenda);line-height:1.5}
+.doze .balanco b{display:block;font-weight:500;color:var(--marinho);margin-bottom:2px}
+.doze .balanco.at b{color:var(--atencao-txt)}
+.teto .trilho{margin:12px 0 6px;height:6px}
+.teto .trilho.passou i{background:var(--laranja)}
+.teto p{margin:10px 0 0;font-size:13.5px;color:var(--marinho);line-height:1.5}
+.teto p.at{color:var(--atencao-txt)}
+/* ---------- As duas linhas dos objetivos: o sonho em cima, o plano embaixo; os marcos de baixo deslizam com o controle ---------- */
+.linhas-obj{margin-bottom:18px}
+.linhas{position:relative;margin:22px 0 8px;padding-left:76px}
+.linhas .trilha{position:relative;height:44px;border-bottom:1px solid var(--areia)}
+.linhas .trilha::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--trilho);border-radius:2px}
+.linhas .tt{position:absolute;left:-76px;top:50%;transform:translateY(-50%);font-size:12.5px;color:var(--legenda)}
+.linhas .tk{position:absolute;top:50%;width:28px;height:28px;margin:-14px 0 0 -14px;border-radius:50%;background-size:cover;background-position:center;box-shadow:0 0 0 2px var(--cartao),0 1px 4px rgba(19,31,46,.25);transition:left .45s cubic-bezier(.22,.9,.26,1);z-index:2}
+.linhas .tk em{position:absolute;right:-5px;top:-6px;min-width:16px;height:16px;border-radius:9999px;background:var(--marinho);color:#fff;font:500 10.5px/16px var(--sans);text-align:center;font-style:normal;padding:0 4px}
+.linhas .tk.sonho{opacity:.9}
+.linhas .tk.nunca{box-shadow:0 0 0 2px var(--cartao),0 0 0 3.5px var(--laranja)}
+.linhas .faixa{position:absolute;top:50%;height:4px;margin-top:-2px;background:var(--laranja);border-radius:2px;opacity:.55;transition:left .45s cubic-bezier(.22,.9,.26,1),width .45s cubic-bezier(.22,.9,.26,1);z-index:1}
+.linhas .faixa.boa{background:var(--verde)}
+.linhas .eixo{position:relative;height:22px;margin-top:4px}
+.linhas .eixo span{position:absolute;transform:translateX(-50%);font-size:11.5px;color:var(--legenda);white-space:nowrap}
+.linhas .eixo span:first-child{transform:none}
+.linhas-leg{list-style:none;margin:10px 0 0;padding:0}
+.linhas-leg li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--areia)}
+.linhas-leg .n{width:20px;height:20px;border-radius:50%;background:var(--marinho);color:#fff;font:500 11px/20px var(--sans);text-align:center}
+.linhas-leg b{display:block;font:500 14px var(--sans);color:var(--marinho)}
+.linhas-leg small{display:block;font-size:12.5px;color:var(--legenda)}
+.linhas-obj .ctl{margin-top:6px;padding:14px 0 6px;border-top:1px solid var(--areia)}
+.linhas-obj .ctl label{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;color:var(--marinho)}
+.linhas-obj .ctl label b{font:500 15px 'Sora',sans-serif}
+.linhas-obj input[type=range]{width:100%;margin:10px 0 2px;accent-color:var(--laranja)}
+.linhas-obj .marcas-ctl{display:flex;justify-content:space-between;font-size:11.5px;color:var(--legenda)}
+.linhas-obj .ctl .mut{margin:8px 0 12px}
+.linhas-obj .ctl label.chk{justify-content:flex-start;align-items:center;gap:8px;cursor:pointer}
+.linhas-obj .ctl label.chk input{width:18px;height:18px;accent-color:var(--marinho);margin:0}
+.linhas-obj .extra{margin-top:12px}
+.linhas-obj .precisa{margin:14px 0 0;font-size:13.5px;color:var(--marinho)}
+@media (max-width:599px){.linhas{padding-left:0;margin-top:30px}.linhas .tt{left:0;top:-4px;transform:translateY(-100%)}.linhas .trilha{margin-top:18px}}
+
+/* ---------- Saber: a trilha, as perguntas e o conceito ---------- */
+.mod-linha{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--areia);text-decoration:none;color:inherit}
+.mod-linha:first-child{border-top:0;padding-top:0}
+.mod-linha:last-child{padding-bottom:0}
+.mod-linha b{display:block;font:500 14.5px var(--sans);color:var(--marinho)}
+.mod-linha small{display:block;font-size:12.5px;color:var(--legenda)}
+.quiz .q{padding:14px 0;border-top:1px solid var(--areia)}
+.quiz .q:first-child{border-top:0;padding-top:0}
+.quiz .etiqueta + .q{border-top:0;padding-top:6px}
+.quiz .qq{margin:0 0 10px;font-size:14.5px;color:var(--marinho);line-height:1.45}
+.quiz .qo{display:flex;flex-direction:column;gap:6px}
+.quiz .qo button{text-align:left;border:1px solid var(--borda);background:var(--cartao);border-radius:10px;padding:10px 12px;font:400 14px var(--sans);color:var(--marinho);min-height:44px}
+.quiz .qo button:not([disabled]):hover{border-color:var(--marinho)}
+.quiz .qo button[disabled]{cursor:default;color:var(--legenda)}
+.quiz .qo button.certa{border-color:var(--verde);background:var(--ok-bg);color:var(--verde-txt)}
+.quiz .qo button.errada{border-color:var(--laranja);background:var(--at-bg);color:var(--atencao-txt)}
+.quiz .qpor{margin:10px 0 0;font-size:13.5px;line-height:1.5;color:var(--grafite)}
+.quiz .qpor b{font-weight:500}
+.quiz .qpor.ok b{color:var(--verde-txt)}
+.quiz .qpor.at b{color:var(--atencao-txt)}
+.capit{margin-bottom:12px}
+.capit .capit-t{display:block;font:500 16px var(--sans);color:var(--marinho)}
+.capit .entre small{display:block;font-size:12.5px;color:var(--legenda);margin-top:2px}
+.capit .lista{margin-top:12px}
+.capit > .peq{margin:10px 0 0}
+.capit .linha{margin-top:12px}
+.capit a.primaria{display:inline-flex;align-items:center;text-decoration:none}
+.conqs{display:grid;gap:10px;margin:0 0 14px}
+@media (min-width:600px){.conqs{grid-template-columns:1fr 1fr}}
+.conq{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px dashed var(--borda);border-radius:12px;background:var(--cartao)}
+.conq i{flex:none;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--trilho);color:var(--legenda)}
+.conq i svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.conq span{flex:1;min-width:0}
+.conq b{display:block;font:500 14px var(--sans);color:var(--legenda)}
+.conq small{display:block;font-size:12.5px;color:var(--legenda);line-height:1.4}
+.conq.ok{border-style:solid}
+.conq.ok b{color:var(--marinho)}
+.conq.ok.saber i{background:var(--marinho);color:#fff}
+.conq.ok.fazer i{background:var(--laranja);color:#fff}
+.cinco{margin:6px 0 12px;font-size:14px;line-height:1.5;color:var(--grafite)}
+.cinco b{font-weight:500;color:var(--marinho)}
+.conceito summary{cursor:pointer;font:500 14.5px var(--sans);color:var(--marinho)}
+.conceito p{margin:10px 0 0;font-size:14px;line-height:1.6}
+
+/* ---------- As reuniões ---------- */
+.reuniao summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none}
+.reuniao summary::-webkit-details-marker{display:none}
+.reuniao summary b{display:block;font:500 15px var(--sans);color:var(--marinho)}
+.reuniao summary small{display:block;font-size:13px;color:var(--legenda)}
+.reuniao > p{margin:12px 0 0;font-size:14px;line-height:1.6;color:var(--grafite)}
+.tarefas-reuniao{list-style:none;margin:6px 0 0;padding:0}
+.tarefas-reuniao li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--areia);font-size:14px;color:var(--marinho)}
+.tarefas-reuniao li:first-child{border-top:0}
+.tarefas-reuniao .tr-abre{flex:1;min-width:0;text-align:left;background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer}
+.tarefas-reuniao span.tr-abre{cursor:default}
+.tr-marca{position:relative;flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--marinho);background:transparent;padding:0;display:flex;align-items:center;justify-content:center;color:var(--marinho);cursor:pointer}
+.tr-marca::before{content:"";position:absolute;inset:-10px}
+.tr-marca svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.tr-marca:hover svg{opacity:.45}
+.tr-marca.ok{background:var(--verde);border-color:var(--verde);color:#fff}.tr-marca.ok svg{opacity:1}
+.tr-marca.nao{border-color:var(--laranja);color:var(--atencao-txt)}
+.tr-marca.pa{border-color:var(--laranja);background:var(--at-bg);color:var(--atencao-txt)}
+.tr-marca b{font:500 12px/1 var(--sans)}
+.tr-marca[aria-expanded="true"]{box-shadow:0 0 0 3px var(--areia)}
+.tarefas-reuniao .tr-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.tr-obs{font-size:12.5px;color:var(--legenda);line-height:1.4}
+.tarefas-reuniao li.escolha-li{display:block;border-top:0;padding-top:0}
+.escolha{margin:6px 0 4px;padding:12px 14px;border:1px solid var(--borda);border-radius:12px;background:var(--fundo)}
+.escolha > p.mut{margin:0 0 8px;font-size:12.5px}
+.escolha .ops{display:flex;flex-wrap:wrap;gap:8px}
+.escolha .ops button{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:6px 12px;border:1px solid var(--borda);border-radius:9999px;background:var(--cartao);font:500 13.5px var(--sans);color:var(--marinho);cursor:pointer}
+.escolha .ops button i{font-style:normal;font-size:12px}
+.escolha .ops button:hover{border-color:var(--marinho)}
+.escolha .ops .feita.on{background:var(--verde);border-color:var(--verde);color:#fff}
+.escolha .ops .parcial.on,.escolha .ops .naofiz.on{background:var(--at-bg);border-color:var(--laranja);color:var(--atencao-txt)}
+.escolha .ops .limpar{color:var(--legenda)}
+.escolha textarea.erro{border-color:var(--laranja)}
+.vez.sel i{box-shadow:0 0 0 3px var(--areia)}
+.tarefas-reuniao li.rec{display:block}
+.vezes{display:flex;gap:14px;margin-top:8px}
+.vez{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;padding:0;cursor:pointer;color:var(--legenda)}
+.vez i{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--borda);font:500 12px/21px var(--sans);font-style:normal;text-align:center;color:var(--marinho)}
+.vez small{font-size:11px}
+.vez.ok i{background:var(--verde);border-color:var(--verde);color:#fff}
+.vez.pa i{border-color:var(--laranja);color:var(--atencao-txt);background:var(--at-bg)}
+.vez.nao i{border-color:var(--laranja);color:var(--atencao-txt)}
+.vez.atr i{border-color:var(--laranja);border-style:dashed}
+.vez:hover i{border-color:var(--marinho)}
+/* ---------- O fazer e o saber, lado a lado no Painel ---------- */
+.duo{margin:22px 0 4px;padding-bottom:6px;border-bottom:1px solid var(--areia)}
+.duo-cab h2{font:400 22px/1.2 var(--serifa);color:var(--marinho);margin:0;letter-spacing:-.01em}
+.duo-cab p{margin:4px 0 0;font-size:13.5px;color:var(--legenda)}
+.duo .rotulo{margin-top:16px}
+.duo-sub{margin:-4px 0 10px;font-size:13px;color:var(--legenda)}
+.duo-nivel{padding:14px 16px}
+.duo-nivel small{display:block;font-size:12px;color:var(--legenda)}
+.duo-nivel .nivel-nome{display:block;margin:2px 0 0}
+.duo-nivel .trilho{margin-top:10px}
+@media (min-width:900px){.duo-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}}
+.placar.card{padding:0}
+.placar a{display:flex;align-items:center;gap:14px;padding:14px 20px;border-top:1px solid var(--areia);text-decoration:none;color:inherit}
+.placar a:first-child{border-top:0}
+.placar .ic{flex:none;width:36px;height:36px;border-radius:10px;background:var(--neutro-bg);display:flex;align-items:center;justify-content:center}
+.placar .ic svg{width:18px;height:18px;fill:none;stroke:var(--marinho);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+/* o anel no quadrado do placar: só o arco, fino; o número fica na frase ao lado, porque dentro de 30px não fica nítido */
+.placar .ic .anel{width:26px;height:26px;fill:none;shape-rendering:geometricPrecision}
+.placar .ic .anel circle{stroke-width:4}
+.placar .ic .anel text{display:none}
+.placar .tx{flex:1;min-width:0}
+.placar b{display:block;font:500 14.5px/1.3 var(--sans);color:var(--marinho)}
+.placar small{display:block;font-size:13px;color:var(--legenda);margin-top:1px}
+.placar small.at{color:var(--atencao-txt)}
+.placar small.crit{color:var(--critico-txt)}
+.placar .seta{color:var(--nevoa);font-size:20px;line-height:1}
+.poup{display:block;text-decoration:none;color:inherit}
+.poup .num{font-size:24px}
+.poup .num small{font:400 13px var(--sans);color:var(--legenda);letter-spacing:0}
+.poup .meses,.poup .pontas{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}
+.poup .meses{margin:16px 0 6px}
+.poup .meses i{height:20px;border-radius:4px;background:var(--trilho);border:1px solid transparent}
+.poup .meses i.f{background:var(--marinho)}
+.poup .meses i.p{background:linear-gradient(90deg,var(--marinho) 50%,var(--trilho) 50%)}
+.poup .meses i.n{background:var(--at-bg);border-color:var(--laranja)}
+.poup .meses i.a{background:transparent;border:1px dashed #C9C3B8}
+.poup .pontas{font-size:11.5px;color:var(--legenda);margin-bottom:10px;white-space:nowrap}
+.poup .pontas span:last-child:not(:first-child){grid-column:var(--n);text-align:right}
+.card.lista{padding-top:14px;padding-bottom:14px}
+.obj-linha{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--areia);text-decoration:none;color:inherit}
+.obj-linha:first-child{border-top:0;padding-top:0}
+.obj-linha:last-child{padding-bottom:0}
+.obj-linha .thumb{width:40px;height:40px;border-radius:9px;background-size:cover;background-position:center}
+.obj-linha b{display:block;font:500 14.5px var(--sans);color:var(--marinho);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.obj-linha small{display:block;font-size:12.5px;color:var(--legenda);margin-top:1px}
+.obj-linha .trilho{display:block;margin-top:7px;height:3px}
+.rotulo a.mais{text-decoration:none;color:var(--marinho)}
+body.v-livro .rotulo .mais{font-weight:400;font-size:13px}
+@media (max-width:899px){
+  .heroi{grid-template-columns:minmax(0,1fr);min-height:0;padding:20px 18px;gap:18px;margin-bottom:20px}
+  .heroi h2{font-size:24px}
+  .heroi .passo .primaria{width:100%;justify-content:center}
 }
 </style>
 </head>
@@ -830,6 +1005,10 @@ body.v-livro .sp-dias i{font-size:13px;font-weight:500;width:32px;height:32px}
     { "id": "reserva", "titulo": "Completar a reserva ideal", "criterio": "reserva", "pedido": "resgate", "porque": "Com a reserva ideal, um imprevisto de até oito meses de custo não toca no dinheiro da Casa própria nem no da liberdade.", "mundo": 2 },
     { "id": "sequencia", "titulo": "Três meses seguidos de aporte", "criterio": "sequencia", "pedido": "aporte", "meses": 3, "porque": "Três meses seguidos fazem do aporte um hábito: é o que leva a Casa própria e a liberdade adiante.", "mundo": 3 }
   ],
+  "reunioes": [
+    { "data": "2026-09-12", "tipo": "Clínica financeira", "com": "Patrícia Lemos", "resumo": "Olhamos o orçamento, a reserva e os dois sonhos da família: a casa própria e a liberdade aos 57. A reserva de R$ 60 mil cobre cinco dos oito meses ideais; o restante sai do BTG, que hoje está parado em liquidez. Combinamos R$ 2.500 por mês para os objetivos e um teto de R$ 5.300 nas despesas ajustáveis.",
+      "tarefas": [{ "txt": "Resgatar R$ 42.133 do BTG para a reserva", "pedido": "resgate" }, { "txt": "Guardar R$ 2.500 todo dia 5", "pedido": "aporte" }, { "txt": "Teto de R$ 5.300 nas despesas ajustáveis", "pedido": "teto" }, { "txt": "Assistir à live de novembro", "pedido": "live-nov" }] }
+  ],
   "orientacoes": [
     { "txt": "Separar a reserva ideal de R$ 102 mil numa aplicação de liquidez diária, longe dos objetivos.", "pedido": "resgate" },
     { "txt": "Todo dia 5, guardar R$ 2.500: R$ 1.500 para a Casa própria e R$ 1.000 para a liberdade.", "pedido": "aporte" },
@@ -844,6 +1023,7 @@ body.v-livro .sp-dias i{font-size:13px;font-weight:500;width:32px;height:32px}
      da consultora depois da clínica. O aporte de outubro e o resgate ficaram sem resposta. -->
 <script type="application/json" id="execucao-exemplo">
 {
+  "saberCap": { "tempo": { "planejador": { "em": "2026-09-26T18:00:00", "quem": "Patrícia Lemos" } } },
   "respostas": {
     "teto:2026-10:0": [{ "em": "2026-10-05T09:12:00", "quem": "ana", "canal": "whatsapp", "estado": "feita", "valor": 650 }],
     "teto:2026-10:1": [{ "em": "2026-10-12T08:40:00", "quem": "marcos", "canal": "whatsapp", "estado": "naofiz", "valor": 1460 }],
@@ -878,6 +1058,14 @@ body.v-livro .sp-dias i{font-size:13px;font-weight:500;width:32px;height:32px}
     "aporte:2027-05": [{ "em": "2027-05-05T09:10:00", "quem": "titular", "canal": "whatsapp", "estado": "feita" }],
     "aporte:2027-06": [{ "em": "2027-06-07T20:05:00", "quem": "conjuge", "canal": "whatsapp", "estado": "feita" }]
   },
+  "reunioes": [
+    { "data": "2026-09-02", "tipo": "Coleta de dados", "com": "Patrícia Lemos", "resumo": "Levantamos a renda, as despesas, o patrimônio e os sonhos da família. A Ana e o Marcos querem sair do aluguel, viajar com a Luiza, pagar o intercâmbio do filho e parar de trabalhar aos 57.",
+      "tarefas": [{ "txt": "Enviar os extratos de agosto do Itaú e do Nubank", "feita": "2026-09-05" }, { "txt": "Mandar a apólice do seguro do apartamento", "feita": "2026-09-20" }] },
+    { "data": "2026-09-26", "tipo": "Apresentação do plano", "com": "Patrícia Lemos", "resumo": "Apresentamos o plano. A reserva sobe para R$ 102 mil, R$ 2.500 por mês vão para cinco objetivos e o teto das despesas ajustáveis passa a R$ 5.300. A liberdade fecha aos 57. O seguro de vida do Marcos é a maior ameaça descoberta.",
+      "tarefas": [{ "txt": "Aporte de R$ 2.500 todo dia 5", "pedido": "aporte" }, { "txt": "Teto das ajustáveis, semana a semana", "pedido": "teto" }, { "txt": "Cotar o seguro de vida do Marcos" }, { "txt": "Indicar os beneficiários do VGBL da Icatu", "feita": "2026-11-10" }] },
+    { "data": "2027-03-22", "tipo": "1º acompanhamento", "com": "Patrícia Lemos", "resumo": "Revimos os seis meses: cinco aportes completos e um parcial em janeiro, por causa do IPVA. A Casa própria passa a R$ 1.800 por mês. O seguro de vida do Marcos segue pendente.",
+      "tarefas": [{ "txt": "Ajustar o aporte da Casa própria para R$ 1.800", "feita": "2027-04-05" }, { "txt": "Contratar o seguro de vida do Marcos" }] }
+  ],
   "ajustes": [],
   "conversas": [
     { "em": "2026-09-26T19:00:00", "quem": "consultora", "txt": "Ana e Marcos, o plano de vocês está publicado aqui. Criei as tarefas dos aportes e o teto da semana a partir do que combinamos; confiram e ajustem os horários dos lembretes." },
@@ -911,6 +1099,7 @@ body.v-livro .sp-dias i{font-size:13px;font-weight:500;width:32px;height:32px}
 // =====================================================================================================================
 const PARAMS = new URLSearchParams(location.search);
 const CLIENTE = PARAMS.get('cliente') || null;   // sem cliente: o visitante, sem conta
+const CONSULTOR = PARAMS.has('consultor');   // a área vista pelo planejador (Clientes › Área do cliente): no Saber, ele vê as respostas e marca o que o cliente já sabe
 const EXEMPLO = !!CLIENTE && /^exemplo/.test(CLIENTE);
 // A direção visual (?visual=), proposta em 30/10 sobre o mesmo esqueleto; a escolha fica lembrada neste navegador
 // os temas escuros (Noite e Travessia) saíram em 30/10: o plano pede clareza
@@ -922,14 +1111,20 @@ if (VISUAL !== 'sobrio') document.body.classList.add('v-' + VISUAL);
 // Os pares de fontes para o Livro (?fonte=), para comparar antes de decidir: a serifa dos títulos e números e a sans do
 // texto. O par escolhido fica lembrado neste navegador; os que não são o padrão carregam as famílias do Google Fonts
 const FONTES = [
-  ['newsreader', 'Newsreader + DM Sans'],
+  ['literata-dm', 'Literata + DM Sans'],
+  ['newsreader', 'Newsreader + DM Sans', "'Newsreader',Georgia,serif", "'DM Sans',system-ui,sans-serif", 'family=Newsreader:ital,opsz,wght@0,6..72,400..500;1,6..72,400'],
   ['instrument', 'Instrument Serif + Instrument Sans', "'Instrument Serif',Georgia,serif", "'Instrument Sans',system-ui,sans-serif", 'family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400..700'],
   ['source', 'Source Serif 4 + Source Sans 3', "'Source Serif 4',Georgia,serif", "'Source Sans 3',system-ui,sans-serif", 'family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400&family=Source+Sans+3:wght@400..700'],
-  ['fraunces', 'Fraunces + Manrope', "'Fraunces',Georgia,serif", "'Manrope',system-ui,sans-serif", 'family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400&family=Manrope:wght@400..700']];
+  ['fraunces', 'Fraunces + Manrope', "'Fraunces',Georgia,serif", "'Manrope',system-ui,sans-serif", 'family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400&family=Manrope:wght@400..700'],
+  // sem o f encaracolado da Fraunces, todas com a Manrope no texto
+  ['literata', 'Literata + Manrope', "'Literata',Georgia,serif", "'Manrope',system-ui,sans-serif", 'family=Literata:ital,opsz,wght@0,7..72,400..600;1,7..72,400&family=Manrope:wght@400..700'],
+  ['young', 'Young Serif + Manrope', "'Young Serif',Georgia,serif", "'Manrope',system-ui,sans-serif", 'family=Young+Serif&family=Manrope:wght@400..700'],
+  ['gloock', 'Gloock + Manrope', "'Gloock',Georgia,serif", "'Manrope',system-ui,sans-serif", 'family=Gloock&family=Manrope:wght@400..700'],
+  ['petrona', 'Petrona + Manrope', "'Petrona',Georgia,serif", "'Manrope',system-ui,sans-serif", 'family=Petrona:ital,wght@0,400..600;1,400&family=Manrope:wght@400..700']];
 const FONTE = (() => { const ok = v => FONTES.some(x => x[0] === v), q = PARAMS.get('fonte');
   if (ok(q)) { try { localStorage.setItem('nl-fonte', q); } catch (e) { } return q; }
-  try { const s = localStorage.getItem('nl-fonte'); if (ok(s)) return s; } catch (e) { } return 'newsreader'; })();
-if (FONTE !== 'newsreader') { const f = FONTES.find(x => x[0] === FONTE); document.body.classList.add('f-' + FONTE); document.body.style.setProperty('--serifa', f[2]); document.body.style.setProperty('--sans', f[3]);
+  try { const s = localStorage.getItem('nl-fonte'); if (ok(s)) return s; } catch (e) { } return 'literata-dm'; })();
+if (FONTE !== 'literata-dm') { const f = FONTES.find(x => x[0] === FONTE); document.body.classList.add('f-' + FONTE); document.body.style.setProperty('--serifa', f[2]); document.body.style.setProperty('--sans', f[3]);
   document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?${f[4]}&display=swap">`); }
 // o ícone da marca (os dois visuais são claros: o positivo)
 const ICONE_MARCA = () => 'marca/nord-icone-64.png';
@@ -988,7 +1183,9 @@ const ARMAZEM = (() => {
   return {
     async iniciar() {
       const ex = EXEMPLOS[CLIENTE];
-      if (ex) for (const k of Object.keys(ex)) if (ler(k) == null || PARAMS.has('reiniciar')) await this.gravar(k, ex[k]());
+      if (ex) for (const k of Object.keys(ex)) { const atual = ler(k);
+        if (atual == null || PARAMS.has('reiniciar')) { await this.gravar(k, ex[k]()); continue; }
+        const novo = ex[k](); if (novo && typeof novo === 'object' && !Array.isArray(novo) && typeof atual === 'object') { const falta = Object.keys(novo).filter(c => !(c in atual)); if (falta.length) { falta.forEach(c => { atual[c] = novo[c]; }); await this.gravar(k, atual); } } }
       // o relatório guarda uma cópia de trabalho do último cliente aberto; sem a marca, ele relê as versões deste
       if (ex && ex.versoes) try { localStorage.removeItem('nl-cliente'); } catch (e) { }
       addEventListener('storage', e => { for (const k in PASTA) if (e.key === chave(k)) { delete memoria[k]; ouvintes[k].forEach(f => f(ler(k))); } });
@@ -1299,8 +1496,12 @@ function ocorrencias() {
       });
     } else lista.push({ id: p.id, pedido: p, cat: p.cat, data: p.data, valor: p.valor, titulo: p.titulo, serve: p.serve, quando: p.quando || 'até ' + dataBR(p.data) + ', uma vez', resp: p.resp });
   });
+  // as tarefas combinadas numa reunião sem pedido do plano: de uma vez, com prazo (ou duas semanas depois da reunião)
+  reunioes().forEach(r => (r.tarefas || []).forEach((t, i) => { if (t.pedido) return; const id = idDaTarefaDaReuniao(r, i), cat = t.cat || 'burocratica', data = t.ate || addD(r.data, 14);
+    lista.push({ id, pedido: { id, ritmo: 'unica', cat }, cat, data, titulo: t.txt, serve: 'combinada na reunião de ' + dataBR(r.data), quando: 'até ' + dataBR(data) + ', uma vez', resp: t.resp,
+      semente: t.feita && t.feita <= HOJE ? [{ em: t.feita + 'T12:00:00', quem: t.resp || MEMBRO(), canal: 'reuniao', estado: 'feita' }] : null }); }));
   return OC_CACHE = lista.map(o => {
-    const rs = X.respostas[o.id] || [], fecha = rs.find(r => r.estado !== 'adiada'), adiamentos = rs.filter(r => r.estado === 'adiada');
+    const rs = X.respostas[o.id] || o.semente || [], fecha = rs.find(r => r.estado !== 'adiada'), adiamentos = rs.filter(r => r.estado === 'adiada');
     const data = adiamentos.length ? adiamentos[adiamentos.length - 1].novaData : o.data;
     return Object.assign(o, { respostas: rs, estado: fecha ? fecha.estado : adiamentos.length ? 'adiada' : 'pendente', resposta: fecha || null, data, aberta: !fecha });
   }).sort((a, b) => a.data < b.data ? -1 : a.data > b.data ? 1 : 0);
@@ -1333,7 +1534,7 @@ const MUNDOS = ['Sobreviver', 'Descobrir', 'Construir', 'Focar', 'Proteger', 'Ot
 const PERGUNTAS_MUNDO = ['Consigo fechar o mês sem afundar?', 'Onde estou e para onde quero ir?', 'Tenho base para subir?', 'Estou pondo o dinheiro onde o sonho está?', 'Um imprevisto derruba o que construí?', 'O dinheiro trabalha mais do que eu?', 'Vivo do que construí?'];
 function passoAtual() {
   for (const p of R.passos) {
-    if (p.criterio === 'reserva') { const at = reservaAtual(), al = reservaIdeal(); if (at < al - 0.5) return Object.assign({}, p, { atual: at, alvo: al, valor: `${brlC(at)} <small>de ${brlC(al)}</small>`, fracao: at / al, origem: 'escolhido pela ' + R.consultora.completo }); }
+    if (p.criterio === 'reserva') { const at = reservaAtual(), al = reservaIdeal(); if (at < al - 0.5) return Object.assign({}, p, { atual: at, alvo: al, valor: `${brlC(at)} <small>de ${brlC(al)}</small>`, fracao: at / al, onde: p.onde || ONDE_RESERVA, junto: juntoDoObjetivo(), origem: 'escolhido pela ' + R.consultora.completo }); }
     if (p.criterio === 'sequencia') { const n = sequenciaDeAportes(); if (n < p.meses) return Object.assign({}, p, { atual: n, alvo: p.meses, valor: `${n} <small>de ${p.meses} meses</small>`, fracao: n / p.meses, origem: 'escolhido pela ' + R.consultora.completo }); }
   }
   if (R.passos.length) return null;
@@ -1344,16 +1545,20 @@ function regua() {
   if (!temExame && !tem(fv('renda'))) return { id: 'exame', mundo: 1, titulo: 'Saber onde você está', valor: '33 <small>perguntas, uns 8 minutos</small>', fracao: 0,
     porque: 'O exame de saúde financeira mostra o seu momento e preenche, de uma vez, o começo de quase todas as áreas do plano.', acao: ['Fazer o exame', '#exame'] };
   if (fv('temDividas') === 'Sim' && tem(fv('dividaTaxa')) && +fv('dividaTaxa') >= 2) return { id: 'divida', mundo: 0, titulo: 'Quitar a dívida cara', valor: `${brlC(+fv('dividas'))} <small>a ${nf1.format(+fv('dividaTaxa'))}% ao mês</small>`, fracao: 0,
-    porque: 'Juros acima de 2% ao mês andam mais rápido do que qualquer investimento: quitar é o melhor rendimento agora.', acao: ['Ver as dívidas', '#cartao/dividas'] };
+    porque: 'Juros acima de 2% ao mês andam mais rápido do que qualquer investimento: quitar é o melhor rendimento agora.',
+    onde: 'Primeiro, listar todas as dívidas com o saldo, a parcela e a taxa; depois, fazer sobrar a parcela todo mês; e trocar a mais cara por um crédito mais barato.', acao: ['Ver as dívidas', '#cartao/dividas'] };
   if (tem(fv('renda')) && tem(fv('custo')) && sobra() <= 0) return { id: 'sobra', mundo: 0, titulo: 'Começar a sobrar', valor: `${brl(sobra())} <small>por mês hoje</small>`, fracao: 0,
     porque: 'Sem sobra, nenhum plano anda. O primeiro passo é achar onde sobra, nem que sejam 3% da renda.', acao: ['Ver a gestão financeira', '#cartao/gestao'] };
   const at = reservaAtual(), al = reservaIdeal();
+  if (al && tem(at) && at < al * 0.4 - 0.5) { const falta = al * 0.4 - at, n = sobra() > 0 ? Math.ceil(falta / sobra()) : null;
+    return { id: 'reserva-minima', mundo: 2, titulo: 'Chegar à reserva mínima', valor: `${brlC(at)} <small>de ${brlC(al * 0.4)}</small>`, fracao: at / (al * 0.4),
+      porque: 'Até a reserva mínima, todo dinheiro que sobra vai para ela: é ela que segura um imprevisto sem virar dívida.', onde: ONDE_RESERVA + (n ? ` Com a sobra inteira, ${brl(sobra())} por mês, chega em ${n} ${n === 1 ? 'mês' : 'meses'}.` : ''), acao: ['Ver a reserva', '#cartao/reserva'] }; }
   if (al && tem(at) && at < al * 0.7 - 0.5) return { id: 'reserva', mundo: 2, titulo: 'Completar a reserva aceitável', valor: `${brlC(at)} <small>de ${brlC(al * 0.7)}</small>`, fracao: at / (al * 0.7),
-    porque: 'Sem reserva, um imprevisto sai do dinheiro dos objetivos e a data deles anda.', acao: ['Ver a reserva', '#cartao/reserva'] };
+    porque: 'Sem reserva, um imprevisto sai do dinheiro dos objetivos e a data deles anda.', onde: ONDE_RESERVA, junto: juntoDoObjetivo(), acao: ['Ver a reserva', '#cartao/reserva'] };
   if (!R.objetivos.length) return { id: 'objetivo', mundo: 1, titulo: 'Dar nome e data a um objetivo', valor: '1 <small>objetivo com valor e data</small>', fracao: 0,
     porque: 'Um objetivo com valor e data diz para onde vai a sobra. É o que dá sentido a todo o resto.', acao: ['Criar um objetivo', '#cartao/objetivos'] };
   if (al && tem(at) && at < al - 0.5) return { id: 'reserva-ideal', mundo: 2, titulo: 'Completar a reserva ideal', valor: `${brlC(at)} <small>de ${brlC(al)}</small>`, fracao: at / al,
-    porque: 'Com a reserva ideal, um imprevisto longo não toca no dinheiro dos objetivos.', acao: ['Ver a reserva', '#cartao/reserva'] };
+    porque: 'Com a reserva ideal, um imprevisto longo não toca no dinheiro dos objetivos.', onde: ONDE_RESERVA, junto: juntoDoObjetivo(), acao: ['Ver a reserva', '#cartao/reserva'] };
   const curtos = objetivos().filter(o => o.tipo !== 'liberdade' && !o.complementar), atras = curtos.filter(o => o.aporte < necessario(o) - 0.5);
   if (atras.length) { const o = atras[0]; return { id: 'focar', mundo: 3, titulo: `Pôr o dinheiro onde ${o.nome} está`, valor: `${brl(o.aporte)} <small>de ${brl(necessario(o))} por mês</small>`, fracao: o.aporte / necessario(o),
     porque: `No ritmo de hoje, ${o.nome} não chega na data. Ajustar o aporte, a data ou o valor é o que põe o objetivo no caminho.`, acao: ['Ver os objetivos', '#cartao/objetivos'] }; }
@@ -1361,6 +1566,14 @@ function regua() {
   if (prot != null && prot < 0.7) return { id: 'proteger', mundo: 4, titulo: 'Proteger o que construiu', valor: `${pct(prot)} <small>protegido</small>`, fracao: prot,
     porque: 'O que foi construído precisa de proteção contra as ameaças críticas antes de buscar mais rendimento.', acao: ['Ver a gestão de riscos', '#cartao/riscos'] };
   return { id: 'otimizar', mundo: 5, titulo: 'Fazer o dinheiro trabalhar mais', valor: '', fracao: 1, porque: 'A base está feita: agora o ganho vem dos impostos, da carteira e da sucessão.', acao: ['Ver os investimentos', '#cartao/politica'] };
+}
+// onde guardar a reserva (o planejador pode trocar o texto no passo que escolheu)
+const ONDE_RESERVA = 'Onde guardar: liquidez diária e baixo risco, como o Tesouro Selic ou um CDB de liquidez diária, fora da conta do dia a dia.';
+// depois da reserva mínima, os objetivos também andam: o mais próximo, com o aporte que fecha na data
+function juntoDoObjetivo() {
+  const o = objetivos().filter(x => x.tipo !== 'liberdade' && !x.complementar && progresso(x) < 1).sort((a, b) => a.data < b.data ? -1 : 1)[0];
+  if (!o) return null; const nec = necessario(o);
+  return { nome: o.nome, href: '#objetivo/' + o.id, txt: `${brl(nec)} por mês até ${mesAno(o.data + '-01')}${o.aporte < nec - 0.5 ? `; hoje vão ${brl(o.aporte)}` : ''}` };
 }
 const mundoAtual = () => { const p = passoAtual(); return p && p.mundo != null ? p.mundo : R.passos.length ? R.passos[R.passos.length - 1].mundo + 1 : 2; };
 
@@ -1706,7 +1919,7 @@ function proximaArea(A) {
 // 8. ROTAS E A CASCA: a mesma para os quatro degraus. Celular: Painel, Objetivos, Tarefas, Plano e Mais; desktop: tudo no
 // menu lateral. O degrau não aparece no menu; aparece só onde é informação (Jornada e Conversas).
 // =====================================================================================================================
-const UI = { grupos: {}, folha: null, toast: null, filtro: 'todas', rascunho: '', exame: null, calc: {}, horizonte: null, aba: {} };
+const UI = { prova: null, marcando: null, reuniaoAberta: null, quiz: {}, ultimaQ: null, linhas: null, grupos: {}, folha: null, toast: null, filtro: 'todas', rascunho: '', exame: null, calc: {}, horizonte: null, aba: {} };
 const rota = () => { const h = decodeURIComponent(location.hash.slice(1)) || 'painel', i = h.indexOf('/'); return i < 0 ? { tela: h, arg: null } : { tela: h.slice(0, i), arg: h.slice(i + 1) }; };
 const ICONES = {
   painel: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>',
@@ -1714,30 +1927,32 @@ const ICONES = {
   tarefas: '<svg viewBox="0 0 24 24"><path d="M4 6h3M4 12h3M4 18h3"/><path d="M10 6h10M10 12h10M10 18h10"/></svg>',
   plano: '<svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6M9 18h3"/></svg>',
   realizado: '<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  saber: '<svg viewBox="0 0 24 24"><path d="M5 4.5h10.5A3.5 3.5 0 0 1 19 8v12H8.5A3.5 3.5 0 0 1 5 16.5z"/><path d="M5 16.5A3.5 3.5 0 0 1 8.5 13H19"/></svg>',
   jornada: '<svg viewBox="0 0 24 24"><path d="M4 19c4 0 4-6 8-6s4-6 8-6"/><circle cx="4" cy="19" r="1.5"/><circle cx="20" cy="7" r="1.5"/></svg>',
   conversas: '<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>',
   mais: '<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>',
 };
-const LATERAL = [['painel', 'Painel'], ['objetivos', 'Objetivos'], ['tarefas', 'Tarefas'], ['plano', 'Plano'], ['realizado', 'Realizado'], ['jornada', 'Jornada']];
+const LATERAL = [['painel', 'Painel'], ['objetivos', 'Objetivos'], ['tarefas', 'Tarefas'], ['saber', 'Saber'], ['plano', 'Plano'], ['realizado', 'Realizado'], ['jornada', 'Jornada']];
 const BAIXO = [['painel', 'Painel'], ['objetivos', 'Objetivos'], ['tarefas', 'Tarefas'], ['plano', 'Plano'], ['mais', 'Mais']];
-const TITULOS = { painel: 'Painel', objetivos: 'Objetivos', tarefas: 'Tarefas', plano: 'Plano', realizado: 'Realizado', jornada: 'Jornada', conversas: 'Atendimento', passo: 'O passo agora', tarefa: 'Tarefa', exame: 'Exame de saúde financeira', mais: 'Mais' };
-const PAI = { objetivo: 'objetivos', passo: 'painel', tarefa: 'tarefas', conversas: 'painel', cartao: 'plano', exame: 'plano', realizado: 'mais', jornada: 'mais' };
+const TITULOS = { painel: 'Painel', objetivos: 'Objetivos', tarefas: 'Tarefas', plano: 'Plano', realizado: 'Realizado', jornada: 'Jornada', conversas: 'Atendimento', passo: 'O passo agora', tarefa: 'Tarefa', exame: 'Exame de saúde financeira', mais: 'Mais', saber: 'Saber', modulo: 'Saber', prova: 'Saber' };
+const PAI = { objetivo: 'objetivos', passo: 'painel', tarefa: 'tarefas', conversas: 'painel', cartao: 'plano', exame: 'plano', realizado: 'mais', jornada: 'mais', saber: 'mais', modulo: 'saber', prova: 'saber' };
 const aguardando = () => X.conversas.filter(c => c.quem !== 'consultora' && !c.respondida).length;
 const falarCom = () => R.consultora ? 'Falar com a ' + R.consultora.nome : 'Falar com alguém';
 function casca(conteudo) {
-  const { tela, arg } = rota(), ativo = (DESK() && ['realizado', 'jornada'].includes(tela)) ? tela : PAI[tela] && tela !== 'conversas' ? PAI[tela] : tela;
+  const { tela, arg } = rota(), ativo = (DESK() && ['realizado', 'jornada', 'saber'].includes(tela)) ? tela : PAI[tela] && tela !== 'conversas' ? PAI[tela] : tela;
   let titulo = TITULOS[tela] || 'Painel';
   if (tela === 'painel') titulo = saudacao();
   if (tela === 'objetivo') titulo = (objDe(arg) || {}).nome || 'Objetivo';
   if (tela === 'cartao') titulo = (CARTOES.find(c => c.id === arg) || {}).nome || 'Plano';
-  const n = aguardando(), voltar = PAI[tela] && !(DESK() && ['realizado', 'jornada'].includes(tela)) ? `<a class="voltar" href="#${PAI[tela]}" aria-label="Voltar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>` : '';
+  if (tela === 'modulo') titulo = (SABER.find(m => m.id === arg) || {}).titulo || 'Saber';
+  const n = aguardando(), voltar = PAI[tela] && !(DESK() && ['realizado', 'jornada', 'saber'].includes(tela)) ? `<a class="voltar" href="#${PAI[tela]}" aria-label="Voltar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>` : '';
   const falar = `<a class="falar" href="#conversas" aria-label="${esc(falarCom())}${n ? ', ' + n + ' esperando resposta' : ''}" title="${esc(falarCom())}">${ICONES.conversas}${n ? `<span class="cont">${n}</span>` : ''}</a>`;
   const selo = voltar ? '' : `<img class="selo" src="${ICONE_MARCA(false)}" alt="Nord Liberta">`;
   return `${barraDemo()}<div class="casca"><nav class="lateral" aria-label="Menu"><div class="marca"><img src="${LOGO_MARCA}" alt="Nord Liberta"></div><div class="quem">${esc(R.domicilio.titulo)}</div>
       ${LATERAL.map(([id, nome]) => `<a class="item${ativo === id ? ' on' : ''}" href="#${id}">${ICONES[id]}${nome}</a>`).join('')}
       <div class="pe"><a class="item${tela === 'conversas' ? ' on' : ''}" href="#conversas">${ICONES.conversas}Atendimento${n ? ` <span class="chip mar">${n}</span>` : ''}</a></div></nav>
     <div class="coluna"><header class="cab">${voltar}${selo}<h1>${esc(titulo)}</h1>${falar}</header><main id="miolo">${conteudo}</main></div></div>
-    <nav class="nav-baixo" aria-label="Menu">${BAIXO.map(([id, nome]) => `<a class="${ativo === id || (id === 'mais' && ['realizado', 'jornada'].includes(tela)) ? 'on' : ''}" href="#${id}">${ICONES[id]}${nome}</a>`).join('')}</nav>`;
+    <nav class="nav-baixo" aria-label="Menu">${BAIXO.map(([id, nome]) => `<a class="${ativo === id || (id === 'mais' && ['realizado', 'jornada', 'saber'].includes(tela)) ? 'on' : ''}" href="#${id}">${ICONES[id]}${nome}</a>`).join('')}</nav>`;
 }
 // a barra dos exemplos (?demo): a mesma família nas quatro profundidades, e o mesmo plano visto em julho de 2027
 function barraDemo() {
@@ -1753,6 +1968,14 @@ function barraDemo() {
 // 9. AS TELAS
 // =====================================================================================================================
 const DESK = () => matchMedia('(min-width: 900px)').matches;
+// a ilustração da capa do capítulo (a área), do Midjourney; o objetivo do cliente fica com a foto dele
+// foco: a altura (0 a 100) do trecho que aparece na faixa, onde está o assunto da imagem
+const CAPA_AREA = { liberdade: { src: 'ilustras/alternativas/porta-3.webp', foco: 62 } };
+// enquanto a escolha não sai: ?capa=veleiro-2 troca a ilustração (ilustras/alternativas.html compara todas)
+{ const FOCO = { 'porta-1': 42, 'porta-2': 55, 'porta-3': 62, 'porta-4': 42, 'veleiro-1': 78, 'veleiro-2': 75, 'veleiro-3': 75, 'veleiro-4': 78,
+    'ilhas-1': 28, 'ilhas-2': 19, 'ilhas-3': 23, 'ilhas-4': 23, 'pessoa-1': 78, 'pessoa-2': 62, 'pessoa-3': 69, 'pessoa-4': 59,
+    'esfera-1': 23, 'esfera-2': 47, 'esfera-3': 27, 'esfera-4': 39 };
+  const q = new URLSearchParams(location.search).get('capa'); if (q in FOCO) CAPA_AREA.liberdade = { src: `ilustras/alternativas/${q}.webp`, foco: FOCO[q] }; }
 const FUNDO_OBJ = o => o.foto ? `url('${o.foto}')` : o.tipo === 'liberdade' ? 'linear-gradient(135deg,#CFE8D9,#77C094)' : 'linear-gradient(135deg,#EEF1F5,#9FB0C4)';
 const tomDoObj = o => { const nec = necessario(o); return o.aporte >= nec - 0.5 ? ['ok', 'no caminho'] : ['at', `aporte em ${pct(o.aporte / Math.max(1, nec))} do necessário`]; };
 const quandoTxt = o => o.aberta ? (atrasada(o) ? `atrasada há ${difD(o.data, HOJE)} ${difD(o.data, HOJE) === 1 ? 'dia' : 'dias'}` : o.data === HOJE ? 'hoje' : 'até ' + dataBR(o.data)) : '';
@@ -1772,59 +1995,486 @@ const faixaVisitante = () => R.degrau === 'visitante' ? `<div class="faixa-visit
 const linhaProfundidade = (A, compacta) => { const f = profundidadeDoPlano(A), px = proximaArea(A);
   return `<a class="prof" href="${px ? px.href : '#plano'}">${anel(f, compacta ? 46 : 56)}<span><b>O seu plano está ${pct(f)} aprofundado</b><small>${px ? `Próximo: ${esc(px.c.nome)}, ${esc(px.como)}.` : 'Todas as áreas estão preenchidas.'}</small></span></a>`; };
 
-// ---------- Painel: a home. O alto é o propósito e os objetivos; depois o passo, a próxima tarefa, os números, o ritmo ----------
+// ---------- Painel: a tela inicial, só com o que importa agora. A paisagem com o propósito e o passo (o único número
+// grande da tela); o placar do que resolver; as próximas tarefas; a poupança dos últimos meses; os objetivos, cada um com
+// a previsão no ritmo de hoje; o atendimento. O plano área por área fica na aba Plano ----------
+const PAISAGEM = 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1800&q=70&auto=format&fit=crop';   // colinas com névoa ao amanhecer (Unsplash, licença livre); no produto, escolhida e guardada com a marca
 function telaPainel() {
-  const A = areas(), objs = objetivos(), oc = ocorrencias(), abertas = oc.filter(o => o.aberta), prox = abertas[0], passo = passoAtual();
-  const semana = abertas.filter(o => o.data <= addD(HOJE, 7)).length - (prox ? 1 : 0);
-  const frase = R.proposito || (R.degrau === 'visitante' ? 'Um plano para a vida que você quer viver começa por saber onde você está.' : null);
-  const topo = frase ? `<section class="paisagem">${ILUSTRA.travessia}<span class="r">${R.proposito ? 'O propósito' : 'Comece por aqui'}</span><h2>${esc(frase)}</h2></section>` : '';
-  const faixa = objs.length ? `${DESK() || !R.proposito ? '' : `<p class="proposito">${esc(R.proposito)}</p>`}<div class="rotulo">Os objetivos</div><div class="faixa-obj">${objs.map(o => `<a class="obj-mini" href="#objetivo/${o.id}"><div class="foto" style="background-image:${FUNDO_OBJ(o)}"></div><div class="tx"><b>${esc(o.nome)}</b><small>${o.tipo === 'liberdade' ? 'aos ' + o.idade : mesAno(o.data + '-01')} · ${pct(progresso(o))} ${o.tipo === 'liberdade' ? 'do caminho' : 'guardado'}</small><div class="trilho"><i style="width:${(progresso(o) * 100).toFixed(1)}%"></i></div></div></a>`).join('')}</div>`
-    : `<div class="rotulo">Os objetivos</div><a class="card" href="#cartao/objetivos" style="display:block;text-decoration:none"><b style="color:var(--marinho)">Dar nome, valor e data ao primeiro objetivo</b><div class="mut">Pode ser uma viagem, a entrada de uma casa, quitar uma dívida ou a primeira reserva.</div></a>`;
-  const cartaoPasso = passo ? `<div class="rotulo">O passo agora</div><section class="passo"><div class="valor">${passo.valor || esc(passo.titulo)}</div>${passo.fracao != null ? `<div class="trilho fut" style="height:8px"><i style="width:${(clamp(passo.fracao, 0, 1) * 100).toFixed(1)}%"></i></div>` : ''}
-      <p>${esc(passo.titulo)}${passo.pedido && ocorrenciaDe(passo.pedido) && ocorrenciaDe(passo.pedido).aberta ? ' · ' + esc(ocorrenciaDe(passo.pedido).quando) : ''}</p><a class="primaria" href="${passo.acao && !passo.pedido ? passo.acao[1] : '#passo'}" style="display:inline-flex;align-items:center;text-decoration:none">${passo.acao && !passo.pedido ? esc(passo.acao[0]) : 'Ver o passo'}</a></section>`
-    : `<div class="rotulo">O passo agora</div><section class="passo"><p style="margin-top:10px">Os passos de agora estão cumpridos. O próximo é ${R.consultora ? 'conversar com a ' + esc(R.consultora.nome) : 'aprofundar o plano'}.</p></section>`;
+  const A = areas(), oc = ocorrencias(), abertas = oc.filter(o => o.aberta), passo = passoAtual();
+  // a paisagem: o propósito; sem ele, o convite ao visitante ou o porquê do passo
+  const convite = 'Um plano para a vida que você quer viver começa por saber onde você está.', frase = R.proposito || (R.degrau === 'visitante' || !passo ? convite : passo.porque);
+  const pedido = passo && passo.pedido ? ocorrenciaDe(passo.pedido) : null;
+  const cartaoPasso = passo ? `<section class="passo"><span class="r">O passo agora</span><div class="valor">${passo.valor || esc(passo.titulo)}</div>${passo.fracao != null ? `<div class="trilho fut"><i style="width:${(clamp(passo.fracao, 0, 1) * 100).toFixed(1)}%"></i></div>` : ''}
+      <p>${passo.valor ? esc(passo.titulo) : esc(passo.porque)}${pedido && pedido.aberta ? ' · ' + esc(pedido.quando) : ''}</p>${passo.onde ? `<p class="onde">${esc(passo.onde)}</p>` : ''}<a class="primaria" href="${passo.acao && !passo.pedido ? passo.acao[1] : '#passo'}" style="display:inline-flex;align-items:center;text-decoration:none">${passo.acao && !passo.pedido ? esc(passo.acao[0]) : 'Ver o passo'}</a>${passo.junto ? `<a class="junto" href="${passo.junto.href}"><span class="r">E ao mesmo tempo: ${esc(passo.junto.nome)}</span>${esc(passo.junto.txt)}</a>` : ''}</section>`
+    : `<section class="passo"><span class="r">O passo agora</span><p>Os passos de agora estão cumpridos. O próximo é ${R.consultora ? 'conversar com a ' + esc(R.consultora.nome) : 'aprofundar o plano'}.</p></section>`;
+  const pt = fv('patrimonioTotal'), ra = reservaAtual(), ex = exames(), ult = ex[ex.length - 1];
+  const chaves = [tem(pt) ? ['Patrimônio', brlC(+pt), '#cartao/patrimonio'] : null, tem(ra) ? ['Reserva', brlC(ra), '#cartao/reserva'] : null, ult ? ['Saúde financeira', ult.nota + ' <small>de 100</small>', '#cartao/saude'] : null].filter(Boolean);
+  const heroi = `<section class="heroi" style="background-image:url('${PAISAGEM}')"><div><span class="r">${R.proposito ? 'O propósito' : frase === convite ? 'Comece por aqui' : 'Por que este passo'}</span><h2>${esc(frase)}</h2>${chaves.length ? `<div class="chaves">${chaves.map(([r, v, h]) => `<a href="${h}"><small>${r}</small><b>${v}</b></a>`).join('')}</div>` : ''}</div>${cartaoPasso}</section>`;
+  // as tarefas: as três próximas, com a conta da semana no título
+  const seg = addD(HOJE, -((dia(HOJE).getDay() + 6) % 7)), daSemana = oc.filter(o => o.data >= seg && o.data <= addD(seg, 6)), resp = daSemana.filter(o => !o.aberta).length, prox = abertas.slice(0, 3);
   const semTarefa = R.degrau === 'visitante' ? 'As tarefas nascem do plano e chegam com lembrete no WhatsApp. Para recebê-las, crie a sua conta.' : 'Nada em aberto agora.';
-  const tarefa = `<div class="rotulo">A próxima tarefa</div>${prox ? cartaoTarefa(prox) + `<a class="btn link peq" href="#tarefas">${semana > 0 ? `mais ${semana} nesta semana` : 'Todas as tarefas'} &#8250;</a>` : `<div class="aviso">${semTarefa}</div>`}`;
-  // os quatro números, cada um com a origem no toque; só os que existem
-  const ra = reservaAtual(), ri = reservaIdeal(), pt = fv('patrimonioTotal'), esp = RS ? RS.patrimonio.esperado : fv('esperadoFase') || (faseDaVida(fv('idade'), fv('comecou'), fv('idadeAlvo'), fv('custo')) || {}).esperado, ex = exames(), ult = ex[ex.length - 1], ant = ex[ex.length - 2];
-  const nums = [tem(fv('renda')) && tem(fv('custo')) ? ['Sobra do mês', brl(sobra()), `${pct(sobra() / renda())} da renda · ${sobra() / renda() >= 0.195 ? 'dentro' : 'abaixo'} dos 20%`, fo('custo')] : null,
-    tem(ra) ? ['Reserva', brlC(ra), ri ? `alvo ${brlC(ri)} (ideal)` : 'alvo a calcular', fo('reserva')] : null,
-    tem(pt) ? ['Patrimônio', brlC(pt), esp ? `esperado para a fase: ${brlC(esp)}` : 'o que tem, menos o que deve', fo('patrimonioTotal')] : null,
-    ult ? ['Saúde financeira', String(ult.nota), ant ? `era ${ant.nota} em ${mesAno(ant.data)}` : 'de 100', 'exame de ' + dataBRano(ult.data)] : null].filter(Boolean);
-  // os números: nos visuais novos, o guia do plano (as onze áreas, cada uma com o número principal, levando à página
-  // dela); no sóbrio, os quatro números de antes
-  const numeros = VISUAL !== 'sobrio' ? `<div class="rotulo">O seu plano, área por área</div><div class="guia">${CARTOES.map(c => cartaoArea(c, A[c.id], true)).join('')}</div><div class="guia-pe"><a class="btn link peq" href="#plano">Ver o plano em detalhe &#8250;</a></div>`
-    : nums.length ? `<div class="rotulo">Os números</div><div class="numeros">${nums.map(([r, v, s, o]) => `<button class="numero" data-acao="toast" data-txt="${esc(r)}: ${esc(o || 'informado por você')}."><span>${r}</span><b>${v}</b><small>${esc(s)}</small></button>`).join('')}</div>` : '';
-  const aps = oc.filter(o => o.pedido.id === 'aporte' && o.data <= HOJE), plan = soma(aps.map(o => o.valor)), feito = soma(aps.map(o => soma(Object.values(feitoPorObjetivo(o)))));
-  const ritmo = aps.length ? `<div class="rotulo">O ritmo</div><a class="card" href="#realizado" style="display:block;text-decoration:none"><div class="num" style="font-size:21px">${brl(feito)} <span class="mut" style="font-family:var(--sans)">de ${brl(plan)} desde ${MESES_L[+aps[0].mes.slice(5) - 1]}${aps[0].mes.slice(0, 4) !== MES.slice(0, 4) ? ' de ' + aps[0].mes.slice(0, 4) : ''}</span></div><div class="trilho" style="margin:8px 0 6px"><i style="width:${plan ? (clamp(feito / plan, 0, 1) * 100).toFixed(1) : 0}%"></i></div><div class="mut">${aps.slice(-6).map(a => `${MESES[+a.mes.slice(5) - 1]}: ${a.aberta ? 'aguardando' : estadoTxt(a)}`).join(' · ')}</div></a>` : '';
-  const encontro = cartaoAtendimento();
-  // o Painel abre pelo dia (a saudação no título e a semana) e o passo é o destaque: o que fazer agora vem antes do resto
-  const aSemana = semanaPainel(oc);
-  if (!DESK()) return faixaVisitante() + aSemana + cartaoPasso + tarefa + faixa + linhaProfundidade(A, true) + numeros + ritmo + encontro;
-  // no computador, o passo e a tarefa na coluna larga; os objetivos, o aprofundamento e o atendimento ao lado; o guia do
-  // plano ocupa a largura toda embaixo
-  if (VISUAL !== 'sobrio') return faixaVisitante() + aSemana + `<div class="painel"><div class="principal">${topo}${cartaoPasso}${tarefa}</div><div>${faixa}${linhaProfundidade(A)}${encontro}</div></div>${numeros}${ritmo}`;
-  return faixaVisitante() + aSemana + `<div class="painel"><div>${topo}${faixa}${tarefa}${numeros}${ritmo}</div><div>${cartaoPasso}${linhaProfundidade(A)}${encontro}</div></div>`;
+  const doMes = oc.filter(o => o.data.slice(0, 7) === MES), feitas = doMes.filter(o => !o.aberta).length, atras = doMes.filter(o => o.aberta && o.data < HOJE).length;
+  const feitoMes = doMes.length ? `<div class="card duo-nivel"><div class="entre"><span><small>Neste mês</small><b class="nivel-nome">${feitas} de ${doMes.length} ${doMes.length === 1 ? 'feita' : 'feitas'}</b></span><span class="mut">${atras ? atras + (atras === 1 ? ' atrasada' : ' atrasadas') : 'em dia'}</span></div><div class="trilho"><i style="width:${(feitas / doMes.length * 100).toFixed(1)}%"></i></div></div>` : '';
+  const tarefas = `<div class="rotulo">Fazer<a class="mais" href="#tarefas">As tarefas &#8250;</a></div>${daSemana.length ? `<p class="duo-sub">Nesta semana, ${resp} de ${daSemana.length} ${resp === 1 ? 'respondida' : 'respondidas'}.</p>` : prox.length ? '<p class="duo-sub">O que o plano pede, com lembrete.</p>' : ''}${feitoMes}${prox.length ? prox.map(cartaoTarefa).join('') + (abertas.length > prox.length ? `<a class="btn link peq" href="#tarefas">mais ${abertas.length - prox.length} em aberto &#8250;</a>` : '') : `<div class="aviso">${semTarefa}</div>`}`;
+  // os objetivos: cada um com a previsão no ritmo de hoje
+  const objs = objetivos().sort((a, b) => (a.tipo === 'liberdade' ? 0 : 1) - (b.tipo === 'liberdade' ? 0 : 1)), lib = A.liberdade.capa && !objs.some(o => o.tipo === 'liberdade') ? A.liberdade.capa : null;
+  const linhaLib = lib ? `<a class="obj-linha" href="#cartao/liberdade"><span class="thumb" style="background-image:${FUNDO_OBJ({ tipo: 'liberdade' })}"></span><span style="min-width:0"><b>Liberdade financeira</b><small>${lib.big.replace(/<small>/, ', ').replace(/<[^>]+>/g, '')}</small></span>${lib.tom ? `<span class="chip ${lib.tom[0]}">${esc(lib.tom[1])}</span>` : ''}</a>` : '';
+  const objetivosBloco = objs.length || lib ? `<div class="rotulo">Os objetivos<a class="mais" href="#objetivos">Todos &#8250;</a></div><div class="card lista">${linhaLib}${objs.slice(0, 6).map(o => { const t = o.tipo === 'liberdade' && A.liberdade.capa && A.liberdade.capa.tom ? A.liberdade.capa.tom : previsaoDoObj(o);
+      return `<a class="obj-linha" href="#objetivo/${o.id}"><span class="thumb" style="background-image:${FUNDO_OBJ(o)}"></span><span style="min-width:0"><b>${esc(o.nome)}</b><small>${o.tipo === 'liberdade' ? 'aos ' + o.idade : mesAno(o.data + '-01')} · ${pct(progresso(o))} ${o.tipo === 'liberdade' ? 'do caminho' : 'guardado'}${t[2] ? ' · no ritmo de hoje, ' + t[2] : ''}</small><span class="trilho"><i style="width:${(progresso(o) * 100).toFixed(1)}%"></i></span></span><span class="chip ${t[0]}">${t[1]}</span></a>`; }).join('')}</div>`
+    : `<div class="rotulo">Os objetivos</div><a class="card" href="#cartao/objetivos" style="display:block;text-decoration:none"><b style="color:var(--marinho)">Dar nome, valor e data ao primeiro objetivo</b><div class="mut">Pode ser uma viagem, a entrada de uma casa, quitar uma dívida ou a primeira reserva.</div></a>`;
+  const placar = placarPainel(A, abertas), poup = poupancaPainel(oc), doze = dozeMeses(oc), teto = tetoPainel(), encontro = cartaoAtendimento();
+  // o fazer e o saber: as duas partes de melhorar o futuro financeiro, lado a lado
+  const duo = `<section class="duo"><div class="duo-cab"><h2>Melhorar o futuro financeiro</h2><p>Um bom plano tem duas partes: fazer e saber.</p></div><div class="duo-cols"><div class="duo-col">${tarefas}</div><div class="duo-col">${saberPainel()}</div></div></section>`;
+  if (!DESK()) return faixaVisitante() + heroi + duo + placar + teto + objetivosBloco + poup + doze + encontro;
+  return faixaVisitante() + heroi + duo + `<div class="painel"><div class="principal">${placar}${objetivosBloco}</div><div>${teto}${poup}${doze}${encontro}</div></div>`;
+}
+// o placar: o que mais importa resolver, em até quatro linhas. As tarefas atrasadas; as áreas do plano em alerta (as
+// críticas primeiro); a próxima área a aprofundar, com a profundidade do plano inteiro no anel
+function placarPainel(A, abertas) {
+  const it = [], atr = abertas.filter(atrasada);
+  if (atr.length) it.push({ ic: ICONES.tarefas, t: atr.length === 1 ? '1 tarefa atrasada' : atr.length + ' tarefas atrasadas', s: (atr.length === 1 ? '' : 'a mais antiga: ') + esc(atr[0].titulo), h: '#tarefas', tom: 'at' });
+  const alertas = CARTOES.map(c => ({ c, tom: A[c.id].capa && A[c.id].capa.tom })).filter(x => x.c.id !== 'objetivos' && x.tom && x.tom[0] !== 'ok').sort((a, b) => (a.tom[0] === 'crit' ? 0 : 1) - (b.tom[0] === 'crit' ? 0 : 1));
+  alertas.slice(0, 3 - it.length).forEach(x => it.push({ ic: iconeArea(x.c.id), t: esc(x.c.nome), s: esc(x.tom[1]), h: '#cartao/' + x.c.id, tom: x.tom[0] }));
+  const f = profundidadeDoPlano(A), px = proximaArea(A);
+  if (px) it.push({ ic: anel(f, 36), t: 'Aprofundar ' + esc(px.c.nome), s: `${esc(px.como)} · o plano está ${pct(f)} preenchido`, h: px.href });
+  if (!it.length) return '';
+  return `<div class="rotulo">O que resolver</div><div class="card placar">${it.map(i => `<a href="${i.h}"><span class="ic">${i.ic}</span><span class="tx"><b>${i.t}</b><small${i.tom ? ` class="${i.tom}"` : ''}>${i.s}</small></span><span class="seta" aria-hidden="true">&#8250;</span></a>`).join('')}</div>`;
+}
+// a poupança: os meses seguidos com o aporte feito, os últimos doze meses um a um e o que ficou faltando nos que falharam
+function poupancaPainel(oc) {
+  const aps = oc.filter(o => o.pedido.id === 'aporte' && o.mes <= MES).slice(-12);
+  if (!aps.length) return '';
+  // a sequência conta os meses seguidos com o aporte feito, do mais recente para trás; o mês ainda em aberto não quebra
+  let seq = 0; for (const a of [...aps].reverse()) { if (['feita', 'outro'].includes(a.estado)) seq++; else if (!a.aberta) break; }
+  const feito = a => soma(Object.values(feitoPorObjetivo(a)));
+  const faltas = aps.filter(a => !a.aberta && !['feita', 'outro'].includes(a.estado)).map(a => ({ mes: a.mes, falta: a.valor - feito(a) }));
+  const nomeMes = m => MESES_L[+m.slice(5) - 1], ponta = m => MESES[+m.slice(5) - 1] + '/' + m.slice(2, 4);
+  const celas = aps.map(a => { const st = a.aberta ? 'a' : ['feita', 'outro'].includes(a.estado) ? 'f' : a.estado === 'parcial' ? 'p' : 'n';
+    return `<i class="${st}" title="${nomeMes(a.mes)}: ${a.aberta ? 'aguardando' : estadoTxt(a) + (st === 'p' ? ', ' + brl(feito(a)) + ' de ' + brl(a.valor) : '')}"></i>`; }).join('');
+  return `<div class="rotulo">A poupança</div><a class="card poup" href="#realizado"><div class="num">${seq} <small>${seq === 1 ? 'mês seguido' : 'meses seguidos'}</small></div><div class="mut">com o aporte feito</div>
+    <div class="meses" aria-label="Os últimos ${aps.length} meses">${celas}</div><div class="pontas" style="--n:${aps.length}">${aps.length >= 6 ? `<span>${ponta(aps[0].mes)}</span><span>${ponta(aps[aps.length - 1].mes)}</span>` : `<span style="grid-column:1/-1">desde ${nomeMes(aps[0].mes)}${aps[0].mes.slice(0, 4) !== MES.slice(0, 4) ? ' de ' + aps[0].mes.slice(0, 4) : ''}</span>`}</div>
+    <div class="mut">${faltas.length ? `Ficou faltando ${brl(soma(faltas.map(f => f.falta)))} em ${nomesJuntos(faltas.map(f => nomeMes(f.mes)))}` : 'Nenhum mês ficou faltando'}</div></a>`;
+}
+// os 12 meses: o que vem (a renda, o presente e o futuro, pelo orçamento do plano mês a mês) e o balanço do que foi
+// combinado e feito nos aportes. O que ficou para trás entra nos próximos 12 meses, para compensar
+function dozeMeses(oc) {
+  const meses = [...Array(12)].map((_, k) => orcadoNoMes(addM(MES, k))).filter(Boolean);
+  if (meses.length < 12) return '';
+  const ent = soma(meses.map(m => m.entradas)), fut = soma(meses.map(m => Math.max(0, m.futuro))), pres = ent - fut;
+  // o balanço: os aportes já respondidos dos últimos 12 meses; o que ainda está em aberto não conta como falta
+  const aps = oc.filter(o => o.pedido.id === 'aporte' && !o.aberta && o.mes > addM(MES, -12) && o.mes <= MES);
+  const esperado = soma(aps.map(o => o.valor)), feito = soma(aps.map(o => soma(Object.values(feitoPorObjetivo(o))))), atras = esperado - feito;
+  const desde = aps.length ? (aps[0].mes > addM(MES, -11) ? 'desde ' + MESES_L[+aps[0].mes.slice(5) - 1] + (aps[0].mes.slice(0, 4) !== MES.slice(0, 4) ? ' de ' + aps[0].mes.slice(0, 4) : '') : 'nos últimos 12 meses') : '';
+  const balanco = !aps.length ? '' : atras > 0.5
+    ? `<div class="balanco at"><b>${desde[0].toUpperCase() + desde.slice(1)}, eram ${brlC(esperado)} para os objetivos; foram ${brlC(feito)}.</b>Para compensar os ${brlC(atras)} que ficaram para trás, os próximos 12 meses pedem ${brlC(fut + atras)} para o futuro, ${brl((fut + atras) / 12)} por mês em média.</div>`
+    : `<div class="balanco ok"><b>${desde[0].toUpperCase() + desde.slice(1)}, ${brlC(feito)} para os objetivos, tudo o que foi combinado.</b></div>`;
+  return `<div class="rotulo">Os próximos 12 meses</div><a class="card doze" href="#realizado"><div class="num">${brlC(ent)} <small>de renda prevista</small></div>
+    <div class="partes" role="img" aria-label="${brlC(pres)} para o presente e ${brlC(fut)} para o futuro"><i style="flex:${pres}"></i><i class="fut" style="flex:${fut}"></i></div>
+    <div class="leg2"><span><i></i>${brlC(pres)} para o presente</span><span><i class="fut"></i>${brlC(fut)} para o futuro</span></div>${balanco}</a>`;
+}
+// o teto do mês nos gastos ajustáveis: com o teto combinado, o quanto já foi e o ajuste das semanas que faltam quando
+// passou; sem teto combinado, o teto que fecha os objetivos, quando a sobra de hoje não fecha
+function tetoPainel() {
+  const p = R.pedidos.find(x => x.id === 'teto');
+  if (p) {
+    const ws = tetosDoMes(p, MES), resp = ws.filter(w => w.gasto != null), gasto = soma(resp.map(w => w.gasto)), previsto = soma(resp.map(w => w.base)), passou = gasto - previsto;
+    const semResp = ws.filter(w => w.gasto == null && w.ate < HOJE).length, faltam = ws.filter(w => w.gasto == null && w.ate >= HOJE), resta = p.tetoMes - gasto - soma(ws.filter(w => w.gasto == null && w.ate < HOJE).map(w => w.teto));
+    const msg = !resp.length ? `Esta semana: até ${brl((ws.find(w => w.atual) || ws[0]).teto)}.`
+      : passou > 0.5 ? (resta > 0.5 && faltam.length ? `Passou ${brl(passou)} nas semanas respondidas. Para fechar o mês no teto, ${faltam.length === 1 ? 'a semana que falta fica' : `as ${faltam.length} semanas que faltam ficam`} com ${nomesJuntos(faltam.map(w => brl(w.teto)))}.`
+        : `O mês passou do teto em ${brl(gasto - p.tetoMes > 0 ? gasto - p.tetoMes : passou)}: o valor sai do aporte e entra na compensação dos próximos 12 meses.`)
+      : `Dentro do teto: ${brl(gasto)} de ${brl(previsto)} nas semanas respondidas. ${faltam.length ? `Esta semana: até ${brl((faltam[0] || {}).teto || 0)}.` : ''}`;
+    return `<div class="rotulo">O teto do mês</div><a class="card teto" href="#tarefas"><div class="num">${brl(p.tetoMes)} <small>nos gastos ajustáveis${tem(fv('fixas')) ? ', as fixas à parte' : ''}</small></div>
+      <div class="trilho${passou > 0.5 ? ' passou' : ''}"><i style="width:${(clamp(gasto / p.tetoMes, 0, 1) * 100).toFixed(1)}%"></i></div><div class="mut">${resp.length ? `${brl(gasto)} gastos em ${resp.length} de ${ws.length} semanas de ${MESES_L[+MES.slice(5) - 1]}` : semResp ? `${semResp} ${semResp === 1 ? 'semana espera' : 'semanas esperam'} o gasto` : MESES_L[+MES.slice(5) - 1]}</div><p class="${passou > 0.5 ? 'at' : ''}">${msg}</p></a>`;
+  }
+  // sem teto combinado: só quando os objetivos pedem mais do que sobra hoje
+  if (!tem(fv('renda')) || !tem(fv('fixas')) || !tem(fv('ajustaveis'))) return '';
+  const objs = objetivos().filter(o => o.tipo !== 'liberdade' && !o.complementar), pedem = soma(objs.map(necessario));
+  if (!objs.length || sobra() >= pedem - 0.5) return '';
+  const tetoSug = renda() - +fv('fixas') - pedem;
+  return `<div class="rotulo">O teto do mês</div><a class="card teto" href="#cartao/gestao">${tetoSug > 0 ? `<div class="num">${brl(tetoSug)} <small>nos gastos ajustáveis</small></div><p>É o teto que fecha os objetivos na data. Hoje ${pl('vocês gastam', 'você gasta')} ${brl(+fv('ajustaveis'))}: são ${brl(+fv('ajustaveis') - tetoSug)} a menos por mês.</p>`
+    : `<p>Os objetivos pedem ${brl(pedem)} por mês, mais do que a renda deixa depois das despesas fixas. A data ou o valor de algum deles precisa mudar.</p>`}</a>`;
+}
+// =====================================================================================================================
+// AS DUAS LINHAS DOS OBJETIVOS. Em cima, quando a família sonha realizar cada objetivo; embaixo, quando ele chega com o
+// dinheiro que vai para o futuro. O controle muda quanto vai por mês (o que sai do presente) e soma uma renda extra; os
+// marcos de baixo andam em direção aos do sonho. A mesma simulação dá o "atrasa" do Painel, para as telas não
+// discordarem: o total do mês se divide como hoje e o objetivo que chega libera o aporte dele para os que faltam
+// =====================================================================================================================
+const itensDasLinhas = () => objetivos().filter(o => o.valor > 0 && o.data).sort((a, b) => (a.tipo === 'liberdade') - (b.tipo === 'liberdade') || (a.data < b.data ? -1 : 1));
+const maxM = (a, b) => a > b ? a : b;
+const aporteDeHoje = itens => soma(itens.map(o => o.aporte || 0));
+// nenhum objetivo chega antes da data-alvo: cada um recebe no máximo o que o leva até lá na data (a liberdade do plano
+// publicado que fecha, o aporte do plano); o que passa disso vai para os que ainda estão atrasados. Quando todos estão no
+// teto, o resto não tem para onde ir: é o que não precisa ser poupado
+function simularLinhas(itens, total) {
+  const base = aporteDeHoje(itens), anc = liberdadeAncorada();
+  const st = itens.map(o => { const g = guardado(o.id); return { w: base ? o.aporte || 0 : 1, fixo: o.aporte || 0, s: g, r: o.taxa || 0, v: o.valor, lib: o.tipo === 'liberdade', n: difM(MES, o.data), a: 0, fim: g >= o.valor - 0.5 ? 0 : null }; });
+  const teto = (x, k) => { if (anc && x.lib) return x.fixo; const n = x.n - k + 1; if (n <= 0) return Infinity;
+    const c = Math.pow(1 + x.r, n), falta = x.v - x.s * c; return falta <= 0 ? 0 : x.r ? falta * x.r / (c - 1) : falta / n; };
+  const reparte = (grupo, valor) => { const W = soma(grupo.map(x => x.w)); grupo.forEach(x => { x.a += W ? valor * x.w / W : valor / grupo.length; }); };
+  for (let k = 1; k <= 600 && st.some(x => x.fim == null); k++) {
+    const vivos = st.filter(x => x.fim == null); vivos.forEach(x => { x.a = 0; x.t = Math.max(0, teto(x, k)); });
+    let livres = vivos, resto = total;
+    while (resto > 0.01 && livres.length) { reparte(livres, resto); resto = 0;
+      livres.forEach(x => { if (x.a > x.t) { resto += x.a - x.t; x.a = x.t; } }); livres = livres.filter(x => x.a < x.t); }
+    vivos.forEach(x => { x.s = x.s * (1 + x.r) + x.a; if (x.s >= x.v - 0.5) x.fim = k; });
+  }
+  return st.map(x => x.fim);   // meses a partir de hoje; null quando não chega em 50 anos
+}
+// a liberdade do plano publicado que fecha: a data é a do plano (que conta o crescimento da renda); o controle só move a
+// diferença em relação ao ritmo de hoje
+const liberdadeAncorada = () => R.degrau === 'completo' && RS && RS.liberdade && RS.liberdade.idade != null && !RS.liberdade.forcada;
+function datasDasLinhas(itens, total) {
+  const f = simularLinhas(itens, total), hoje = liberdadeAncorada() ? simularLinhas(itens, aporteDeHoje(itens)) : null;
+  return itens.map((o, i) => f[i] == null ? null : maxM(o.data, o.tipo === 'liberdade' && hoje && hoje[i] != null ? addM(o.data, f[i] - hoje[i]) : addM(MES, f[i])));
+}
+// o ritmo de hoje, uma vez por desenho, para o Painel e os Objetivos dizerem o mesmo
+let PREV_CACHE = null;
+function previsoesDeHoje() {
+  if (PREV_CACHE) return PREV_CACHE;
+  const itens = itensDasLinhas(), d = datasDasLinhas(itens, aporteDeHoje(itens));
+  return PREV_CACHE = Object.fromEntries(itens.map((o, i) => [o.id, d[i]]));
+}
+const atrasoTxt = d => d === 0 ? 'na data' : d < 0 ? `adianta ${-d >= 24 ? Math.round(-d / 12) + ' anos' : -d + (d === -1 ? ' mês' : ' meses')}` : `atrasa ${d >= 24 ? Math.round(d / 12) + ' anos' : d + (d === 1 ? ' mês' : ' meses')}`;
+// o total que põe todos os sonhos na data, procurado entre zero e a renda inteira; null quando nem a renda inteira fecha
+function totalQueFecha(itens) {
+  const fecha = t => datasDasLinhas(itens, t).every((d, i) => d != null && d <= itens[i].data);
+  let lo = 0, hi = Math.max(renda(), aporteDeHoje(itens) * 4);
+  if (!fecha(hi)) return null;
+  for (let k = 0; k < 30; k++) { const m = (lo + hi) / 2; if (fecha(m)) hi = m; else lo = m; }
+  return Math.ceil(hi / 50) * 50;
+}
+function estadoDasLinhas(itens, L, ini, fim) {
+  const datas = datasDasLinhas(itens, L.d + (L.extra ? L.e : 0)), span = Math.max(1, difM(ini, fim)), x = m => clamp(difM(ini, m) / span, 0, 1) * 100;
+  return itens.map((o, i) => { const p = datas[i], d = p ? difM(o.data, p) : null;
+    return { i, sonho: x(o.data), plano: p ? x(p) : 100, nunca: !p, d, chip: !p ? ['at', 'não chega em 50 anos'] : d > 0 ? ['at', atrasoTxt(d)] : ['ok', atrasoTxt(d)],
+      txt: `sonho ${mesAno(o.data + '-01')}${idadeEm_(o.data)} · plano ${p ? mesAno(p + '-01') + idadeEm_(p) : 'depois de 50 anos'}` }; });
+}
+const idadeEm_ = m => tem(fv('idade')) ? ` (aos ${Math.floor(+fv('idade') + difM(MES, m) / 12)})` : '';
+function textosDasLinhas(itens, L, fecha) {
+  const c = custo(), dif = L.d - aporteDeHoje(itens), extra = L.extra && L.e > 0 ? ` A renda extra, ${brl(L.e)}, vai inteira para os objetivos.` : '';
+  const presente = !c ? '' : Math.abs(dif) < 0.5 ? `O presente segue com ${brl(c)} por mês.${extra}` : dif > 0 ? `O presente fica com ${brl(dif)} a menos por mês: ${brl(c - dif)}.${extra}` : `O presente ganha ${brl(-dif)} por mês: ${brl(c - dif)}.${extra}`;
+  const precisa = fecha == null ? 'Nem com a renda inteira todos os sonhos chegam na data: vale rever a data ou o valor de algum deles.'
+    : L.d + (L.extra ? L.e : 0) > fecha ? `Todos chegam na data com ${brl(Math.max(0, fecha - (L.extra ? L.e : 0)))} por mês${L.extra && L.e ? ', somando a renda extra' : ''}. O que passar disso não adianta nenhum objetivo.`
+    : `Para todos chegarem na data: ${brl(Math.max(0, fecha - (L.extra ? L.e : 0)))} por mês${L.extra && L.e ? ', somando a renda extra' : ''}.`;
+  return { d: `${brl(L.d)} por mês`, e: `${brl(L.e)} por mês`, presente, precisa };
+}
+function linhasDosObjetivos() {
+  const itens = itensDasLinhas(); if (!itens.length) return '';
+  const base = Math.round(aporteDeHoje(itens)), fecha = totalQueFecha(itens);
+  if (!UI.linhas || UI.linhas.base !== base) UI.linhas = { base, d: base, e: 0, extra: false };
+  const L = UI.linhas, min = Math.max(0, Math.floor(base * 0.5 / 50) * 50), max = Math.ceil(Math.max(base * 2.5, (fecha || 0) * 1.15, base + 500) / 50) * 50;
+  // o eixo: de hoje até o mais longe entre os sonhos e o plano no menor esforço, até 40 anos
+  const pior = datasDasLinhas(itens, min), lim = addM(MES, 480);
+  let fim = itens.reduce((m, o, i) => [o.data, pior[i] || lim].reduce((a, b) => b > a ? b : a, m), MES); fim = addM(fim > lim ? lim : fim, 12);
+  const ini = MES, anos = difM(ini, fim) / 12, passo = anos <= 10 ? 2 : anos <= 25 ? 5 : 10, idade = tem(fv('idade')) ? +fv('idade') : null;
+  const ticks = []; for (let a = 0; a <= anos; a += passo) ticks.push(`<span style="left:${(a / anos * 100).toFixed(2)}%">${idade != null ? (idade + a) + (a ? '' : ' anos') : +MES.slice(0, 4) + a}</span>`);
+  const est = estadoDasLinhas(itens, L, ini, fim), tx = textosDasLinhas(itens, L, fecha);
+  const tk = (o, i, x, cls) => `<span class="tk${cls}" data-i="${i}" style="left:${x.toFixed(2)}%;background-image:${FUNDO_OBJ(o)}" title="${esc(o.nome)}"><em>${i + 1}</em></span>`;
+  const faixa = e => `left:${Math.min(e.sonho, e.plano).toFixed(2)}%;width:${Math.abs(e.plano - e.sonho).toFixed(2)}%`;
+  return `<div class="card linhas-obj" data-ini="${ini}" data-fim="${fim}"><div class="entre"><h3 style="margin:0">O sonho e o plano</h3><span class="mut" data-out="resumo">${resumoLinhas(est)}</span></div>
+    <p class="mut" style="margin:4px 0 0">Em cima, quando ${pl('vocês querem', 'você quer')} realizar cada objetivo. Embaixo, quando ele chega com o que vai para o futuro.</p>
+    <div class="linhas" role="img" aria-label="As datas sonhadas e as do plano">
+      <div class="trilha"><span class="tt">O sonho</span>${itens.map((o, i) => tk(o, i, est[i].sonho, ' sonho')).join('')}</div>
+      <div class="trilha"><span class="tt">O plano</span>${est.map(e => `<i class="faixa${e.d > 0 || e.nunca ? '' : ' boa'}" data-i="${e.i}" style="${faixa(e)}"></i>`).join('')}${itens.map((o, i) => tk(o, i, est[i].plano, est[i].nunca ? ' nunca' : '')).join('')}</div>
+      <div class="eixo">${ticks.join('')}</div></div>
+    <div class="ctl"><label for="ln-d">Para os objetivos <b data-out="d">${tx.d}</b></label><input id="ln-d" type="range" data-linhas="d" min="${min}" max="${max}" step="50" value="${L.d}">
+      <div class="marcas-ctl"><span>${brl(min)}</span><span>hoje: ${brl(base)}</span><span>${brl(max)}</span></div>
+      <p class="mut" data-out="presente">${tx.presente}</p>
+      <label class="chk"><input type="checkbox" data-linhas="extra"${L.extra ? ' checked' : ''}> Somar uma renda extra</label>
+      <div class="extra"${L.extra ? '' : ' hidden'}><label for="ln-e">Renda extra <b data-out="e">${tx.e}</b></label><input id="ln-e" type="range" data-linhas="e" min="0" max="5000" step="100" value="${L.e}"></div>
+      <p class="precisa"><span data-out="precisa">${tx.precisa}</span>${fecha != null ? ' <button class="btn link peq" data-acao="linhas-fecha">Ver assim</button>' : ''}</p></div>
+    <ol class="linhas-leg">${itens.map((o, i) => `<li data-i="${i}"><span class="n">${i + 1}</span><span class="tx"><b>${esc(o.nome)}</b><small data-out="txt">${est[i].txt}</small></span><span class="chip ${est[i].chip[0]}" data-out="chip">${est[i].chip[1]}</span></li>`).join('')}</ol>
+    </div>`;
+}
+const resumoLinhas = est => { const na = est.filter(e => !e.nunca && e.d <= 0).length; return `${na} de ${est.length} na data`; };
+// o controle mexe só nos marcos e nos textos, para os marcos deslizarem
+function atualizarLinhas() {
+  const raiz = document.querySelector('.linhas-obj'); if (!raiz || !UI.linhas) return;
+  const itens = itensDasLinhas(), L = UI.linhas, est = estadoDasLinhas(itens, L, raiz.dataset.ini, raiz.dataset.fim), tx = textosDasLinhas(itens, L, totalQueFecha(itens));
+  raiz.querySelectorAll('.tk:not(.sonho)').forEach(t => { const e = est[+t.dataset.i]; t.style.left = e.plano.toFixed(2) + '%'; t.classList.toggle('nunca', e.nunca); });
+  raiz.querySelectorAll('.faixa').forEach(f => { const e = est[+f.dataset.i]; f.style.left = Math.min(e.sonho, e.plano).toFixed(2) + '%'; f.style.width = Math.abs(e.plano - e.sonho).toFixed(2) + '%'; f.classList.toggle('boa', !(e.d > 0 || e.nunca)); });
+  raiz.querySelectorAll('.linhas-leg li').forEach(li => { const e = est[+li.dataset.i]; li.querySelector('[data-out="txt"]').textContent = e.txt; const c = li.querySelector('[data-out="chip"]'); c.className = 'chip ' + e.chip[0]; c.textContent = e.chip[1]; });
+  ['d', 'e', 'presente', 'precisa'].forEach(k => { const n = raiz.querySelector(`[data-out="${k}"]`); if (n) n.textContent = tx[k]; });
+  raiz.querySelector('[data-out="resumo"]').textContent = resumoLinhas(est);
+  raiz.querySelector('.extra').hidden = !L.extra;
 }
 
-// ---------- A semana no alto do Painel: quantas tarefas da semana já foram respondidas, a sequência de meses com o
-// aporte feito e os sete dias, cada um com o estado das tarefas que vencem nele ----------
-const DIAS_CURTOS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
-function semanaPainel(oc) {
-  if (!R.pedidos.length) return '';
-  const seg = addD(HOJE, -((dia(HOJE).getDay() + 6) % 7)), dom = addD(seg, 6), daSemana = oc.filter(o => o.data >= seg && o.data <= dom);
-  const dias = DIAS_CURTOS.map((n, i) => { const data = addD(seg, i), l = daSemana.filter(o => o.data === data);
-    const st = !l.length ? '' : l.some(o => o.aberta) ? (data < HOJE ? 'atraso' : 'pendente') : l.every(o => ['feita', 'outro'].includes(o.estado)) ? 'feito' : 'respondido';
-    const txt = !l.length ? 'sem tarefa' : l.map(o => o.titulo + (o.aberta ? ' (em aberto)' : ' (' + estadoTxt(o) + ')')).join('; ');
-    return `<li class="${st}${data === HOJE ? ' hoje' : ''}" title="${esc(txt)}"><span>${n}</span><i>${+data.slice(8)}</i></li>`; }).join('');
-  // a sequência conta os meses seguidos com o aporte feito, do mais recente para trás; o do mês ainda em aberto não quebra
-  const aps = oc.filter(o => o.pedido.id === 'aporte' && o.data <= HOJE).sort((a, b) => a.data < b.data ? 1 : -1);
-  let seq = 0; for (const [i, o] of aps.entries()) { if (o.estado === 'feita') seq++; else if (!(i === 0 && o.aberta)) break; }
-  const resp = daSemana.filter(o => !o.aberta).length;
-  return `<section class="semana-painel" aria-label="A semana"><div class="sp-num"><span class="etiqueta">Nesta semana</span><b>${daSemana.length ? resp + ' de ' + daSemana.length : 'Livre'}</b><small>${daSemana.length ? (daSemana.length === 1 ? 'tarefa respondida' : 'tarefas respondidas') : 'nenhuma tarefa vence'}</small></div>
-    ${seq ? `<div class="sp-num"><span class="etiqueta">Sequência</span><b>${seq} ${seq === 1 ? 'mês' : 'meses'}</b><small>com o aporte feito</small></div>` : ''}
-    <ol class="sp-dias" aria-label="Os dias da semana">${dias}</ol></section>`;
+// =====================================================================================================================
+// SABER. Um bom planejamento tem duas partes: saber e fazer. As tarefas cuidam do fazer; a trilha cuida do saber. Cada
+// módulo é um conceito com três perguntas: quem acerta duas passa; quem não acerta lê o conceito e refaz. Os módulos se
+// agrupam em capítulos (CAPITULOS). As respostas ficam na execução do cliente (X.saber, X.saberCap e X.conquistas)
+// =====================================================================================================================
+const SABER = [
+  { id: 'reserva', titulo: 'Reserva de emergência', sub: 'O dinheiro que segura um imprevisto',
+    conceito: 'A reserva de emergência paga um imprevisto (perda de renda, saúde, conserto) sem virar dívida e sem mexer no dinheiro dos objetivos. Fica numa aplicação de liquidez diária e baixo risco, separada da conta do dia a dia. O tamanho vem do custo de vida: quanto mais instável a renda e mais dependentes, mais meses.',
+    perguntas: [
+      { q: 'Onde a reserva de emergência deve ficar?', o: ['Em ações, para render mais', 'Numa aplicação de liquidez diária e baixo risco', 'No imóvel da família'], c: 1, por: 'A reserva precisa estar disponível no mesmo dia e sem risco de valer menos na hora do aperto.' },
+      { q: 'Quem é autônomo, comparado a quem é CLT, costuma precisar de uma reserva…', o: ['menor', 'igual', 'maior'], c: 2, por: 'A renda do autônomo oscila e não tem seguro-desemprego: a reserva cobre mais meses.' },
+      { q: 'Usar a reserva para pagar a viagem de férias é…', o: ['um bom uso, já que o dinheiro está parado', 'um desvio: férias são um objetivo, com aporte próprio', 'indiferente'], c: 1, por: 'Gasto previsível é objetivo. A reserva é só para o que não dá para prever.' }] },
+  { id: 'juros', titulo: 'Juros compostos', sub: 'Por que o tempo pesa tanto',
+    conceito: 'Nos juros compostos, o rendimento de cada mês passa a render também nos meses seguintes. Por isso o tempo pesa mais do que o valor: quem começa cedo precisa guardar bem menos para chegar ao mesmo lugar. A 1% ao mês, o dinheiro dobra em cerca de 70 meses.',
+    perguntas: [
+      { q: 'R$ 1.000 a 1% ao mês, por 12 meses, viram aproximadamente…', o: ['R$ 1.120', 'R$ 1.127', 'R$ 1.200'], c: 1, por: '1,01 elevado a 12 dá 1,1268: os juros de cada mês rendem nos seguintes, e o total passa dos R$ 1.120 dos juros simples.' },
+      { q: 'Por que começar a investir cedo faz tanta diferença?', o: ['Porque os rendimentos passam a render também', 'Porque a taxa é maior para quem é jovem', 'Não faz diferença'], c: 0, por: 'É o efeito dos juros sobre juros: mais tempo, mais rodadas de rendimento sobre rendimento.' },
+      { q: 'A 1% ao mês, o dinheiro dobra em cerca de…', o: ['2 anos', '6 anos', '12 anos'], c: 1, por: '1,01 elevado a 70 é cerca de 2: uns 70 meses, quase 6 anos.' }] },
+  { id: 'inflacao', titulo: 'Inflação e juro real', sub: 'O que o dinheiro compra',
+    conceito: 'A inflação é a alta geral dos preços; no Brasil, o índice oficial é o IPCA. O que importa num investimento é o juro real: o quanto ele rende acima da inflação. Dinheiro parado perde poder de compra todo ano.',
+    perguntas: [
+      { q: 'Um investimento rendeu 10% num ano em que a inflação foi 4%. O ganho real foi de cerca de…', o: ['6%', '5,8%', '14%'], c: 1, por: '1,10 dividido por 1,04 dá 1,0577: um pouco menos que a subtração simples.' },
+      { q: 'O índice oficial de inflação no Brasil é o…', o: ['CDI', 'IPCA', 'Ibovespa'], c: 1, por: 'O IPCA, do IBGE, é o índice da meta de inflação do Banco Central.' },
+      { q: 'Dinheiro parado por 10 anos, com inflação de 4% ao ano, perde cerca de…', o: ['4% do poder de compra', 'um terço do poder de compra', 'nada, o valor continua o mesmo'], c: 1, por: '1 dividido por 1,04 elevado a 10 dá 0,68: um terço a menos do que comprava.' }] },
+  { id: 'cdi', titulo: 'CDI e Selic', sub: 'A régua da renda fixa',
+    conceito: 'A Selic é a taxa básica de juros, definida pelo Banco Central. O CDI é a taxa dos empréstimos de um dia entre os bancos e anda colado na Selic. É a régua da renda fixa pós-fixada: um CDB que paga 100% do CDI rende o mesmo que o CDI no período, antes do imposto.',
+    perguntas: [
+      { q: 'Num ano em que o CDI foi 11%, um CDB que paga 100% do CDI rende…', o: ['11%, antes do imposto', '11% ao mês', '100% do valor aplicado'], c: 0, por: 'Ele acompanha o CDI do período. O imposto de renda sai depois, sobre o rendimento.' },
+      { q: 'O CDI anda colado em qual taxa?', o: ['Na Selic', 'No IPCA', 'No dólar'], c: 0, por: 'O Banco Central define a Selic, e o CDI fica quase igual a ela.' },
+      { q: 'Se a Selic cai, um investimento atrelado ao CDI…', o: ['passa a render menos', 'passa a render mais', 'continua igual'], c: 0, por: 'O pós-fixado acompanha a taxa do momento: se ela cai, o rendimento cai junto.' }] },
+  { id: 'rendafixa', titulo: 'Renda fixa e o FGC', sub: 'CDB, Tesouro, LCI e LCA',
+    conceito: 'Na renda fixa, você empresta dinheiro e sabe a regra do rendimento na hora de aplicar. O Tesouro Direto empresta ao governo federal; CDB, LCI e LCA emprestam a bancos e têm a garantia do FGC, de até R$ 250 mil por CPF em cada instituição. LCI e LCA são isentas de imposto de renda para a pessoa física.',
+    perguntas: [
+      { q: 'O FGC garante, por CPF e por instituição, até…', o: ['R$ 100 mil', 'R$ 250 mil', 'R$ 1 milhão'], c: 1, por: 'Até R$ 250 mil por CPF em cada instituição, com um teto global de R$ 1 milhão a cada quatro anos.' },
+      { q: 'LCI e LCA, para a pessoa física, são…', o: ['isentas de imposto de renda', 'tributadas como o CDB', 'tributadas na fonte em 15%'], c: 0, por: 'São isentas, por isso uma LCI a 90% do CDI pode render mais que um CDB a 100%.' },
+      { q: 'O Tesouro Selic é um empréstimo para…', o: ['um banco', 'o governo federal', 'uma empresa'], c: 1, por: 'Os títulos do Tesouro Direto são do governo federal.' }] },
+  { id: 'risco', titulo: 'Liquidez, risco e retorno', sub: 'O triângulo de todo investimento',
+    conceito: 'Todo investimento troca três coisas: liquidez (a facilidade de virar dinheiro sem perder valor), risco (o quanto pode oscilar ou dar errado) e retorno. Não existe o que tenha tudo. Por isso o dinheiro é separado pelo prazo: o de curto prazo pede liquidez; o de longo prazo pode aceitar mais oscilação.',
+    perguntas: [
+      { q: 'Liquidez é…', o: ['o quanto rende', 'a facilidade de virar dinheiro sem perder valor', 'a garantia do FGC'], c: 1, por: 'Um investimento líquido vira dinheiro rápido e pelo preço justo.' },
+      { q: 'Uma promessa de retorno alto e sem risco deve…', o: ['ser aproveitada logo', 'levantar desconfiança', 'ser dividida com a família'], c: 1, por: 'Retorno maior sempre vem com mais risco ou menos liquidez. Sem isso, é sinal de golpe.' },
+      { q: 'Dinheiro para daqui a 15 anos pode…', o: ['aceitar mais oscilação no caminho', 'ficar só na poupança', 'ficar na conta corrente'], c: 0, por: 'Com tempo para esperar a oscilação passar, dá para buscar mais retorno.' }] },
+  { id: 'ir', titulo: 'Imposto nos investimentos', sub: 'A tabela regressiva',
+    conceito: 'Na renda fixa tributada (CDB, Tesouro, fundos de renda fixa), o imposto incide só sobre o rendimento e cai com o tempo: 22,5% até 180 dias, 20% até 360, 17,5% até 720 e 15% acima de 720 dias. Nos primeiros 30 dias ainda há o IOF.',
+    perguntas: [
+      { q: 'Um CDB resgatado depois de 2 anos e 1 mês paga de imposto…', o: ['22,5%', '17,5%', '15%'], c: 2, por: 'Acima de 720 dias, a alíquota é a mínima, 15%.' },
+      { q: 'O imposto de renda do CDB incide sobre…', o: ['o valor total resgatado', 'só o rendimento', 'o valor aplicado'], c: 1, por: 'O valor aplicado volta sem imposto: o IR é sobre o ganho.' },
+      { q: 'O IOF nos investimentos aparece em resgates…', o: ['nos primeiros 30 dias', 'depois de um ano', 'só em ações'], c: 0, por: 'O IOF regressivo vale só até o 30º dia.' }] },
+  { id: 'previdencia', titulo: 'Previdência: PGBL e VGBL', sub: 'Qual faz sentido para você',
+    conceito: 'O PGBL deixa abater até 12% da renda bruta tributável na declaração completa do imposto de renda, mas o imposto do resgate incide sobre o valor total. O VGBL não abate nada, e o imposto do resgate incide só sobre o rendimento. Na tabela regressiva da previdência, a alíquota chega a 10% depois de 10 anos.',
+    perguntas: [
+      { q: 'O PGBL faz mais sentido para quem…', o: ['faz a declaração simplificada', 'faz a declaração completa', 'não declara imposto de renda'], c: 1, por: 'O benefício do PGBL é a dedução, que só existe na declaração completa.' },
+      { q: 'No VGBL, o imposto do resgate incide sobre…', o: ['o valor total', 'só o rendimento', 'nada'], c: 1, por: 'Como não houve dedução na entrada, só o rendimento é tributado.' },
+      { q: 'Na tabela regressiva da previdência, a menor alíquota é…', o: ['15%', '10%', 'zero'], c: 1, por: 'Ela cai 5 pontos a cada dois anos, de 35% até 10% depois de 10 anos.' }] },
+  { id: 'diversificar', titulo: 'Diversificação', sub: 'Não pôr tudo no mesmo lugar',
+    conceito: 'Diversificar é dividir o patrimônio entre tipos de investimento, emissores e instituições, para que um problema num deles não derrube o resto. Não é ter muitos produtos parecidos: é ter partes que reagem de jeitos diferentes.',
+    perguntas: [
+      { q: 'Diversificar serve para…', o: ['garantir o maior retorno', 'reduzir o estrago quando um investimento dá errado', 'pagar menos imposto'], c: 1, por: 'O ganho da diversificação é a proteção: nenhuma parte sozinha decide o resultado.' },
+      { q: 'Ter R$ 600 mil em CDBs de um único banco…', o: ['fica todo coberto pelo FGC', 'deixa a parte acima de R$ 250 mil sem a garantia', 'é proibido'], c: 1, por: 'O FGC cobre até R$ 250 mil por CPF em cada instituição.' },
+      { q: 'Dez fundos que compram as mesmas ações são…', o: ['uma carteira diversificada', 'quase a mesma aposta repetida', 'mais seguros que um fundo só'], c: 1, por: 'Se reagem igual, não protegem um ao outro.' }] },
+  { id: 'marcacao', titulo: 'Marcação a mercado', sub: 'Por que a renda fixa oscila',
+    conceito: 'O preço de um título de renda fixa muda todo dia com os juros do mercado. Quando os juros sobem, os títulos prefixados e os atrelados à inflação que já existem perdem valor no preço de hoje; quando caem, ganham. Quem leva até o vencimento recebe a taxa contratada. Quanto mais longo o título, maior a oscilação.',
+    perguntas: [
+      { q: 'Quando os juros do mercado sobem, o preço de hoje de um título prefixado…', o: ['sobe', 'cai', 'não muda'], c: 1, por: 'O título antigo paga menos que os novos: para alguém comprá-lo, o preço precisa cair.' },
+      { q: 'Quem leva um título prefixado até o vencimento…', o: ['recebe a taxa contratada', 'perde a oscilação do caminho', 'paga o dobro de imposto'], c: 0, por: 'A oscilação só vira perda ou ganho de fato para quem vende antes.' },
+      { q: 'Um Tesouro IPCA+ com vencimento em 20 anos oscila mais porque…', o: ['é longo', 'é do governo', 'paga inflação'], c: 0, por: 'Quanto mais longo, mais a mudança dos juros pesa no preço de hoje.' }] },
+  { id: 'fundos', titulo: 'Fundos: taxas e come-cotas', sub: 'O custo que não aparece',
+    conceito: 'Nos fundos, a taxa de administração é cobrada todo ano sobre o patrimônio, rendendo ou não. A taxa de performance, quando existe, incide só sobre o que passa do índice de referência. Nos fundos abertos, o come-cotas antecipa o imposto de renda em maio e em novembro.',
+    perguntas: [
+      { q: 'O come-cotas acontece em…', o: ['janeiro e julho', 'maio e novembro', 'só no resgate'], c: 1, por: 'Duas vezes por ano, no último dia útil de maio e de novembro.' },
+      { q: 'A taxa de administração é cobrada…', o: ['só quando o fundo rende', 'todo ano, sobre o patrimônio', 'só no resgate'], c: 1, por: 'É um percentual ao ano sobre o que está aplicado, descontado no valor da cota.' },
+      { q: 'A taxa de performance incide sobre…', o: ['todo o rendimento', 'o que passa do índice de referência', 'o valor aplicado'], c: 1, por: 'Ela premia o gestor só pelo que ele entregou acima da régua combinada.' }] },
+  { id: 'sucessao', titulo: 'Sucessão', sub: 'O que acontece com o patrimônio',
+    conceito: 'Na sucessão, o patrimônio passa aos herdeiros pelo inventário, que leva tempo e tem custo: o ITCMD, imposto estadual sobre herança e doação, mais cartório e advogado. Algumas estruturas, como a previdência privada com beneficiários indicados, costumam chegar aos herdeiros sem passar pelo inventário.',
+    perguntas: [
+      { q: 'O ITCMD é um imposto…', o: ['federal sobre a renda', 'estadual sobre herança e doação', 'municipal sobre imóveis'], c: 1, por: 'Cada estado define a alíquota, que pode chegar a 8%.' },
+      { q: 'A previdência privada com beneficiários indicados, na sucessão, costuma…', o: ['entrar no inventário como qualquer bem', 'chegar aos beneficiários sem passar pelo inventário', 'ser perdida'], c: 1, por: 'Por isso ela é usada para dar liquidez à família enquanto o inventário corre.' },
+      { q: 'Um inventário costuma…', o: ['ser resolvido em uma semana', 'levar meses e ter custos de imposto, cartório e advogado', 'não ter custo'], c: 1, por: 'Planejar antes reduz o custo e o tempo da família.' }] },
+];
+// Os capítulos: os grandes temas, cada um com três módulos. Ninguém precisa começar do zero: quem já sabe um capítulo
+// marca "já sei" e prova em cinco perguntas (acertando quatro, o capítulo fica concluído), ou o planejador marca por ele
+// (na área aberta com ?consultor; fica em X.saberCap e X.saber, em "planejador"). Cada capítulo vale duas conquistas: a do saber (concluir) e a do fazer (pôr em prática), porque saber
+// o que é uma ação é uma coisa e já ter comprado uma é outra
+const CAPITULOS = [
+  { id: 'tempo', titulo: 'O dinheiro e o tempo', sub: 'Reserva, juros compostos e inflação', mods: ['reserva', 'juros', 'inflacao'],
+    saber: 'Juros a favor', fazer: ['reserva', 'Reserva mínima formada', 'A reserva de emergência chegar à mínima do plano'] },
+  { id: 'fixa', titulo: 'Renda fixa', sub: 'CDI, CDB, Tesouro e por que ela oscila', mods: ['cdi', 'rendafixa', 'marcacao'],
+    saber: 'Renda fixa sem segredo', fazer: ['fixa', 'O primeiro título', 'Investir num CDB, num Tesouro, numa LCI ou numa LCA'] },
+  { id: 'carteira', titulo: 'Risco e carteira', sub: 'Liquidez, diversificação e fundos', mods: ['risco', 'diversificar', 'fundos'],
+    saber: 'Carteira com critério', fazer: ['variavel', 'Além da renda fixa', 'Investir em ações, fundos imobiliários ou multimercado'] },
+  { id: 'imposto', titulo: 'Imposto, previdência e herança', sub: 'O IR dos investimentos, PGBL e VGBL e a sucessão', mods: ['ir', 'previdencia', 'sucessao'],
+    saber: 'Imposto no lugar', fazer: ['previdencia', 'A previdência certa', 'Ter um PGBL ou um VGBL escolhido com o planejador'] },
+];
+const MIN_MODULO = 2, MIN_PROVA = 3;   // os minutos de cada um: a trilha cabe em cinco minutos de vez em quando
+const saber = () => (X.saber = X.saber || {});
+const capSaber = () => (X.saberCap = X.saberCap || {});
+const aprovado = id => { const s = saber()[id]; return !!(s && (s.aprovado || s.planejador)); };
+const marcaDoPlanejador = () => ({ em: AGORA(), quem: R.consultora ? R.consultora.completo || R.consultora.nome : 'Planejador' });
+const moduloDe = id => SABER.find(m => m.id === id);
+const capDoModulo = id => CAPITULOS.find(c => c.mods.includes(id));
+// como o capítulo foi concluído: pelo planejador, pela prova ou pelos três módulos; null enquanto não foi
+function concluido(c) {
+  const k = capSaber()[c.id] || {};
+  return k.planejador ? 'planejador' : k.prova && k.prova.ok ? 'prova' : c.mods.every(aprovado) ? 'modulos' : null;
 }
+const jaSei = c => !concluido(c) && !!(capSaber()[c.id] || {}).jaSei;
+const capsConcluidos = () => CAPITULOS.filter(c => concluido(c)).length;
+const saberNovo = () => !Object.keys(saber()).length && !Object.keys(capSaber()).length;
+// o próximo módulo, na ordem dos capítulos, fora os concluídos e os marcados "já sei" (esses vão para a prova)
+const proximoModulo = () => { for (const c of CAPITULOS) if (!concluido(c) && !jaSei(c)) { const id = c.mods.find(x => !aprovado(x)); if (id) return moduloDe(id); } return null; };
+// a prova do capítulo: a primeira pergunta de cada módulo e a segunda dos dois primeiros
+const perguntasDaProva = c => [[0, 0], [1, 0], [2, 0], [0, 1], [1, 1]].map(([k, q]) => ({ m: moduloDe(c.mods[k]), p: moduloDe(c.mods[k]).perguntas[q] }));
+// o fazer: a reserva mínima sai das contas; o resto, quem fez marca (ou o planejador, por ele)
+const fezIsso = id => { if ((X.conquistas || {})[id]) return true;
+  if (id === 'reserva') { const a = reservaAtual(), i = reservaIdeal(); return a != null && !!i && a >= i * 0.4; } return false; };
+// todas as conquistas, ganhas ou não: as duas de cada capítulo, a trilha completa e o primeiro sonho realizado
+function conquistas() {
+  const l = [];
+  CAPITULOS.forEach(c => l.push({ id: 'saber:' + c.id, tipo: 'saber', nome: c.saber, como: 'Concluir ' + c.titulo, ok: !!concluido(c) },
+    { id: 'fazer:' + c.fazer[0], tipo: 'fazer', nome: c.fazer[1], como: c.fazer[2], ok: fezIsso(c.fazer[0]), marca: c.fazer[0] }));
+  l.push({ id: 'saber:trilha', tipo: 'saber', nome: 'Trilha completa', como: 'Concluir os quatro capítulos', ok: capsConcluidos() === CAPITULOS.length },
+    { id: 'fazer:sonho', tipo: 'fazer', nome: 'O primeiro sonho realizado', como: 'Chegar ao valor de um objetivo', ok: R.objetivos.some(o => o.tipo !== 'liberdade' && o.valor && guardado(o.id) >= o.valor - 0.5) });
+  return l;
+}
+const ganhas = () => conquistas().filter(x => x.ok).map(x => x.id);
+const avisarConquista = antes => { const n = conquistas().find(x => x.ok && !antes.includes(x.id)); if (n) avisar('Conquista: ' + n.nome + '.'); };
+const ICONE_CONQ = { saber: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h10.5A3.5 3.5 0 0 1 19 8v12H8.5A3.5 3.5 0 0 1 5 16.5z"/><path d="M5 16.5A3.5 3.5 0 0 1 8.5 13H19"/></svg>',
+  fazer: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h12l-2.5 4L17 12H5"/></svg>' };
+const medalha = x => `<div class="conq ${x.tipo}${x.ok ? ' ok' : ''}"><i>${ICONE_CONQ[x.tipo]}</i><span><b>${esc(x.nome)}</b><small>${x.ok ? (x.tipo === 'saber' ? 'Saber' : 'Fazer') : esc(x.como)}</small></span>${!x.ok && x.marca ? `<button class="btn link peq" data-acao="fiz" data-v="${x.marca}">${CONSULTOR ? 'Marcar como feito' : 'Já fiz'}</button>` : ''}${x.ok && CONSULTOR && x.marca && (X.conquistas || {})[x.marca] ? `<button class="btn link peq" data-acao="fiz-desfaz" data-v="${x.marca}">Desmarcar</button>` : ''}</div>`;
+// uma pergunta, com as opções; respondida (-1 é "ainda não sei"), mostra o certo e o porquê
+function perguntaHtml(p, r, dados) {
+  return `<div class="q${r != null ? ' feita' : ''}"><p class="qq">${esc(p.q)}</p><div class="qo">${p.o.map((o, i) => `<button ${dados} data-v="${i}"${r != null ? ' disabled' : ''} class="${r == null ? '' : i === p.c ? 'certa' : i === r ? 'errada' : ''}">${esc(o)}</button>`).join('')}</div>
+    ${r != null ? `<p class="qpor ${r === p.c ? 'ok' : 'at'}"><b>${r === p.c ? 'Isso.' : r < 0 ? 'Sem problema.' : 'Não é essa.'}</b> ${esc(p.por)}</p>` : ''}</div>`;
+}
+const perguntaSaber = (m, qi) => perguntaHtml(m.perguntas[qi], (UI.quiz[m.id] || {})[qi], `data-acao="quiz" data-m="${m.id}" data-q="${qi}"`);
+function linhaModulo(m) {
+  const s = saber()[m.id], chip = aprovado(m.id) ? ['ok', s.aprovado ? 'aprovado' : 'marcado'] : concluido(capDoModulo(m.id)) ? ['ok', 'já sabia'] : s ? ['at', `${s.acertos} de 3, refazer`] : ['', `${MIN_MODULO} min`];
+  return `<a class="mod-linha" href="#modulo/${m.id}"><span class="tx"><b>${esc(m.titulo)}</b><small>${esc(m.sub)}</small></span><span class="chip ${chip[0]}">${chip[1]}</span></a>`;
+}
+function cartaoCapitulo(c) {
+  const via = concluido(c), js = jaSei(c), feitos = c.mods.filter(aprovado).length, k = capSaber()[c.id] || {};
+  const st = via === 'planejador' ? ['ok', `marcado ${R.consultora ? 'pela ' + R.consultora.nome : 'pelo planejador'}`] : via === 'prova' ? ['ok', 'provado'] : via ? ['ok', 'concluído']
+    : js ? ['mar', 'falta provar'] : feitos ? ['at', `${feitos} de 3 módulos`] : ['', '3 módulos'];
+  const acoes = CONSULTOR ? `<div class="linha"><button class="${via === 'planejador' ? 'btn link peq' : 'btn'}" data-acao="cap-plan" data-c="${c.id}">${via === 'planejador' ? 'Desmarcar' : 'Marcar como concluído'}</button></div>`
+    : via ? '' : js ? `<div class="linha"><a class="primaria" href="#prova/${c.id}">Provar em 5 perguntas</a><button class="btn link peq" data-acao="ja-sei" data-c="${c.id}">Desmarcar</button></div>`
+    : `<div class="linha"><button class="btn" data-acao="ja-sei" data-c="${c.id}">Já sei isso</button></div>`;
+  return `<div class="card capit${via ? ' feito' : ''}"><div class="entre"><div><b class="capit-t">${esc(c.titulo)}</b><small>${esc(c.sub)}</small></div><span class="chip ${st[0]}">${esc(st[1])}</span></div>
+    ${CONSULTOR && k.prova ? `<p class="mut peq">Prova em ${dataBR(k.prova.em)}: ${k.prova.acertos} de 5. <a href="#prova/${c.id}">Ver as respostas</a></p>` : ''}${!CONSULTOR && js ? `<p class="mut peq">Cinco perguntas, uns ${MIN_PROVA} minutos. Acertando quatro, o capítulo fica concluído sem precisar dos módulos.</p>` : ''}<div class="lista">${c.mods.map(id => linhaModulo(moduloDe(id))).join('')}</div>${acoes}</div>`;
+}
+function telaSaber() {
+  const n = capsConcluidos(), l = conquistas(), g = l.filter(x => x.ok).length;
+  return `<div style="max-width:760px"><div class="card"><div class="entre"><div><span class="etiqueta">A trilha</span><div class="nivel-nome">${n} de ${CAPITULOS.length} capítulos</div></div><span class="mut">${g} de ${l.length} conquistas</span></div>
+      <div class="trilho" style="margin:10px 0 10px"><i style="width:${(n / CAPITULOS.length * 100).toFixed(1)}%"></i></div>
+      <p class="mut" style="margin:0">Ninguém precisa começar do zero. O que você já sabe, marque e prove em cinco perguntas; o resto vem em módulos de uns ${MIN_MODULO} minutos. Concluir um capítulo vale uma conquista, e pôr em prática vale outra.</p></div>
+    ${CONSULTOR ? `<div class="aviso" style="margin-bottom:12px"><b>Visão do planejador.</b> Em cada módulo e na prova, você vê as respostas de ${esc(R.domicilio.titulo)}. O que você marcar como concluído vale como aprovado, sem as perguntas.</div>`
+      : saberNovo() ? '<div class="aviso" style="margin-bottom:12px"><b>Por onde começar:</b> marque os capítulos que você já domina.</div>' : ''}
+    <div class="rotulo">Os capítulos</div>${CAPITULOS.map(cartaoCapitulo).join('')}
+    <div class="rotulo">Conquistas</div><div class="conqs">${l.map(medalha).join('')}</div></div>`;
+}
+function telaModulo(id) {
+  const m = moduloDe(id); if (!m) return '<div class="vazio"><h2>Módulo não encontrado</h2></div>';
+  if (CONSULTOR) return moduloDoPlanejador(m);
+  const st = UI.quiz[m.id] || {}, todas = m.perguntas.every((_, i) => st[i] != null), ac = m.perguntas.filter((p, i) => st[i] === p.c).length, ok = ac >= 2;
+  const prox = ok ? proximoModulo() : null;
+  const fim = !todas ? '' : `<div class="aviso ${ok ? 'ok' : 'at'}" style="margin:6px 0 14px">${ok ? `<b>Aprovado: ${ac} de 3.</b> ${prox ? 'O próximo é ' + esc(prox.titulo) + '.' : 'Os módulos da trilha acabaram.'}` : `<b>${ac} de 3.</b> O conceito está logo abaixo. Depois de ler, vale refazer.`}</div>
+    <div class="linha">${prox ? `<a class="primaria" href="#modulo/${prox.id}" style="display:inline-flex;align-items:center;text-decoration:none">${esc(prox.titulo)}</a>` : ''}<button class="btn" data-acao="quiz-refazer" data-m="${m.id}">Refazer as perguntas</button></div>`;
+  return `<div style="max-width:720px"><p class="mut" style="margin:0 0 14px">${esc(capDoModulo(m.id).titulo)} · ${aprovado(m.id) ? 'aprovado' : 'três perguntas; acertando duas, o módulo fica aprovado'}</p>
+    <div class="card quiz">${m.perguntas.map((_, i) => perguntaSaber(m, i)).join('')}</div>${fim}
+    <details class="card conceito"${todas && !ok ? ' open' : ''}><summary>O conceito</summary><p>${esc(m.conceito)}</p></details></div>`;
+}
+// o módulo visto pelo planejador: as respostas do cliente (quando ficaram guardadas) e a marca de concluído
+function moduloDoPlanejador(m) {
+  const s = saber()[m.id], r = s && s.r;
+  const st = !s ? 'ainda sem resposta' : s.planejador && !s.aprovado ? 'marcado como concluído em ' + dataBR(s.planejador.em) : s.acertos + ' de 3 em ' + dataBR(s.em) + (s.aprovado ? ', aprovado' : '');
+  const resp = r ? `<div class="card quiz">${m.perguntas.map((p, i) => perguntaHtml(p, r[i] == null ? -1 : r[i], '')).join('')}</div>`
+    : s && s.em ? '<div class="card"><p class="mut" style="margin:0">Só os acertos ficaram guardados: estas respostas são de antes de a área guardar cada uma.</p></div>' : '';
+  return `<div style="max-width:720px"><p class="mut" style="margin:0 0 14px">${esc(capDoModulo(m.id).titulo)} · ${st}</p>${resp}
+    ${s && s.aprovado ? '' : `<div class="linha" style="margin:6px 0 14px"><button class="btn" data-acao="mod-plan" data-m="${m.id}">${s && s.planejador ? 'Desmarcar' : 'Marcar como concluído'}</button></div>`}
+    <details class="card conceito"><summary>O conceito</summary><p>${esc(m.conceito)}</p></details></div>`;
+}
+// a prova do capítulo: uma pergunta por tela, com o porquê logo depois; no fim, o resultado
+function telaProva(id) {
+  const c = CAPITULOS.find(x => x.id === id); if (!c) return '<div class="vazio"><h2>Capítulo não encontrado</h2></div>';
+  if (CONSULTOR) { const pr = (capSaber()[id] || {}).prova, qs = perguntasDaProva(c);   // o planejador lê a última prova
+    return `<div style="max-width:720px"><p class="mut" style="margin:0 0 14px">${esc(c.titulo)} · ${pr ? 'prova em ' + dataBR(pr.em) + ': ' + pr.acertos + ' de 5' + (pr.ok ? ', concluído' : '') : 'ainda sem prova'}</p>
+      ${pr && pr.r ? `<div class="card quiz">${qs.map((q, k) => '<span class="etiqueta">' + esc(q.m.titulo) + '</span>' + perguntaHtml(q.p, pr.r[k] == null ? -1 : pr.r[k], '')).join('')}</div>` : ''}
+      <a class="btn" href="#saber">Voltar aos capítulos</a></div>`; }
+  if (!UI.prova || UI.prova.cap !== id) UI.prova = { cap: id, r: [], i: 0 };
+  const P = UI.prova, qs = perguntasDaProva(c), ac = qs.filter((q, k) => P.r[k] === q.p.c).length;
+  const cab = `<p class="mut" style="margin:0 0 14px">${esc(c.titulo)} · cinco perguntas; acertando quatro, o capítulo fica concluído</p>`;
+  if (P.i >= qs.length) {
+    const ok = ac >= 4, errou = [...new Set(qs.filter((q, k) => P.r[k] !== q.p.c).map(q => q.m))], cq = conquistas();
+    return `<div style="max-width:720px">${cab}<div class="card">${ok ? `<span class="etiqueta">Capítulo concluído</span><div class="nivel-nome">${ac} de 5</div>
+        <p class="cinco">${esc(c.titulo)} fica concluído, sem precisar fazer os módulos.</p><div class="conqs">${medalha(cq.find(x => x.id === 'saber:' + c.id))}${medalha(cq.find(x => x.id === 'fazer:' + c.fazer[0]))}</div>`
+      : `<span class="etiqueta">Faltou pouco</span><div class="nivel-nome">${ac} de 5</div><p class="cinco">Eram quatro para concluir. O capítulo segue na trilha, a começar pelo que ficou em dúvida:</p><div class="lista">${errou.map(linhaModulo).join('')}</div>`}
+      <div class="linha" style="margin-top:14px"><a class="primaria" href="#saber" style="display:inline-flex;align-items:center;text-decoration:none">Voltar aos capítulos</a>${ok ? '' : '<button class="btn" data-acao="prova-refazer">Refazer a prova</button>'}</div></div></div>`;
+  }
+  const q = qs[P.i], r = P.r[P.i];
+  return `<div style="max-width:720px">${cab}<div class="card quiz"><div class="entre"><span class="etiqueta">${P.i + 1} de ${qs.length}</span><span class="mut">${esc(q.m.titulo)}</span></div>
+    <div class="trilho" style="margin:8px 0 14px"><i style="width:${(P.i / qs.length * 100).toFixed(1)}%"></i></div>${perguntaHtml(q.p, r, 'data-acao="prova"')}
+    <div class="linha" style="margin-top:12px">${r != null ? `<button class="primaria" data-acao="prova-prox">${P.i === qs.length - 1 ? 'Ver o resultado' : 'Próxima'}</button>` : '<button class="btn link peq" data-acao="prova-naosei">Ainda não sei</button>'}</div></div></div>`;
+}
+// no Painel: os cinco minutos de hoje. Quem não começou vê o convite para marcar o que já sabe; depois, primeiro a prova
+// do que marcou como "já sei"; depois, uma pergunta do próximo módulo, sem sair da tela
+function saberPainel() {
+  const n = capsConcluidos(), g = ganhas().length, prova = CAPITULOS.find(jaSei), m = proximoModulo();
+  const nivel = `<div class="card duo-nivel"><div class="entre"><span><small>A trilha</small><b class="nivel-nome">${n} de ${CAPITULOS.length} capítulos</b></span><span class="mut">${g} ${g === 1 ? 'conquista' : 'conquistas'}</span></div><div class="trilho"><i style="width:${(n / CAPITULOS.length * 100).toFixed(1)}%"></i></div></div>`;
+  const cab = `<div class="rotulo">Saber<a class="mais" href="#saber">A trilha &#8250;</a></div><p class="duo-sub">${!prova && !m ? 'A trilha está completa.' : 'Cinco minutos de vez em quando: o que já sabe, prove; o resto, aprenda.'}</p>`;
+  if (saberNovo()) return cab + nivel + `<div class="card"><span class="etiqueta">Para começar</span><p class="cinco">Ninguém precisa começar do zero. Veja os ${CAPITULOS.length} capítulos e marque os que você já domina.</p><a class="btn" href="#saber">Ver os capítulos</a></div>`;
+  if (prova) return cab + nivel + `<div class="card"><span class="etiqueta">Os seus 5 minutos · provar o que já sabe</span><p class="cinco"><b>${esc(prova.titulo)}</b>. Cinco perguntas, uns ${MIN_PROVA} minutos. Acertando quatro, o capítulo fica concluído.</p><a class="primaria" href="#prova/${prova.id}" style="display:inline-flex;align-items:center;text-decoration:none">Começar</a></div>`;
+  if (!m) return cab + nivel;
+  // a pergunta da tela: a que acabou de ser respondida aqui (para mostrar o porquê) ou a primeira ainda sem resposta
+  const st = UI.quiz[m.id] || {}, faltam = m.perguntas.filter((_, i) => st[i] == null).length;
+  const qi = UI.ultimaQ && UI.ultimaQ.m === m.id ? UI.ultimaQ.q : Math.max(0, m.perguntas.findIndex((_, i) => st[i] == null));
+  return cab + nivel + `<div class="card quiz"><span class="etiqueta">Os seus 5 minutos · ${esc(m.titulo)}</span>${perguntaSaber(m, qi)}
+    ${faltam < m.perguntas.length ? `<a class="btn link peq" href="#modulo/${m.id}">${faltam ? `Continuar o módulo, ${faltam} ${faltam === 1 ? 'pergunta' : 'perguntas'} &#8250;` : 'Ver o resultado do módulo &#8250;'}</a>` : ''}</div>`;
+}
+
+// =====================================================================================================================
+// AS REUNIÕES: com quem foi, o resumo escrito pelo planejador e as tarefas que saíram dela. A tarefa ligada a um pedido
+// mostra o estado dele; a avulsa, a data em que foi feita ou "em aberto". Vêm da clínica e da execução (o portal grava)
+// =====================================================================================================================
+const reunioes = () => ((C && C.reunioes) || []).concat((X && X.reunioes) || []).filter(r => r.data <= HOJE).sort((a, b) => a.data < b.data ? 1 : -1);
+const idDaTarefaDaReuniao = (r, i) => 'reuniao:' + r.data + ':' + i;
+// a tarefa da reunião é a da lista: a ligada a um pedido de uma vez é a ocorrência dele; a avulsa, a que entrou na lista;
+// a recorrente mostra as últimas cinco vezes
+const ocorrenciaDaReuniao = (r, t, i) => { const p = t.pedido && R.pedidos.find(x => x.id === t.pedido); if (p && p.ritmo !== 'unica') return null; return ocorrenciaDe(p ? p.id : idDaTarefaDaReuniao(r, i)) || null; };
+function ultimasVezes(p) {
+  if (p.ritmo === 'mensal') return ocorrencias().filter(o => o.pedido.id === p.id && o.mes <= MES).slice(-5).map(o => ({ id: o.id, data: o.data, rot: MESES[+o.mes.slice(5) - 1], tit: o.titulo }));
+  const l = []; for (let m = addM(MES, -1); m <= MES; m = addM(m, 1)) if (m >= p.desde) tetosDoMes(p, m).forEach(w => { if (w.de <= HOJE) l.push({ id: 'teto:' + m + ':' + w.k, data: w.ate, rot: dataBR(w.de), tit: 'Semana de ' + dataBR(w.de) + ' a ' + dataBR(w.ate) }); });
+  return l.slice(-5);
+}
+const estadoDaVez = v => { const r = ultimaResposta(v.id); return r ? r.estado : v.data < HOJE ? 'atrasada' : 'aberta'; };
+function estadoDaTarefaDaReuniao(r, t, i) {
+  const p = t.pedido && R.pedidos.find(x => x.id === t.pedido);
+  if (p && p.ritmo !== 'unica') return ['mar', p.ritmo === 'mensal' ? 'todo mês' : 'toda semana'];
+  const o = ocorrenciaDaReuniao(r, t, i); if (!o) return ['at', 'em aberto'];
+  return o.aberta ? ['at', atrasada(o) ? 'atrasada' : 'em aberto'] : o.estado === 'feita' || o.estado === 'outro' ? ['ok', (o.cat === 'comportamental' ? 'fiquei dentro' : 'feita') + ' em ' + dataBR(o.resposta.em)]
+    : o.estado === 'parcial' ? ['at', 'feita em parte'] : o.estado === 'naofiz' ? ['at', o.cat === 'comportamental' ? 'passei do teto' : 'não feita'] : ['at', estadoTxt(o)];
+}
+const VEZ = { feita: ['ok', '✓', 'feita'], outro: ['ok', '✓', 'em outro objetivo'], parcial: ['pa', '½', 'feita em parte'], naofiz: ['nao', '✕', 'não feita'], atrasada: ['atr', '', 'em aberto, atrasada'], aberta: ['', '', 'em aberto'] };
+// a resposta que vale de uma tarefa (a da lista ou a semente da reunião)
+const respostaDe = id => { const o = ocorrenciaDe(id), rs = X.respostas[id] || (o && o.semente) || []; return rs.find(r => r.estado !== 'adiada') || null; };
+const MARCA_SVG = { ok: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12.5l4 4 8-9"/></svg>', pa: '<b aria-hidden="true">\u00bd</b>', nao: '<b aria-hidden="true">\u2715</b>' };
+// a escolha, aberta logo abaixo do que foi tocado: um toque grava; "em parte" abre o campo do que foi feito e do que faltou
+function escolhaDaMarca(id, cat, rot) {
+  const M = UI.marcando; if (!M || M.id !== id) return '';
+  const r = respostaDe(id), est = r ? r.estado : null, comp = cat === 'comportamental';
+  const ops = [['feita', '\u2713', comp ? 'Fiquei dentro' : 'Feita'], ['parcial', '\u00bd', 'Em parte'], ['naofiz', '\u2715', comp ? 'Passei do teto' : 'Não feita']].concat(r ? [['limpar', '', 'Em aberto']] : []);
+  const parte = M.parte ? `<div class="campo" style="margin-top:12px"><label for="mc-obs">O que foi feito e o que faltou</label><textarea id="mc-obs" rows="3" placeholder="Por exemplo: guardei R$ 1.500 dos R$ 2.500; o resto vai no próximo mês">${esc(r && r.obs ? r.obs : '')}</textarea></div>
+    ${cat === 'dinheiro' ? `<div class="campo"><label for="mc-valor">Quanto foi guardado <small class="mut">(opcional)</small></label><input id="mc-valor" inputmode="decimal" data-moeda placeholder="R$" value="${r && r.valor != null ? moedaTxt(r.valor) : ''}"></div>` : ''}
+    <div class="linha"><button class="primaria" data-acao="marca-parte">Gravar</button><button class="btn" data-acao="marca-v" data-v="cancelar">Cancelar</button></div>` : '';
+  return `<div class="escolha" role="group" aria-label="Marcar ${esc(rot)}">${rot ? `<p class="mut">${esc(rot)}</p>` : ''}<div class="ops">${ops.map(([v, ic, nome]) => `<button class="${(v === est || (v === 'parcial' && M.parte)) ? 'on' : ''} ${v}" data-acao="marca-v" data-v="${v}">${ic ? `<i>${ic}</i>` : ''}${nome}</button>`).join('')}</div>${parte}</div>`;
+}
+function linhaDaTarefaDaReuniao(r, t, i) {
+  const p = t.pedido && R.pedidos.find(x => x.id === t.pedido), e = estadoDaTarefaDaReuniao(r, t, i);
+  if (p && p.ritmo !== 'unica') { const vezes = ultimasVezes(p), aberta = vezes.find(v => UI.marcando && UI.marcando.id === v.id);
+    return `<li class="rec"><div class="entre"><span>${esc(t.txt)}</span><span class="chip mar">${esc(e[1])}</span></div>${vezes.length ? `<div class="vezes" aria-label="As últimas ${vezes.length} vezes">${vezes.map(v => { const st = estadoDaVez(v), k = VEZ[st] || VEZ.aberta, rr = ultimaResposta(v.id);
+      return `<button class="vez ${k[0]}${aberta === v ? ' sel' : ''}" data-acao="marca" data-id="${esc(v.id)}" aria-expanded="${aberta === v}" title="${esc(v.tit)}: ${k[2]}${rr && rr.obs ? '. ' + esc(rr.obs) : ''}"><i>${k[1]}</i><small>${esc(v.rot)}</small></button>`; }).join('')}</div>` : ''}${aberta ? escolhaDaMarca(aberta.id, p.cat, aberta.tit) : ''}</li>`; }
+  const o = ocorrenciaDaReuniao(r, t, i), rr = o && o.resposta, k = !o || o.aberta ? '' : ['feita', 'outro'].includes(o.estado) ? 'ok' : o.estado === 'parcial' ? 'pa' : 'nao', sel = o && UI.marcando && UI.marcando.id === o.id;
+  const circ = o ? `<button class="tr-marca ${k}" data-acao="marca" data-id="${esc(o.id)}" aria-expanded="${!!sel}" aria-label="Marcar: ${esc(t.txt)}" title="Marcar">${MARCA_SVG[k] || MARCA_SVG.ok}</button>` : '';
+  return `<li>${circ}<span class="tr-tx">${o ? `<button class="tr-abre" data-acao="abrir" data-id="${esc(o.id)}">${esc(t.txt)}</button>` : `<span class="tr-abre">${esc(t.txt)}</span>`}${rr && rr.obs ? `<small class="tr-obs">${esc(rr.obs)}</small>` : ''}</span><span class="chip ${e[0]}">${esc(e[1])}</span></li>${sel ? `<li class="escolha-li">${escolhaDaMarca(o.id, o.cat, '')}</li>` : ''}`;
+}
+function blocoReunioes() {
+  const rs = reunioes();
+  if (!rs.length) return `<div class="rotulo">As reuniões</div><div class="aviso" style="max-width:760px">${['visitante', 'cadastrado'].includes(R.degrau) ? 'Cada reunião com a Nord fica guardada aqui: com quem foi, o resumo e as tarefas que saíram dela.' : 'Nenhuma reunião registrada ainda.'}</div>`;
+  const abertasDe = r => (r.tarefas || []).filter((t, i) => estadoDaTarefaDaReuniao(r, t, i)[0] === 'at').length, total = soma(rs.map(abertasDe));
+  return `<div class="rotulo">As reuniões${total ? `<span class="mais mut">${total} ${total === 1 ? 'tarefa em aberto' : 'tarefas em aberto'}</span>` : ''}</div><div style="max-width:760px">${rs.map((r, i) => { const ab = abertasDe(r);
+    return `<details class="card reuniao"${(UI.reuniaoAberta ? UI.reuniaoAberta === r.data : i === 0) ? ' open' : ''} data-reuniao="${r.data}"><summary><span class="tx"><b>${esc(r.tipo)}</b><small>${dataBRano(r.data)} · com ${esc(r.com)}</small></span>${ab ? `<span class="chip at">${ab} em aberto</span>` : ''}</summary>
+      <p>${esc(r.resumo)}</p>${(r.tarefas || []).length ? `<div class="etiqueta" style="margin-top:12px">As tarefas</div><ul class="tarefas-reuniao">${r.tarefas.map((t, k) => linhaDaTarefaDaReuniao(r, t, k)).join('')}</ul>` : ''}</details>`; }).join('')}</div>`;
+}
+
+// a previsão de cada objetivo no ritmo de hoje: no caminho, ou quantos meses a data anda
+const previsaoDoObj = o => { const p = previsoesDeHoje()[o.id]; if (p == null) return ['at', 'não fecha neste ritmo'];
+  const d = difM(o.data, p); return d <= 0 ? ['ok', 'no caminho'] : ['at', atrasoTxt(d), mesAno(p + '-01')]; };
 const saudacao = () => { const hr = new Date().getHours(), s = hr < 12 ? 'Bom dia' : hr < 18 ? 'Boa tarde' : 'Boa noite', n = R.domicilio && R.domicilio.titulo !== 'Você' ? R.domicilio.titulo : '';
   return n ? s + ', ' + n : s; };
 
@@ -1977,7 +2627,8 @@ function telaCartao(id) {
   const pre = R.degrau !== 'completo' && (CALCS[c.id] || c.id === 'objetivos' || c.id === 'saude') ? calculadora(c) : '';
   const rel = R.degrau === 'completo' ? relatorioDaArea(c) : '';
   const prox = proximoNaArea(c, falta);
-  return `<div style="max-width:1080px">${rel ? `<div class="grade2" style="align-items:start">${resumo}${lista}</div>${rel}` : `<div class="grade2" style="align-items:start"><div>${resumo}${pre}</div><div>${lista}${prox}</div></div>`}</div>`;
+  const ca = CAPA_AREA[c.id], capa = ca ? `<img class="capa-area" src="${ca.src}" alt="" style="object-position:50% ${ca.foco}%">` : '';
+  return `<div style="max-width:1080px">${capa}${rel ?`<div class="grade2" style="align-items:start">${resumo}${lista}</div>${rel}` : `<div class="grade2" style="align-items:start"><div>${resumo}${pre}</div><div>${lista}${prox}</div></div>`}</div>`;
 }
 const proximoNaArea = (c, falta) => falta.some(([, , m]) => m === 'consultor') && R.degrau !== 'completo'
   ? `<div class="aviso" style="margin-bottom:12px">${falta.filter(([, , m]) => m === 'consultor').length} ${falta.filter(([, , m]) => m === 'consultor').length === 1 ? 'informação desta área depende' : 'informações desta área dependem'} de uma conversa com um planejador. ${R.consultora ? `<a href="#conversas">Falar com a ${esc(R.consultora.nome)}</a>` : '<a href="#conversas">Agendar uma clínica</a>'}.</div>` : '';
@@ -2117,7 +2768,7 @@ function folhaTarefa(o) {
   const cab = `<div class="alca"></div><span class="rotulo" style="margin:0">${CATS[o.cat]}${casal() && o.resp ? ' · ' + esc(nomeDe(o.resp)) : ''}</span><h2>${esc(o.titulo)}</h2><div class="mut">${esc(o.serve)} · ${esc(o.quando)}</div>`;
   const orient = (R.orientacoes || []).find(x => x.pedido === o.pedido.id);
   const combinado = orient ? `<p class="peq" style="color:var(--marinho);margin:10px 0 0">${esc(orient.txt)}</p>` : '';
-  const hist = o.respostas.length ? `<div class="rotulo">Histórico</div>${o.respostas.map(r => `<div class="hist">${dataBR(r.em)} · ${esc(nomeDe(r.quem))} ${r.estado === 'adiada' ? `adiou para ${dataBR(r.novaData)}${r.motivo ? ': "' + esc(r.motivo) + '"' : ''}` : `respondeu: ${esc(o.cat === 'comportamental' ? ({ feita: 'fiquei dentro', naofiz: 'passei', parcial: 'informei o valor' }[r.estado]) : ESTADO_TXT[r.estado])}${r.valor != null ? ', ' + brl(r.valor) : ''}${r.saida ? ' · ' + esc(SAIDAS[r.saida]) : ''}`} ${r.canal === 'whatsapp' ? '(pelo WhatsApp)' : ''}</div>`).join('')}` : '';
+  const hist = o.respostas.length ? `<div class="rotulo">Histórico</div>${o.respostas.map(r => `<div class="hist">${dataBR(r.em)} · ${esc(nomeDe(r.quem))} ${r.estado === 'adiada' ? `adiou para ${dataBR(r.novaData)}${r.motivo ? ': "' + esc(r.motivo) + '"' : ''}` : `respondeu: ${esc(o.cat === 'comportamental' ? ({ feita: 'fiquei dentro', naofiz: 'passei', parcial: 'informei o valor' }[r.estado]) : ESTADO_TXT[r.estado])}${r.valor != null ? ', ' + brl(r.valor) : ''}${r.saida ? ' · ' + esc(SAIDAS[r.saida]) : ''}${r.obs ? ': "' + esc(r.obs) + '"' : ''}`} ${r.canal === 'whatsapp' ? '(pelo WhatsApp)' : ''}</div>`).join('')}` : '';
   const divisao = o.divisao ? `<div class="sep"></div>${o.divisao.map(d => `<div class="entre peq" style="padding:3px 0"><span>${esc(objDe(d.obj).nome)}</span><b class="num" style="font-size:16px">${brl(d.valor)}</b></div>`).join('')}` : '';
   const risco = o.pedido.risco && o.aberta ? `<div class="aviso at" style="margin-top:10px">${esc(o.pedido.risco)}</div>` : '';
   const semanas = o.semana ? barrasTeto(o) : '';
@@ -2208,7 +2859,7 @@ function telaObjetivos() {
   const objs = objetivos();
   if (!objs.length) return `<div class="vazio">${ILUSTRA.objetivos}<h2>Ainda sem objetivos</h2><p>Um objetivo com valor e data diz para onde vai o dinheiro. Pode ser uma viagem, a entrada de uma casa, quitar uma dívida ou a primeira reserva.</p><a class="primaria" href="#cartao/objetivos" style="display:inline-flex;align-items:center;text-decoration:none">Criar o primeiro</a></div>`;
   const pedem = soma(objs.filter(o => !o.complementar).map(necessario)), poe = soma(objs.filter(o => !o.complementar).map(o => o.aporte));
-  return `<div style="max-width:760px">${objs.map(o => { const t = tomDoObj(o), nec = necessario(o);
+  return `<div style="max-width:760px">${linhasDosObjetivos()}${objs.map(o => { const t = tomDoObj(o), nec = necessario(o);
       return `<a class="obj-card" href="#objetivo/${o.id}"><span class="thumb" style="background-image:${FUNDO_OBJ(o)}"></span><span style="min-width:0"><span class="entre"><b>${esc(o.nome)}</b><span class="chip ${t[0]}">${t[1]}</span></span>
         <span class="mut">${o.tipo === 'liberdade' ? 'aos ' + o.idade + ', ' + mesAno(o.data + '-01') : mesAno(o.data + '-01')} · ${brlC(guardado(o.id))} de ${brlC(o.valor)}, ${pct(progresso(o))} guardado</span><div class="trilho" style="margin:8px 0 4px"><i style="width:${(progresso(o) * 100).toFixed(1)}%"></i></div>
         <span class="mut">${brl(o.aporte)} por mês, de ${brl(nec)} necessários${o.complementar ? ' · complementar' : ''}</span></span></a>`; }).join('')}
@@ -2411,9 +3062,9 @@ function telaConversas() {
       <div class="card" style="margin-top:16px"><div class="campo" style="margin-top:0"><label for="msg">Escrever para a ${esc(c.nome)}</label><textarea id="msg" data-campo="rascunho" placeholder="Uma dúvida, um pedido de conversa ou uma mudança na vida de ${pl('vocês', 'você')}">${esc(UI.rascunho)}</textarea></div>
       <div class="entre"><span class="mut">A resposta chega aqui e no WhatsApp.</span><button class="btn" data-acao="enviar">Enviar</button></div></div></div>`
     : `<div class="rotulo">Enquanto isso</div><div class="card" style="max-width:720px"><h3>As lives mensais de planejamento</h3><p class="peq" style="margin:0">Uma vez por mês, ao vivo e gravada, com o passo de cada momento de vida e gente da Nord respondendo.</p></div>`;
-  return `<div class="grade2" style="align-items:stretch">${servico}${encontro}</div>${niveis}${conversas}`;
+  return `<div class="grade2" style="align-items:stretch">${servico}${encontro}</div>${blocoReunioes()}${niveis}${conversas}`;
 }
-const telaMais = () => `<div class="mais-lista" style="max-width:560px"><a href="#realizado">${ICONES.realizado}<span>Realizado<small>O planejado e o que aconteceu, no orçamento e no patrimônio</small></span></a><a href="#jornada">${ICONES.jornada}<span>Jornada<small>O histórico, a relação com a Nord e a escalada</small></span></a><a href="#conversas">${ICONES.conversas}<span>Atendimento<small>Quem atende, o próximo encontro e as conversas</small></span></a></div>`;
+const telaMais = () => `<div class="mais-lista" style="max-width:560px"><a href="#realizado">${ICONES.realizado}<span>Realizado<small>O planejado e o que aconteceu, no orçamento e no patrimônio</small></span></a><a href="#jornada">${ICONES.jornada}<span>Jornada<small>O histórico, a relação com a Nord e a escalada</small></span></a><a href="#saber">${ICONES.saber}<span>Saber<small>A trilha dos conceitos, com perguntas para testar o que já sabe</small></span></a><a href="#conversas">${ICONES.conversas}<span>Atendimento<small>Quem atende, as reuniões e as conversas</small></span></a></div>`;
 
 // =====================================================================================================================
 // 10. DESENHO E EVENTOS
@@ -2421,13 +3072,13 @@ const telaMais = () => `<div class="mais-lista" style="max-width:560px"><a href=
 function desenhar() {
   const raiz = document.getElementById('raiz');
   if (degrau() === 'completo' && !RS) { raiz.innerHTML = barraDemo() + `<div class="carregando">${ERRO_PLANO ? 'Não foi possível abrir o plano: ' + esc(ERRO_PLANO) : 'Abrindo o seu plano…'}</div>`; return; }
-  OC_CACHE = null; R = montar();
+  OC_CACHE = null; PREV_CACHE = null; R = montar();
   const { tela, arg } = rota(), topo = desenhar.ultima === location.hash ? window.scrollY : 0;
   if (tela !== 'plano') CARROSSEL_VISTO = false;   // saiu do Plano: na volta, o carrossel toca de novo
   let html;
   try {
     html = ({ painel: telaPainel, passo: telaPasso, tarefas: telaTarefas, tarefa: telaTarefas, objetivos: telaObjetivos, objetivo: () => telaObjetivo(arg), plano: telaPlano, cartao: () => telaCartao(arg),
-      exame: telaExame, realizado: telaRealizado, jornada: telaJornada, conversas: telaConversas, mais: telaMais }[tela] || telaPainel)();
+      exame: telaExame, realizado: telaRealizado, jornada: telaJornada, conversas: telaConversas, mais: telaMais, saber: telaSaber, modulo: () => telaModulo(arg), prova: () => telaProva(arg) }[tela] || telaPainel)();
   } catch (e) { console.error(e); html = `<div class="aviso at">Não foi possível mostrar esta tela agora. ${esc(e.message)}</div>`; }
   raiz.innerHTML = casca(html);
   document.title = (tela === 'objetivo' ? (objDe(arg) || {}).nome || 'Objetivo' : tela === 'cartao' ? (CARTOES.find(c => c.id === arg) || {}).nome || 'Plano' : TITULOS[tela] || 'Painel') + ' — Nord Liberta';
@@ -2440,10 +3091,16 @@ function desenhar() {
 function desenharFolha() {
   const f = document.getElementById('folha-raiz');
   if (UI.folha && UI.folha.lancar) { f.innerHTML = `<div class="veu" data-acao="fechar-fora"><div class="folha" role="dialog" aria-modal="true" aria-label="Lançar um mês">${folhaLancar()}</div></div>`; return; }
+  if (UI.folha && UI.folha.sobra != null) { f.innerHTML = `<div class="veu" data-acao="fechar-fora"><div class="folha" role="dialog" aria-modal="true" aria-label="Não precisa poupar mais">${folhaSobra()}</div></div>`; return; }
   if (UI.folha && UI.folha.conta) { f.innerHTML = `<div class="veu" data-acao="fechar-fora"><div class="folha" role="dialog" aria-modal="true" aria-label="Criar a conta">${folhaConta()}</div></div>`; return; }
   const o = UI.folha && ocorrenciaDe(UI.folha.id);
   f.innerHTML = o ? `<div class="veu" data-acao="fechar-fora"><div class="folha" role="dialog" aria-modal="true" aria-label="${esc(o.titulo)}">${folhaTarefa(o)}</div></div>` : '';
 }
+// passou do que fecha: nenhum objetivo chega antes da data, então o que passa disso não precisa ir para o futuro
+const folhaSobra = () => { const L = UI.linhas, fecha = UI.folha.sobra, total = L.d + (L.extra ? L.e : 0), alvo = Math.max(0, fecha - (L.extra ? L.e : 0));
+  return `<div class="alca"></div><h2>Não precisa poupar mais do que isso</h2><p>Com ${brl(fecha)} por mês${L.extra && L.e ? ', somando a renda extra,' : ''} todos os objetivos chegam na data sonhada. Nenhum objetivo chega antes da data: os ${brl(total - fecha)} a mais por mês ficariam parados.</p>
+  <p class="mut">Se ${pl('vocês quiserem', 'você quiser')} realizar algo antes, o caminho é mudar a data do objetivo. Ou criar um objetivo novo.</p>
+  <div class="linha"><button class="primaria" data-acao="linhas-fecha">Ficar com ${brl(alvo)} por mês</button><button class="btn" data-acao="fechar">Manter assim</button></div>`; };
 // criar a conta: o que o visitante preencheu na sessão vai para o vetor da conta nova, sem pedir de novo
 const folhaConta = () => { const c = UI.folha; return `<div class="alca"></div><h2>Criar a sua conta</h2><p class="mut">O que ${c.dois ? 'vocês preencheram' : 'você preencheu'} até aqui vai junto. Os lembretes no WhatsApp só chegam com o seu consentimento.</p>
   <div class="campo"><label>Só você ou vocês dois?</label><div class="opcoes"><button type="button" class="${!c.dois ? 'on' : ''}" data-acao="conta-dois" data-v="">Só eu</button><button type="button" class="${c.dois ? 'on' : ''}" data-acao="conta-dois" data-v="1">Nós dois</button></div></div>
@@ -2476,17 +3133,58 @@ async function responder(estado) {
   desenhar();
 }
 
+// grava a marca de uma tarefa: substitui a resposta que valia (guardando os adiamentos); "limpar" volta para em aberto
+async function gravarMarca(id, estado, extra = {}) {
+  const o = ocorrenciaDe(id), atual = X.respostas[id] || (o && o.semente) || [], antes = JSON.stringify(X), adiadas = atual.filter(r => r.estado === 'adiada');
+  const r = { em: AGORA(), quem: MEMBRO(), canal: 'area', estado }; if (extra.obs) r.obs = extra.obs; if (extra.valor != null) r.valor = extra.valor;
+  X.respostas[id] = estado === 'limpar' ? adiadas : adiadas.concat(r); X.ajustes = (X.ajustes || []).filter(j => j.ocorrencia !== id);
+  await ARMAZEM.gravar('execucao', X); UI.marcando = null; UI.desfazer = antes;
+  avisar({ feita: 'Marcada como feita.', parcial: 'Marcada como feita em parte.', naofiz: 'Marcada como não feita.', limpar: 'A tarefa voltou para em aberto.' }[estado], true); desenhar();
+}
 document.addEventListener('click', async ev => {
   const a = ev.target.closest('[data-acao]'); if (!a) return;
   const acao = a.dataset.acao;
   if (acao === 'fechar-fora' && ev.target !== a) return;
   if (acao === 'abrir') { UI.folha = { id: a.dataset.id }; desenharFolha(); return; }
+  if (['marca', 'marca-v', 'marca-parte'].includes(acao)) { const det = a.closest('details[data-reuniao]'); if (det) UI.reuniaoAberta = det.dataset.reuniao; }
+  if (acao === 'marca') { const id = a.dataset.id; UI.marcando = UI.marcando && UI.marcando.id === id ? null : { id }; desenhar(); return; }
+  if (acao === 'marca-v') { const v = a.dataset.v, M = UI.marcando; if (!M) return;
+    if (v === 'cancelar') { UI.marcando = null; desenhar(); return; }
+    if (v === 'parcial') { M.parte = true; desenhar(); const t = document.getElementById('mc-obs'); if (t) t.focus(); return; }
+    await gravarMarca(M.id, v); return; }
+  if (acao === 'marca-parte') { const t = document.getElementById('mc-obs'), obs = t ? t.value.trim() : '', vEl = document.getElementById('mc-valor');
+    if (!obs) { if (t) { t.classList.add('erro'); t.focus(); } return; }
+    await gravarMarca(UI.marcando.id, 'parcial', { obs, valor: vEl ? numero(vEl.value) : null }); return; }
   if (acao === 'fiz-rapido') { UI.folha = { id: a.dataset.id }; await responder('feita'); return; }
   if (acao === 'fechar' || acao === 'fechar-fora') { UI.folha = null; if (location.hash.startsWith('#tarefa/')) history.replaceState(null, '', '#tarefas'); desenhar(); return; }
   if (acao === 'modo') { Object.assign(UI.folha, { modo: a.dataset.v || null, saida: null }); desenharFolha(); return; }
   if (acao === 'saida') { UI.folha.saida = a.dataset.v; desenharFolha(); return; }
   if (acao === 'ver-por-obj') { UI.folha.porObj = !UI.folha.porObj; desenharFolha(); return; }
   if (acao === 'responder') { await responder(a.dataset.v); return; }
+  if (acao === 'quiz') { const id = a.dataset.m, q = +a.dataset.q, st = UI.quiz[id] = UI.quiz[id] || {}; if (st[q] != null) return; st[q] = +a.dataset.v; UI.ultimaQ = { m: id, q }; const antes = ganhas();
+    const m = SABER.find(x => x.id === id);
+    if (m.perguntas.every((_, i) => st[i] != null)) { const ac = m.perguntas.filter((p, i) => st[i] === p.c).length, ant = saber()[id]; saber()[id] = Object.assign(ant && ant.planejador ? { planejador: ant.planejador } : {}, { em: AGORA(), acertos: ac, aprovado: ac >= 2 || !!(ant && ant.aprovado), r: m.perguntas.map((_, i) => st[i]) }); await ARMAZEM.gravar('execucao', X); avisarConquista(antes); }
+    desenhar(); return; }
+  if (acao === 'ja-sei') { const k = capSaber()[a.dataset.c] = capSaber()[a.dataset.c] || {}; k.jaSei = k.jaSei ? null : AGORA(); await ARMAZEM.gravar('execucao', X);
+    if (k.jaSei) avisar('Marcado. Cinco perguntas confirmam, quando der.'); desenhar(); return; }
+  if (acao === 'prova' || acao === 'prova-naosei') { const P = UI.prova; if (!P || P.r[P.i] != null) return; P.r[P.i] = acao === 'prova' ? +a.dataset.v : -1; desenhar(); return; }
+  if (acao === 'prova-prox') { const P = UI.prova, c = P && CAPITULOS.find(x => x.id === P.cap); if (!c) return; const qs = perguntasDaProva(c); P.i++;
+    if (P.i === qs.length) { const antes = ganhas(), ac = qs.filter((q, k) => P.r[k] === q.p.c).length, k = capSaber()[c.id] = capSaber()[c.id] || {};
+      k.prova = { em: AGORA(), acertos: ac, ok: ac >= 4, r: P.r.slice() }; if (!k.prova.ok) k.jaSei = null; await ARMAZEM.gravar('execucao', X); avisarConquista(antes); }
+    desenhar(); window.scrollTo(0, 0); return; }
+  if (acao === 'prova-refazer') { UI.prova = null; desenhar(); window.scrollTo(0, 0); return; }
+  if (acao === 'cap-plan') { const antes = ganhas(), k = capSaber()[a.dataset.c] = capSaber()[a.dataset.c] || {}; k.planejador = k.planejador ? null : marcaDoPlanejador();
+    await ARMAZEM.gravar('execucao', X); avisarConquista(antes); desenhar(); return; }
+  if (acao === 'mod-plan') { const antes = ganhas(), id = a.dataset.m, s = saber()[id];
+    if (s && s.planejador) { delete s.planejador; if (!s.em) delete saber()[id]; } else saber()[id] = Object.assign(s || {}, { planejador: marcaDoPlanejador() });
+    await ARMAZEM.gravar('execucao', X); avisarConquista(antes); desenhar(); return; }
+  if (acao === 'fiz-desfaz') { delete X.conquistas[a.dataset.v]; await ARMAZEM.gravar('execucao', X); desenhar(); return; }
+  if (acao === 'fiz') { const antes = JSON.stringify(X), v = a.dataset.v; X.conquistas = X.conquistas || {}; X.conquistas[v] = CONSULTOR ? marcaDoPlanejador() : { em: AGORA(), quem: MEMBRO() }; await ARMAZEM.gravar('execucao', X);
+    UI.desfazer = antes; avisar('Conquista: ' + conquistas().find(x => x.id === 'fazer:' + v).nome + '.', true); desenhar(); return; }
+  if (acao === 'quiz-refazer') { UI.quiz[a.dataset.m] = {}; UI.ultimaQ = null; desenhar(); window.scrollTo(0, 0); return; }
+  if (acao === 'linhas-fecha') { const itens = itensDasLinhas(), f = totalQueFecha(itens), L = UI.linhas; if (f == null || !L) return; L.d = Math.max(0, f - (L.extra ? L.e : 0)); L.avisou = false;
+    if (UI.folha && UI.folha.sobra != null) { UI.folha = null; desenharFolha(); }
+    const r = document.querySelector('[data-linhas="d"]'); if (r) { if (L.d > +r.max) r.max = L.d; r.value = L.d; } atualizarLinhas(); return; }
   if (acao === 'filtro') { UI.filtro = a.dataset.v; desenhar(); return; }
   if (acao === 'horizonte') { UI.horizonte = a.dataset.v; desenhar(); return; }
   if (acao === 'expandir') { const q = a.dataset.v === '1'; if (q !== planoExpandido()) alternarPlano(q); return; }
@@ -2564,6 +3262,7 @@ document.addEventListener('input', mascaraMoeda, true);
 document.addEventListener('input', ev => {
   const t = ev.target, d = t.dataset || {};
   if (d.campo === 'rascunho') { UI.rascunho = t.value; return; }
+  if (d.linhas && UI.linhas) { if (d.linhas === 'extra') UI.linhas.extra = t.checked; else UI.linhas[d.linhas] = +t.value; atualizarLinhas(); return; }
   if (d.campo && UI.folha) { UI.folha[d.campo] = ['valor', 'coube'].includes(d.campo) ? numero(t.value) : t.value; const g = document.querySelector('.folha [data-acao="responder"]'); if (g && d.campo === 'valor') g.disabled = UI.folha.valor == null; return; }
   if (d.calc) { UI.calc[d.calc] = UI.calc[d.calc] || {}; UI.calc[d.calc][d.c] = t.value; return; }
   if (d.ex && UI.exame) { UI.exame.resp[d.ex] = t.value; return; }
@@ -2574,7 +3273,9 @@ document.addEventListener('input', ev => {
 document.addEventListener('change', ev => { const t = ev.target, d = t.dataset || {};
   if (d.campo && ['valor', 'coube'].includes(d.campo) && UI.folha) { const id = t.id; desenharFolha(); const n = document.getElementById(id); if (n) n.focus(); }
   if (d.calc === 'objetivos' || d.lanc === 'mes') { if (d.lanc) desenharFolha(); else desenhar(); }
-  if (d.ex && !(UI.exame && UI.exame.conversa)) desenhar(); });
+  if (d.ex && !(UI.exame && UI.exame.conversa)) desenhar();
+  if (d.linhas && UI.linhas) { const L = UI.linhas, fecha = totalQueFecha(itensDasLinhas()), acima = fecha != null && L.d + (L.extra ? L.e : 0) > fecha;
+    if (acima && !L.avisou) { L.avisou = true; UI.folha = { sobra: fecha }; desenharFolha(); } else if (!acima) L.avisou = false; } });
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && UI.folha) { UI.folha = null; desenhar(); }
   // no exame em conversa, o Enter no campo responde e segue
   if (ev.key === 'Enter' && ev.target.closest && ev.target.closest('.cv-campo') && UI.exame) { ev.preventDefault(); UI.exame.resp[ev.target.dataset.ex] = ev.target.value; andaExame(1); } });

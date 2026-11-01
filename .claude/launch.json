@@ -2,7 +2,7 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "assets-evolution",
+      "name": "integrated-app",
       "runtimeExecutable": "node",
       "runtimeArgs": ["ux/servir.cjs", ".", "8137"],
       "port": 8137

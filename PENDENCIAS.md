@@ -33,6 +33,85 @@ estrutura (seção 15). Em aberto, para o dono do produto decidir:
 - **O financiamento do exemplo** aparece com 360 parcelas restantes porque o plano de exemplo não tem a data de início do
   contrato; o relatório mostra o mesmo.
 
+### O Painel só com o que importa (31/10/2026)
+
+A tela inicial deixou de repetir o Plano. O guia das onze áreas, os quatro números e o cartão do ritmo saíram (o plano
+área por área fica na aba Plano); a semana com os sete dias virou a conta "nesta semana, X de Y respondidas" no título
+das tarefas. Ficam, nesta ordem: a **paisagem** (a foto de natureza de volta, com o propósito em serifa e o passo num
+cartão de vidro, o único número grande da tela); o **placar do que resolver** (até quatro linhas: as tarefas atrasadas,
+as áreas em alerta com as críticas primeiro, e a próxima área a aprofundar com o anel da profundidade); **as tarefas**
+(as três próximas); **a poupança** (os meses seguidos com o aporte feito, os últimos doze meses um a um e o que ficou
+faltando nos que falharam); **os objetivos** em linhas, cada um com a previsão no ritmo de hoje (`previsaoDoObj`: no
+caminho, ou quantos meses a data anda); e o atendimento. Em aberto:
+
+- **Vinte pessoas na tela inicial** (`area-logada/PERSONAS-PAINEL-2026-10-31.md`): a pergunta imediata de cada uma e o cartão
+  em que toca. Trouxeram os números-chave na paisagem (patrimônio, reserva, nota do exame), a liberdade financeira como
+  primeira linha dos objetivos com o estado do Plano, todos os objetivos e a data no ritmo de hoje.
+- **A foto.** É a mesma do Unsplash de antes (`PAISAGEM`); o produto precisa de uma foto própria, guardada com a marca.
+- **O Appshots** não tem ferramentas financeiras no catálogo web (a busca por Mercury, Stripe e "finance" não acha apps);
+  a referência de sofisticação continua sendo a Origin (`C:Users
+ocosDesktop	empOriginorigin-screenshots.zip`) e
+  as regras do "Livro discreto" em `area-logada/DIRECOES-VISUAIS-2026-10-30.md`.
+- **A ilustração da travessia** (`ILUSTRA.travessia`) ficou sem uso; pode voltar numa tela de pausa (Jornada) ou sair.
+
+### O passo pelo momento de vida, os 12 meses e o teto (31/10/2026)
+
+Decisão do dono do produto. **O passo** segue o momento de vida (`regua()`), quando o planejador não escolheu outro:
+a dívida cara primeiro (listar as dívidas, fazer sobrar a parcela, trocar por um crédito mais barato); abaixo da
+**reserva mínima** (40% da ideal), prioridade total, com onde guardar (`ONDE_RESERVA`) e em quantos meses chega com a
+sobra inteira; depois da mínima, a **aceitável** (70%) e a **ideal** andam junto com o objetivo mais próximo ("E ao mesmo
+tempo", `juntoDoObjetivo`). O passo de reserva escolhido pelo planejador ganha o mesmo onde e o mesmo objetivo.
+
+O Painel ganhou dois cartões: **os próximos 12 meses** (a renda prevista dividida entre o presente e o futuro, pelo
+orçamento do plano mês a mês, com bônus e despesas anuais; e o balanço dos aportes respondidos: o combinado, o feito e
+quanto os próximos 12 meses pedem para compensar o que ficou para trás) e **o teto do mês** nos gastos ajustáveis (com
+teto combinado: o gasto das semanas respondidas e quanto ficam as semanas que faltam quando passou; sem teto combinado e
+com a sobra abaixo do que os objetivos pedem: o teto que fecha os objetivos). Em aberto:
+
+- **Duas fontes no mesmo cartão.** O futuro dos próximos 12 meses vem do orçamento do plano (no exemplo, R$ 39,5 mil); o
+  balanço vem das tarefas de aporte, que no Completo não incluem a parte da liberdade financeira. A diferença é pequena,
+  mas o aporte da liberdade deveria entrar na tarefa do Completo.
+- **O teto entre meses.** Dentro do mês, o excesso redistribui as semanas; o mês fechado acima do teto vira falta no
+  aporte e entra na compensação dos 12 meses. Não há teto ajustado para o mês seguinte.
+- **Onde guardar a reserva** é um texto genérico; o planejador pode trocar (`onde` no passo da clínica).
+
+### O sonho e o plano, o Saber e as reuniões (31/10/2026)
+
+- **Objetivos: as duas linhas** (`linhasDosObjetivos`). Em cima, a data sonhada de cada objetivo e da liberdade; embaixo,
+  quando cada um chega, com o atraso escrito ("atrasa 16 meses", "atrasa 8 anos", "na data"). O controle muda quanto vai
+  por mês para os objetivos (e diz quanto o presente perde ou ganha); "Somar uma renda extra" abre um segundo controle,
+  inteiro para os objetivos; "Para todos chegarem na data: R$ X por mês" com "Ver assim". A simulação divide o total como
+  hoje e o objetivo que chega libera o aporte para os que faltam; é a mesma do "atrasa" do Painel. A liberdade do plano
+  publicado que fecha fica ancorada na data do plano (o motor conta o crescimento da renda); o controle move a diferença.
+  O controle fica logo abaixo das linhas. Nenhum objetivo chega antes da data-alvo: cada um recebe só o aporte que o
+  leva até lá (a liberdade do plano publicado, o aporte do plano) e o que passa disso vai para os que ainda estão
+  atrasados; o já alcançado fica na data planejada. Ao soltar o controle acima do total que põe todos na data, uma janela
+  diz que não precisa poupar mais do que isso e oferece ficar com esse valor.
+- **Saber** (aba no computador, em Mais no celular): quatro capítulos (`CAPITULOS`) de três módulos, três perguntas cada;
+  quem acerta duas é aprovado, quem não acerta lê o conceito e refaz. Ninguém começa do zero: "Já sei isso" marca o
+  capítulo, e a prova de cinco perguntas, uma por tela e com "Ainda não sei", conclui o capítulo com quatro acertos.
+  O planejador entra no Saber do cliente (Clientes › Área do cliente, que abre com `?consultor`): vê as respostas de
+  cada módulo e da última prova e marca capítulos, módulos e conquistas de fazer como concluídos (em "planejador" de
+  `X.saberCap` e `X.saber`, e em `X.conquistas`), ou desmarca. As respostas passaram a ficar guardadas (`r`). Cada capítulo vale duas conquistas: a do saber (concluir) e a do fazer (pôr em prática: a
+  reserva mínima sai das contas, o resto o cliente marca com "Já fiz"), mais a trilha completa e o primeiro sonho
+  realizado. No Painel, "Os seus 5 minutos": o convite para marcar o que já sabe, depois a prova do que marcou, depois
+  uma pergunta do próximo módulo. Fica em `X.saber`, `X.saberCap` e `X.conquistas`.
+- **Fazer e saber no Painel**: logo depois da paisagem, "Melhorar o futuro financeiro" com duas colunas. À esquerda, o
+  Fazer (as tarefas do mês feitas, com a barra, e as próximas); à direita, o Saber (o nível, a barra da trilha e uma
+  pergunta do próximo módulo). No menu do computador, o Saber fica ao lado das Tarefas; no celular, segue em Mais.
+- **As reuniões** no Atendimento: com quem foi, o resumo e as tarefas, com o estado de cada uma (a ligada a um pedido
+  segue a tarefa; a avulsa, a data em que foi feita). Vêm de `C.reunioes` e `X.reunioes`, gravadas pelo portal.
+  Cada tarefa da reunião é a da lista. O toque no círculo (ou numa das últimas vezes) abre a escolha logo abaixo: Feita,
+  Em parte, Não feita ou Em aberto (no teto, Fiquei dentro e Passei do teto); "Em parte" pede o que foi feito e o que
+  faltou (e, no aporte, quanto foi guardado), e a observação aparece embaixo da tarefa e no histórico dela. Tem desfazer. A avulsa entra na lista de
+  tarefas como Burocrática, com prazo de duas semanas depois da reunião (ou `ate`); a recorrente mostra as últimas cinco
+  vezes (meses ou semanas), cada uma com o estado e o toque para marcar ou desmarcar.
+
+Em aberto: o portal ainda não grava as reuniões nem o resumo; o conteúdo dos módulos precisa da revisão da Nord, e os
+capítulos são um agrupamento provisório até a trilha completa (falta renda variável); a visão do planejador na área
+vem só do `?consultor` no endereço, sem checar quem está vendo (na plataforma, deve vir da sessão); no
+celular, objetivos com datas próximas se sobrepõem na linha (a lista abaixo resolve a leitura).
+
 ### O exame em conversa (30/10/2026)
 
 O exame de saúde financeira é uma conversa: a Nord pergunta (o ícone, não a foto do planejador, porque não é ele quem

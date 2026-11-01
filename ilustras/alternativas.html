@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ilustrações da Liberdade financeira</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{--fundo:#F8F4EE;--cartao:#fff;--marinho:#20344C;--laranja:#FA7A35;--legenda:#6B7480;--areia:#E9E2D8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fundo);color:var(--marinho);font:400 14px/1.4 'DM Sans',sans-serif;display:grid;grid-template-columns:300px 1fr;height:100vh}
+aside{overflow-y:auto;padding:20px 16px;border-right:1px solid var(--areia)}
+h1{font:500 22px/1.2 Newsreader,serif;margin:0 0 4px}
+aside>p{color:var(--legenda);margin:0 0 16px;font-size:13px}
+h2{font:600 12px 'DM Sans',sans-serif;color:var(--legenda);margin:18px 0 8px}
+.grade{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grade button{padding:0;border:2px solid transparent;border-radius:8px;overflow:hidden;cursor:pointer;background:none;aspect-ratio:16/9}
+.grade button img{width:100%;height:100%;object-fit:cover;display:block}
+.grade button.on{border-color:var(--laranja)}
+main{display:flex;flex-direction:column;min-width:0}
+.barra{display:flex;gap:8px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--areia);flex-wrap:wrap}
+.barra b{margin-right:auto;font-weight:600}
+.barra button{border:1px solid var(--areia);background:var(--cartao);color:var(--marinho);border-radius:9999px;padding:8px 14px;font:500 13px 'DM Sans',sans-serif;cursor:pointer}
+.barra button.on{background:var(--marinho);color:#fff;border-color:var(--marinho)}
+.palco{flex:1;display:flex;justify-content:center;overflow:auto;padding:16px}
+iframe{border:0;background:#fff;border-radius:12px;box-shadow:0 10px 30px -12px rgba(19,31,46,.25);height:100%;width:100%;max-width:1280px}
+iframe.cel{max-width:390px}
+@media (max-width:799px){body{grid-template-columns:1fr;grid-template-rows:auto 1fr;height:auto}aside{border-right:0;max-height:none}.palco{height:80vh}}
+</style>
+</head>
+<body>
+<aside>
+  <h1>Liberdade financeira</h1>
+  <p>As 20 alternativas do Midjourney para a capa do capítulo. Toque numa imagem para ver na tela de verdade.</p>
+  <div id="lista"></div>
+</aside>
+<main>
+  <div class="barra">
+    <b id="nome"></b>
+    <button data-larg="" class="on">Computador</button>
+    <button data-larg="cel">Celular</button>
+  </div>
+  <div class="palco"><iframe id="tela" title="A área do cliente com a ilustração escolhida"></iframe></div>
+</main>
+<script>
+const GRUPOS = [['porta', 'Porta aberta'], ['veleiro', 'Veleiro em recorte de papel'], ['ilhas', 'Ilhas flutuantes'], ['pessoa', 'Pessoa com a pipa'], ['esfera', 'Esfera de vidro']];
+const st = { capa: 'porta-3' };
+document.getElementById('lista').innerHTML = GRUPOS.map(([g, n]) => `<h2>${n}</h2><div class="grade">${[1, 2, 3, 4].map(k => `<button data-capa="${g}-${k}" title="${n} ${k}"><img src="alternativas/${g}-${k}.webp" alt="${n}, variação ${k}" loading="lazy"></button>`).join('')}</div>`).join('');
+const mostra = () => {
+  document.getElementById('tela').src = `../area-cliente.html?cliente=exemplo&capa=${st.capa}#cartao/liberdade`;
+  const [g, k] = st.capa.split('-');
+  document.getElementById('nome').textContent = `${GRUPOS.find(x => x[0] === g)[1]}, variação ${k}`;
+  document.querySelectorAll('[data-capa]').forEach(b => b.classList.toggle('on', b.dataset.capa === st.capa));
+};
+document.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.capa) st.capa = b.dataset.capa;
+  if (b.dataset.larg != null) { document.getElementById('tela').className = b.dataset.larg; document.querySelectorAll('[data-larg]').forEach(x => x.classList.toggle('on', x === b)); }
+  mostra();
+});
+mostra();
+</script>
+</body>
+</html>
