@@ -1105,10 +1105,10 @@ const CONSULTOR = PARAMS.has('consultor');   // a área vista pelo planejador (C
 const EXEMPLO = !!CLIENTE && /^exemplo/.test(CLIENTE);
 // A direção visual (?visual=), proposta em 30/10 sobre o mesmo esqueleto; a escolha fica lembrada neste navegador
 // os temas escuros (Noite e Travessia) saíram em 30/10: o plano pede clareza
-const VISUAIS = [['sobrio', 'Sóbrio'], ['livro', 'Livro'], ['aurora', 'Aurora']];
+const VISUAIS = [['livro', 'Livro']]; // decidido: o Livro é o visual; Sóbrio e Aurora saíram do seletor
 const VISUAL = (() => { const ok = v => VISUAIS.some(x => x[0] === v), q = PARAMS.get('visual');
   if (ok(q)) { try { localStorage.setItem('nl-visual', q); } catch (e) { } return q; }
-  try { const s = localStorage.getItem('nl-visual'); if (ok(s)) return s; } catch (e) { } return 'sobrio'; })();
+  try { const s = localStorage.getItem('nl-visual'); if (ok(s)) return s; } catch (e) { } return 'livro'; })();
 if (VISUAL !== 'sobrio') document.body.classList.add('v-' + VISUAL);
 // Os pares de fontes para o Livro (?fonte=), para comparar antes de decidir: a serifa dos títulos e números e a sans do
 // texto. O par escolhido fica lembrado neste navegador; os que não são o padrão carregam as famílias do Google Fonts
@@ -1124,8 +1124,7 @@ const FONTES = [
   ['gloock', 'Gloock + Manrope', "'Gloock',Georgia,serif", "'Manrope',system-ui,sans-serif", 'family=Gloock&family=Manrope:wght@400..700'],
   ['petrona', 'Petrona + Manrope', "'Petrona',Georgia,serif", "'Manrope',system-ui,sans-serif", 'family=Petrona:ital,wght@0,400..600;1,400&family=Manrope:wght@400..700']];
 const FONTE = (() => { const ok = v => FONTES.some(x => x[0] === v), q = PARAMS.get('fonte');
-  if (ok(q)) { try { localStorage.setItem('nl-fonte', q); } catch (e) { } return q; }
-  try { const s = localStorage.getItem('nl-fonte'); if (ok(s)) return s; } catch (e) { } return 'literata-dm'; })();
+  return 'literata-dm'; })(); // decidido: Literata + DM Sans; o seletor de fontes saiu
 if (FONTE !== 'literata-dm') { const f = FONTES.find(x => x[0] === FONTE); document.body.classList.add('f-' + FONTE); document.body.style.setProperty('--serifa', f[2]); document.body.style.setProperty('--sans', f[3]);
   document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?${f[4]}&display=swap">`); }
 // o ícone da marca (os dois visuais são claros: o positivo)
@@ -1962,8 +1961,7 @@ function barraDemo() {
   const link = (rot, cli, extra) => { const q = new URLSearchParams(); q.set('demo', ''); if (cli) q.set('cliente', cli); if (extra) q.set('hoje', extra); const on = (cli || null) === CLIENTE && (extra || null) === (PARAMS.get('hoje') || null);
     return `<a class="${on ? 'on' : ''}" href="?${q.toString().replace('demo=', 'demo')}${location.hash}">${rot}</a>`; };
   const vis = ([v, nome]) => { const q = new URLSearchParams(PARAMS); q.delete('reiniciar'); q.set('visual', v); return `<a class="${v === VISUAL ? 'on' : ''}" href="?${q.toString().replace('demo=&', 'demo&').replace(/demo=$/, 'demo')}${location.hash}">${nome}</a>`; };
-  return `<div class="demo"><span>Exemplo · a mesma família em quatro profundidades:</span>${link('Visitante', null)}${link('Cadastrado', 'exemplo-cadastrado')}${link('Clínica', 'exemplo')}${link('Completo', 'exemplo-completo')}${link('Completo em jul/2027', 'exemplo-completo', '2027-07-15')}<span>hoje: ${dataBRano(HOJE)}</span>${CLIENTE ? `<a href="?${PARAMS.toString()}&reiniciar${location.hash}">Reiniciar</a>` : ''}</div>
-    <div class="demo" style="padding-top:0"><span>Visual:</span>${VISUAIS.map(vis).join('')}${VISUAL === 'livro' ? `<span style="margin-left:10px">Fontes:</span>${FONTES.map(([f, nome]) => { const q = new URLSearchParams(PARAMS); q.delete('reiniciar'); q.set('fonte', f); return `<a class="${f === FONTE ? 'on' : ''}" href="?${q.toString().replace('demo=&', 'demo&').replace(/demo=$/, 'demo')}${location.hash}">${nome}</a>`; }).join('')}` : ''}</div>`;
+  return `<div class="demo"><span>Exemplo · a mesma família em quatro profundidades:</span>${link('Visitante', null)}${link('Cadastrado', 'exemplo-cadastrado')}${link('Clínica', 'exemplo')}${link('Completo', 'exemplo-completo')}${link('Completo em jul/2027', 'exemplo-completo', '2027-07-15')}<span>hoje: ${dataBRano(HOJE)}</span>${CLIENTE ? `<a href="?${PARAMS.toString()}&reiniciar${location.hash}">Reiniciar</a>` : ''}</div>`;
 }
 
 // =====================================================================================================================
