@@ -10663,18 +10663,22 @@ addEventListener('resize', () => renderFluxo());
   const link = ([id, n, h]) => `<a href="${h}"${id === aqui ? ' aria-current="page"' : ''}>${n}</a>`;
   if (!document.getElementById('casca-estilo')) { const st = document.createElement('style'); st.id = 'casca-estilo';
     st.textContent = `[data-casca]{font:500 13px 'DM Sans',system-ui,sans-serif}
-[data-casca] a{color:rgba(255,255,255,.78);text-decoration:none;white-space:nowrap;padding:5px 9px;border-radius:8px}
+[data-casca] a{color:rgba(255,255,255,.78);text-decoration:none;white-space:nowrap;padding:6px 10px;border-radius:8px;transition:background .15s,color .15s}
+[data-casca] a:focus-visible{outline:2px solid #FA7A35;outline-offset:1px}
 [data-casca] a:hover{color:#fff;background:rgba(255,255,255,.1)}
 [data-casca] a[aria-current=page]{color:#fff;background:rgba(255,255,255,.16)}
 [data-casca] .cc-cli{color:rgba(255,255,255,.55);padding:5px 4px 5px 10px;white-space:nowrap}
-[data-casca=faixa]{display:flex;align-items:center;gap:2px;background:#131F2E;padding:6px 20px;overflow-x:auto;scrollbar-width:none}
-[data-casca=faixa] img{width:22px;height:22px;margin-right:8px;flex:none}
+[data-casca=faixa]{display:flex;align-items:center;gap:2px;background:#20344C;border-bottom:1px solid rgba(255,255,255,.12);padding:7px 20px;overflow-x:auto;scrollbar-width:none}
+[data-casca=faixa] img{width:24px;height:24px;margin-right:10px;flex:none}
+[data-casca=faixa]:has(+ header img) img{display:none}   /* a tela que já tem a marca no próprio cabeçalho não a repete */
 [data-casca=faixa] .cc-sep{flex:0 0 1px;align-self:stretch;background:rgba(255,255,255,.18);margin:4px 8px}
 [data-casca=lateral]{display:flex;flex-wrap:wrap;gap:2px;margin-top:10px}
 [data-casca=lateral] a{padding:4px 8px;font-size:12.5px;background:rgba(255,255,255,.06)}
 [data-casca=lateral] .cc-sep{flex:0 0 100%;height:4px}
 [data-casca=lateral] .cc-cli,[data-casca=lateral] img,[data-casca=lateral] a:first-of-type{display:none}   /* no portal, a base já é o botão acima */
 body.recolhido [data-casca=lateral]{display:none}
+@media (max-width:600px){[data-casca=faixa]{padding:7px 12px}}
+@media (prefers-reduced-motion:reduce){[data-casca] a{transition:none}}
 @media print{[data-casca]{display:none!important}}`;
     document.head.appendChild(st); }
   alvo.setAttribute('aria-label', 'Área do consultor');

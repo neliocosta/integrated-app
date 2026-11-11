@@ -10,38 +10,48 @@
   --nl-orange-500:#FA7A35; --nl-orange-600:#E06600; --nl-peach-100:#FFF3EB;
   --nl-navy-900:#20344C; --nl-navy-950:#131F2E;
   --nl-gray-700:#555555; --nl-gray-500:#6B6A66; --nl-gray-300:#DDDDDD; --nl-sand:#F1EEE8; --nl-cream-50:#FDFCFA; --nl-white:#FFFFFF;
-  --nl-verde-fundo:#E8F4EC; --nl-verde-texto:#2F6B45; --nl-atencao:#B4520F;
+  --nl-verde-fundo:#E3F3E9; --nl-verde-texto:#22794A; --nl-atencao:#964400; --nl-ardosia:#DCE3EC;
   --shadow-card:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04);
+  --shadow-card-module:0 4px 10px rgba(0,0,0,.08),0 12px 28px rgba(0,0,0,.10);
+  --r-card:16px; --r-bloco:12px; --r-controle:11px; --r-peq:8px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--nl-cream-50);color:var(--nl-gray-700);font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:100vh}
+body{background:var(--nl-cream-50);color:var(--nl-gray-700);font-family:'DM Sans',system-ui,sans-serif;font-size:14px;line-height:1.5;min-height:100vh;font-variant-numeric:lining-nums tabular-nums}
+:focus-visible{outline:2px solid var(--nl-orange-500);outline-offset:2px}
+::selection{background:#FCD9C2;color:var(--nl-navy-900)}
 main{max-width:1180px;margin:0 auto;padding:28px 34px 80px}
 a{color:var(--nl-navy-900)}
 .topo{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:18px;flex-wrap:wrap}
 .eyebrow{font:600 11px 'DM Sans',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--nl-gray-500);margin-bottom:6px}
 h1{font:700 28px Sora,sans-serif;color:var(--nl-navy-900);line-height:1.15}
-h2{font:600 16px Sora,sans-serif;color:var(--nl-navy-900);margin:0 0 10px}
+h2{font:600 17px Sora,sans-serif;color:var(--nl-navy-900);margin:0 0 10px}
 .sub{margin-top:8px;font-size:15px;line-height:1.6;max-width:640px}
-.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:11px;padding:10px 16px;font:600 13.5px 'DM Sans',sans-serif;cursor:pointer;text-decoration:none;white-space:nowrap;min-height:40px}
-.btn-primary{background:var(--nl-navy-900);color:#fff}
-.btn-primary:hover{background:var(--nl-navy-950)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:var(--r-controle);padding:9px 14px;font:600 13px 'DM Sans',sans-serif;cursor:pointer;text-decoration:none;white-space:nowrap;min-height:40px;transition:filter .12s,box-shadow .12s,transform .1s}
+.btn:active{transform:scale(.97)}
+.btn-primary,.btn-novo{background:var(--nl-orange-500);color:var(--nl-navy-900);border-radius:9999px;padding:9px 18px}
+.btn-primary:hover,.btn-novo:hover{filter:brightness(.94)}
 .btn-secondary{background:var(--nl-white);color:var(--nl-navy-900);box-shadow:inset 0 0 0 1px var(--nl-gray-300)}
 .btn-secondary:hover{box-shadow:inset 0 0 0 1px var(--nl-navy-900)}
-.btn-novo{background:var(--nl-orange-500);color:#fff}
-.btn-novo:hover{background:var(--nl-orange-600)}
-.btn-peq{padding:6px 11px;min-height:32px;font-size:12.5px;border-radius:9px}
-.btn-link{background:none;color:var(--nl-navy-900);padding:4px 6px;min-height:28px;text-decoration:underline;font-weight:500}
+.btn-terc{background:var(--nl-peach-100);color:var(--nl-navy-900)}
+.btn-terc:hover{filter:brightness(.97)}
+.btn-peq{padding:6px 11px;min-height:32px;font-size:12.5px;border-radius:var(--r-peq)}
+.btn-link{background:none;color:var(--nl-navy-900);padding:4px 6px;min-height:28px;text-decoration:underline;text-underline-offset:3px;font-weight:500}
 .botoes{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .btn input[type=file]{display:none}
 /* as duas visões (a carteira e o cliente) e, na carteira, lista ou pipeline */
 .abas{display:flex;gap:4px;border-bottom:1px solid var(--nl-gray-300);margin-bottom:18px;overflow-x:auto}
-.abas a{padding:11px 14px 9px;border-bottom:2.5px solid transparent;font:600 13.5px 'DM Sans',sans-serif;color:var(--nl-gray-500);text-decoration:none;white-space:nowrap}
+.abas a{padding:12px 14px 10px;border-bottom:2.5px solid transparent;font:600 13.5px 'DM Sans',sans-serif;color:var(--nl-gray-500);text-decoration:none;white-space:nowrap}
 .abas a[aria-current=page]{color:var(--nl-navy-900);border-bottom-color:var(--nl-orange-500)}
 .abas a i{font-style:normal;margin-left:6px;background:var(--nl-peach-100);color:var(--nl-atencao);border-radius:9999px;padding:1px 7px;font-size:11.5px}
-.cartao{background:var(--nl-white);border-radius:16px;box-shadow:var(--shadow-card);padding:18px 22px;margin-bottom:14px}
-.grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+.cartao{background:var(--nl-white);border-radius:var(--r-card);box-shadow:var(--shadow-card);padding:20px 22px;margin-bottom:16px}
+/* o que ainda não existe ("em breve"): contorno tracejado, sem sombra, como o cartão vago da área do cliente */
+.cartao.breve{background:transparent;box-shadow:none;border:1px dashed var(--nl-gray-300)}
+.cartao.breve h2{font-size:15px}
+.cab-cartao{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.cab-cartao h2{margin:0}
+.grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
 .grade4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.meta{border:1px dashed var(--nl-gray-300);border-radius:12px;padding:12px 14px}
+.meta{background:var(--nl-sand);border-radius:var(--r-bloco);padding:12px 14px}
 .meta b{display:block;font:600 13.5px Sora,sans-serif;color:var(--nl-navy-900)}
 .linha{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-top:1px solid var(--nl-sand)}
 .linha:first-of-type{border-top:0}
@@ -51,30 +61,49 @@ h2{font:600 16px Sora,sans-serif;color:var(--nl-navy-900);margin:0 0 10px}
 .chip{display:inline-block;padding:2px 9px;border-radius:9999px;background:var(--nl-sand);color:var(--nl-gray-500);font:600 11.5px 'DM Sans',sans-serif;white-space:nowrap}
 .chip.ok{background:var(--nl-verde-fundo);color:var(--nl-verde-texto)}
 .chip.at{background:var(--nl-peach-100);color:var(--nl-atencao)}
-.chip.mar{background:#E6EBF1;color:var(--nl-navy-900)}
+.chip.mar{background:var(--nl-ardosia);color:var(--nl-navy-900)}
 .vazio{color:var(--nl-gray-500);line-height:1.6;padding:6px 0}
 .cartao.vazio{text-align:center;padding:28px}
+/* o estado vazio que acolhe: a ilustração da série, o que falta e o que fazer */
+.vazio-ilu{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:28px 16px 30px;color:var(--nl-gray-500);line-height:1.6}
+.vazio-ilu .ilustra{width:min(240px,72%);margin-bottom:12px}
+.vazio-ilu b{font:600 17px Sora,sans-serif;color:var(--nl-navy-900)}
+.vazio-ilu p{max-width:46ch}
+/* as ilustrações da série (ilustras/PROMPTS-MIDJOURNEY.md): o lugar reservado tem a proporção da imagem e um céu suave nas
+   cores dela; a imagem cobre o lugar quando ilustras/v2/<nome>.webp existir, sem mexer no código */
+.ilustra{position:relative;display:block;overflow:hidden;aspect-ratio:4/3;border-radius:var(--r-card);background:#E3EEF7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 225' preserveAspectRatio='xMidYMid slice'%3E%3Crect width='400' height='225' fill='%23E3EEF7'/%3E%3Ccircle cx='292' cy='104' r='30' fill='%23FCD9C2'/%3E%3Cg fill='%23fff'%3E%3Cellipse cx='96' cy='84' rx='40' ry='12'/%3E%3Cellipse cx='118' cy='74' rx='24' ry='13'/%3E%3Cellipse cx='236' cy='62' rx='28' ry='8'/%3E%3Cellipse cx='340' cy='140' rx='32' ry='9'/%3E%3C/g%3E%3Cpath d='M0 176c70-26 130-24 200-8s130 10 200-14v71H0z' fill='%23FFF3EB'/%3E%3Cpath d='M0 204c90-18 170-10 240 0s110 4 160-8v29H0z' fill='%23FDE4D3'/%3E%3C/svg%3E") center/cover no-repeat}
+.ilustra img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease}
+.ilustra.tem img{opacity:1}
 /* a carteira: um cliente por linha */
-.cli{background:var(--nl-white);border-radius:16px;box-shadow:var(--shadow-card);padding:16px 20px;display:grid;grid-template-columns:42px minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) auto;gap:16px;align-items:center;margin-bottom:10px}
+.cli{background:var(--nl-white);border-radius:var(--r-card);box-shadow:var(--shadow-card);padding:16px 22px;display:grid;grid-template-columns:42px minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) auto;gap:14px 16px;align-items:center;margin-bottom:12px}
+.cli .pe{grid-column:1/-1;border-top:1px solid var(--nl-sand);padding-top:12px}
 .ini{width:42px;height:42px;border-radius:50%;background:var(--nl-peach-100);color:var(--nl-orange-600);display:flex;align-items:center;justify-content:center;font:600 15px Sora,sans-serif}
-.cli .nome b{display:block;font:600 16px Sora,sans-serif;color:var(--nl-navy-900);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cli .nome b{display:block;font:600 16px Sora,sans-serif;color:var(--nl-navy-900);margin-bottom:4px;text-wrap:balance}
 .cli .nome a{text-decoration:none;color:inherit}
+.cli .nome a:hover{text-decoration:underline;text-underline-offset:3px}
 .cli .col small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--nl-gray-500);margin-bottom:2px}
 .cli .col span{color:var(--nl-navy-900);font-size:13.5px}
-.tag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:9999px;background:var(--nl-sand);color:var(--nl-gray-500);font:600 10.5px 'DM Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;vertical-align:3px}
+.tag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:9999px;background:var(--nl-sand);color:var(--nl-gray-500);font:600 11px 'DM Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;vertical-align:3px;white-space:nowrap}
 .atalhos{display:flex;gap:6px;flex-wrap:wrap}
 /* o pipeline: as 20 etapas em colunas, rolando para o lado */
 .quadro{display:flex;gap:10px;overflow-x:auto;padding-bottom:12px;align-items:flex-start}
-.coluna{flex:0 0 212px;background:var(--nl-sand);border-radius:12px;padding:10px}
+.coluna{flex:0 0 212px;background:var(--nl-sand);border-radius:var(--r-bloco);padding:10px}
 .coluna h3{font:600 12px 'DM Sans',sans-serif;color:var(--nl-navy-900);margin-bottom:8px;display:flex;justify-content:space-between;gap:6px}
-.coluna.sem{opacity:.55}
-.pcard{display:block;background:var(--nl-white);border-radius:10px;padding:10px 12px;margin-bottom:8px;text-decoration:none;box-shadow:var(--shadow-card)}
+.coluna h3 span{color:var(--nl-gray-500)}
+.coluna.sem{flex-basis:148px;background:transparent;box-shadow:inset 0 0 0 1px var(--nl-sand)}
+.coluna.sem h3{color:var(--nl-gray-500);font-weight:500;margin:0}
+.pcard{display:block;background:var(--nl-white);border-radius:var(--r-peq);padding:10px 12px;margin-bottom:8px;text-decoration:none;box-shadow:var(--shadow-card);transition:box-shadow .15s}
+.pcard:hover{box-shadow:var(--shadow-card-module)}
+.pcard:last-child{margin-bottom:0}
 .pcard b{display:block;color:var(--nl-navy-900);font:600 13.5px Sora,sans-serif}
 .pcard small{display:block;font-size:12px;color:var(--nl-gray-500);margin-top:2px}
 /* a ficha do cliente */
 .campo{display:flex;flex-direction:column;gap:4px;margin:10px 0}
 .campo label{font:600 12.5px 'DM Sans',sans-serif;color:var(--nl-navy-900)}
-.campo input,.campo select,.campo textarea{border:1px solid var(--nl-gray-300);border-radius:9px;padding:9px 11px;font:inherit;background:#fff;width:100%}
+.campo input,.campo select,.campo textarea{border:1px solid var(--nl-gray-300);border-radius:var(--r-peq);padding:9px 11px;font:inherit;color:var(--nl-navy-900);background:#fff;width:100%;min-height:40px}
+.campo :is(input,select,textarea):focus-visible{outline:2px solid var(--nl-orange-500);outline-offset:0;border-color:transparent}
+.campo ::placeholder{color:var(--nl-gray-500)}
+input[type=checkbox]{accent-color:var(--nl-navy-900);width:16px;height:16px}
 .campos2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
 .marca{width:22px;height:22px;flex:0 0 22px;border-radius:50%;border:1.5px solid var(--nl-gray-300);background:#fff;margin-top:1px;cursor:pointer}
 .marca.ok{background:var(--nl-verde-texto);border-color:var(--nl-verde-texto)}
@@ -87,9 +116,13 @@ body.com-tela{overflow:hidden}
 @media (max-width:860px){
   main{padding:20px 16px 60px} h1{font-size:24px}
   .grade,.campos2{grid-template-columns:minmax(0,1fr)} .grade4{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .cli{grid-template-columns:42px minmax(0,1fr);gap:10px 12px} .cli .col,.cli .atalhos{grid-column:1/-1}
+  .cli{grid-template-columns:42px minmax(0,1fr);gap:10px 12px;padding:16px} .cli .col,.cli .abrir{grid-column:1/-1}
+  .cli .abrir .btn{width:100%}
   .cartao{padding:16px}
+  .linha{flex-wrap:wrap} .linha .tx{flex:1 1 62%}
+  .topo .btn{width:100%} .topo > div:last-child{width:100%}
 }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
@@ -201,7 +234,9 @@ let DONO = true, MODO_NUVEM = false;
 const rota = () => { const h = decodeURIComponent(location.hash.slice(1)) || 'carteira', i = h.indexOf('/'); return i < 0 ? { tela: h, arg: null } : { tela: h.slice(0, i), arg: h.slice(i + 1) }; };
 const atalhos = (c, peq) => { const b = 'btn btn-secondary' + (peq ? ' btn-peq' : '');
   return `<div class="atalhos"><a class="${b}" data-tela href="${url('tela-consultor.html', c.id, '&coleta')}">Coleta</a><a class="${b}" data-tela href="${url('tela-consultor.html', c.id)}">Montar o plano</a><a class="${b}" data-tela href="${url('evolucao-patrimonial.html', c.id, '&consultor')}">Relatório</a><a class="${b}" data-tela href="${url('area-cliente.html', c.id, '&consultor')}" title="Emular o acesso do cliente: a área logada como ele vê">Área do cliente</a><a class="${b}" data-tela href="${url('acompanhamento.html', c.id, '&consultor')}">Acompanhamento</a></div>`; };
-const emBreve = (titulo, txt) => `<div class="cartao"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><h2 style="margin:0">${titulo}</h2><span class="chip">em breve</span></div><p class="leg" style="margin-top:6px">${txt}</p></div>`;
+// a ilustração da série: o lugar reservado mostra o céu; a imagem entra sozinha quando o arquivo existir (ilustras/PROMPTS-MIDJOURNEY.md)
+const ilustra = nome => `<span class="ilustra" aria-hidden="true"><img src="ilustras/v2/${nome}.webp" alt="" onload="this.parentNode.classList.add('tem')" onerror="this.remove()"></span>`;
+const emBreve = (titulo, txt) => `<div class="cartao breve"><div class="cab-cartao"><h2>${titulo}</h2><span class="chip">em breve</span></div><p class="leg" style="margin-top:6px">${txt}</p></div>`;
 const cabecalho = (L, tela) => { const esp = L.reduce((s, c) => s + c.espera.length, 0);
   return `<div class="topo"><div><div class="eyebrow">Área do consultor</div><h1>Base de clientes</h1><p class="sub">A carteira inteira num lugar: em que etapa cada cliente está, o que espera por você e os atalhos para trabalhar em cada um.</p></div>
     <div class="botoes"><label class="btn btn-secondary" title="Um plano em JSON (o do portal, exportado, ou um que uma IA extraiu dos documentos do cliente) entra como um cliente novo; serve também para recuperar uma coleta de um arquivo">Importar JSON<input type="file" accept=".json,application/json" id="arqImportar"></label><a class="btn btn-novo" id="btnNovo" href="#">+ Novo cliente</a></div></div>
@@ -213,21 +248,21 @@ function telaCarteira(L) {
       <div class="nome"><b><a href="#cliente/${encodeURIComponent(c.id)}">${escH(c.nome)}</a>${c.exemplo ? `<span class="tag">exemplo · ${c.exemplo}</span>` : ''}</b><span class="chip mar">${ETAPAS[c.etapa]}</span> ${vence(c)}</div>
       <div class="col"><small>Próxima reunião</small><span>${c.reuniao ? escH(quandoReuniao(c.reuniao)) : 'sem reunião marcada'}</span></div>
       <div class="col"><small>Tarefas e alertas</small><span>${ab ? ab + (ab === 1 ? ' tarefa aberta' : ' tarefas abertas') + (atr ? `, ${atr} em atraso` : '') : 'nenhuma tarefa aberta'}${c.espera.length ? ` · <a href="#cliente/${encodeURIComponent(c.id)}">${c.espera.length} esperando por você</a>` : ''}</span></div>
-      <div><a class="btn btn-primary btn-peq" href="#cliente/${encodeURIComponent(c.id)}">Abrir a ficha</a></div>
-      <div style="grid-column:2/-1">${atalhos(c, true)}</div></div>`; };
+      <div class="abrir"><a class="btn btn-terc btn-peq" href="#cliente/${encodeURIComponent(c.id)}">Abrir a ficha</a></div>
+      <div class="pe">${atalhos(c, true)}</div></div>`; };
   const seis = L.filter(c => !c.exames.length || difD(c.exames[0].data, c.hoje) > 183), coletas = L.filter(c => c.plano && c.plano.coleta && c.plano.coleta.status !== 'finalizada');
   const reunioes = L.filter(c => c.reuniao).sort((a, b) => a.reuniao.inicio < b.reuniao.inicio ? -1 : 1);
   const lista = (itens, vazio) => itens.length ? itens.join('') : `<p class="vazio">${vazio}</p>`;
-  return `<div class="cartao"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><h2 style="margin:0">Metas do semestre</h2><span class="chip">em breve</span></div>
+  return `<div class="cartao breve"><div class="cab-cartao"><h2>Metas do semestre</h2><span class="chip">em breve</span></div>
       <div class="grade4" style="margin-top:10px">${['Renovação', 'NPS', 'Indicações', 'Cobertura da base'].map(m => `<div class="meta"><b>${m}</b><span class="leg">nível de 1 a 5</span></div>`).join('')}</div></div>
-    <h2 style="margin-top:22px">Clientes <span class="leg" style="font-weight:400">${L.length}</span></h2>${L.map(linha).join('') || '<div class="cartao vazio ilustra-vaga">Nenhum cliente ainda. Comece por "+ Novo cliente": ele abre a reunião de coleta.</div>'}
+    <h2 style="margin-top:22px">Clientes <span class="leg" style="font-weight:400">${L.length}</span></h2>${L.map(linha).join('') || `<div class="cartao vazio-ilu ilustra-vaga">${ilustra('consultor-base-vazia')}<b>Nenhum cliente ainda</b><p>Comece por "+ Novo cliente": ele abre a reunião de coleta.</p></div>`}
     <div class="grade" style="margin-top:22px">
       <div class="cartao"><h2>Reuniões marcadas</h2>${lista(reunioes.map(c => `<div class="linha"><div class="tx"><b>${escH(quandoReuniao(c.reuniao))}</b><small><a href="#cliente/${encodeURIComponent(c.id)}">${escH(c.nome)}</a></small></div></div>`), 'Nenhuma reunião marcada na agenda.')}<p style="margin-top:8px"><a href="agendamento.html" data-tela>Abrir a agenda</a></p></div>
       <div class="cartao"><h2>Exames desatualizados</h2><p class="leg" style="margin-bottom:4px">Sem exame de saúde financeira, ou com o último há mais de seis meses.</p>${lista(seis.map(c => `<div class="linha"><div class="tx"><b><a href="#cliente/${encodeURIComponent(c.id)}">${escH(c.nome)}</a></b><small>${c.exames.length ? 'último em ' + dataBR(c.exames[0].data) + ', nota ' + c.exames[0].nota : 'nenhum exame'}</small></div></div>`), 'Todos com o exame em dia.')}</div>
       <div class="cartao"><h2>Coletas em andamento</h2>${lista(coletas.map(c => `<div class="linha"><div class="tx"><b><a href="#cliente/${encodeURIComponent(c.id)}">${escH(c.nome)}</a></b><small>coleta aberta, ainda não finalizada</small></div><a class="btn btn-secondary btn-peq" data-tela href="${url('tela-consultor.html', c.id, '&coleta')}">Continuar</a></div>`), 'Nenhuma coleta aberta.')}</div>
       <div>${emBreve('NPS em aberto', 'As pesquisas de satisfação enviadas e ainda sem resposta.')}${emBreve('Programa contínuo', 'Os clientes do programa contínuo e o que vence em cada um.')}</div>
     </div>
-    <div class="cartao" style="margin-top:8px"><h2>Mais da área do consultor</h2><p class="leg">Existem em produção e ainda não foram trazidos para cá:</p>
+    <div class="cartao breve" style="margin-top:8px"><h2>Mais da área do consultor</h2><p class="leg">Existem em produção e ainda não foram trazidos para cá:</p>
       ${[['Visão por papel', 'admin, escritório ou proprietário, e a carteira de outro consultor'], ['Link de indicação', 'para cadastrar clientes direto na sua carteira'], ['Resultados de campanha', ''], ['Cotações de seguros', ''], ['Consultores e escritórios, Pipeline Admin, Registro de ações, Ferramentas técnicas', 'por papel']].map(([t, s]) => `<div class="linha"><div class="tx"><b>${t}</b>${s ? `<small>${s}</small>` : ''}</div><span class="chip">em breve</span></div>`).join('')}</div>
     <p class="nota">${MODO_NUVEM ? 'Os planos ficam no banco deste link e abrem em qualquer computador com a sua conta. Só você, dono do link, vê esta lista.' : 'Neste computador, os planos ficam no navegador. No link publicado, ficam no banco do link e abrem em qualquer computador.'}
       Para importar um plano em JSON (por exemplo, extraído por uma IA dos documentos do cliente), siga o <a href="ux/plano-exemplo.json" download="modelo-plano.json">modelo</a> e a seção "Formato do plano" do README.</p>`;
@@ -243,7 +278,7 @@ function telaPipeline(L) {
 function telaEspera(L) {
   const itens = L.flatMap(c => c.espera.map(e => ({ c, e })));
   return `<div class="cartao"><h2>Espera por mim</h2><p class="leg" style="margin-bottom:4px">As suas tarefas, as propostas e mensagens sem resposta, e o que você pediu a um cliente e está em atraso.</p>
-    ${itens.length ? itens.map(({ c, e }) => `<div class="linha"><div class="tx"><b>${escH(e.txt)}</b><small>${escH(c.nome)}${c.exemplo ? ' · exemplo ' + c.exemplo : ''}</small></div>${e.atrasada ? '<span class="chip at">em atraso</span>' : ''}<a class="btn btn-secondary btn-peq" ${e.href.startsWith('#') ? '' : 'data-tela '}href="${escH(e.href)}">Abrir</a></div>`).join('') : '<p class="vazio ilustra-vaga">Nada esperando por você.</p>'}</div>`;
+    ${itens.length ? itens.map(({ c, e }) => `<div class="linha"><div class="tx"><b>${escH(e.txt)}</b><small>${escH(c.nome)}${c.exemplo ? ' · exemplo ' + c.exemplo : ''}</small></div>${e.atrasada ? '<span class="chip at">em atraso</span>' : ''}<a class="btn btn-secondary btn-peq" ${e.href.startsWith('#') ? '' : 'data-tela '}href="${escH(e.href)}">Abrir</a></div>`).join('') : `<div class="vazio-ilu ilustra-vaga">${ilustra('consultor-nada-esperando')}<b>Nada esperando por você</b></div>`}</div>`;
 }
 
 // a ficha: o cliente escolhido. O formulário de tarefa fica na memória (FORM) para sobreviver aos redesenhos
@@ -265,7 +300,7 @@ function telaFicha(c) {
   const coleta = c.plano && c.plano.coleta;
   return `<div class="topo"><div><div class="eyebrow"><a href="#carteira">Base de clientes</a> › Cliente</div><h1>${escH(c.nome)}${c.exemplo ? `<span class="tag">exemplo · ${c.exemplo}</span>` : ''}</h1>
       <p class="sub">${c.versoes.length ? 'Plano publicado em ' + dataBR(c.versoes[0].em) + (c.versoes.length > 1 ? ', ' + c.versoes.length + ' versões' : '') + '.' : c.clinica ? 'Clínica financeira em ' + dataBR(c.clinica.publicadaEm) + '.' : c.plano ? 'Plano em montagem, ainda sem versão publicada.' : 'Ainda sem plano.'} ${c.reuniao ? 'Próxima reunião: ' + escH(quandoReuniao(c.reuniao)) + '.' : 'Sem reunião marcada.'}</p></div>
-    <div><a class="btn btn-primary" data-tela href="${url('area-cliente.html', c.id, '&consultor')}" title="A área logada como o cliente vê">Emular o acesso do cliente</a></div></div>
+    <div><a class="btn btn-secondary" data-tela href="${url('area-cliente.html', c.id, '&consultor')}" title="A área logada como o cliente vê">Emular o acesso do cliente</a></div></div>
   <div class="cartao"><h2>Trabalhar neste cliente</h2>${atalhos(c)}<p style="margin-top:10px"><a href="agendamento.html#clientes/${idq}" data-tela>Agenda deste cliente</a></p></div>
   <div class="grade">
     <div>
@@ -273,7 +308,7 @@ function telaFicha(c) {
         <div class="campo"><label for="f-ate">Vence em</label><input id="f-ate" type="date" data-ficha="etapaAte" value="${escH(c.at.etapaAte || '')}"></div></div>
         <p class="leg">${c.at.etapa == null ? 'Etapa sugerida pelos dados do cliente; escolha outra para fixar.' : `Posta por você${c.at.etapaEm ? ' em ' + dataBR(c.at.etapaEm) : ''}. Pelos dados, a base sugere "${ETAPAS[c.sugerida]}". <button class="btn btn-link" data-a="etapa-sugerida">voltar à sugerida</button>`} ${vence(c)}</p></div>
       <div class="cartao"><h2>Tarefas e lembretes</h2><p class="leg" style="margin-bottom:6px">As do cliente aparecem em Tarefas, na área dele, e a resposta volta para cá. As suas e as de reunião ficam só aqui.</p>
-        ${doCliente.concat(minhas, daColeta).join('') || '<p class="vazio ilustra-vaga">Nenhuma tarefa cadastrada para este cliente.</p>'}
+        ${doCliente.concat(minhas, daColeta).join('') || '<p class="vazio">Nenhuma tarefa cadastrada para este cliente.</p>'}
         <h2 style="margin-top:18px">Nova tarefa</h2>
         <div class="campo"><label for="t-titulo">O que fazer</label><input id="t-titulo" maxlength="120" data-form="titulo" value="${escH(FORM.titulo)}"></div>
         <div class="campo"><label for="t-serve">Para quê (opcional)</label><input id="t-serve" maxlength="120" data-form="serve" value="${escH(FORM.serve)}" placeholder="para…"></div>
@@ -499,18 +534,22 @@ importar().then(carregar).catch(err => {
   const link = ([id, n, h]) => `<a href="${h}"${id === aqui ? ' aria-current="page"' : ''}>${n}</a>`;
   if (!document.getElementById('casca-estilo')) { const st = document.createElement('style'); st.id = 'casca-estilo';
     st.textContent = `[data-casca]{font:500 13px 'DM Sans',system-ui,sans-serif}
-[data-casca] a{color:rgba(255,255,255,.78);text-decoration:none;white-space:nowrap;padding:5px 9px;border-radius:8px}
+[data-casca] a{color:rgba(255,255,255,.78);text-decoration:none;white-space:nowrap;padding:6px 10px;border-radius:8px;transition:background .15s,color .15s}
+[data-casca] a:focus-visible{outline:2px solid #FA7A35;outline-offset:1px}
 [data-casca] a:hover{color:#fff;background:rgba(255,255,255,.1)}
 [data-casca] a[aria-current=page]{color:#fff;background:rgba(255,255,255,.16)}
 [data-casca] .cc-cli{color:rgba(255,255,255,.55);padding:5px 4px 5px 10px;white-space:nowrap}
-[data-casca=faixa]{display:flex;align-items:center;gap:2px;background:#131F2E;padding:6px 20px;overflow-x:auto;scrollbar-width:none}
-[data-casca=faixa] img{width:22px;height:22px;margin-right:8px;flex:none}
+[data-casca=faixa]{display:flex;align-items:center;gap:2px;background:#20344C;border-bottom:1px solid rgba(255,255,255,.12);padding:7px 20px;overflow-x:auto;scrollbar-width:none}
+[data-casca=faixa] img{width:24px;height:24px;margin-right:10px;flex:none}
+[data-casca=faixa]:has(+ header img) img{display:none}   /* a tela que já tem a marca no próprio cabeçalho não a repete */
 [data-casca=faixa] .cc-sep{flex:0 0 1px;align-self:stretch;background:rgba(255,255,255,.18);margin:4px 8px}
 [data-casca=lateral]{display:flex;flex-wrap:wrap;gap:2px;margin-top:10px}
 [data-casca=lateral] a{padding:4px 8px;font-size:12.5px;background:rgba(255,255,255,.06)}
 [data-casca=lateral] .cc-sep{flex:0 0 100%;height:4px}
 [data-casca=lateral] .cc-cli,[data-casca=lateral] img,[data-casca=lateral] a:first-of-type{display:none}   /* no portal, a base já é o botão acima */
 body.recolhido [data-casca=lateral]{display:none}
+@media (max-width:600px){[data-casca=faixa]{padding:7px 12px}}
+@media (prefers-reduced-motion:reduce){[data-casca] a{transition:none}}
 @media print{[data-casca]{display:none!important}}`;
     document.head.appendChild(st); }
   alvo.setAttribute('aria-label', 'Área do consultor');
