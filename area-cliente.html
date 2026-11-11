@@ -1146,6 +1146,8 @@ body.v-livro .rotulo .mais{font-weight:400;font-size:13px}
 .ilustra img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease}
 .ilustra.tem img{opacity:1}
 .ilustra.capa{aspect-ratio:3/1;width:100%;max-height:220px;margin-bottom:14px;background-position:center 50%}
+/* sem a imagem ainda, a capa é só um fio de céu: não empurra o conteúdo; com a imagem, ganha a altura inteira */
+.ilustra.capa:not(.tem){aspect-ratio:auto;height:44px}
 .ilustra.traco{background:none;border-radius:0;aspect-ratio:auto;width:170px;margin:0 auto 18px}
 .ilustra.traco .ilu{width:100%;margin:0}
 .ilustra.traco.tem{aspect-ratio:4/3;width:min(240px,72%);border-radius:var(--raio)}
@@ -3631,10 +3633,11 @@ function blocoFerramentas() {
   if (objetivos().length) it.push(['#objetivos', 'objetivos', 'Simular os objetivos', 'Mude o valor do mês e veja cada data andar']);
   if (v) it.push([urlRelatorioInteiro(v.n, 'evolucao'), 'jornada', 'Evolução do patrimônio', 'A trajetória ano a ano, até a liberdade']);
   if (v) it.push([urlAcompanhamento(), 'semanadas', 'Semanadas', 'O teto da fatura do cartão, semana a semana']);
-  if (R.degrau !== 'visitante') it.push(['#realizado', 'realizado', 'Planejado e realizado', 'O que foi combinado e o que aconteceu']);
+  if (realizadoExiste()) it.push(['#realizado', 'realizado', 'Planejado e realizado', 'O que foi combinado e o que aconteceu']);
   if (v) it.push([urlRelatorioInteiro(v.n), 'relatorio', 'O plano completo', 'O planejamento inteiro, capítulo a capítulo']);
   if (!v) it.push(['#exame', 'plano', 'Exame de saúde financeira', 'A nota de 0 a 100, em 5 minutos']);
   it.push(['#utilitarios', 'utilitarios', 'Calculadoras', 'Contas rápidas para decidir']);
+  if (v && !realizadoExiste()) it.push(['#saber', 'saber', 'Saber', 'O que serve ao seu passo, em 5 minutos']);
   if (!v) it.push(['#saber', 'saber', 'Saber', 'O que serve ao seu passo, em 5 minutos']);
   return `<div class="rotulo">As ferramentas do plano<a class="mais" href="#mais">Todas &#8250;</a></div><nav class="ferr" style="--n:${it.length}" aria-label="Ferramentas">${it.map(([h, ic, n, d]) => `<a href="${h}">${ICONES[ic]}<b>${n}</b><small>${d}</small></a>`).join('')}</nav>`;
 }
