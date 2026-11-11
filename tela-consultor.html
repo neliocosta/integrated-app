@@ -331,7 +331,8 @@ details.opc2[open] summary{margin-bottom:10px}
 .bloco h3{font:600 13px Sora,sans-serif;color:var(--nl-navy-900);margin-bottom:12px}
 .tip{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;margin-left:4px;border-radius:50%;background:#e9e6df;color:#7b7a76;font:700 10px 'DM Sans',sans-serif;cursor:help;position:relative;vertical-align:1px;text-transform:none;letter-spacing:0}
 .tip::after{content:attr(data-tip);position:absolute;left:-8px;bottom:calc(100% + 8px);width:max-content;max-width:280px;background:var(--nl-navy-900);color:#fff;font:500 12px/1.45 'DM Sans',sans-serif;padding:8px 11px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.18);opacity:0;pointer-events:none;transition:opacity .12s;z-index:30;white-space:normal;text-align:left;font-weight:500}
-.tip:hover::after,.tip:focus::after{opacity:1}
+.tip::after{display:none}   /* escondido, o balão não ocupa lugar: antes alargava a página e criava rolagem lateral */
+.tip:hover::after,.tip:focus::after{display:block;opacity:1}
 .goal.fechado{padding:11px 18px}
 .goal.fechado .goalhead{margin-bottom:0}
 .goalhead[data-abrir-goal]{cursor:pointer}
@@ -10672,17 +10673,23 @@ addEventListener('resize', () => renderFluxo());
 [data-casca=faixa] img{width:24px;height:24px;margin-right:10px;flex:none}
 [data-casca=faixa]:has(+ header img) img{display:none}   /* a tela que já tem a marca no próprio cabeçalho não a repete */
 [data-casca=faixa] .cc-sep{flex:0 0 1px;align-self:stretch;background:rgba(255,255,255,.18);margin:4px 8px}
-[data-casca=lateral]{display:flex;flex-wrap:wrap;gap:2px;margin-top:10px}
-[data-casca=lateral] a{padding:4px 8px;font-size:12.5px;background:rgba(255,255,255,.06)}
-[data-casca=lateral] .cc-sep{flex:0 0 100%;height:4px}
-[data-casca=lateral] .cc-cli,[data-casca=lateral] img,[data-casca=lateral] a:first-of-type{display:none}   /* no portal, a base já é o botão acima */
+[data-casca=lateral]{display:block;margin-top:10px}   /* no portal, um menu recolhido: os passos do plano são a navegação principal */
+[data-casca=lateral] summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:8px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.86);font-size:12.5px}
+[data-casca=lateral] summary::-webkit-details-marker{display:none}
+[data-casca=lateral] summary::after{content:'+';opacity:.7;font-size:15px;line-height:1}
+[data-casca=lateral] details[open] summary::after{content:'−'}
+[data-casca=lateral] .cc-lista{display:flex;flex-direction:column;gap:1px;margin-top:4px}
+[data-casca=lateral] a{display:block;padding:6px 10px;font-size:12.5px}
+[data-casca=lateral] .cc-sep{display:block;height:1px;background:rgba(255,255,255,.12);margin:4px 10px}
+[data-casca=lateral] .cc-cli,[data-casca=lateral] img{display:none}
 body.recolhido [data-casca=lateral]{display:none}
 @media (max-width:600px){[data-casca=faixa]{padding:7px 12px}}
 @media (prefers-reduced-motion:reduce){[data-casca] a{transition:none}}
 @media print{[data-casca]{display:none!important}}`;
     document.head.appendChild(st); }
   alvo.setAttribute('aria-label', 'Área do consultor');
-  alvo.innerHTML = `<img src="marca/nord-icone-negativo-64.png" alt="Nord Liberta">${gerais.map(link).join('')}${doCliente.length ? `<span class="cc-sep"></span>${nome ? `<span class="cc-cli">${esc(nome)}</span>` : ''}${doCliente.map(link).join('')}` : ''}`;
+  const miolo = `<img src="marca/nord-icone-negativo-64.png" alt="Nord Liberta">${gerais.map(link).join('')}${doCliente.length ? `<span class="cc-sep"></span>${nome ? `<span class="cc-cli">${esc(nome)}</span>` : ''}${doCliente.map(link).join('')}` : ''}`;
+  alvo.innerHTML = alvo.dataset.casca === 'lateral' ? `<details><summary>Ir para outra tela</summary><div class="cc-lista">${miolo}</div></details>` : miolo;
 })();
 </script>
 </body>
