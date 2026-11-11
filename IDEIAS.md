@@ -46,7 +46,10 @@ O que existe hoje: as 33 perguntas de produção estão em `COLETA.md`, seção 
 `area-cliente.html` (`EXAME`). A **fórmula oficial não está aqui**: roda no servidor (`saudeFinanceiraController`); a
 `notaDoExame()` da área é uma conta provisória minha, com os cinco pilares em pesos iguais.
 
-Perguntas abertas: a fórmula oficial (o Nélio traz?); o que os clientes erram ou não entendem hoje; se os cinco pilares
+11/11/2026: o Nélio mandou o código da conta (`newScore.tsx`). A fórmula e o que encontrei nela estão em
+`area-logada/referencias/EXAME-FORMULA-ATUAL.md`. Falta ele mandar as dúvidas e confusões dos clientes.
+
+Perguntas abertas: o que os clientes erram ou não entendem hoje; se os cinco pilares
 continuam ou se a nota passa a ser por área do Plano; como tratar a quebra da série histórica quando a conta mudar.
 
 ## Versão 2.0: as duas ferramentas numa só

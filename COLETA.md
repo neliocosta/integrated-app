@@ -57,7 +57,8 @@ campos; cada pergunta tem um trecho de vídeo explicativo.
 grava as respostas (`action: insert`) e depois mostra a nota. O formulário vai como um objeto com o `name` de cada pergunta.
 
 **Resultado:** cinco pilares e um score geral, de 0 a 100%, com faixas de cor (até 20 vermelho, 40 laranja, 60 azul, 80
-verde-escuro, acima verde). A conta é feita no servidor e não aparece no código da página. O que cada pilar mede, nas
+verde-escuro, acima verde). A conta é feita no servidor e não aparece no código da página (desde 11/11/2026 está descrita em
+`area-logada/referencias/EXAME-FORMULA-ATUAL.md`). O que cada pilar mede, nas
 palavras da página:
 
 | Pilar | Chave | O que mede |
