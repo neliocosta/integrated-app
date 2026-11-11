@@ -371,6 +371,7 @@ details.hist li span{color:var(--legenda)}
 </style>
 </head>
 <body>
+<nav data-casca="faixa"></nav>
 <header class="barra">
   <img src="marca/nord-icone-negativo-64.png" alt="">
   <div class="marca"><b>Nord Liberta</b><span>Agendamento de reuniões</span></div>
@@ -2735,6 +2736,47 @@ AR.iniciar().then(async () => {
   // o painel faz o papel do agendador de tarefas: o que vence enquanto ele está aberto sai sozinho
   setInterval(async () => { if (await rodarRelogio() && rota().aba === 'caixa' && !$('#fundo')) desenhar(); }, 20000);
 }).catch(err => { console.error(err); $('#main').innerHTML = '<div class="cartao">Não consegui abrir os dados do agendamento. Recarregue a página.</div>'; });
+</script>
+<script id="casca-consultor">
+// ===================== CASCA DO CONSULTOR: a mesma navegação em toda tela do consultor =====================
+// As telas são autocontidas, então este bloco é copiado igual em cada uma (a fonte é o index.html; o sync-motor.js copia
+// para as outras). Ele preenche o elemento [data-casca] da tela com as mesmas ligações: a base de clientes, o pipeline, a
+// agenda e, com um cliente no endereço (?cliente=<id>), a ficha, a coleta, a montagem, o relatório, a área do cliente e
+// o acompanhamento. data-casca="faixa" é a faixa do alto; "lateral", a lista dentro de um menu escuro (o portal).
+// As telas que também são do cliente (o acompanhamento) só ganham a casca quando é o consultor que abre (&consultor).
+(() => {
+  const alvo = document.querySelector('[data-casca]'); if (!alvo) return;
+  const q = new URLSearchParams(location.search), cli = q.get('cliente'), pag = location.pathname.split('/').pop() || 'index.html';
+  const doConsultor = ['index.html', 'tela-consultor.html', 'agendamento.html'].includes(pag) || q.has('consultor');
+  if (!doConsultor) { alvo.hidden = true; return; }
+  const c = cli ? '?cliente=' + encodeURIComponent(cli) : '';
+  const aqui = pag === 'index.html' ? 'base' : pag === 'tela-consultor.html' ? (q.has('coleta') ? 'coleta' : 'plano') : pag === 'agendamento.html' ? 'agenda' : pag === 'acompanhamento.html' ? 'acomp' : pag === 'area-cliente.html' ? 'area' : pag === 'evolucao-patrimonial.html' ? 'relatorio' : null;
+  const gerais = [['base', 'Base de clientes', 'index.html'], ['pipeline', 'Pipeline', 'index.html#pipeline'], ['agenda', 'Agenda', 'agendamento.html']];
+  const doCliente = !cli ? [] : [['ficha', 'Ficha', 'index.html#cliente/' + encodeURIComponent(cli)], ['coleta', 'Coleta', 'tela-consultor.html' + c + '&coleta'], ['plano', 'Montar o plano', 'tela-consultor.html' + c],
+    ['relatorio', 'Relatório', 'evolucao-patrimonial.html' + c + '&consultor'], ['area', 'Área do cliente', 'area-cliente.html' + c + '&consultor'], ['acomp', 'Acompanhamento', 'acompanhamento.html' + c + '&consultor']];
+  let nome = '';
+  if (cli) try { for (const k of ['planos/', 'versoes/']) { const d = (JSON.parse(localStorage.getItem('nl-db:' + k + cli) || 'null') || {}).dados, p = d && (d.lista ? (d.lista[0] || {}).dados : d); if (p && p.name) { nome = p.name; break; } } } catch (e) { }
+  const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+  const link = ([id, n, h]) => `<a href="${h}"${id === aqui ? ' aria-current="page"' : ''}>${n}</a>`;
+  if (!document.getElementById('casca-estilo')) { const st = document.createElement('style'); st.id = 'casca-estilo';
+    st.textContent = `[data-casca]{font:500 13px 'DM Sans',system-ui,sans-serif}
+[data-casca] a{color:rgba(255,255,255,.78);text-decoration:none;white-space:nowrap;padding:5px 9px;border-radius:8px}
+[data-casca] a:hover{color:#fff;background:rgba(255,255,255,.1)}
+[data-casca] a[aria-current=page]{color:#fff;background:rgba(255,255,255,.16)}
+[data-casca] .cc-cli{color:rgba(255,255,255,.55);padding:5px 4px 5px 10px;white-space:nowrap}
+[data-casca=faixa]{display:flex;align-items:center;gap:2px;background:#131F2E;padding:6px 20px;overflow-x:auto;scrollbar-width:none}
+[data-casca=faixa] img{width:22px;height:22px;margin-right:8px;flex:none}
+[data-casca=faixa] .cc-sep{flex:0 0 1px;align-self:stretch;background:rgba(255,255,255,.18);margin:4px 8px}
+[data-casca=lateral]{display:flex;flex-wrap:wrap;gap:2px;margin-top:10px}
+[data-casca=lateral] a{padding:4px 8px;font-size:12.5px;background:rgba(255,255,255,.06)}
+[data-casca=lateral] .cc-sep{flex:0 0 100%;height:4px}
+[data-casca=lateral] .cc-cli,[data-casca=lateral] img,[data-casca=lateral] a:first-of-type{display:none}   /* no portal, a base já é o botão acima */
+body.recolhido [data-casca=lateral]{display:none}
+@media print{[data-casca]{display:none!important}}`;
+    document.head.appendChild(st); }
+  alvo.setAttribute('aria-label', 'Área do consultor');
+  alvo.innerHTML = `<img src="marca/nord-icone-negativo-64.png" alt="Nord Liberta">${gerais.map(link).join('')}${doCliente.length ? `<span class="cc-sep"></span>${nome ? `<span class="cc-cli">${esc(nome)}</span>` : ''}${doCliente.map(link).join('')}` : ''}`;
+})();
 </script>
 </body>
 </html>

@@ -30,3 +30,14 @@ for (const id of ['motor-agenda', 'armazem-agenda']) {
     console.log(id + ' sincronizado em ' + destino + ' (' + Math.round(bloco.length / 1024) + ' KB)');
   }
 }
+
+// A casca do consultor (a navegação comum das telas dele): da base de clientes (index.html) para as outras telas.
+// Só onde a tela já carrega o bloco, como a agenda acima.
+const reCasca = /<script id="casca-consultor">[\s\S]*?<\/script>/, casca = fs.readFileSync('index.html', 'utf8').match(reCasca)[0];
+for (const destino of ['tela-consultor.html', 'agendamento.html', 'acompanhamento.html']) {
+  const t = fs.readFileSync(destino, 'utf8');
+  if (!reCasca.test(t)) continue;
+  const quebra = t.includes('\r\n') ? '\r\n' : '\n';
+  fs.writeFileSync(destino, t.replace(reCasca, () => casca.replace(/\r?\n/g, quebra)));
+  console.log('casca-consultor sincronizada em ' + destino);
+}
