@@ -1155,6 +1155,84 @@ body.v-livro .rotulo .mais{font-weight:400;font-size:13px}
 @media (max-width:599px){.com-ilustra{grid-template-columns:minmax(0,1fr)}.com-ilustra .ilustra{width:148px;order:-1}}
 .folha .ilustra.capa{margin:0 0 14px}
 @media (prefers-reduced-motion: reduce){html:not(.movimento) .ilustra img{transition:none}}
+
+/* ===== O Painel 2.0 (11/11/2026): a trajetória do patrimônio no alto, os sinais vitais, as ferramentas a um clique e os
+   objetivos em cartões com foto. A casa do cliente mostra a vida financeira inteira antes de pedir a tarefa ===== */
+.heroi.h2{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:end;padding:22px 20px 20px;min-height:0}
+.heroi.h2::before{background:linear-gradient(180deg,rgba(19,31,46,.74),rgba(19,31,46,.5) 45%,rgba(19,31,46,.78))}
+.heroi.h2 .proposito-l{margin:0 0 18px;max-width:56ch}
+.heroi.h2 .h2-pat{display:block;text-decoration:none;color:#fff}
+.heroi.h2 .h2-pat small{display:block;font:500 13px var(--sans);color:rgba(255,255,255,.82)}
+.heroi.h2 .h2-pat b{display:block;font:500 40px/1.05 'Sora',sans-serif;letter-spacing:-.025em;margin-top:4px}
+.heroi.h2 .h2-pat em{display:inline-flex;align-items:center;gap:6px;font:500 12.5px var(--sans);font-style:normal;color:#fff;margin-top:8px;background:rgba(255,255,255,.16);border-radius:9999px;padding:3px 10px}
+.heroi.h2 .h2-pat em::before{content:"";width:6px;height:6px;border-radius:50%;background:#7BE0A4}
+.heroi.h2 .h2-pat em.at::before{background:var(--laranja)}
+.heroi.h2 .passo{max-width:none}
+.traj{position:relative;height:150px;margin:18px 0 26px}
+.traj svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.traj .pt{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.22)}
+.traj .pt.hoje{background:var(--laranja);box-shadow:0 0 0 4px rgba(250,122,53,.32)}
+.traj .pt.lib{width:11px;height:11px;margin:-5.5px 0 0 -5.5px;background:#7BE0A4;box-shadow:0 0 0 4px rgba(123,224,164,.28)}
+.traj .lb{position:absolute;font:500 11.5px/1.25 var(--sans);color:rgba(255,255,255,.9);white-space:nowrap}
+.traj .lb b{display:block;font:500 13px 'Sora',sans-serif;color:#fff;letter-spacing:-.01em}
+.traj .lb.base{top:100%;margin-top:6px}
+.traj .lb.dir{transform:translateX(-100%)}
+.traj .lb.meio{transform:translateX(-50%);text-align:center}
+.traj .lb.topo{transform:translate(-50%,-100%);text-align:center;margin-top:-12px}
+.traj .haste{position:absolute;width:0;border-left:1px dashed rgba(255,255,255,.45);bottom:0}
+@media (min-width:900px){
+  .heroi.h2{grid-template-columns:minmax(0,1.45fr) minmax(300px,380px);gap:34px;padding:30px 32px 28px}
+  .heroi.h2 .h2-pat b{font-size:52px}
+  .traj{height:170px}
+}
+.vitais{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 22px}
+.vital{display:flex;flex-direction:column;gap:8px;background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);padding:14px 14px 13px;text-decoration:none;color:inherit;min-width:0;transition:box-shadow .18s,transform .18s}
+.vital:hover{box-shadow:0 10px 24px -14px rgba(19,31,46,.35);transform:translateY(-1px)}
+.vital .vt-r{display:flex;align-items:center;gap:7px;font:500 12.5px var(--sans);color:var(--legenda)}
+.vital .vt-r svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.7;flex:none}
+.vital .vt-m{display:flex;align-items:center;gap:12px;min-height:50px}
+.vital .vt-big{font:500 22px/1.1 'Sora',sans-serif;letter-spacing:-.02em;color:var(--marinho);min-width:0}
+.vital .vt-big small{display:block;font:400 12px/1.3 var(--sans);letter-spacing:0;color:var(--legenda);margin-top:3px}
+.vital .vt-big small.delta{display:inline;margin:0 0 0 4px}
+.vital .anel{flex:none;width:48px;height:48px}
+.vital .anel circle{fill:none;stroke-width:5}
+.vital .anel .f{stroke:var(--trilho)}
+.vital .anel .v{stroke:var(--verde);stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%}
+.vital.at .anel .v{stroke:var(--laranja)}
+.vital .regua{position:relative;height:6px;border-radius:3px;background:var(--trilho);margin-top:2px}
+.vital .regua i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--verde)}
+.vital.at .regua i{background:var(--laranja)}
+.vital .regua u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--marinho);border-radius:1px}
+.vital .vt-e{display:flex;align-items:center;gap:6px;font:500 12px/1.3 var(--sans);color:var(--verde-txt);margin-top:auto}
+.vital .vt-e::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--verde);flex:none}
+.vital.at .vt-e{color:var(--atencao-txt)}.vital.at .vt-e::before{background:var(--laranja)}
+.vital.vazio .vt-e{color:var(--marinho)}.vital.vazio .vt-e::before{display:none}
+.vitais .vital:nth-child(5):last-child{grid-column:1/-1}
+@media (min-width:900px){.vitais{grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-bottom:26px}.vitais .vital:nth-child(5):last-child{grid-column:auto}.vital{padding:16px 16px 14px}.vital .vt-big{font-size:24px}}
+.ferr{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(148px,44%);gap:10px;overflow-x:auto;margin:0 -16px 6px;padding:2px 16px 12px;scroll-snap-type:x proximity;scrollbar-width:none}
+.ferr::-webkit-scrollbar{display:none}
+.ferr a{display:flex;flex-direction:column;gap:3px;background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);padding:14px;text-decoration:none;color:inherit;scroll-snap-align:start;min-width:0;transition:box-shadow .18s,transform .18s,border-color .18s}
+.ferr a:hover{box-shadow:0 10px 24px -14px rgba(19,31,46,.35);transform:translateY(-1px);border-color:var(--marinho)}
+.ferr a svg{width:22px;height:22px;stroke:var(--laranja-txt);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:6px}
+.ferr a b{font:600 14px/1.25 var(--sans);color:var(--marinho)}
+.ferr a small{font-size:12.5px;line-height:1.35;color:var(--legenda)}
+@media (min-width:900px){.ferr{grid-auto-flow:row;grid-template-columns:repeat(var(--n,6),minmax(0,1fr));gap:14px;overflow:visible;margin:0 0 10px;padding:0}}
+.obj-cards{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(200px,64%);gap:12px;overflow-x:auto;margin:0 -16px;padding:2px 16px 12px;scroll-snap-type:x proximity;scrollbar-width:none}
+.obj-cards::-webkit-scrollbar{display:none}
+.obj-c{display:flex;flex-direction:column;background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);overflow:hidden;text-decoration:none;color:inherit;scroll-snap-align:start;min-width:0;transition:box-shadow .18s,transform .18s}
+.obj-c:hover{box-shadow:0 14px 30px -16px rgba(19,31,46,.4);transform:translateY(-2px)}
+.obj-c .foto{position:relative;aspect-ratio:16/9;background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:10px}
+.obj-c .foto .chip,body.v-livro .obj-c .foto .chip{background:#fff!important;box-shadow:0 1px 4px rgba(19,31,46,.22);padding:3px 10px;border-radius:9999px}
+.obj-c .foto .gde{font:500 30px/1 'Sora',sans-serif;letter-spacing:-.02em;color:var(--marinho);margin:auto auto auto 4px}
+.obj-c .corpo{display:flex;flex-direction:column;gap:6px;padding:12px 14px 14px;flex:1}
+.obj-c b{font:600 14.5px/1.25 var(--sans);color:var(--marinho)}
+.obj-c small{font-size:12.5px;line-height:1.35;color:var(--legenda)}
+.obj-c .trilho{display:block;height:5px;border-radius:3px;background:var(--trilho);margin-top:auto;overflow:hidden}
+.obj-c .trilho i{display:block;height:100%;border-radius:3px;background:var(--marinho)}
+.obj-c .trilho.at i{background:var(--laranja)}
+.obj-resumo{font-size:13.5px;line-height:1.45;color:var(--legenda);margin:-2px 0 10px}
+@media (min-width:900px){.obj-cards{grid-auto-flow:row;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:14px;overflow:visible;margin:0 0 26px;padding:0}}
+@media (prefers-reduced-motion:reduce){.vital,.ferr a,.obj-c{transition:none}.vital:hover,.ferr a:hover,.obj-c:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -3512,7 +3590,53 @@ function heroiPainel(oc, P) {
   const chaves = [tem(pt) ? `<a href="#cartao/patrimonio"><small>Patrimônio</small><b>${brlC(+pt)}</b></a>` : '',
     tem(ra) ? `<span><a href="#cartao/reserva"><small>Reserva</small><b>${brlC(ra)}</b>${posReserva ? `<em>${posReserva}</em>` : ''}</a>${R.degrau !== 'visitante' ? `<button class="imprevisto" data-acao="imprevisto">um imprevisto? &#8250;</button>` : ''}</span>` : '',
     dv > 0.5 ? `<a href="#cartao/dividas"><small>Dívidas</small><b>${brlC(dv)}</b>${RS && RS.dividas && RS.dividas[0] && RS.dividas[0].parcela ? `<em>parcela ${brl(RS.dividas[0].parcela)}${RS.dividas[0].juros != null ? ' · ' + nf1.format(RS.dividas[0].juros) + '% a.a.' : ''}</em>` : ''}</a>` : ''].filter(Boolean);
-  return `<section class="heroi" style="background-image:url('${PAISAGEM}')"><div class="heroi-in">${proposito}${cartao}</div>${chaves.length ? `<div class="chaves">${chaves.join('')}</div>` : ''}</section>`;
+  // o patrimônio em destaque (o mesmo número da área Patrimônio e ativos) e a trajetória do plano; reserva e dívidas embaixo
+  const capaPat = areas().patrimonio.capa, tomPat = capaPat && capaPat.tom, resto = chaves.slice(tem(pt) ? 1 : 0);
+  const patGrande = tem(pt) ? `<a class="h2-pat" href="#cartao/patrimonio"><small>Patrimônio ${casal() ? 'da família' : 'hoje'}</small><b>${brlC(+pt)}</b>${tomPat ? `<em class="${tomPat[0] === 'ok' ? '' : 'at'}">${esc(tomPat[1])}</em>` : ''}</a>` : '';
+  return `<section class="heroi h2" style="background-image:url('${PAISAGEM}')"><div class="h2-esq">${proposito}${patGrande}${trajetoriaDoHeroi()}${resto.length ? `<div class="chaves" style="margin-top:${RS ? 0 : 18}px">${resto.join('')}</div>` : ''}</div><div class="h2-dir">${cartao}</div></section>`;
+}
+// a trajetória do patrimônio no alto do Painel, do plano publicado (RS.evolucao.porAno): de hoje ao fim da vida, com os
+// objetivos e a liberdade marcados. A linha é um SVG esticado; os pontos e os rótulos são HTML, para não deformarem
+function trajetoriaDoHeroi() {
+  const pa = RS && RS.evolucao && RS.evolucao.porAno; if (!pa || pa.length < 3) return '';
+  const x0 = pa[0].idade, x1 = pa[pa.length - 1].idade, max = Math.max(1, ...pa.map(p => p.total));
+  const X = i => (i - x0) / (x1 - x0) * 100, Y = v => 8 + (1 - Math.max(0, v) / max) * 92;
+  const em = id => pa.find(q => q.idade === id), pts = pa.map(p => [X(p.idade), Y(p.total)]);
+  const linha = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(2) + ' ' + p[1].toFixed(2)).join(' ');
+  const L = RS.liberdade && RS.liberdade.idade != null ? em(RS.liberdade.idade) : null, v = versoesVigentes()[0];
+  const marcos = (RS.evolucao.marcos || []).map(m => ({ m, p: em(m.idade) })).filter(x => x.p && (!L || x.m.idade !== L.idade));
+  const pontos = marcos.map(({ m, p }) => `<i class="pt" style="left:${X(p.idade).toFixed(2)}%;top:${Y(p.total).toFixed(2)}%" title="${esc(m.nome)}: ${m.ano}, aos ${m.idade}"></i>`).join('');
+  const lib = L ? `<i class="haste" style="left:${X(L.idade).toFixed(2)}%;height:${(100 - Y(L.total)).toFixed(2)}%"></i><i class="pt lib" style="left:${X(L.idade).toFixed(2)}%;top:${Y(L.total).toFixed(2)}%"></i><span class="lb topo" style="left:${clamp(X(L.idade), 14, 86).toFixed(2)}%;top:${Y(L.total).toFixed(2)}%"><b>${brlC(L.total)}</b>liberdade aos ${L.idade}</span>` : '';
+  return `<a class="traj" href="${v ? urlRelatorioInteiro(v.n, 'evolucao') : '#cartao/evolucao'}" aria-label="A trajetória do patrimônio no plano: de ${brlC(pa[0].total)} hoje${L ? ' a ' + brlC(L.total) + ' na liberdade, aos ' + L.idade : ''}. Abrir a evolução patrimonial" style="display:block;text-decoration:none">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="traj-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
+      <path d="${linha} L100 100 L0 100 Z" fill="url(#traj-g)"/><path d="${linha}" fill="none" stroke="#fff" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/><path d="M0 100 H100" stroke="rgba(255,255,255,.35)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+    ${pontos}${lib}<i class="pt hoje" style="left:0%;top:${Y(pa[0].total).toFixed(2)}%"></i>
+    <span class="lb base" style="left:0">hoje, aos ${x0}</span>${marcos.length ? `<span class="lb base meio" style="left:50%">${marcos.length} ${marcos.length === 1 ? 'objetivo' : 'objetivos'} no caminho · ver a evolução ›</span>` : ''}<span class="lb base dir" style="left:100%">aos ${x1}</span></a>`;
+}
+// os sinais vitais: cinco áreas do plano, cada uma com o mesmo número e o mesmo estado da capa dela no Plano (uma conta só)
+function sinaisVitais(A) {
+  const ex = exames(), ult = ex[ex.length - 1], ra = reservaAtual(), ri = reservaIdeal(), rd = fv('renda'), cs = fv('custo');
+  const anel = f => `<svg class="anel" viewBox="0 0 48 48" aria-hidden="true"><circle class="f" cx="24" cy="24" r="20"/><circle class="v" cx="24" cy="24" r="20" stroke-dasharray="${(clamp(f, 0, 1) * 125.66).toFixed(1)} 125.66"/></svg>`;
+  const regua = (f, marcas) => `<div class="regua" aria-hidden="true"><i style="width:${(clamp(f, 0, 1) * 100).toFixed(1)}%"></i>${(marcas || []).map(m => `<u style="left:${(m * 100).toFixed(1)}%"></u>`).join('')}</div>`;
+  const viz = { saude: () => ult ? anel(ult.nota / 100) : '', riscos: () => RS ? anel(RS.riscos.nota) : '',
+    gestao: () => tem(rd) && tem(cs) && rd > 0 ? regua((rd - cs) / rd / 0.4, [0.5]) : '', reserva: () => tem(ra) && ri ? regua(ra / ri, [0.4, 0.7]) : '', liberdade: () => '' };
+  const nomes = { saude: 'Saúde financeira', gestao: 'Para o futuro', reserva: 'Reserva', riscos: 'Proteção', liberdade: 'Liberdade' };
+  return `<div class="vitais">${['saude', 'gestao', 'reserva', 'riscos', 'liberdade'].map(id => { const c = A[id].capa, vz = c ? viz[id]() : '', t = c && c.tom, emAnel = /class="anel"/.test(vz);
+    if (!c) return `<a class="vital vazio" href="#cartao/${id}"><span class="vt-r">${iconeArea(id)}${nomes[id]}</span><div class="vt-m"><div class="vt-big"><small>${id === 'saude' ? 'O exame diz a nota, em 5 minutos' : 'Ainda sem número'}</small></div></div><span class="vt-e">${id === 'saude' || !ex.length ? 'Começar pelo exame' : 'Preencher'} ›</span></a>`;
+    return `<a class="vital${t && t[0] !== 'ok' ? ' at' : ''}" href="#cartao/${id}"><span class="vt-r">${iconeArea(id)}${nomes[id]}</span><div class="vt-m">${emAnel ? vz : ''}<div class="vt-big">${c.big}</div></div>${emAnel ? '' : vz}${t ? `<span class="vt-e">${esc(t[1])}</span>` : ''}</a>`; }).join('')}</div>`;
+}
+// as ferramentas que mais valem, a um clique da casa: o simulador dos objetivos, a evolução, as semanadas, o realizado, o plano inteiro e as contas rápidas
+function blocoFerramentas() {
+  const v = versoesVigentes()[0], it = [];
+  if (objetivos().length) it.push(['#objetivos', 'objetivos', 'Simular os objetivos', 'Mude o valor do mês e veja cada data andar']);
+  if (v) it.push([urlRelatorioInteiro(v.n, 'evolucao'), 'jornada', 'Evolução do patrimônio', 'A trajetória ano a ano, até a liberdade']);
+  if (v) it.push([urlAcompanhamento(), 'semanadas', 'Semanadas', 'O teto da fatura do cartão, semana a semana']);
+  if (R.degrau !== 'visitante') it.push(['#realizado', 'realizado', 'Planejado e realizado', 'O que foi combinado e o que aconteceu']);
+  if (v) it.push([urlRelatorioInteiro(v.n), 'relatorio', 'O plano completo', 'O planejamento inteiro, capítulo a capítulo']);
+  if (!v) it.push(['#exame', 'plano', 'Exame de saúde financeira', 'A nota de 0 a 100, em 5 minutos']);
+  it.push(['#utilitarios', 'utilitarios', 'Calculadoras', 'Contas rápidas para decidir']);
+  if (!v) it.push(['#saber', 'saber', 'Saber', 'O que serve ao seu passo, em 5 minutos']);
+  return `<div class="rotulo">As ferramentas do plano<a class="mais" href="#mais">Todas &#8250;</a></div><nav class="ferr" style="--n:${it.length}" aria-label="Ferramentas">${it.map(([h, ic, n, d]) => `<a href="${h}">${ICONES[ic]}<b>${n}</b><small>${d}</small></a>`).join('')}</nav>`;
 }
 // ---------- Bloco 2: esta semana. Agora (um cartão), a tarefa do outro, as respondidas com o efeito, o depois, o teto quando
 // não é o botão, e uma linha de Saber ----------
@@ -3542,7 +3666,7 @@ function blocoSemana(oc, P, acao) {
   const dep = oc.filter(o => o.aberta && o.data > HOJE && !o.semana && o !== agora).sort((a, b) => a.data < b.data ? -1 : 1)[0];
   const depois = dep ? `<div class="faixa-r">Depois</div><a class="linha-l" href="#tarefas"><span>${dataBR(dep.data)}: ${esc(dep.titulo)}</span>${dep.serve ? `<small>${esc(dep.serve)}</small>` : ''}</a>` : '';
   const teto = oc.find(o => o.semana && o.semana.atual && o.aberta), tetoLinha = teto && !(acao && acao.id === teto.id) ? `<button class="linha-l abre-l" data-acao="abrir" data-id="${esc(teto.id)}"><span>Esta semana: até ${brl(teto.valor)} nos gastos que ${pl('vocês controlam', 'você controla')}</span><small>responder até ${dataBR(teto.data)} &#8250;</small></button>` : '';
-  return `<section class="semana"><div class="rotulo">Esta semana<a class="mais" href="#tarefas">Todas as tarefas &#8250;</a></div><p class="duo-sub">${esc(sub)}</p>${cartaoAgora}${tetoLinha}${respondidas}${depois}${linhaSaber(P, oc)}</section>`;
+  return `<section class="semana"><div class="rotulo">Esta semana<a class="mais" href="#tarefas">Todas as tarefas &#8250;</a></div><p class="duo-sub">${esc(sub)}</p>${cartaoAgora}${tetoLinha}${linhaSaber(P, oc)}${resp.length || dep ? `<a class="btn link peq" href="#tarefas">${[resp.length ? resp.length + (resp.length === 1 ? " respondida" : " respondidas") : "", dep ? "a próxima em " + dataBR(dep.data) : ""].filter(Boolean).join(" · ")} &#8250;</a>` : ""}</section>`;
 }
 // lembrar o outro: uma mensagem da Nord, no máximo uma por tarefa a cada sete dias, com o estado depois
 function lembrarHtml(o) {
@@ -3586,7 +3710,16 @@ function blocoObjetivos(A, P) {
   const linhas = objs.slice(0, 6).map(o => { if (o.tipo === 'liberdade') return linhaLib(o);
     const p = prev[o.id], d = p ? difM(o.data, p) : null, ok = p && d <= 0, causa = o.versoes && o.versoes.length ? 'desde o ajuste de ' + dataBR(o.versoes[o.versoes.length - 1].em) : `no plano desde ${dataBR(R.publicadaEm || o.criado || HOJE)}`;
     return `<a class="obj-l" href="#objetivo/${o.id}"><span class="thumb" style="background-image:${FUNDO_OBJ(o)}"></span><span><b>${esc(o.nome)}</b><small>${mesAno(o.data + '-01')} · ${ok ? pct(progresso(o)) + ' guardado' : o === primeiro && saida ? saida : causa}</small></span><span class="chip ${ok ? 'ok' : 'at'}">${ok ? 'na data' : !p ? 'não chega' : atrasoTxt(d)}</span></a>`; }).join('');
-  return `<div class="rotulo">Os objetivos<a class="mais" href="#objetivos">Todos &#8250;</a></div>${conta}<div class="card lista">${lib ? linhaLib(null) : ''}${linhas}</div>${objs.length > 6 ? `<a class="btn link peq" href="#objetivos">Todos os ${objs.length} &#8250;</a>` : ''}`;
+  // no Painel, um cartão por objetivo: a foto, a data, o quanto já está guardado e se chega na data; a conta inteira fica em Objetivos
+  const Lr = RS && RS.liberdade && RS.liberdade.idade != null ? RS.liberdade : null;
+  const cartaoLib = o => { const ok = Lr ? !Lr.forcada : (o ? o.aporte >= necessario(o) - 0.5 : true), idade = o ? o.idade : (lib ? lib.big.replace(/<[^>]+>/g, '').split(' ')[1] : '');
+    return `<a class="obj-c" href="${o ? '#objetivo/' + o.id : '#cartao/liberdade'}"><span class="foto" style="background-image:${FUNDO_OBJ({ tipo: 'liberdade' })}"><span class="gde">aos ${idade}</span></span><span class="corpo"><b>Liberdade financeira</b><small>${o && o.data ? mesAno(o.data + '-01') + ' · ' : ''}trabalhar passa a ser escolha</small><span class="chip ${ok ? 'ok' : 'at'}" style="align-self:flex-start;margin-top:auto">${ok ? 'na data' : 'pede ajuste'}</span></span></a>`; };
+  const cartoes = objs.slice(0, 6).map(o => { if (o.tipo === 'liberdade') return cartaoLib(o);
+    const p = prev[o.id], d = p ? difM(o.data, p) : null, ok = p && d <= 0, g = guardado(o.id);
+    return `<a class="obj-c" href="#objetivo/${o.id}"><span class="foto" style="background-image:${FUNDO_OBJ(o)}"><span class="chip ${ok ? 'ok' : 'at'}">${ok ? 'na data' : !p ? 'não chega' : atrasoTxt(d)}</span></span><span class="corpo"><b>${esc(o.nome)}</b><small>${mesAno(o.data + '-01')}${idadeEm_(o.data)}</small><span class="trilho${ok ? '' : ' at'}" role="img" aria-label="${pct(progresso(o))} guardado"><i style="width:${Math.max(2, progresso(o) * 100).toFixed(1)}%"></i></span><small>${brlC(g)} de ${brlC(o.valor)}</small></span></a>`; }).join('');
+  const naData = montantes.length - atrasados.length;
+  const resumo = montantes.length ? `<p class="obj-resumo">${naData} de ${montantes.length} ${naData === 1 ? 'chega' : 'chegam'} na data com os ${brl(comb)} por mês combinados${outros > 0.5 ? `, mais ${brl(outros)} para a liberdade` : ''}.${atrasados.length ? ` <a href="#objetivos">Simular como trazer ${atrasados.length === 1 ? 'o que atrasa' : 'os ' + atrasados.length + ' que atrasam'} &#8250;</a>` : ''}</p>` : '';
+  return `<div class="rotulo">Os objetivos<a class="mais" href="#objetivos">Todos &#8250;</a></div>${resumo}<div class="obj-cards">${lib ? cartaoLib(null) : ''}${cartoes}</div>`;
 }
 // ---------- Bloco 4: as pendências do plano. Só o que não tem tarefa nem pauta, mais a proteção enquanto a cotação não
 // foi feita, com o risco em renda mensal; uma destacada por vez; some quando vazio ----------
@@ -3678,8 +3811,10 @@ function telaPainel() {
   const A = areas(), oc = ocorrencias(), P = passoCompleto(), acao = P ? acaoDoDia(oc) : null;
   const b0 = linhaSituacao(oc), b1 = heroiPainel(oc, P), b2 = blocoSemana(oc, P, acao), b3 = blocoObjetivos(A, P), b4 = blocoPendencias(A, oc), b5 = blocoMesAno(oc), b6 = AGENDA_AREA.cartoes() + blocoNord(A);
   const planoVis = R.degrau === 'visitante' ? `<a class="linha-l card" href="#plano" style="display:flex;text-decoration:none"><span>As onze áreas do seu plano, preenchidas pelo exame</span><small>ver &#8250;</small></a>` : '';
-  if (!DESK()) return faixaVisitante() + b0 + b1 + planoVis + b2 + b3 + b4 + b5 + b6;
-  return faixaVisitante() + b0 + b1 + planoVis + `<div class="painel"><div class="principal">${b2}${b3}</div><div class="trilho-l">${b4}${b5}${b6}</div></div>`;
+  // a casa: a vida financeira inteira primeiro (o patrimônio e a trajetória, os sinais vitais, as ferramentas, os objetivos); depois, o que fazer e com quem
+  const cima = faixaVisitante() + b0 + b1 + planoVis + sinaisVitais(A) + blocoFerramentas() + b3;
+  if (!DESK()) return cima + b2 + b4 + b5 + b6;
+  return cima + `<div class="painel"><div class="principal">${b2}</div><div class="trilho-l">${b4}${b5}${b6}</div></div>`;
 }
 // =====================================================================================================================
 // AS DUAS LINHAS DOS OBJETIVOS. Em cima, quando a família sonha realizar cada objetivo; embaixo, quando ele chega com o
@@ -4093,9 +4228,9 @@ function telaTarefas() {
 function telaPlano() {
   const A = areas(), v = versoesVigentes()[0];
   const cab = `<div class="grade2" style="align-items:stretch;margin-bottom:6px">${linhaProfundidade(A)}
-    <div class="prof" style="display:block">${v ? `<b>O plano de ${dataBRano(v.em)}</b><small>${esc(v.comentario || 'versão publicada')}${versoesVigentes().length > 1 ? ` · ${versoesVigentes().length} versões; a de cada mês fica em Realizado` : ''}</small>`
+    <${v ? `a class="prof abre-plano" href="${urlRelatorioInteiro(v.n)}"` : 'div class="prof"'} style="display:block;text-decoration:none;color:inherit">${v ? `<b>O plano de ${dataBRano(v.em)}</b><small>${esc(v.comentario || 'versão publicada')}${versoesVigentes().length > 1 ? ` · ${versoesVigentes().length} versões; a de cada mês fica em Realizado` : ''}</small><span class="btn link peq" style="display:inline-block;margin-top:6px">Abrir o plano completo &#8250;</span>`
       : R.degrau === 'clinica' ? `<b>O plano de ${dataBRano(C.publicadaEm)}</b><small>Os números registrados com a ${esc(R.consultora.completo)} e os que ${pl('vocês preencheram', 'você preencheu')}. As áreas vazias se preenchem pelas calculadoras ou numa próxima conversa.</small>`
-      : `<b>${R.degrau === 'visitante' ? 'O seu plano, montado por você' : 'O plano montado por ' + pl('vocês', 'você')}</b><small>Cada área se preenche pelo exame e pelas calculadoras. Com um planejador, o plano chega a 100% de profundidade.</small>`}</div></div>`;
+      : `<b>${R.degrau === 'visitante' ? 'O seu plano, montado por você' : 'O plano montado por ' + pl('vocês', 'você')}</b><small>Cada área se preenche pelo exame e pelas calculadoras. Com um planejador, o plano chega a 100% de profundidade.</small>`}</${v ? 'a' : 'div'}></div>`;
   // nos visuais novos, o Plano abre compacto (só o número principal de cada área); o botão abre todos em detalhe
   if (VISUAL === 'sobrio') return faixaVisitante() + cab + `<div class="cap-grade tres">${CARTOES.map(c => cartaoArea(c, A[c.id])).join('')}</div>`;
   const exp = planoExpandido();
