@@ -3173,7 +3173,7 @@ function areas() {
 
   // Reserva e liquidez
   const ra = reservaAtual(), ri = reservaIdeal();
-  if (tem(ra)) put('reserva', 'atual', brl(ra), fo('reserva'));
+  if (tem(ra)) put('reserva', 'atual', brl(ra), fo('reserva') + (Math.abs(ra - fv('reserva')) > 0.5 ? `, mais o que ${pl('vocês marcaram', 'você marcou')} desde então (resgates, aportes e imprevistos)` : ''));
   if (ri) put('reserva', 'alvos', `mínima ${brlC(ri * 0.4)} · aceitável ${brlC(ri * 0.7)} · ideal ${brlC(ri)}${fv('reservaMeses') ? ' (' + fv('reservaMeses') + ' meses de custo)' : ''}`, fo('reservaIdeal') || fo('natureza'));
   if (RS) { const cx = RS.politica.caixinhas.find(c => c.id === 'reserva');
     if (cx) put('reserva', 'onde', `na caixinha da reserva, em liquidez diária: ${brl(cx.patrimonio)}`, oP);
@@ -3356,7 +3356,15 @@ const CAPA_AREA = { liberdade: { src: 'ilustras/alternativas/porta-3.webp', foco
     'esfera-1': 23, 'esfera-2': 47, 'esfera-3': 27, 'esfera-4': 39 };
   const q = new URLSearchParams(location.search).get('capa'); if (q in FOCO) CAPA_AREA.liberdade = { src: `ilustras/alternativas/${q}.webp`, foco: FOCO[q] }; }
 const FUNDO_OBJ = o => o.foto ? `url('${o.foto}')` : o.tipo === 'liberdade' ? 'linear-gradient(135deg,#CFE8D9,#77C094)' : 'linear-gradient(135deg,#EEF1F5,#9FB0C4)';
-const tomDoObj = o => { const nec = necessario(o); return o.aporte >= nec - 0.5 ? ['ok', 'no caminho'] : ['at', `aporte em ${pct(o.aporte / Math.max(1, nec))} do necessário`]; };
+// o estado de um objetivo vem da mesma conta das duas linhas e do Painel (previsoesDeHoje: o ritmo de hoje, com o dinheiro
+// de um objetivo que chega passando para o seguinte). Sem previsão (objetivo sem valor ou data), vale o aporte contra o necessário
+const tomDoObj = o => { const p = previsoesDeHoje()[o.id], nec = necessario(o);
+  if (p) { const d = difM(o.data, p); return d > 0 ? ['at', atrasoTxt(d)] : ['ok', 'na data']; }
+  return o.aporte >= nec - 0.5 ? ['ok', 'no caminho'] : ['at', `aporte em ${pct(o.aporte / Math.max(1, nec))} do necessário`]; };
+// o aporte de hoje ao lado do que o objetivo pediria sozinho; na liberdade do plano publicado que fecha, a data é a do plano
+const aporteTxt = o => { const nec = necessario(o);
+  return o.tipo === 'liberdade' && liberdadeAncorada() ? `${brl(o.aporte)} por mês hoje · a data é a do plano, que conta a renda que cresce e o que os outros objetivos liberam`
+    : o.aporte >= nec - 0.5 ? `${brl(o.aporte)} por mês, de ${brl(nec)} necessários` : `${brl(o.aporte)} por mês hoje · sozinho, pediria ${brl(nec)}`; };
 const quandoTxt = o => o.aberta ? (atrasada(o) ? `atrasada há ${difD(o.data, HOJE)} ${difD(o.data, HOJE) === 1 ? 'dia' : 'dias'}` : o.data === HOJE ? 'hoje' : 'até ' + dataBR(o.data)) : '';
 const ESTADO_TXT = { feita: 'fiz', parcial: 'fiz parte', naofiz: 'não fiz', outro: 'usei em outro objetivo', adiada: 'adiada' };
 const estadoTxt = o => o.cat === 'comportamental' ? ({ feita: 'fiquei dentro', naofiz: 'passei', parcial: 'informei o valor' }[o.estado] || ESTADO_TXT[o.estado]) : ESTADO_TXT[o.estado];
@@ -3541,8 +3549,8 @@ function blocoObjetivos(A, P) {
   if (primeiro && semDest > 0.5 && R.degrau !== 'completo' && !reservaPede) { const itens = itensDasLinhas(), d = datasDasLinhas(itens, aporteDeHoje(itens) + semDest), i = itens.findIndex(o => o.id === primeiro.id); if (i >= 0 && d[i]) saida = `com os ${brl(semDest)} que sobram, ${mesAno(d[i] + '-01')}`; }
   const quando = e.data ? ` · decidir no ${e.titulo.charAt(0).toLowerCase() + e.titulo.slice(1)} de ${dataBRano(e.data)}` : '';
   const sobraTxt = semDest > 0.5 ? (reservaPede ? ` Os ${brl(semDest)} que sobram vão primeiro para a reserva, até ela fechar.` : R.degrau === 'completo' ? ` Os ${brl(semDest)} que sobram ficam na reserva${quando}.` : primeiro ? ` Os ${brl(semDest)} que sobram vão para ${esc(primeiro.nome)}, ${prioridade.length ? 'a primeira da ordem' : 'a mais próxima'}.` : ` Sobram ${brl(semDest)} sem destino.`)
-    : pedem > comb + 0.5 && atrasados.length ? ` ${atrasados.length === 1 ? 'Um atrasa' : atrasados.length + ' atrasam'} por desenho do plano${quando}.` : '';
-  const conta = montantes.length && tem(fv('renda')) ? `<p class="conta">${montantes.length === 1 ? 'O objetivo pede' : `Os ${montantes.length} pedem`} ${brl(pedem)}/mês; o combinado é ${brl(comb)}${outros > 0.5 ? `, mais ${brl(outros)} para a liberdade` : ''}.${sobraTxt} <a href="#objetivos">ver a ordem &#8250;</a></p>` : '';
+    : pedem > comb + 0.5 && atrasados.length ? ` ${atrasados.length === 1 ? 'Um atrasa' : atrasados.length + ' atrasam'}: o combinado cobre primeiro os de data mais próxima, e os outros recebem quando esses chegam${quando}.` : '';
+  const conta = montantes.length && tem(fv('renda')) ? `<p class="conta">${montantes.length === 1 ? 'O objetivo pede' : `Somados um a um, os ${montantes.length} pediriam`} ${brl(pedem)}/mês; o combinado é ${brl(comb)}${outros > 0.5 ? `, mais ${brl(outros)} para a liberdade` : ''}.${sobraTxt} <a href="#objetivos">ver a ordem &#8250;</a></p>` : '';
   const prot = RS ? RS.riscos.nota : null;
   const linhaLib = o => { const L = RS && RS.liberdade && RS.liberdade.idade != null ? RS.liberdade : null, ok = L ? !L.forcada : (o ? o.aporte >= necessario(o) - 0.5 : true);
     const cond = `se o aporte segue como combinado${prot != null && prot < 0.7 ? ' e a proteção é contratada' : ''}`, idade = o ? o.idade : (lib ? lib.big.replace(/<[^>]+>/g, '').split(' ')[1] : '');
@@ -3563,10 +3571,30 @@ function fraseDoRisco(oc) {
   const txt = `Se ${eu ? 'você' : 'o ' + nome} faltar, ${nomesJuntos(quem.map(n => (n === quem[0] && /a$/.test(n) ? 'a ' : /a$/.test(n) ? 'a ' : 'o ') + n))} ${quem.length > 1 ? 'ficam' : 'fica'} com ${brl(+sem.inssMorte || 0)} por mês para um custo de ${brlC(+fv('custo'))}`;
   return { txt, membro, tarefa, eu };
 }
+// a tarefa que fecha uma ameaça (pedido.risco) respondida como feita: a proteção do plano só muda quando a planejadora
+// registra a apólice numa versão nova; até lá, a área diz o que foi marcado, em vez de seguir pedindo a cotação
+function riscoMarcado(oc) {
+  const ts = (oc || ocorrencias()).filter(o => o.pedido.risco === 'familia'), v = versoesVigentes()[0];
+  if (!ts.length || ts.some(o => o.aberta)) return null;
+  const u = ts.filter(o => o.estado === 'feita' && o.resposta && (!v || o.resposta.em > v.em)).sort((a, b) => a.resposta.em < b.resposta.em ? -1 : 1).pop();
+  return u ? { em: u.resposta.em, quem: nomeDe(u.resposta.quem), titulo: u.curto || u.titulo } : null;
+}
+// o que um aviso de ameaça diz na folha da tarefa: a frase da pendência (com a renda que fica), nunca o código da ameaça
+const textoDoRisco = o => o.pedido.risco === 'familia' ? ((fraseDoRisco(ocorrencias()) || {}).txt || 'Enquanto isto não é feito, a família segue sem proteção se faltar quem a sustenta') + '.' : String(o.pedido.risco || '');
+// na página da área, o que mudou desde a foto do plano e a nota ainda não conta (a nota é do motor, sobre o plano publicado)
+function desdeOPlano(c) {
+  if (c.id !== 'riscos' || !RS) return '';
+  const l = [], rv = RS.riscos.reserva || {}, ra = reservaAtual(), ri = reservaIdeal(), m = riscoMarcado(), v = versoesVigentes()[0], cons = R.consultora ? 'a ' + R.consultora.nome : 'a planejadora';
+  if (tem(ra) && ri && rv.atual != null && Math.abs(ra - rv.atual) > 0.5) l.push(`A reserva: no plano, ${brlC(rv.atual)} (${pct(Math.min(1, rv.atual / ri))} da ideal). Hoje, com o que ${pl('vocês marcaram', 'você marcou')}, ${brlC(ra)} (${pct(Math.min(1, ra / ri))}).`);
+  if (m) l.push(`A proteção da família: ${m.quem} marcou "${m.titulo}" como feito em ${dataBR(m.em)}.`);
+  return l.length ? `<div class="aviso" style="margin-bottom:12px"><b>Desde o plano de ${dataBRano(v.em)}</b><br>${l.map(esc).join('<br>')}<br><span class="mut">A nota de proteção abaixo é a do plano publicado: ela muda quando ${esc(cons)} registrar isso numa versão nova.</span></div>` : '';
+}
 function blocoPendencias(A, oc) {
   if (R.degrau === 'visitante') return '';
   const it = [], e = proximoEncontro();
-  const risco = R.degrau === 'completo' ? fraseDoRisco(oc) : null;
+  const marcado = R.degrau === 'completo' ? riscoMarcado(oc) : null;
+  const risco = R.degrau === 'completo' && !marcado ? fraseDoRisco(oc) : null;
+  if (marcado) it.push({ txt: `${marcado.titulo}: feito em ${dataBR(marcado.em)}. A proteção do plano sobe quando ${R.consultora ? 'a ' + R.consultora.nome : 'a planejadora'} registrar a apólice numa versão nova`, acao: `<a href="#cartao/riscos">ver a gestão de riscos &#8250;</a>` });
   if (risco) it.push({ txt: risco.txt, acao: risco.tarefa ? `<button class="btn link peq" data-acao="abrir" data-id="${esc(risco.tarefa.id)}">resolve com a cotação &#8250;</button>` : `<a href="#cartao/riscos">ver a gestão de riscos &#8250;</a>`, forte: risco.eu || !casal() });
   else { const ex = exames(), ult = ex[ex.length - 1]; if (ult && ult.pilares.Proteção < 60 && R.degrau === 'cadastrado') it.push({ txt: `Proteção, pilar do exame: ${ult.pilares.Proteção}`, acao: `<a href="#cartao/riscos">responder a calculadora de seguros &#8250;</a>` }); }
   const dv = +fv('dividas') || 0; if (dv > 0.5 && !e.data) it.push({ txt: `Dívidas ${brlC(dv)}`, acao: '<a href="#cartao/dividas">amortizar ou investir &#8250;</a>' });
@@ -4160,7 +4188,7 @@ function telaCartao(id) {
   const rel = R.degrau === 'completo' ? relatorioDaArea(c) : '';
   const prox = proximoNaArea(c, falta);
   const ca = CAPA_AREA[c.id], capa = ilustra('capa-' + c.id, 'capa', '', ca && ca.src, ca && ca.foco);   // a da série; enquanto não chega, a escolhida antes (só a liberdade tem)
-  return `<div style="max-width:1080px">${capa}${niveisDaArea(c, f)}${rel ?`<div class="grade2" style="align-items:start">${resumo}${lista}</div>${atalhosDaArea(c)}${rel}` : `<div class="grade2" style="align-items:start"><div>${resumo}${pre}</div><div>${lista}${prox}</div></div>${atalhosDaArea(c)}${semRelatorio(c)}`}</div>`;
+  return `<div style="max-width:1080px">${capa}${niveisDaArea(c, f)}${desdeOPlano(c)}${rel ?`<div class="grade2" style="align-items:start">${resumo}${lista}</div>${atalhosDaArea(c)}${rel}` : `<div class="grade2" style="align-items:start"><div>${resumo}${pre}</div><div>${lista}${prox}</div></div>${atalhosDaArea(c)}${semRelatorio(c)}`}</div>`;
 }
 // AS TRÊS PROFUNDIDADES (v2/ARQUITETURA.md, seção 3), as mesmas em toda área e em todo degrau: 1. a visão geral (o cartão do
 // Plano e a capa daqui), 2. a visão aprofundada (as informações da área e a calculadora) e 3. o relatório (o capítulo do
@@ -4313,9 +4341,9 @@ function folhaTarefa(o) {
   const combinado = orient ? `<p class="peq" style="color:var(--marinho);margin:10px 0 0">${esc(orient.txt)}</p>` : '';
   const hist = o.respostas.length ? `<div class="rotulo">Histórico</div>${o.respostas.map(r => `<div class="hist">${dataBR(r.em)} · ${esc(nomeDe(r.quem))} ${r.estado === 'adiada' ? `adiou para ${dataBR(r.novaData)}${r.motivo ? ': "' + esc(r.motivo) + '"' : ''}` : `respondeu: ${esc(o.cat === 'comportamental' ? ({ feita: 'fiquei dentro', naofiz: 'passei', parcial: 'informei o valor' }[r.estado]) : ESTADO_TXT[r.estado])}${r.valor != null ? ', ' + brl(r.valor) : ''}${r.saida ? ' · ' + esc(SAIDAS[r.saida]) : ''}${r.obs ? ': "' + esc(r.obs) + '"' : ''}`} ${r.canal === 'whatsapp' ? '(pelo WhatsApp)' : ''}</div>`).join('')}` : '';
   const divisao = o.divisao ? `<div class="sep"></div>${o.divisao.map(d => `<div class="entre peq" style="padding:3px 0"><span>${esc(objDe(d.obj).nome)}</span><b class="num" style="font-size:16px">${brl(d.valor)}</b></div>`).join('')}` : '';
-  const risco = o.pedido.risco && o.aberta ? `<div class="aviso at" style="margin-top:10px">${esc(o.pedido.risco)}</div>` : '';
+  const risco = o.pedido.risco && o.aberta ? `<div class="aviso at" style="margin-top:10px">${esc(textoDoRisco(o))}</div>` : '';
   const semanas = o.semana ? barrasTeto(o) : '';
-  if (!o.aberta) return cab + combinado + divisao + semanas + `<div class="aviso ok" style="margin-top:12px">Respondida: ${esc(estadoTxt(o))}${o.resposta.valor != null ? ', ' + brl(o.resposta.valor) : ''}.</div>` + hist + `<div style="margin-top:14px"><button class="btn" data-acao="fechar">Fechar</button></div>`;
+  if (!o.aberta) return cab + combinado + divisao + semanas + `<div class="aviso ok" style="margin-top:12px">Respondida: ${esc(estadoTxt(o))}${o.resposta.valor != null ? ', ' + brl(o.resposta.valor) : ''}.</div>` + hist + `<div class="linha" style="margin-top:14px"><button class="btn" data-acao="fechar">Fechar</button>${X.respostas[o.id] && X.respostas[o.id].some(r => r.estado !== 'adiada') ? `<button class="btn link peq" data-acao="corrigir-resposta" data-id="${esc(o.id)}">Corrigir a resposta</button>` : ''}</div>`;
   let corpo = '';
   if (!F_.modo) {
     corpo = o.cat === 'comportamental'
@@ -4369,7 +4397,7 @@ function naoFizHtml(o) {
       ${F_.saida === 'coube' ? `<div class="campo"><label for="coube">Quanto cabe por mês</label><input id="coube" inputmode="decimal" data-moeda value="${moedaTxt(F_.coube != null ? F_.coube : Math.round(o.valor * 0.6))}" data-campo="coube"></div>` : ''}
       ${F_.saida ? antesDepois(o, F_.saida) + (completo && F_.saida !== 'outro' ? `<p class="mut" style="margin:6px 0">No planejamento completo, o ajuste vale como provisório até a ${esc(R.consultora ? R.consultora.nome : 'consultora')} aprovar.</p>` : '') + `<div class="linha pe"><button class="primaria" data-acao="responder" data-v="${F_.saida === 'outro' ? 'outro' : 'naofiz'}">Confirmar</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>` : `<div style="margin-top:10px"><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`}`;
   }
-  const txt = o.cat === 'educacional' ? 'Sem problema: escolha uma nova data.' : o.pedido.risco ? o.pedido.risco : 'O que esta tarefa resolve continua em aberto.';
+  const txt = o.cat === 'educacional' ? 'Sem problema: escolha uma nova data.' : o.pedido.risco ? textoDoRisco(o) : 'O que esta tarefa resolve continua em aberto.';
   return `<div class="aviso at" style="margin-top:12px">${esc(txt)}</div><div class="campo"><label for="nova">Nova data</label><input id="nova" type="date" min="${addD(HOJE, 1)}" value="${F_.novaData || addD(HOJE, 7)}" data-campo="novaData"></div>
     <div class="linha"><button class="primaria" data-acao="responder" data-v="adiada">Marcar a nova data</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`;
 }
@@ -4405,8 +4433,9 @@ function telaObjetivos() {
   return `<div style="max-width:760px">${linhasDosObjetivos()}${objs.map(o => { const t = tomDoObj(o), nec = necessario(o);
       return `<a class="obj-card" href="#objetivo/${o.id}"><span class="thumb" style="background-image:${FUNDO_OBJ(o)}"></span><span style="min-width:0"><span class="entre"><b>${esc(o.nome)}</b><span class="chip ${t[0]}">${t[1]}</span></span>
         <span class="mut">${o.tipo === 'liberdade' ? 'aos ' + o.idade + ', ' + mesAno(o.data + '-01') : mesAno(o.data + '-01')} · ${brlC(guardado(o.id))} de ${brlC(o.valor)}, ${pct(progresso(o))} guardado</span><div class="trilho" style="margin:8px 0 4px"><i style="width:${(progresso(o) * 100).toFixed(1)}%"></i></div>
-        <span class="mut">${brl(o.aporte)} por mês, de ${brl(nec)} necessários${o.complementar ? ' · complementar' : ''}</span></span></a>`; }).join('')}
-    ${tem(fv('renda')) ? `<div class="card"><div class="entre"><span class="peq" style="color:var(--marinho)">Os objetivos juntos pedem <b>${brl(pedem)}</b> por mês</span><span class="mut">${pl('vocês põem', 'você põe')} ${brl(poe)} de ${brl(sobra())} de sobra</span></div>${b100([[poe, 'var(--marinho)', 'O que vai para os objetivos'], [Math.max(0, pedem - poe), 'var(--trilho)', 'O que falta para o necessário']], 10)}${legenda([['o que vai para os objetivos', 'var(--marinho)'], ['o que falta para o necessário', 'var(--trilho)']])}</div>` : ''}
+        <span class="mut">${aporteTxt(o)}${o.complementar ? ' · complementar' : ''}</span></span></a>`; }).join('')}
+    ${tem(fv('renda')) ? `<div class="card"><div class="entre"><span class="peq" style="color:var(--marinho)">Somados um a um, os objetivos pediriam <b>${brl(pedem)}</b> por mês</span><span class="mut">${pl('vocês põem', 'você põe')} ${brl(poe)} de ${brl(sobra())} de sobra</span></div>${b100([[poe, 'var(--marinho)', 'O que vai para os objetivos'], [Math.max(0, pedem - poe), 'var(--trilho)', 'O que falta para o necessário']], 10)}${legenda([['o que vai para os objetivos', 'var(--marinho)'], ['o que falta para o necessário', 'var(--trilho)']])}
+      <p class="mut" style="margin:8px 0 0">Essa soma trata cada objetivo como se fosse pago só com o aporte dele${objs.some(o => o.complementar) ? ', sem contar a liberdade' : ''}. No plano, quando um objetivo chega, o dinheiro dele passa para o seguinte: por isso a conta lá do alto, a que vale para as datas, pede menos.</p></div>` : ''}
     <a class="btn" href="#cartao/objetivos" style="display:inline-flex;align-items:center;text-decoration:none">${R.degrau === 'completo' ? 'Ver os objetivos no plano' : 'Criar outro objetivo'}</a></div>`;
 }
 function curvaObjetivo(o) {
@@ -4427,7 +4456,7 @@ function telaObjetivo(id) {
   const g = guardado(o.id), nec = necessario(o), t = tomDoObj(o), n = Math.max(1, difM(MES, o.data)), naData = fvDe(g, o.aporte, o.taxa || 0, n);
   const aps = ocorrencias().filter(x => x.divisao && x.divisao.some(d => d.obj === o.id) && x.data <= addD(HOJE, 14)).slice(-8);
   return `<div style="max-width:820px"><div class="obj-foto" style="background-image:${FUNDO_OBJ(o)}"><div class="sobre"><b>${esc(o.nome)}</b><span>${esc(o.porque || '')}</span></div></div>
-    <div class="nums"><div><span>Guardado</span><b>${brlC(g)}</b><small>de ${brlC(o.valor)} · ${pct(g / o.valor)}</small></div><div><span>Por mês</span><b class="fut">${brl(o.aporte)}</b><small>de ${brl(nec)} necessários · ${t[1]}</small></div><div><span>${o.tipo === 'liberdade' ? 'A data' : 'Na data'}</span><b>${o.tipo === 'liberdade' ? 'aos ' + o.idade : mesAno(o.data + '-01')}</b><small>${o.tipo === 'liberdade' ? mesAnoL(o.data) + ', com ' + brl(o.desejada) + ' por mês' : 'no ritmo de hoje, ' + brlC(naData)}</small></div></div>
+    <div class="nums"><div><span>Guardado</span><b>${brlC(g)}</b><small>de ${brlC(o.valor)} · ${pct(g / o.valor)}</small></div><div><span>Por mês</span><b class="fut">${brl(o.aporte)}</b><small>${o.tipo === 'liberdade' && liberdadeAncorada() ? '' : o.aporte >= nec - 0.5 ? `de ${brl(nec)} necessários · ` : `sozinho, pediria ${brl(nec)} · `}${t[1]}</small></div><div><span>${o.tipo === 'liberdade' ? 'A data' : 'Na data'}</span><b>${o.tipo === 'liberdade' ? 'aos ' + o.idade : mesAno(o.data + '-01')}</b><small>${o.tipo === 'liberdade' ? mesAnoL(o.data) + ', com ' + brl(o.desejada) + ' por mês' : 'no ritmo de hoje, ' + brlC(naData)}</small></div></div>
     <div class="card"><h3>O caminho até lá</h3>${curvaObjetivo(o)}</div>
     <div class="grade2"><div class="card"><h3>A estratégia</h3><p class="peq" style="margin:0">${esc(o.estrategia || 'Guardar o aporte todo mês, numa caixinha só deste objetivo.')}</p><p class="mut" style="margin:8px 0 0">${esc(o.origem || '')}</p></div>
       <div class="card"><h3>Os aportes</h3>${aps.length ? aps.map(a => `<div class="entre peq" style="padding:5px 0;border-top:1px solid var(--areia)"><span>${mesAnoL(a.mes)}</span><span>${a.aberta ? `<span class="chip ${atrasada(a) ? 'at' : ''}">${atrasada(a) ? 'atrasado' : 'aguardando'}</span>` : `<span class="chip ${a.estado === 'feita' ? 'ok' : 'at'}">${estadoTxt(a)} · ${brl(feitoPorObjetivo(a)[o.id] || 0)}</span>`}</span></div>`).join('') : `<div class="mut">${R.pedidos.length ? 'O primeiro aporte ainda não venceu.' : o.complementar ? 'A liberdade recebe o que sobra depois dos objetivos.' : 'Sem tarefa de aporte ainda.'}</div>`}
@@ -4471,9 +4500,9 @@ function telaRealizado() {
   const mesa = meses.slice().reverse().map(([m, r]) => { const o = orcadoNoMes(m); if (!o) return ''; const fut = r.entradas - r.fixas - r.ajustaveis; tot.o += o.futuro; tot.r += fut; tot.n++;
     const d = fut - o.futuro, est = Math.abs(d) <= Math.max(100, Math.abs(o.futuro) * 0.05) ? ['', 'dentro do plano'] : d > 0 ? ['ok', 'acima do plano'] : ['at', 'abaixo do plano'];
     return `<div class="mes"><h4><span>${MESES_L[+m.slice(5) - 1]} de ${m.slice(0, 4)}</span><span class="chip ${est[0]}">${est[1]}</span></h4><div class="l cab"><span></span><span>orçado</span><b>realizado</b></div>
-      ${linha('Entradas', o.entradas, r.entradas, true)}${linha('Fixas', o.fixas, r.fixas)}${linha('Ajustáveis', o.ajustaveis, r.ajustaveis)}${linha('Para o futuro', o.futuro, fut, true)}
+      ${linha('Entradas', o.entradas, r.entradas, true)}${linha('Fixas', o.fixas, r.fixas)}${linha('Ajustáveis', o.ajustaveis, r.ajustaveis)}${linha('Sobra do mês', o.futuro, fut, true)}
       <div class="mut" style="margin-top:6px;font-size:11.5px">contra ${esc(o.versao)} · ${esc(r.origem || '')}</div></div>`; }).join('');
-  const resumoOrc = tot.n ? (() => { const d = tot.r - tot.o; return `<div class="nums"><div><span>Planejado para o futuro</span><b>${brlC(tot.o)}</b><small>em ${tot.n} ${tot.n === 1 ? 'mês' : 'meses'}</small></div><div><span>Realizado</span><b class="${d >= -0.5 ? 'ok' : 'fut'}">${brlC(tot.r)}</b><small>${Math.abs(d) <= Math.max(100, Math.abs(tot.o) * 0.03) ? 'dentro do plano' : d > 0 ? brlC(d) + ' acima do plano' : brlC(-d) + ' abaixo do plano'}</small></div><div><span>Meses dentro ou acima</span><b>${meses.filter(([m, r]) => { const o = orcadoNoMes(m); return o && r.entradas - r.fixas - r.ajustaveis >= o.futuro - Math.max(100, Math.abs(o.futuro) * 0.05); }).length} de ${tot.n}</b><small>no horizonte escolhido</small></div></div>`; })() : '';
+  const resumoOrc = tot.n ? (() => { const d = tot.r - tot.o; return `<div class="nums"><div><span>Sobra planejada</span><b>${brlC(tot.o)}</b><small>entradas menos despesas, em ${tot.n} ${tot.n === 1 ? 'mês' : 'meses'}</small></div><div><span>Sobra realizada</span><b class="${d >= -0.5 ? 'ok' : 'fut'}">${brlC(tot.r)}</b><small>${Math.abs(d) <= Math.max(100, Math.abs(tot.o) * 0.03) ? 'dentro do plano' : d > 0 ? brlC(d) + ' acima do plano' : brlC(-d) + ' abaixo do plano'}</small></div><div><span>Meses dentro ou acima</span><b>${meses.filter(([m, r]) => { const o = orcadoNoMes(m); return o && r.entradas - r.fixas - r.ajustaveis >= o.futuro - Math.max(100, Math.abs(o.futuro) * 0.05); }).length} de ${tot.n}</b><small>no horizonte escolhido</small></div></div>`; })() : '';
   // o patrimônio: a curva prevista (a de cada versão, no seu trecho) e os pontos reais
   let grafPat = '';
   if (pat.length) { const ini = vs.length ? addM(vs[0].em.slice(0, 7), 0) : pat[0][0], fim = addM(MES, 2), pts = [];
@@ -4490,7 +4519,7 @@ function telaRealizado() {
   const seletor = hz.length > 1 ? `<div class="filtros">${hz.map(([k]) => `<button class="filtro${k === H ? ' on' : ''}" data-acao="horizonte" data-v="${k}">${{ 3: '3 meses', 6: '6 meses', 12: '12 meses', ano: 'o ano', plano: 'desde o plano' }[k]}</button>`).join('')}</div>` : '';
   return `<div style="max-width:1080px">${vazio ? `<div class="aviso" style="margin-bottom:12px">O realizado começa no primeiro registro. ${R.degrau === 'visitante' ? 'Com a conta, ' + pl('vocês lançam', 'você lança') + ' o mês aqui (ou o open banking traz sozinho, quando estiver ligado).' : 'Lance o primeiro mês: a área compara com o plano que valia nele.'}</div>` : ''}
     <div class="grade2" style="align-items:start">${cabVersoes || '<div></div>'}${dedicado}</div>
-    ${orc.length ? `<div class="rotulo">O orçamento: o orçado e o realizado</div>${seletor}${resumoOrc}<div class="mesa">${mesa}</div>` : ''}
+    ${orc.length ? `<div class="rotulo">O orçamento: o orçado e o realizado</div>${seletor}${resumoOrc}${aps.length ? `<p class="mut" style="margin:0 0 10px">São duas medidas. A sobra é o que o extrato mostra: entradas menos despesas. O dinheiro dedicado aos objetivos, acima, é o aporte que ${pl('vocês marcaram', 'você marcou')} como feito. Num mês em que a sobra fica menor que o aporte, parte dele saiu de outro lugar (do saldo da conta ou da reserva).</p>` : ''}<div class="mesa">${mesa}</div>` : ''}
     ${grafPat ? `<div class="rotulo">O patrimônio: o previsto e o real</div>${grafPat}` : ''}
     ${R.degrau !== 'visitante' ? `<div style="margin-top:14px"><button class="btn" data-acao="lancar">Lançar um mês</button></div>` : ''}</div>`;
 }
@@ -4861,6 +4890,8 @@ document.addEventListener('click', async ev => {
   if (acao === 'fiz-rapido') { UI.folha = { id: a.dataset.id }; await responder('feita'); return; }
   if (acao === 'fechar' || acao === 'fechar-fora') { UI.folha = null; if (location.hash.startsWith('#tarefa/')) history.replaceState(null, '', '#tarefas'); desenhar(); return; }
   if (acao === 'modo') { Object.assign(UI.folha, { modo: a.dataset.v || null, saida: null }); desenharFolha(); return; }
+  // corrigir uma resposta já dada: a tarefa volta para em aberto (com os ajustes dela desfeitos) e a folha reabre para responder de novo
+  if (acao === 'corrigir-resposta') { const id = a.dataset.id; await gravarMarca(id, 'limpar'); UI.folha = { id }; desenharFolha(); return; }
   if (acao === 'saida') { UI.folha.saida = a.dataset.v; desenharFolha(); const on = document.querySelector('.folha .saida.on'); if (on) on.scrollIntoView({ block: 'center' }); return; }
   if (acao === 'ver-por-obj') { UI.folha.porObj = !UI.folha.porObj; desenharFolha(); return; }
   if (acao === 'responder') { await responder(a.dataset.v); return; }

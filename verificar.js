@@ -1071,7 +1071,7 @@ console.log('\n14. Segunda rodada da auditoria (M5 a M10, D4, D6 e os campos nov
     ok('imposto sobre o ganho: 15% de (2.000.000 − 500.000) = 225.000 saem do líquido da venda', tr.venda && Math.abs(tr.venda.custo - 225000) < 1 && Math.abs(tr.venda.liquido - 1775000) < 1, tr.venda && tr.venda.custo); }
 }
 console.log('\n15. Área do cliente: a mesma estrutura para todo degrau (area-logada/CORRECOES-PLANO-2026-10-30.md)');
-{ const area = fs.readFileSync('area-cliente.html', 'utf8'), rel = fs.readFileSync(CLIENTE, 'utf8');
+{ const area = fs.readFileSync('area-cliente.html', 'utf8').replace(/\r\n/g, '\n'), rel = fs.readFileSync(CLIENTE, 'utf8');   // os trechos abaixo são cortados por "\n": valem com LF ou CRLF no disco
   const trecho = (de, ate) => { const i = area.indexOf(de), j = area.indexOf(ate, i); return i >= 0 && j > i ? area.slice(i, j) : null; };
   // os cartões: um literal só, avaliado à parte
   const srcCartoes = trecho('const CARTOES = [', 'const COMO = ');
@@ -1273,6 +1273,11 @@ console.log('\nFeedback do cliente simulado de 12 meses (area-logada/v2/FEEDBACK
   ok('Q2: na área vista pelo planejador, a mensagem sai como "consultora" e fecha as perguntas em aberto', /if \(CONSULTOR\) \{ X\.conversas\.forEach\(m => \{ if \(m\.quem !== 'consultora' && !m\.respondida\) m\.respondida = true; \}\); X\.conversas\.push\(\{ em: AGORA\(\), quem: 'consultora'/.test(area), '');
   ok('T1: o Confirmar de "não fiz" fica preso ao pé da folha (.linha.pe, sticky)', /\.folha \.linha\.pe\{position:sticky/.test(area) && /<div class="linha pe"><button class="primaria" data-acao="responder"/.test(area), '');
   ok('Q20: a folha não se redesenha dentro do próprio desenho (o "change" do campo que sai)', /function desenharFolha\(\) \{ if \(desenharFolha\.em\) return;/.test(area), '');
+  ok('Q8: o estado do objetivo (cartão e página) sai da mesma conta das duas linhas e do Painel (previsoesDeHoje)', /const tomDoObj = o => \{ const p = previsoesDeHoje\(\)\[o\.id\]/.test(area) && !/Os objetivos juntos pedem/.test(area), '');
+  ok('Q18: o aviso de ameaça na folha da tarefa é uma frase, nunca o código da ameaça ("familia")', !/esc\(o\.pedido\.risco\)/.test(area) && !/o\.pedido\.risco \? o\.pedido\.risco :/.test(area), '');
+  ok('Q4/Q5: a área de riscos diz o que mudou desde a foto do plano (reserva de hoje, proteção marcada) e a pendência fecha', /function desdeOPlano\(c\)/.test(area) && /\$\{desdeOPlano\(c\)\}/.test(area) && /const marcado = R\.degrau === 'completo' \? riscoMarcado\(oc\)/.test(area), '');
+  ok('Q7: no Realizado, a sobra do extrato não se chama "para o futuro" (não se confunde com o aporte marcado)', /linha\('Sobra do mês', o\.futuro, fut, true\)/.test(area) && !/Planejado para o futuro/.test(area), '');
+
 }
 console.log('\n' + (falhas ? falhas + ' verificação(ões) falharam.' : 'Tudo certo.') + '\n');
 process.exit(falhas ? 1 : 0);
