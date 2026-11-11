@@ -3434,7 +3434,9 @@ function pautaDaReuniao(A) {
     const objs = objetivos().filter(o => o.tipo !== 'liberdade'), atr = objs.filter(o => { const p = previsoesDeHoje()[o.id]; return !p || difM(o.data, p) > 0; });
     if (atr.length) l.push({ de: 'planejadora', txt: `A ordem dos objetivos: ${atr.length} ${atr.length === 1 ? 'pede' : 'pedem'} ajuste` });
   } else (R.temas || []).forEach(t => l.push({ de: 'planejadora', txt: t }));
-  ((X && X.pauta) || []).forEach(p => l.push({ de: 'vocês', txt: p.txt, em: p.em }));
+  // a pauta da família é a da próxima reunião: o que foi escrito até a última reunião já foi levado e sai daqui
+  const ult = (reunioes()[0] || {}).data || '';
+  ((X && X.pauta) || []).filter(p => p.em.slice(0, 10) > ult && p.em.slice(0, 10) <= HOJE).forEach(p => l.push({ de: 'vocês', txt: p.txt, em: p.em }));
   return l;
 }
 // ---------- Bloco 0: a linha de situação. Três fatos na ordem fixa (o dinheiro do mês · a execução · os objetivos), sem
@@ -4460,7 +4462,7 @@ function telaObjetivo(id) {
     <div class="card"><h3>O caminho até lá</h3>${curvaObjetivo(o)}</div>
     <div class="grade2"><div class="card"><h3>A estratégia</h3><p class="peq" style="margin:0">${esc(o.estrategia || 'Guardar o aporte todo mês, numa caixinha só deste objetivo.')}</p><p class="mut" style="margin:8px 0 0">${esc(o.origem || '')}</p></div>
       <div class="card"><h3>Os aportes</h3>${aps.length ? aps.map(a => `<div class="entre peq" style="padding:5px 0;border-top:1px solid var(--areia)"><span>${mesAnoL(a.mes)}</span><span>${a.aberta ? `<span class="chip ${atrasada(a) ? 'at' : ''}">${atrasada(a) ? 'atrasado' : 'aguardando'}</span>` : `<span class="chip ${a.estado === 'feita' ? 'ok' : 'at'}">${estadoTxt(a)} · ${brl(feitoPorObjetivo(a)[o.id] || 0)}</span>`}</span></div>`).join('') : `<div class="mut">${R.pedidos.length ? 'O primeiro aporte ainda não venceu.' : o.complementar ? 'A liberdade recebe o que sobra depois dos objetivos.' : 'Sem tarefa de aporte ainda.'}</div>`}
-        ${o.versoes.length ? `<div class="rotulo">Ajustes</div>${o.versoes.map(v => `<div class="hist">${dataBR(v.em)} · ${v.campo === 'aporte' ? `aporte de ${brl(v.de)} para ${brl(v.para)}` : `data de ${mesAno(v.de + '-01')} para ${mesAno(v.para + '-01')}`} (${esc(SAIDAS[v.saida] || 'ajuste')})</div>`).join('')}` : ''}</div></div></div>`;
+        ${o.versoes.length ? `<div class="rotulo">Ajustes</div>${o.versoes.map(v => `<div class="hist">${dataBR(v.em)} · ${v.campo === 'aporte' ? `aporte de ${brl(v.de)} para ${brl(v.para)}` : `data de ${mesAno(v.de + '-01')} para ${mesAno(v.para + '-01')}`} (${esc(SAIDAS[v.saida] || 'ajuste')}${v.provisorio ? ', provisório até a ' + esc(R.consultora ? R.consultora.nome : 'consultora') + ' aprovar' : v.aprovadoEm ? ', aprovado pela ' + esc(R.consultora ? R.consultora.nome : 'consultora') + ' em ' + dataBR(v.aprovadoEm) : ''})</div>`).join('')}` : ''}</div></div></div>`;
 }
 
 // ---------- Realizado: o orçado × o realizado do orçamento e do patrimônio, cada mês contra a versão que valia nele ----------

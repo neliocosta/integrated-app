@@ -147,14 +147,17 @@ const dataHora = iso => { const d = new Date(iso); if (isNaN(d)) return ''; retu
 const dataBR = s => s ? s.slice(8, 10) + '/' + s.slice(5, 7) + '/' + s.slice(0, 4) : '';
 const iniciais = n => (n || '?').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(p => p[0].toUpperCase()).join('') || '?';
 const primeiro = s => String(s || '').trim().split(/\s+/)[0];
-const url = (pagina, id, extra) => pagina + '?cliente=' + encodeURIComponent(id) + (extra || '');
+// ?hoje=AAAA-MM-DD: o mesmo relógio simulado da área do cliente; a base o repassa às telas que abre, para as duas pontas
+// contarem a mesma história num teste de vários meses
+const HOJE_SIM = (new URLSearchParams(location.search).get('hoje') || '').match(/^\d{4}-\d{2}-\d{2}$/) ? new URLSearchParams(location.search).get('hoje') : null;
+const url = (pagina, id, extra) => pagina + '?cliente=' + encodeURIComponent(id) + (extra || '') + (HOJE_SIM ? '&hoje=' + HOJE_SIM : '');
 const dia = s => new Date(s.slice(0, 10) + 'T12:00:00'), isoD = d => d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate());
 const addD = (s, n) => { const d = dia(s); d.setDate(d.getDate() + n); return isoD(d); };
 const difD = (a, b) => Math.round((dia(b) - dia(a)) / 864e5);
 const maisMeses = (d, n) => { const a = new Date(+d.slice(0, 4), +d.slice(5, 7) - 1 + n, 1), ult = new Date(a.getFullYear(), a.getMonth() + 1, 0).getDate(); return a.getFullYear() + '-' + p2(a.getMonth() + 1) + '-' + p2(Math.min(+d.slice(8, 10), ult)); };
 // os exemplos vivem em 20/10/2026, como na área do cliente (lá, HOJE); os clientes de verdade, no dia de hoje
 const EXEMPLOS = { 'exemplo-cadastrado': 'cadastrado', exemplo: 'clínica', 'exemplo-completo': 'completo' };
-const hojeDe = id => id in EXEMPLOS ? '2026-10-20' : isoD(new Date());
+const hojeDe = id => HOJE_SIM || (id in EXEMPLOS ? '2026-10-20' : isoD(new Date()));
 
 // ---------- o armazém: um documento por chave e por cliente, { dados, em } ----------
 const NUVEM = { planos: null };   // no link publicado: os planos do banco do link, por id
@@ -192,6 +195,10 @@ function vezesDaAvulsa(t, hoje) {
   return l;
 }
 const ESTADO_TXT = { feita: 'fez', parcial: 'fez parte', naofiz: 'não fez', outro: 'usou em outro objetivo', adiada: 'adiou' };
+const SAIDA_TXT = { manter: 'manter a data', adiar: 'adiar o objetivo', coube: 'ajustar ao que coube', outro: 'usou em outro objetivo' };
+const TIPO_IMP = { saude: 'saúde', casa: 'casa ou carro', renda: 'a renda caiu', outra: 'outra coisa' };
+const reais = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR');
+const mesBR = m => m ? m.slice(5, 7) + '/' + m.slice(0, 4) : '';
 const REC_TXT = { semanal: 'toda semana', quinzenal: 'a cada 15 dias', mensal: 'todo mês' };
 
 // ---------- o cliente, montado dos documentos ----------
@@ -210,13 +217,20 @@ function cliente(id) {
   // as do consultor: as desta ficha (responsável consultor ou reunião) e as do bloco 11 da coleta com responsável "consultor"
   c.minhas = (at.tarefas || []).map(t => Object.assign({}, t, { aberta: !t.feita, atrasada: !t.feita && t.data < hoje }));
   c.daColeta = ((plano && plano.coleta && plano.coleta.tarefas) || []).filter(t => t.titulo && t.status !== 'concluida');
-  c.conversas = (exec.conversas || []).filter(x => x.quem !== 'consultora' && !x.respondida);
+  c.conversas = (exec.conversas || []).filter(x => x.quem !== 'consultora' && !x.respondida && x.em.slice(0, 10) <= hoje);
+  // o que o cliente ajustou sozinho (um aporte não feito: manter a data, adiar, ajustar ao que coube) vale como provisório
+  // até o consultor aprovar: um grupo por resposta
+  c.ajustes = Object.values((exec.ajustes || []).filter(j => j.provisorio && j.em.slice(0, 10) <= hoje).reduce((g, j) => { const k = j.ocorrencia + '|' + j.em; (g[k] = g[k] || { oc: j.ocorrencia, em: j.em, saida: j.saida, itens: [] }).itens.push(j); return g; }, {}));
+  // a pauta que o cliente escreveu para a próxima reunião: o que entrou depois da última reunião registrada
+  const ultReuniao = ((clinica && clinica.reunioes) || []).concat(exec.reunioes || []).map(r => r.data).filter(d => d <= hoje).sort().pop() || '';
+  c.pauta = (exec.pauta || []).filter(p => p.em.slice(0, 10) > ultReuniao && p.em.slice(0, 10) <= hoje);
   c.exames = ((vetor && vetor.exames) || []).filter(x => x.data <= hoje).sort((a, b) => a.data < b.data ? 1 : -1);
   c.reuniao = AGENDA.filter(a => a.cliente && a.cliente.id === id && a.estado === 'marcado' && Date.parse(a.fim) > Date.now()).sort((a, b) => a.inicio < b.inicio ? -1 : 1)[0] || null;
   // o que espera pelo consultor neste cliente
   c.espera = [];
   if (c.proposta && c.proposta.status === 'pendente') c.espera.push({ txt: 'Proposta de mudança no plano esperando resposta', href: url('tela-consultor.html', id) + '#propostas' });
-  c.conversas.forEach(x => c.espera.push({ txt: 'Mensagem sem resposta: "' + String(x.txt || '').slice(0, 70) + '"', href: url('area-cliente.html', id, '&consultor') + '#conversas' }));
+  c.conversas.forEach(x => c.espera.push({ txt: 'Mensagem sem resposta, de ' + dataBR(x.em) + ': "' + String(x.txt || '').slice(0, 110) + '"', href: url('area-cliente.html', id, '&consultor') + '#conversas', rotulo: 'Responder' }));
+  c.ajustes.forEach(g => c.espera.push({ txt: 'Ajuste do cliente esperando a sua aprovação, de ' + dataBR(g.em) + ' (' + (SAIDA_TXT[g.saida] || 'ajuste') + ')', href: '#cliente/' + encodeURIComponent(id), ajuste: g }));
   c.tarefas.filter(t => t.atrasada && t.avulsa.por === 'consultor').forEach(t => c.espera.push({ txt: 'Tarefa pedida ao cliente em atraso desde ' + dataBR(t.data) + ': ' + t.titulo, href: '#cliente/' + encodeURIComponent(id) }));
   c.minhas.filter(t => t.aberta).forEach(t => c.espera.push({ txt: (t.resp === 'reuniao' ? 'Para a reunião: ' : 'Minha tarefa: ') + t.titulo + (t.data ? ', até ' + dataBR(t.data) : ''), href: '#cliente/' + encodeURIComponent(id), atrasada: t.atrasada }));
   c.daColeta.filter(t => t.responsavel === 'consultor').forEach(t => c.espera.push({ txt: 'Tarefa da coleta comigo: ' + t.titulo, href: url('tela-consultor.html', id, '&coleta') }));
@@ -278,7 +292,7 @@ function telaPipeline(L) {
 function telaEspera(L) {
   const itens = L.flatMap(c => c.espera.map(e => ({ c, e })));
   return `<div class="cartao"><h2>Espera por mim</h2><p class="leg" style="margin-bottom:4px">As suas tarefas, as propostas e mensagens sem resposta, e o que você pediu a um cliente e está em atraso.</p>
-    ${itens.length ? itens.map(({ c, e }) => `<div class="linha"><div class="tx"><b>${escH(e.txt)}</b><small>${escH(c.nome)}${c.exemplo ? ' · exemplo ' + c.exemplo : ''}</small></div>${e.atrasada ? '<span class="chip at">em atraso</span>' : ''}<a class="btn btn-secondary btn-peq" ${e.href.startsWith('#') ? '' : 'data-tela '}href="${escH(e.href)}">Abrir</a></div>`).join('') : `<div class="vazio-ilu ilustra-vaga">${ilustra('consultor-nada-esperando')}<b>Nada esperando por você</b></div>`}</div>`;
+    ${itens.length ? itens.map(({ c, e }) => `<div class="linha"><div class="tx"><b>${escH(e.txt)}</b><small>${escH(c.nome)}${c.exemplo ? ' · exemplo ' + c.exemplo : ''}</small></div>${e.atrasada ? '<span class="chip at">em atraso</span>' : ''}<a class="btn btn-secondary btn-peq" ${e.href.startsWith('#') ? '' : 'data-tela '}href="${escH(e.href)}">${e.rotulo || 'Abrir'}</a></div>`).join('') : `<div class="vazio-ilu ilustra-vaga">${ilustra('consultor-nada-esperando')}<b>Nada esperando por você</b></div>`}</div>`;
 }
 
 // a ficha: o cliente escolhido. O formulário de tarefa fica na memória (FORM) para sobreviver aos redesenhos
@@ -286,20 +300,37 @@ const FORM = { titulo: '', serve: '', data: '', resp: '', lembrar: true, hora: '
 function telaFicha(c) {
   const idq = encodeURIComponent(c.id), op = (l, sel) => l.map(([v, t]) => `<option value="${escH(v)}"${v === sel ? ' selected' : ''}>${escH(t)}</option>`).join('');
   const paraCliente = FORM.resp !== 'consultor' && FORM.resp !== 'reuniao';
-  const nomeResp = r => r === 'consultor' ? 'consultor' : r === 'reuniao' ? 'reunião' : (c.membros.find(m => m.id === r) || {}).nome || 'a família';
+  const nomeResp = r => r === 'consultor' ? 'do consultor' : r === 'reuniao' ? 'de reunião' : (c.membros.find(m => m.id === r) || {}).nome ? 'de ' + c.membros.find(m => m.id === r).nome : 'da família';
   const estado = t => t.resposta ? `<span class="chip ${['feita', 'outro'].includes(t.resposta.estado) ? 'ok' : 'at'}">${ESTADO_TXT[t.resposta.estado] || t.resposta.estado} em ${dataBR(t.resposta.em)}</span>` : t.atrasada ? `<span class="chip at">em atraso desde ${dataBR(t.data)}</span>` : `<span class="chip">até ${dataBR(t.data)}${t.adiada ? ' · adiada' : ''}</span>`;
   const doCliente = c.tarefas.map(t => { const a = t.avulsa;
-    return `<div class="linha"><span class="marca${t.resposta && ['feita', 'outro'].includes(t.resposta.estado) ? ' ok' : ''}" aria-hidden="true"></span><div class="tx"><b>${escH(t.titulo)}</b><small>${a.por === 'consultor' ? 'pedida por você' : 'criada por ' + escH(a.quem || 'o cliente')} · de ${escH(nomeResp(a.resp))}${a.serve ? ' · ' + escH(a.serve) : ''}${a.lembrete ? ' · lembrete no WhatsApp às ' + escH(a.lembrete.hora || '') : ''}${a.rec ? ' · ' + REC_TXT[a.rec] : ''}${t.resposta && t.resposta.obs ? ' · "' + escH(t.resposta.obs) + '"' : ''}</small></div>${estado(t)}${a.por === 'consultor' ? `<button class="btn btn-link" data-a="apagar-tarefa" data-id="${escH(a.id)}">apagar</button>` : ''}</div>`; });
+    return `<div class="linha"><span class="marca${t.resposta && ['feita', 'outro'].includes(t.resposta.estado) ? ' ok' : ''}" aria-hidden="true"></span><div class="tx"><b>${escH(t.titulo)}</b><small>${a.por === 'consultor' ? 'pedida por você' : 'criada por ' + escH(a.quem || 'o cliente')} · ${escH(nomeResp(a.resp))}${a.serve ? ' · ' + escH(a.serve) : ''}${a.lembrete ? ' · lembrete no WhatsApp às ' + escH(a.lembrete.hora || '') : ''}${a.rec ? ' · ' + REC_TXT[a.rec] : ''}${t.resposta && t.resposta.obs ? ' · "' + escH(t.resposta.obs) + '"' : ''}</small></div>${estado(t)}${a.por === 'consultor' ? `<button class="btn btn-link" data-a="apagar-tarefa" data-id="${escH(a.id)}">apagar</button>` : ''}</div>`; });
   const minhas = c.minhas.map(t => `<div class="linha"><button class="marca${t.feita ? ' ok' : ''}" data-a="marcar-minha" data-id="${escH(t.id)}" aria-label="${t.feita ? 'Reabrir' : 'Concluir'}: ${escH(t.titulo)}"></button><div class="tx"><b>${escH(t.titulo)}</b><small>${t.resp === 'reuniao' ? 'para a reunião' : 'com você'}${t.serve ? ' · ' + escH(t.serve) : ''}</small></div>${t.feita ? `<span class="chip ok">concluída em ${dataBR(t.feita)}</span>` : t.data ? `<span class="chip${t.atrasada ? ' at' : ''}">${t.atrasada ? 'em atraso desde ' : 'até '}${dataBR(t.data)}</span>` : ''}<button class="btn btn-link" data-a="apagar-minha" data-id="${escH(t.id)}">apagar</button></div>`);
   const daColeta = c.daColeta.map((t, i) => `<div class="linha"><span class="marca" aria-hidden="true"></span><div class="tx"><b>${escH(t.titulo)}</b><small>da coleta · ${t.responsavel === 'cliente' ? 'com o cliente' : 'com você'}${t.prazo ? ' · até ' + dataBR(t.prazo) : ''}</small></div>${t.responsavel === 'cliente' ? `<button class="btn btn-secondary btn-peq" data-a="enviar-coleta" data-i="${i}">Enviar ao cliente</button>` : ''}</div>`);
   // o que o cliente fez: as últimas respostas dele a qualquer tarefa (do plano, da reunião, avulsa)
   const nomeDaTarefa = id => { const m = id.match(/^aporte:(\d{4})-(\d{2})$/), w = id.match(/^teto:(\d{4})-(\d{2}):(\d+)$/), r = id.match(/^reuniao:(\d{4}-\d{2}-\d{2}):/), av = c.tarefas.find(t => t.id === id), p = (c.exec.pedidos || []).find(x => x.id === id);
     return m ? `Aporte de ${m[2]}/${m[1]}` : w ? `Teto da semana ${+w[3] + 1} de ${w[2]}/${w[1]}` : r ? 'Tarefa da reunião de ' + dataBR(r[1]) : av ? av.titulo : p ? p.curto || p.titulo : id.startsWith('agendar:') ? 'Agendar o acompanhamento' : id; };
-  const feitos = Object.entries(c.exec.respostas || {}).flatMap(([id, rs]) => rs.map(r => ({ id, r }))).filter(x => x.r.em.slice(0, 10) <= c.hoje).sort((a, b) => a.r.em < b.r.em ? 1 : -1).slice(0, 8);
+  // tudo o que o cliente fez na área, numa linha do tempo só: as respostas às tarefas (com a saída escolhida e o que ele
+  // escreveu), os imprevistos pagos com a reserva, os ajustes, as mensagens, a pauta e os meses que ele lançou
+  const quem = q => (c.membros.find(m => m.id === q) || {}).nome || (q === 'consultora' ? 'você' : q || '');
+  const nomeObj = id => (((c.versoes[0] && c.versoes[0].dados && c.versoes[0].dados.objectives) || []).find(o => o.id === id) || {}).name || id;
+  const txtAjuste = j => nomeObj(j.obj) + ': ' + (j.campo === 'aporte' ? 'aporte de ' + reais(j.de) + ' para ' + reais(j.para) : 'data de ' + mesBR(j.de) + ' para ' + mesBR(j.para));
+  const X = c.exec, fatos = [];
+  Object.entries(X.respostas || {}).forEach(([id, rs]) => rs.forEach(r => fatos.push({ em: r.em, t: nomeDaTarefa(id), s: `${quem(r.quem)} ${ESTADO_TXT[r.estado] || r.estado}${r.estado === 'adiada' && r.novaData ? ' para ' + dataBR(r.novaData) : ''}${r.valor != null ? ', ' + reais(r.valor) : ''}${r.saida ? ' · escolheu ' + (SAIDA_TXT[r.saida] || r.saida) : ''}${r.motivo ? ' · "' + r.motivo + '"' : ''}${r.obs ? ' · "' + r.obs + '"' : ''}${r.canal === 'whatsapp' ? ' · pelo WhatsApp' : r.canal === 'area' ? ' · na área' : ''}`, tom: ['naofiz', 'parcial'].includes(r.estado) && !/^teto:/.test(id) ? 'at' : '' })));
+  (X.imprevistos || []).forEach(i => fatos.push({ em: i.em, t: 'Imprevisto: ' + reais(i.valor) + (i.de === 'reserva' ? ' pagos com a reserva' : ' pagos de outro lugar'), s: `${quem(i.quem)} · ${TIPO_IMP[i.tipo] || i.tipo || ''}`, tom: 'at' }));
+  Object.values((X.ajustes || []).filter(j => j.saida !== 'versao').reduce((g, j) => { (g[j.ocorrencia + '|' + j.em] = g[j.ocorrencia + '|' + j.em] || []).push(j); return g; }, {})).forEach(g => { const j = g[0];
+    fatos.push({ em: j.em, t: 'Ajuste (' + (SAIDA_TXT[j.saida] || 'ajuste') + '): ' + g.map(txtAjuste).join(' · '), s: `${quem(j.quem)} · ${j.provisorio ? 'provisório, espera a sua aprovação' : j.aprovadoEm ? 'aprovado por você em ' + dataBR(j.aprovadoEm) : 'vale'}` }); });
+  (X.conversas || []).filter(m => m.quem !== 'consultora').forEach(m => fatos.push({ em: m.em, t: 'Mensagem: "' + String(m.txt || '').slice(0, 140) + '"', s: `${quem(m.quem)} · ${m.respondida ? 'respondida' : 'sem resposta'}`, tom: m.respondida ? '' : 'at' }));
+  (X.pauta || []).forEach(p => fatos.push({ em: p.em, t: 'Para a pauta da reunião: "' + String(p.txt || '').slice(0, 140) + '"', s: quem(p.quem) }));
+  Object.entries((X.realizado || {}).orcamento || {}).forEach(([m, r]) => { const d = String(r.origem || '').match(/^(.+) lançou em (\d{2})\/(\d{2})\/(\d{4})/); if (d) fatos.push({ em: `${d[4]}-${d[3]}-${d[2]}T12:00:00`, t: 'Lançou o mês ' + mesBR(m), s: `${d[1]} · entradas ${reais(r.entradas)}, fixas ${reais(r.fixas)}, ajustáveis ${reais(r.ajustaveis)}` }); });
+  const todos = fatos.filter(x => x.em.slice(0, 10) <= c.hoje).sort((a, b) => a.em < b.em ? 1 : -1), feitos = FORM.tudo ? todos : todos.slice(0, 12);
   const reunioesPassadas = ((c.clinica && c.clinica.reunioes) || []).concat(c.exec.reunioes || []).filter(r => r.data <= c.hoje).sort((a, b) => a.data < b.data ? 1 : -1);
   const coleta = c.plano && c.plano.coleta;
+  // sem horário na agenda, a área do cliente mostra o acompanhamento previsto pelo plano (6 e 12 meses depois da 1ª versão)
+  const v1 = c.versoes.length ? c.versoes[c.versoes.length - 1].em.slice(0, 10) : null;
+  const prevista = !v1 ? null : [{ nome: '1º acompanhamento', data: maisMeses(v1, 6) }, { nome: 'acompanhamento anual', data: maisMeses(v1, 12) }].find(p => p.data >= c.hoje && !reunioesPassadas.some(r => r.data >= addD(p.data, -45))) || null;
+  const prop = c.proposta && c.proposta.status && c.proposta.status !== 'rascunho' ? c.proposta : null;
   return `<div class="topo"><div><div class="eyebrow"><a href="#carteira">Base de clientes</a> › Cliente</div><h1>${escH(c.nome)}${c.exemplo ? `<span class="tag">exemplo · ${c.exemplo}</span>` : ''}</h1>
-      <p class="sub">${c.versoes.length ? 'Plano publicado em ' + dataBR(c.versoes[0].em) + (c.versoes.length > 1 ? ', ' + c.versoes.length + ' versões' : '') + '.' : c.clinica ? 'Clínica financeira em ' + dataBR(c.clinica.publicadaEm) + '.' : c.plano ? 'Plano em montagem, ainda sem versão publicada.' : 'Ainda sem plano.'} ${c.reuniao ? 'Próxima reunião: ' + escH(quandoReuniao(c.reuniao)) + '.' : 'Sem reunião marcada.'}</p></div>
+      <p class="sub">${c.versoes.length ? 'Plano publicado em ' + dataBR(c.versoes[0].em) + (c.versoes.length > 1 ? ', ' + c.versoes.length + ' versões' : '') + '.' : c.clinica ? 'Clínica financeira em ' + dataBR(c.clinica.publicadaEm) + '.' : c.plano ? 'Plano em montagem, ainda sem versão publicada.' : 'Ainda sem plano.'} ${c.reuniao ? 'Próxima reunião: ' + escH(quandoReuniao(c.reuniao)) + '.' : 'Sem reunião marcada na agenda' + (prevista ? '; o ' + prevista.nome + ' está previsto para ' + dataBR(prevista.data) + ', como a área do cliente mostra.' : '.')}</p></div>
     <div><a class="btn btn-secondary" data-tela href="${url('area-cliente.html', c.id, '&consultor')}" title="A área logada como o cliente vê">Emular o acesso do cliente</a></div></div>
   <div class="cartao"><h2>Trabalhar neste cliente</h2>${atalhos(c)}<p style="margin-top:10px"><a href="agendamento.html#clientes/${idq}" data-tela>Agenda deste cliente</a></p></div>
   <div class="grade">
@@ -321,15 +352,19 @@ function telaFicha(c) {
         <div style="margin-top:10px"><button class="btn btn-primary" data-a="criar-tarefa">${paraCliente ? 'Cadastrar para o cliente' : 'Cadastrar'}</button></div></div>
     </div>
     <div>
-      <div class="cartao"><h2>O que o cliente fez</h2>${c.espera.filter(e => !e.txt.startsWith('Minha') && !e.txt.startsWith('Para a')).map(e => `<div class="linha"><div class="tx"><b>${escH(e.txt)}</b></div><a class="btn btn-secondary btn-peq" ${e.href.startsWith('#') ? '' : 'data-tela '}href="${escH(e.href)}">Abrir</a></div>`).join('')}
-        ${feitos.length ? feitos.map(({ id, r }) => `<div class="linha"><div class="tx"><b>${escH(nomeDaTarefa(id))}</b><small>${dataBR(r.em)} · ${escH((c.membros.find(m => m.id === r.quem) || {}).nome || r.quem || '')} ${ESTADO_TXT[r.estado] || r.estado}${r.estado === 'adiada' && r.novaData ? ' para ' + dataBR(r.novaData) : ''}${r.valor != null ? ', R$ ' + Math.round(r.valor).toLocaleString('pt-BR') : ''}${r.canal === 'whatsapp' ? ' · pelo WhatsApp' : r.canal === 'area' ? ' · na área' : ''}</small></div></div>`).join('') : '<p class="vazio">Nenhuma resposta do cliente ainda.</p>'}</div>
+      <div class="cartao"><h2>O que o cliente fez</h2><p class="leg" style="margin-bottom:4px">Primeiro, o que espera por você. Depois, tudo o que ele marcou, escreveu e lançou na área, do mais novo ao mais antigo.</p>
+        ${c.espera.filter(e => !e.txt.startsWith('Minha') && !e.txt.startsWith('Para a')).map(e => `<div class="linha"><div class="tx"><b>${escH(e.txt)}</b>${e.ajuste ? `<small>${escH(e.ajuste.itens.map(txtAjuste).join(' · '))}</small>` : ''}</div>${e.ajuste ? `<button class="btn btn-secondary btn-peq" data-a="aprovar-ajuste" data-oc="${escH(e.ajuste.oc)}" data-em="${escH(e.ajuste.em)}">Aprovar</button>` : `<a class="btn btn-secondary btn-peq" ${e.href.startsWith('#') ? '' : 'data-tela '}href="${escH(e.href)}">${e.rotulo || 'Abrir'}</a>`}</div>`).join('')}
+        ${prop ? `<div class="linha"><div class="tx"><b>Proposta de mudança no plano: ${(prop.ops || []).length} ${(prop.ops || []).length === 1 ? 'alteração' : 'alterações'}</b><small>${prop.enviadaEm ? 'enviada em ' + dataBR(prop.enviadaEm) + ' · ' : ''}${prop.status === 'pendente' ? 'esperando a sua resposta' : 'respondida' + (prop.respondidaEm ? ' em ' + dataBR(prop.respondidaEm) : '') + ': ' + (prop.decisoes || []).filter(d => d === 'aprovada').length + ' de ' + (prop.ops || []).length + ' aprovadas. O cliente vê o valor novo no relatório quando você publicar uma versão'}${prop.mensagem ? ' · "' + escH(String(prop.mensagem).slice(0, 140)) + '"' : ''}</small></div></div>` : ''}
+        ${feitos.length ? feitos.map(f => `<div class="linha"><div class="tx"><b${f.tom ? '' : ' style="font-weight:500"'}>${escH(f.t)}</b><small>${dataBR(f.em)} · ${escH(f.s)}</small></div></div>`).join('') + (todos.length > feitos.length ? `<p style="margin-top:8px"><button class="btn btn-link" data-a="ver-tudo">ver os ${todos.length}</button></p>` : '') : '<p class="vazio">Nenhuma resposta do cliente ainda.</p>'}</div>
       <div class="cartao"><h2>Reuniões</h2>${c.reuniao ? `<div class="linha"><div class="tx"><b>${escH(quandoReuniao(c.reuniao))}</b><small>marcada na agenda</small></div><span class="chip mar">próxima</span></div>` : ''}
+        ${!c.reuniao && prevista ? `<div class="linha"><div class="tx"><b>${escH(prevista.nome.charAt(0).toUpperCase() + prevista.nome.slice(1))} · previsto para ${dataBR(prevista.data)}</b><small>ainda sem horário na agenda</small></div><span class="chip">prevista</span></div>` : ''}
+        ${c.pauta.length ? `<div class="linha"><div class="tx"><b>O que o cliente quer levar para a próxima reunião</b>${c.pauta.map(p => `<small>${dataBR(p.em)} · ${escH(quem(p.quem))}: "${escH(p.txt)}"</small>`).join('')}</div></div>` : ''}
         ${reunioesPassadas.map(r => `<div class="linha"><div class="tx"><b>${escH(r.tipo || 'Reunião')} · ${dataBR(r.data)}</b><small>${escH(r.resumo || '')}</small></div></div>`).join('') || (c.reuniao ? '' : '<p class="vazio">Nenhuma reunião registrada.</p>')}
         <p style="margin-top:8px"><a href="agendamento.html#clientes/${idq}" data-tela>+ Nova, pela agenda</a> <span class="chip" style="margin-left:6px">registrar o resumo: em breve</span></p></div>
       <div class="cartao"><h2>Notas</h2>${(c.at.notas || []).slice().reverse().map(n => `<div class="linha"><div class="tx"><b style="font-weight:500">${escH(n.txt)}</b><small>${dataHora(n.em)}</small></div><button class="btn btn-link" data-a="apagar-nota" data-id="${escH(n.id)}">apagar</button></div>`).join('')}
         <div class="campo"><label for="t-nota">Nova nota (só você vê)</label><textarea id="t-nota" rows="2" data-form="nota">${escH(FORM.nota)}</textarea></div><button class="btn btn-secondary btn-peq" data-a="criar-nota">Guardar a nota</button></div>
       <div class="cartao"><h2>Exames de saúde financeira</h2>${c.exames.length ? c.exames.map(x => `<div class="linha"><div class="tx"><b>Nota ${x.nota} · ${dataBR(x.data)}</b><div class="pilares">${Object.entries(x.pilares || {}).map(([k, v]) => `<span>${escH(k)} ${v}</span>`).join('')}</div></div></div>`).join('') : '<p class="vazio">Nenhum exame respondido.</p>'}</div>
-      <div class="cartao"><h2>Coleta de dados</h2><div class="linha"><div class="tx"><b>${coleta ? (coleta.status === 'finalizada' ? 'Finalizada' + (coleta.finalizadaEm ? ' em ' + dataBR(coleta.finalizadaEm) : '') : 'Em andamento') : 'Ainda não começou'}</b><small>A reunião de coleta, no portal; o que entra lá alimenta a montagem do plano.</small></div><a class="btn btn-secondary btn-peq" data-tela href="${url('tela-consultor.html', c.id, '&coleta')}">${coleta ? 'Continuar' : 'Começar'}</a></div></div>
+      <div class="cartao"><h2>Coleta de dados</h2><div class="linha"><div class="tx"><b>${coleta ? (coleta.status === 'finalizada' ? 'Finalizada' + (coleta.finalizadaEm ? ' em ' + dataBR(coleta.finalizadaEm) : '') : 'Em andamento') : c.versoes.length ? 'Feita: o plano já está publicado' : 'Ainda não começou'}</b><small>A reunião de coleta, no portal; o que entra lá alimenta a montagem do plano.</small></div><a class="btn btn-secondary btn-peq" data-tela href="${url('tela-consultor.html', c.id, '&coleta')}">${coleta ? 'Continuar' : c.versoes.length ? 'Abrir' : 'Começar'}</a></div></div>
       ${emBreve('Pesquisas NPS', 'Enviar a pesquisa e ver as respostas deste cliente.')}
     </div>
   </div>`;
@@ -343,7 +378,7 @@ function desenhar() {
   else { m.innerHTML = cabecalho(L, tela) + (tela === 'pipeline' ? telaPipeline(L) : tela === 'espera' ? telaEspera(L) : telaCarteira(L)); document.title = 'Base de clientes — Nord Liberta'; }
   if (fid) { const n = document.getElementById(fid); if (n) { n.focus(); scrollTo(0, topo); } }
 }
-addEventListener('hashchange', () => { desenhar(); scrollTo(0, 0); });
+addEventListener('hashchange', () => { FORM.tudo = false; desenhar(); scrollTo(0, 0); });
 addEventListener('storage', e => { if (e.key && e.key.startsWith('nl-db:')) desenhar(); });   // a área do cliente (outra aba, ou o quadro) gravou: a base mostra na hora
 
 // ---------- os gestos da ficha ----------
@@ -371,6 +406,9 @@ document.addEventListener('click', e => {
   else if (a === 'criar-nota') { const txt = FORM.nota.trim(); if (!txt) return; mudaAt(id, at => { (at.notas = at.notas || []).push({ id: novoId(), txt, em: new Date().toISOString() }); }); FORM.nota = ''; }
   else if (a === 'apagar-nota') mudaAt(id, at => { at.notas = (at.notas || []).filter(n => n.id !== b.dataset.id); });
   else if (a === 'etapa-sugerida') mudaAt(id, at => { delete at.etapa; delete at.etapaEm; });
+  // o ajuste que o cliente fez sozinho deixa de ser provisório: a área dele passa a mostrar "aprovado"
+  else if (a === 'aprovar-ajuste') mudaExec(id, x => { (x.ajustes || []).forEach(j => { if (j.provisorio && j.ocorrencia === b.dataset.oc && j.em === b.dataset.em) { j.provisorio = false; j.aprovadoEm = hojeDe(id); j.aprovadoPor = (c.versoes[0] && c.versoes[0].consultor) || 'Planejador'; } }); });
+  else if (a === 'ver-tudo') FORM.tudo = true;
   else return;
   desenhar();
 });

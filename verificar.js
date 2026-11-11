@@ -1277,6 +1277,9 @@ console.log('\nFeedback do cliente simulado de 12 meses (area-logada/v2/FEEDBACK
   ok('Q18: o aviso de ameaça na folha da tarefa é uma frase, nunca o código da ameaça ("familia")', !/esc\(o\.pedido\.risco\)/.test(area) && !/o\.pedido\.risco \? o\.pedido\.risco :/.test(area), '');
   ok('Q4/Q5: a área de riscos diz o que mudou desde a foto do plano (reserva de hoje, proteção marcada) e a pendência fecha', /function desdeOPlano\(c\)/.test(area) && /\$\{desdeOPlano\(c\)\}/.test(area) && /const marcado = R\.degrau === 'completo' \? riscoMarcado\(oc\)/.test(area), '');
   ok('Q7: no Realizado, a sobra do extrato não se chama "para o futuro" (não se confunde com o aporte marcado)', /linha\('Sobra do mês', o\.futuro, fut, true\)/.test(area) && !/Planejado para o futuro/.test(area), '');
+  ok('Q3: a ficha mostra tudo o que o cliente fez (respostas, imprevistos, ajustes, mensagens, pauta, meses lançados) e aceita ?hoje=', ['X.respostas', 'X.imprevistos', 'X.ajustes', 'X.conversas', 'X.pauta', '(X.realizado || {}).orcamento'].every(k => base.includes(k)) && /const hojeDe = id => HOJE_SIM \|\|/.test(base), '');
+  ok('Q3: o ajuste provisório do cliente entra em "Espera por mim" e a ficha aprova (provisorio = false, aprovadoEm)', /c\.ajustes\.forEach\(g => c\.espera\.push/.test(base) && /a === 'aprovar-ajuste'/.test(base) && /j\.provisorio = false; j\.aprovadoEm = hojeDe\(id\)/.test(base) && /v\.aprovadoEm \? ', aprovado pela '/.test(area), '');
+  ok('Q14: a pauta da família vale para a próxima reunião (some depois da reunião registrada), na área e na ficha', /filter\(p => p\.em\.slice\(0, 10\) > ult && p\.em\.slice\(0, 10\) <= HOJE\)/.test(area) && /c\.pauta = \(exec\.pauta \|\| \[\]\)\.filter\(p => p\.em\.slice\(0, 10\) > ultReuniao/.test(base), '');
 
 }
 console.log('\n' + (falhas ? falhas + ' verificação(ões) falharam.' : 'Tudo certo.') + '\n');
