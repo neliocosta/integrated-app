@@ -1287,6 +1287,8 @@ console.log('\nFeedback do cliente simulado de 12 meses (area-logada/v2/FEEDBACK
   { const rel = fs.readFileSync(CLIENTE, 'utf8');
     ok('T5: o relatório abre "Simular outros valores" pelo endereço (&simular=obj:<id>) e a página do objetivo leva até lá', /get\('simular'\); if \(q && PAPEL === 'cliente'\)/.test(rel) && /&simular=\$\{o\.tipo === 'liberdade' \? 'ff' : 'obj:'/.test(area), '');
     ok('Q12: no celular, a calculadora do relatório fica em uma coluna e as linhas do orçamento não cortam colunas', /@media \(max-width:700px\)\{\.calc-g\{grid-template-columns:minmax\(0,1fr\)/.test(rel) && /@media \(max-width:700px\)\{\.ob-cab\{display:none\}/.test(rel), ''); }
+  ok('Q11: resposta e conversa com data depois de hoje não aparecem (o roteiro do exemplo com ?hoje= no passado)', /\(X\.respostas\[o\.id\] \|\| o\.semente \|\| \[\]\)\.filter\(r => r\.em\.slice\(0, 10\) <= HOJE\)/.test(area) && /X\.conversas\.filter\(m => m\.em\.slice\(0, 10\) <= HOJE\)\.map/.test(area), '');
+  ok('Q13/Q15/T17: as semanas do teto numa linha só, a idade pela data de nascimento e o exame sem total que muda', /\.semanas\{display:grid;grid-auto-flow:column/.test(area) && /idadeEm\(nasc, m \+ '-28'\)/.test(area) && !/Pergunta \$\{k \+ 1\} de \$\{vis\.length\}/.test(area), '');
   ok('Q14: a pauta da família vale para a próxima reunião (some depois da reunião registrada), na área e na ficha', /filter\(p => p\.em\.slice\(0, 10\) > ult && p\.em\.slice\(0, 10\) <= HOJE\)/.test(area) && /c\.pauta = \(exec\.pauta \|\| \[\]\)\.filter\(p => p\.em\.slice\(0, 10\) > ultReuniao/.test(base), '');
 
 }

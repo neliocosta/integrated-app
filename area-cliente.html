@@ -196,7 +196,7 @@ body.v-livro .grupo > summary.rotulo:not(._){margin:30px 0 12px}
 .filtros{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:6px}
 .filtro{border:1px solid var(--borda);background:var(--cartao);border-radius:9999px;padding:6px 12px;font:600 12.5px var(--sans);color:var(--marinho);white-space:nowrap;min-height:34px}
 .filtro.on{background:var(--marinho);border-color:var(--marinho);color:#fff}
-.semanas{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;align-items:end;height:96px;margin:10px 0 4px}
+.semanas{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:6px;align-items:end;height:96px;margin:10px 0 4px}   /* um mês pode ter seis semanas: todas na mesma linha */
 .semanas div{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative}
 .semanas i{display:block;width:70%;border-radius:4px 4px 0 0;background:var(--ajust)}
 .semanas i.passou{background:var(--critico)}
@@ -2802,7 +2802,8 @@ function ocorrencias() {
     lista.push({ id, pedido: { id, ritmo: 'unica', cat, risco: t.risco }, cat, data, titulo: t.txt, curto: t.curto, serve: t.serve || 'combinada na reunião de ' + dataBR(r.data), quando: 'até ' + dataBR(data) + ', uma vez', resp: t.resp, min: t.min, gesto: t.gesto, reuniao: r.data,
       semente: t.feita && t.feita <= HOJE ? [{ em: t.feita + 'T12:00:00', quem: t.resp || MEMBRO(), canal: 'reuniao', estado: 'feita' }] : null }); }));
   return OC_CACHE = lista.map(o => {
-    const rs = X.respostas[o.id] || o.semente || [], fecha = rs.find(r => r.estado !== 'adiada'), adiamentos = rs.filter(r => r.estado === 'adiada');
+    // só o que já aconteceu: uma resposta com data depois de hoje (o roteiro do exemplo, com ?hoje= no passado) ainda não existe
+    const rs = (X.respostas[o.id] || o.semente || []).filter(r => r.em.slice(0, 10) <= HOJE), fecha = rs.find(r => r.estado !== 'adiada'), adiamentos = rs.filter(r => r.estado === 'adiada');
     const data = adiamentos.length ? adiamentos[adiamentos.length - 1].novaData : o.data;
     // a tarefa sugerida (cadastrado) fica fora das contas até ser aceita; "não agora" a guarda por 30 dias
     const ac = (X.aceites || {})[o.pedido.id], sugerida = !!o.pedido.sugerida && !(ac && ac.em) && !rs.length, guardada = sugerida && ac && ac.ate && ac.ate > HOJE;
@@ -2851,7 +2852,7 @@ function passoAtual() {
 }
 function regua() {
   const temExame = exames().length > 0;
-  if (!temExame && !tem(fv('renda'))) return { id: 'exame', mundo: 1, titulo: 'Saber onde você está', valor: '33 <small>perguntas, uns 8 minutos</small>', fracao: 0,
+  if (!temExame && !tem(fv('renda'))) return { id: 'exame', mundo: 1, titulo: 'Saber onde você está', valor: 'até 33 <small>perguntas, uns 8 minutos</small>', fracao: 0,
     porque: 'O exame de saúde financeira mostra o seu momento e preenche, de uma vez, o começo de quase todas as áreas do plano.', acao: ['Fazer o exame', '#exame'] };
   if (fv('temDividas') === 'Sim' && tem(fv('dividaTaxa')) && +fv('dividaTaxa') >= 2) return { id: 'divida', mundo: 0, titulo: 'Quitar a dívida cara', valor: `${brlC(+fv('dividas'))} <small>a ${nf1.format(+fv('dividaTaxa'))}% ao mês</small>`, fracao: 0,
     porque: 'Juros acima de 2% ao mês andam mais rápido do que qualquer investimento: quitar é o melhor rendimento agora.',
@@ -3622,7 +3623,7 @@ function blocoPendencias(A, oc) {
   const risco = R.degrau === 'completo' && !marcado ? fraseDoRisco(oc) : null;
   if (marcado) it.push({ txt: `${marcado.titulo}: feito em ${dataBR(marcado.em)}. A proteção do plano sobe quando ${R.consultora ? 'a ' + R.consultora.nome : 'a planejadora'} registrar a apólice numa versão nova`, acao: `<a href="#cartao/riscos">ver a gestão de riscos &#8250;</a>` });
   if (risco) it.push({ txt: risco.txt, acao: risco.tarefa ? `<button class="btn link peq" data-acao="abrir" data-id="${esc(risco.tarefa.id)}">resolve com a cotação &#8250;</button>` : `<a href="#cartao/riscos">ver a gestão de riscos &#8250;</a>`, forte: risco.eu || !casal() });
-  else { const ex = exames(), ult = ex[ex.length - 1]; if (ult && ult.pilares.Proteção < 60 && R.degrau === 'cadastrado') it.push({ txt: `Proteção, pilar do exame: ${ult.pilares.Proteção}`, acao: `<a href="#cartao/riscos">responder a calculadora de seguros &#8250;</a>` }); }
+  else { const ex = exames(), ult = ex[ex.length - 1]; if (ult && ult.pilares.Proteção < 60 && R.degrau === 'cadastrado') it.push({ txt: `Proteção, pilar do exame: ${ult.pilares.Proteção}`, acao: `<a href="#cartao/riscos">ver as oito ameaças &#8250;</a>` }); }
   const dv = +fv('dividas') || 0; if (dv > 0.5 && !e.data) it.push({ txt: `Dívidas ${brlC(dv)}`, acao: '<a href="#cartao/dividas">amortizar ou investir &#8250;</a>' });
   if (!it.length) return '';
   return `<div class="rotulo">Pendências do plano<a class="mais" href="#plano">Ver o plano &#8250;</a></div><div class="card pend">${it.slice(0, 3).map((i, k) => `<div class="${k === 0 && i.forte ? 'destaque' : ''}"><p>${esc(i.txt)}</p>${i.acao}</div>`).join('')}</div>`;
@@ -3736,7 +3737,9 @@ function estadoDasLinhas(itens, L, ini, fim) {
     return { i, sonho: x(o.data), plano: p ? x(p) : 100, nunca: !p, d, chip: !p ? ['at', 'não chega em 50 anos'] : d > 0 ? ['at', atrasoTxt(d)] : ['ok', atrasoTxt(d)],
       txt: `sonho ${mesAno(o.data + '-01')}${idadeEm_(o.data)} · plano ${p ? mesAno(p + '-01') + idadeEm_(p) : 'depois de 50 anos'}` }; });
 }
-const idadeEm_ = m => tem(fv('idade')) ? ` (aos ${Math.floor(+fv('idade') + difM(MES, m) / 12)})` : '';
+// a idade num mês: pela data de nascimento, quando o plano a tem (a mesma conta da "liberdade aos 57"); sem ela, a idade de hoje mais os anos
+const idadeEm_ = m => { const v = versoesVigentes()[0], nasc = (v && v.dados && v.dados.nascimento) || fv('nascimento');
+  return nasc ? ` (aos ${idadeEm(nasc, m + '-28')})` : tem(fv('idade')) ? ` (aos ${Math.floor(+fv('idade') + difM(MES, m) / 12)})` : ''; };
 function textosDasLinhas(itens, L, fecha) {
   const c = custo(), dif = L.d - aporteDeHoje(itens), extra = L.extra && L.e > 0 ? ` A renda extra, ${brl(L.e)}, vai inteira para os objetivos.` : '';
   const presente = !c ? '' : Math.abs(dif) < 0.5 ? `O presente segue com ${brl(c)} por mês.${extra}` : dif > 0 ? `O presente fica com ${brl(dif)} a menos por mês: ${brl(c - dif)}.${extra}` : `O presente ganha ${brl(-dif)} por mês: ${brl(c - dif)}.${extra}`;
@@ -4294,6 +4297,7 @@ function telaExame() {
   const ex = exames(), ult = ex[ex.length - 1];
   if (UI.exame && UI.exame.resultado) { const r = UI.exame.resultado, ant = ex[ex.length - 2];
     return `<div style="max-width:720px"><div class="card"><span class="rotulo" style="margin:0">O resultado · ${dataBRano(r.data)}</span><div class="grande" style="margin:10px 0">${r.nota} <small class="mut" style="font-size:16px">de 100${ant ? ' · era ' + ant.nota + ' em ' + mesAno(ant.data) : ''}</small></div>${pilaresHtml(r.pilares)}
+      ${(() => { const f = Object.entries(r.pilares || {}).sort((a, b) => a[1] - b[1])[0]; return f ? `<p class="peq" style="margin:12px 0 0;color:var(--marinho)">O ponto mais fraco hoje é <b>${esc(f[0])}</b> (${f[1]} de 100). O passo de agora, no <a href="#painel">Painel</a>, diz por onde começar.</p>` : ''; })()}
       <p class="mut" style="margin:10px 0 0">Nota provisória: a fórmula oficial da Nord ainda vai substituir esta conta. As respostas já preencheram o começo das áreas do plano.</p></div>
       <a class="primaria" href="#plano" style="display:inline-flex;align-items:center;text-decoration:none">Ver o plano</a> <button class="btn" data-acao="exame-de-novo">Responder de novo</button></div>`; }
   if (!UI.exame) UI.exame = { resp: Object.assign({}, ult && ult.respostas || {}), conversa: true, atual: null };
@@ -4330,13 +4334,13 @@ function conversaExame(vis, r, feitas, ult) {
   const minha = t => `<div class="cv-msg minha"><div class="cv-resp">${esc(t)}</div></div>`;
   const lista = `<button class="btn link peq" data-acao="ex-modo">Ver todas as perguntas numa lista</button>`;
   if (k < 0) return `<div class="conversa"><div class="cv-quem">Nord Liberta</div>
-      ${fala(`Este exame mostra, de 0 a 100, como está a sua saúde financeira. São ${vis.length} perguntas curtas, uma de cada vez: uns 8 minutos.`)}
+      ${fala(`Este exame mostra, de 0 a 100, como está a sua saúde financeira. São até 33 perguntas curtas, uma de cada vez (algumas só aparecem conforme as respostas): uns 8 minutos.`)}
       ${ult ? fala(`As respostas do último exame, de ${dataBRano(ult.data)}, já vêm marcadas. É só confirmar o que não mudou.`) : ''}
       ${fala(R.consultora ? `O resultado também fica com a ${esc(R.consultora.nome)}, para a próxima conversa.` : R.degrau === 'visitante' ? 'Sem conta, o resultado fica só nesta aba.' : 'Toda pergunta pode ser pulada; para a nota, bastam 12 respostas.')}
       <div class="cv-acoes"><button class="primaria" data-acao="ex-comecar">Começar</button>${lista}</div></div>`;
   const pct_ = Math.round(Math.min(k, vis.length) / vis.length * 100);
   const anterior = `<button class="btn link peq cv-anterior" data-acao="ex-volta">${SETA_VOLTA}Pergunta anterior</button>`;
-  const topo = `<div class="cv-topo"><div class="cv-prog"><span>${k < vis.length ? `Pergunta ${k + 1} de ${vis.length}` : 'Tudo pronto'}</span><div class="cv-barra" role="progressbar" aria-valuenow="${pct_}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct_}%"></i></div></div></div>`;
+  const topo = `<div class="cv-topo"><div class="cv-prog"><span>${k < vis.length ? `Pergunta ${k + 1}` : 'Tudo pronto'}</span><div class="cv-barra" role="progressbar" aria-valuenow="${pct_}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct_}%"></i></div></div></div>`;
   if (k >= vis.length) return `<div class="conversa">${topo}${fala(`Pronto. Você respondeu ${feitas} de ${vis.length} perguntas.`)}${feitas < 12 ? fala(`Para calcular a nota, são pelo menos 12 respostas: faltam ${12 - feitas}. Dá para voltar e responder as que ficaram para trás.`) : ''}
       <div class="cv-acoes"><button class="primaria" data-acao="gravar-exame" ${feitas < 12 ? 'disabled' : ''}>Ver o resultado</button><button class="btn link peq" data-acao="ex-modo">Revisar as respostas numa lista</button>${anterior}</div></div>`;
   const q = vis[k], v = r[q.c], antes = vis.slice(Math.max(0, k - 2), k).filter(x => tem(x.t === 'multi' ? (r[x.c] || []).length || null : r[x.c]));
@@ -4698,7 +4702,7 @@ const RESEARCH = [['Comitê de Investimentos', 'A alocação recomendada pela No
 const telaResearch = () => `<div class="mais-lista" style="max-width:560px"><p class="duo-sub" style="margin:0 0 12px">Os relatórios de investimentos da Nord. Abrem na área de membros, em outra aba.</p>
   ${RESEARCH.map(([n, s, u]) => u ? `<a href="${u}" target="_blank" rel="noopener">${ICONES.research}<span>${n}<small>${s}</small></span></a>` : itemMais(null, 'research', n, s)).join('')}</div>`;
 // ---------- Como usar: o vídeo e os "primeiros passos" de produção, cada passo levando à tela dele ----------
-const PRIMEIROS = [['#exame', 'Faça o exame de saúde financeira', '33 perguntas, uns 8 minutos. Ele situa a sua vida financeira e preenche boa parte do Plano.'], ['#cartao/reserva', 'Calcule a sua reserva', 'A mínima, a aceitável e a ideal, pelo seu custo de vida.'],
+const PRIMEIROS = [['#exame', 'Faça o exame de saúde financeira', 'Até 33 perguntas, uns 8 minutos. Ele situa a sua vida financeira e preenche boa parte do Plano.'], ['#cartao/reserva', 'Calcule a sua reserva', 'A mínima, a aceitável e a ideal, pelo seu custo de vida.'],
   ['#cartao/liberdade', 'Veja a sua liberdade financeira', 'Quando o trabalho passa a ser escolha, e com que renda.'], ['#objetivos', 'Dê valor e data aos objetivos', 'Cada objetivo com aporte vira uma tarefa do mês.'],
   ['#tarefas', 'Acompanhe as tarefas e os lembretes', 'O que fazer em cada mês. O lembrete chega no WhatsApp, e a resposta vale nos dois lugares.']];
 const ONDE_FICA = [['#painel', 'Painel', 'o passo de agora e o que resolver'], ['#objetivos', 'Objetivos', 'o que realizar e como cada um está indo'], ['#tarefas', 'Tarefas', 'o que fazer, e se foi feito'], ['#plano', 'Plano', 'as onze áreas, cada uma em três profundidades'], ['#mais', 'Mais', 'o acompanhamento, o relatório, o saber, os utilitários e a Nord']];
@@ -4771,7 +4775,7 @@ function telaPreparar() {
   const ex = exames(), ult = ex[ex.length - 1], ant = ex.filter(x => x.data <= base).pop(), pats = Object.entries((X.realizado || {}).patrimonio || {}).filter(([m]) => m <= MES).sort(), p0 = pats.find(([m]) => m >= base.slice(0, 7)), p1 = pats[pats.length - 1];
   const tot = p => p[1].financeiro + p[1].bens + p[1].participacoes - p[1].dividas;
   const nums = [tem(reservaAtual()) ? `Reserva: ${brlC(reservaAtual())} hoje${reservaIdeal() ? ', de ' + brlC(reservaIdeal()) + ' da ideal' : ''}` : '', aps.length ? `Aportes desde ${dataBR(base)}: ${feitos} de ${aps.length}` : '',
-    p0 && p1 && p0[0] !== p1[0] ? `Patrimônio: de ${brlC(tot(p0))} em ${mesAno(p0[0] + '-01')} a ${brlC(tot(p1))} em ${mesAno(p1[0] + '-01')}` : p1 ? `Patrimônio: ${brlC(tot(p1))} em ${mesAno(p1[0] + '-01')}` : '',
+    p0 && p1 && p0[0] !== p1[0] ? `Patrimônio: de ${brlC(tot(p0))} em ${mesAno(p0[0] + '-01')} a ${brlC(tot(p1))} em ${mesAno(p1[0] + '-01')} (${tot(p1) >= tot(p0) ? '+' : '−'}${brl(Math.abs(tot(p1) - tot(p0)))})` : p1 ? `Patrimônio: ${brlC(tot(p1))} em ${mesAno(p1[0] + '-01')}` : '',
     ult ? `Saúde financeira: ${ult.nota} de 100${ant && ant.data !== ult.data ? ', era ' + ant.nota + ' em ' + mesAno(ant.data) : ' (sem exame novo desde o plano)'}` : ''].filter(Boolean);
   const numeros = nums.length ? `<div class="card"><h3>Os números, antes e depois</h3>${nums.map(n => `<div class="linha-l"><span>${esc(n)}</span></div>`).join('')}</div>` : '';
   const lista = de => pauta.filter(p => p.de === de).map(p => `<div class="linha-l"><span>${esc(p.txt)}</span>${p.em ? `<small>${dataBR(p.em)}</small>` : ''}</div>`).join('') || '<p class="vazio-l">Nada ainda.</p>';
