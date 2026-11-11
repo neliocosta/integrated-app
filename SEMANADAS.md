@@ -94,6 +94,6 @@ O realizado não entra no relatório e não fica dentro do plano: é guardado à
   o último de cada semana. Por pessoa, o ciclo de hoje (setas pelos 12), o marco de cada semana, o campo "Quanto está a
   fatura" e a situação (a folga, ou quanto passou do marco); as semanas seguintes mostram o novo marco e o novo valor para
   gastar, com o do plano riscado, e o quadro "O novo alvo" diz tudo por extenso, inclusive em quanto o ciclo fecha acima
-  do teto. A conta é `ENGINE.acompanhaSemanada`, com as checagens no `verificar.js`. Fica para depois: um link para o
-  acompanhamento no relatório ou na área logada (hoje se abre pelo endereço).
+  do teto. A conta é `ENGINE.acompanhaSemanada`, com as checagens no `verificar.js`. Em 11/11/2026 (versão 2.0) a página ganhou as entradas: na área do cliente,
+  Mais › Semanadas e Plano › Gestão financeira (`&area`, com "← Minha área"); na base de clientes, Ficha › Acompanhamento (`&consultor`, com a casca do consultor).
 - [ ] Etapa 4: Acompanhamento - Orçamento Mensal

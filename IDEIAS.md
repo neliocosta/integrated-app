@@ -13,6 +13,60 @@ sai para o documento ou o código que a implementa, e a ideia muda de estado.
 
 ---
 
+## Três profundidades por tema
+
+`aceita` · 11/11/2026 · Nélio · ver `area-logada/v2/ARQUITETURA.md`, seção 3
+
+Para cada ponto principal da vida financeira, os dados aparecem em três profundidades: visão geral, visão aprofundada e
+visão extremamente detalhada, que é o relatório que o cliente de planejamento recebe. A estrutura é a mesma para todo
+cliente; muda a profundidade preenchida.
+
+11/11/2026: aplicada nas onze áreas do Plano (`area-cliente.html`): o cartão (1), a página da área com as informações e a
+calculadora (2) e o capítulo do relatório (3), com a régua dos três níveis no alto; sem plano publicado, o nível 3 aparece
+no mesmo lugar dizendo com o que chega. Falta levar a regra para fora do Plano (Objetivos, Realizado).
+
+## Versão 2.0: as duas ferramentas numa só
+
+`aceita` · 11/11/2026 · Nélio · ver `area-logada/v2/ARQUITETURA.md`
+
+Uma ferramenta só, completamente integrada: a área logada do cliente (que o ajuda a melhorar a vida financeira mês a mês)
+e a área do consultor (a base de clientes, os relatórios, as tarefas e os lembretes cadastrados para o cliente, o
+planejamento de vida, a agenda e o realizado). Nada do que existe em produção, no assets-evolution e no integrated-app fica
+de fora ou órfão.
+
+11/11/2026: primeira rodada feita no branch `claude/versao-2-integrada`: o inventário, a base de clientes com o pipeline e a
+ficha, a casca comum do consultor, o ciclo da tarefa (consultor → cliente → consultor) e o que veio de produção em Mais. O
+que ficou "em breve" e as decisões abertas estão no documento.
+
+## Ilustrações espalhadas pela ferramenta, no estilo flat
+
+`aceita` · 11/11/2026 · Nélio · substitui "ilustração só na capa de capítulo" (31/10/2026)
+
+As ilustrações em vetor plano deixam de ficar só na abertura de cada área e passam a aparecer pela ferramenta toda. O
+objetivo do cliente continua com foto.
+
+Perguntas abertas:
+
+- Em que tipos de lugar entram (estados vazios, aberturas de página, passos, conquistas) e onde não entram (telas de
+  trabalho do consultor, tabelas).
+- O molde do prompt do `DESIGN.md` serve para peças pequenas, ou precisa de um segundo molde.
+
+11/11/2026: os lugares candidatos estão marcados no código com a classe `ilustra-vaga` e listados no fim do
+`area-logada/v2/ARQUITETURA.md`; a escolha e o desenho são do trabalho de design.
+
+## Cliente simulado que usa a ferramenta por 12 meses
+
+`nova` · 11/11/2026 · Nélio
+
+Um cliente simulado usa a ferramenta por doze meses (entra, responde as tarefas, falha em algumas, recebe os lembretes,
+passa pelas reuniões) e devolve um quadro de feedback: o que ajudou, o que confundiu, o que faltou em cada mês.
+
+Perguntas abertas:
+
+- Quantos perfis (os de `ux/personas/clientes-teste.md` e os vinte do Painel são o ponto de partida) e em que degrau cada um.
+- O relógio: a área já aceita `?hoje=`; falta um roteiro que avance mês a mês e grave as respostas de cada mês.
+- O formato do quadro: por mês e por tela, com a pergunta que a pessoa tinha e se a tela respondeu.
+
 ## Tempo dedicado ao plano: 5 minutos por mês, 30 a cada seis, 1 hora por ano
 
 `nova` · 05/11/2026 · Nélio

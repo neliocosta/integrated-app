@@ -45,15 +45,35 @@ Estado: **pronto** (já existia e ficou onde estava), **integrado agora** (ligad
 | Calculadoras úteis sem valores salvos (rendimento real de investimento e de imóvel) | Mais › Utilitários (`#utilitarios`) | integrado agora |
 | Menu: relatórios de research (Comitê, Renda Fixa Pro, Nord Fundos, Nord FIIs, O Investidor de Valor, Nord Dividendos) | Mais › Research da Nord (`#research`) | integrado agora (faltam os endereços de cinco dos seis) |
 
-### Produção, área do consultor (`/internal`, pelo que `area-logada/README.md` documenta)
+### Produção, área do consultor (`/internal` e `/pipeline`, levantados em [PRODUCAO-INTERNAL.md](PRODUCAO-INTERNAL.md))
 
 | Função em produção | Onde vive na 2.0 | Estado |
 |---|---|---|
-| Lista de clientes e pipeline (Topo do funil → Reunião agendada → Montar relatório → Apresentar → Aguardando aprovação → Aguardando execução; clínica: Exame → Clínica → Aprofundamento → Check anual) | `index.html`: a base de clientes, com o estágio lido dos documentos de cada um | integrado agora (estágio derivado; arrastar de coluna não existe) |
-| "Minhas Tarefas Pendentes" | `index.html`: "Espera por mim" (propostas, conversas sem resposta, tarefas atrasadas, tarefas da coleta com o consultor) | integrado agora |
+| Duas visões: aba Consultor (a carteira) e aba Cliente (o escolhido) | `index.html`: a base (`#carteira`, `#pipeline`, `#espera`) e a ficha (`#cliente/<id>`) | integrado agora |
+| Seletor de cliente + atalhos "Área do cliente" e "Montagem de relatório" | A linha do cliente na base e "Trabalhar neste cliente" na ficha; em toda tela, a casca do consultor | integrado agora |
+| "Emulando acesso do cliente" | Ficha › "Emular o acesso do cliente" (`area-cliente.html?cliente=<id>&consultor`) | integrado agora (sem o selo e o relógio da sessão) |
+| Pipeline em quadro, 20 etapas, "Vencidos" e "vence em N dias" | `index.html#pipeline`: as 20 colunas; a etapa e o prazo são postos na ficha; sem etapa posta, a base sugere uma pelos dados | integrado agora (sem arrastar, sem lista, sem filtros de escritório e proprietário) |
+| Metas do semestre (Renovação, NPS, Indicações, Cobertura da base) | Base › Carteira, no alto | em breve |
+| Minhas Tarefas Pendentes | Base › Espera por mim: as tarefas do consultor e de reunião, propostas, mensagens sem resposta, tarefas pedidas ao cliente em atraso, etapas vencidas | integrado agora |
+| Reuniões (semana, mês, semestre) | Base › Carteira › Reuniões marcadas (as da agenda); o painel completo em `agendamento.html` | integrado agora (sem o filtro de período) |
+| Scores Pendentes (exame há mais de 6 meses) | Base › Carteira › Exames desatualizados | integrado agora |
+| Coletas em Andamento | Base › Carteira › Coletas em andamento | integrado agora |
+| NPS em Aberto; Pesquisas NPS do cliente | Base › Carteira e Ficha | em breve |
+| Programa Contínuo | Base › Carteira | em breve |
+| Dados do cliente, com a etapa do pipeline | Ficha: cabeçalho e "Etapa no pipeline" | integrado agora |
+| Tarefas do cliente (+ Nova): título, data, responsável (cliente, consultor, reunião), estado | Ficha › Tarefas e lembretes. As do cliente vão para a área dele; as do consultor e de reunião ficam na ficha | integrado agora |
+| Reuniões do cliente (+ Nova) | Ficha › Reuniões: a próxima (agenda) e as passadas com o resumo; "+ Nova" abre a agenda | integrado agora; registrar o resumo: em breve |
+| Notas (+ Nova) | Ficha › Notas (só o consultor vê) | integrado agora |
+| Scores: histórico do exame com os cinco pilares | Ficha › Exames de saúde financeira | integrado agora |
+| Coletas de Dados (+ Novo, continuar, descartar, recuperar de arquivo) | Ficha › Coleta de dados (começar ou continuar); "Importar JSON" na base recupera de arquivo. Uma coleta por cliente; descartar não existe | integrado agora (parcial) |
+| + Novo Cliente (`/internalsignup`) | Base › "+ Novo cliente" (abre a coleta) | pronto |
 | Coleta de dados (211 campos, 11 blocos) | `tela-consultor.html?cliente=<id>&coleta` | pronto |
-| Bloco 11 "Próximas tarefas" (`tarefasList`) | Coleta › Documentos e tarefas; as de responsável "cliente" aparecem na ficha, com "Enviar ao cliente" | integrado agora |
-| Marcar tarefa sem login (`/taskChecker`) | A resposta grava em `execucao/<id>.respostas` com o canal; o link de um toque é da plataforma | falta construir (a página sem login) |
+| Bloco 11 "Próximas tarefas" | Coleta › Documentos e tarefas; na ficha, as pendentes aparecem e as do cliente têm "Enviar ao cliente" | integrado agora |
+| Visão Admin · Escritório · Proprietário, e a carteira de outro consultor | Base › "Mais da área do consultor" | em breve |
+| Link de indicação, Resultados de Campanha, Cotações de Seguros | Base › "Mais da área do consultor" | em breve |
+| Consultores e Escritórios, Pipeline Admin, Registro de Ações, Ferramentas Técnicas, NPS (direção) | Base › "Mais da área do consultor" | em breve |
+| Meu Perfil, WhatsApp, Microsserviços (menu do consultor) | Fora do protótipo (são da plataforma) | falta construir |
+| Marcar tarefa sem login (`/taskChecker`) | A resposta grava em `execucao/<id>.respostas` com o canal; a página de um toque é da plataforma | falta construir |
 
 ### Repositório
 
@@ -98,20 +118,20 @@ A barra de baixo e o menu lateral não mudaram: Painel, Objetivos, Tarefas, Plan
 ### Consultor
 
 ```
-Base de clientes (index.html) ── filtros por estágio · "Espera por mim"
- └─ Ficha (index.html#cliente/<id>)
+Base de clientes (index.html) ── Carteira (#carteira) · Pipeline (#pipeline) · Espera por mim (#espera)
+ └─ Ficha (index.html#cliente/<id>) ── etapa e prazo · notas · exames · coleta
      ├─ Coleta            tela-consultor.html?cliente=<id>&coleta
      ├─ Montar o plano    tela-consultor.html?cliente=<id>
      ├─ Relatório         evolucao-patrimonial.html?cliente=<id>&consultor
      ├─ Área do cliente   area-cliente.html?cliente=<id>&consultor
      ├─ Acompanhamento    acompanhamento.html?cliente=<id>&consultor
-     ├─ Tarefas e lembretes para o cliente (cadastrar, ver o estado, apagar)
+     ├─ Tarefas e lembretes: para o cliente (vão para a área dele), do consultor e de reunião (ficam na ficha)
      └─ O que o cliente fez (últimas respostas, conversas sem resposta, proposta pendente)
 Agenda (agendamento.html)
 ```
 
 A **casca do consultor** (`<script id="casca-consultor">`, escrita no `index.html` e copiada pelo `sync-motor.js`) põe as
-mesmas ligações em toda tela do consultor: Base de clientes, Agenda e, com um cliente aberto, Ficha, Coleta, Montar o
+mesmas ligações em toda tela do consultor: Base de clientes, Pipeline, Agenda e, com um cliente aberto, Ficha, Coleta, Montar o
 plano, Relatório, Área do cliente e Acompanhamento. No portal ela entra no menu lateral; nas outras, numa faixa no alto.
 
 ## 3. A regra das três profundidades
@@ -145,7 +165,8 @@ O que acontece de verdade (o realizado) não é um quarto nível: é a outra met
 
 1. **O consultor cadastra** na Ficha do cliente (ou em Área do cliente `&consultor` › Tarefas › Nova tarefa): título, para
    quê, prazo, de quem é e, se quiser, o lembrete no WhatsApp (hora, assinatura, recorrência semanal, quinzenal ou mensal e o
-   número de vezes). Grava em `execucao/<id>.avulsas[]`, com `por: 'consultor'`.
+   número de vezes). Grava em `execucao/<id>.avulsas[]`, com `por: 'consultor'`. Com responsável "consultor" ou "reunião", a
+   tarefa não vai ao cliente: fica em `atendimento/<id>.tarefas[]`, o documento só do consultor (etapa, prazo, tarefas, notas).
 2. **O cliente vê** em Tarefas (e no Painel, quando é da semana), com "pedida pela Patrícia". Responde fiz, não fiz ou adia;
    a resposta grava em `execucao/<id>.respostas['av:<id>']`, com quem e por qual canal. O cliente cria as próprias tarefas e
    lembretes no mesmo lugar (`por: 'cliente'`).
@@ -166,8 +187,10 @@ a seguinte.
 3. **As três profundidades usam o que já existia** (cartão, página da área, capítulo embutido). O que faltava era nomear os
    níveis, mostrá-los em todo degrau e dar a saída para o relatório inteiro.
 4. **A base de clientes lê os documentos crus**, sem motor: estágio, próxima reunião, tarefas avulsas, respostas, conversas,
-   proposta. Não grava derivados. O estágio é derivado (versão publicada → em acompanhamento; coleta finalizada → montar o
-   relatório; plano sem coleta finalizada → coleta; clínica → clínica realizada; exame → exame feito).
+   proposta. Não grava derivados. A etapa do pipeline é a que o consultor põe na ficha, com o prazo ("vence em N dias"),
+   guardada em `atendimento/<id>`; sem ela, a base sugere uma pelos dados (plano com coleta aberta → Reunião agendada;
+   coleta finalizada → Montar relatório; uma versão → Aguardando execução ou Estratégia executada; proposta pendente →
+   Aguardando aprovação; a 30 dias do A1 → Agendando A1; duas versões → A1 concluído) e diz que é sugestão.
 5. **Os exemplos da base são os três da área do cliente** (`exemplo-cadastrado`, `exemplo`, `exemplo-completo`), para o
    funil aparecer cheio. A base os carrega uma vez abrindo a área num quadro escondido (a semente fica só na área). O hoje
    dos exemplos é 20/10/2026, como na área.
@@ -175,18 +198,22 @@ a seguinte.
    funcionar de ponta a ponta e é a regra certa para um cliente que só tem versões.
 7. **Casca por bloco copiado**, como o motor: as telas são autocontidas, então a navegação comum é um bloco igual em cada uma,
    mantido pelo `sync-motor.js`.
-8. **Acompanhamento é do cliente** (é a família que informa a fatura); o consultor abre a mesma página com `&consultor`.
-9. **Research e vídeo sem endereço inventado**: o que não tem endereço conhecido aparece como "em breve".
+8. **Os exemplos têm uma tarefa pedida pela consultora** (`execucao-completo`, em `area-cliente.html`), para o ciclo
+   aparecer cheio nas duas pontas.
+9. **Acompanhamento é do cliente** (é a família que informa a fatura); o consultor abre a mesma página com `&consultor`.
+10. **Research e vídeo sem endereço inventado**: o que não tem endereço conhecido aparece como "em breve".
 
 ## 6. Em aberto para o Nélio
 
 1. Os endereços dos cinco relatórios de research e do vídeo "Como utilizar a plataforma".
-2. O estágio do funil é derivado dos dados. Produção tem um pipeline movido à mão (Reunião agendada, Aguardando aprovação,
-   Aguardando execução). Mantemos derivado, ou o consultor move o cartão?
+2. A etapa do pipeline é posta à mão, com sugestão pelos dados. Vale a sugestão virar automática em algumas passagens
+   (publicou a versão → Aguardando execução)? E a clínica financeira, que em produção tem funil próprio, entra em que
+   colunas? Hoje o cliente de clínica aparece em "Topo do funil".
 3. A tarefa do bloco 11 da coleta e a tarefa da ficha são hoje duas listas (uma no plano, outra na execução), ligadas por
    "Enviar ao cliente". Unificar numa só?
 4. As calculadoras de IR/PGBL e de seguros de produção: reconstruir no cartão, ou só o relatório cobre?
-5. O `/internal` de produção não foi aberto: pode haver função lá que não está neste inventário.
+5. Do `/internal`, ficaram só como "em breve": metas do semestre, NPS, programa contínuo, papéis (admin, escritório,
+   direção), campanhas, cotações de seguro e link de indicação. Qual vem primeiro?
 6. No link publicado, a área do cliente ainda guarda no navegador (`execucao`, `vetor`, `clinicas`); a base e a ficha leem
    de lá. Para dois computadores, o armazém da área precisa ir para o banco do link, como o do portal.
 7. Registrar a clínica e registrar a reunião (UX.md) continuam sem tela; a ficha do cliente é o lugar.
@@ -201,6 +228,7 @@ Servir com `node ux/servir.cjs . 8137`. Base: `http://localhost:8137/`. Abra pri
 | Tela | Endereço |
 |---|---|
 | Base de clientes | `index.html` |
+| Pipeline em quadro (20 etapas) | `index.html#pipeline` |
 | Base, só "Espera por mim" | `index.html#espera` |
 | Ficha do cliente (completo) | `index.html#cliente/exemplo-completo` |
 | Ficha do cliente (clínica) | `index.html#cliente/exemplo` |
