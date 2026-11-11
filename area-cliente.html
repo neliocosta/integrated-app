@@ -1132,6 +1132,27 @@ body.v-livro .rotulo .mais{font-weight:400;font-size:13px}
 .passos-uso a{font-weight:600;color:var(--marinho);text-decoration:none}
 .passos-uso small{display:block;color:var(--legenda);font-size:13px}
 .util-res{margin-top:6px}
+/* Mais, no computador: os cinco grupos em duas colunas, em vez de uma lista estreita com a metade da tela vazia */
+@media (min-width:900px){.mais-grupos{max-width:1080px!important;columns:2;column-gap:28px}.mais-grupos section{break-inside:avoid;padding-bottom:10px}}
+.mais-lista section h3.rotulo{margin:0 0 8px}
+.mais-lista .sem{background:transparent}
+/* as ilustrações da série (ilustras/PROMPTS-MIDJOURNEY.md): o lugar reservado tem a proporção da imagem e um céu suave nas
+   cores dela; a imagem cobre o lugar quando ilustras/v2/<nome>.webp existir, sem mexer no código.
+   .capa é a faixa que abre a página (3:1, até 220 px de altura); sem classe, a cena 4:3 dos estados vazios;
+   .traco guarda o desenho de traço que já existia e some quando a imagem chega */
+.ilustra{position:relative;display:block;overflow:hidden;aspect-ratio:4/3;border-radius:var(--raio);background:#E3EEF7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 225' preserveAspectRatio='xMidYMid slice'%3E%3Crect width='400' height='225' fill='%23E3EEF7'/%3E%3Ccircle cx='292' cy='104' r='30' fill='%23FCD9C2'/%3E%3Cg fill='%23fff'%3E%3Cellipse cx='96' cy='84' rx='40' ry='12'/%3E%3Cellipse cx='118' cy='74' rx='24' ry='13'/%3E%3Cellipse cx='236' cy='62' rx='28' ry='8'/%3E%3Cellipse cx='340' cy='140' rx='32' ry='9'/%3E%3C/g%3E%3Cpath d='M0 176c70-26 130-24 200-8s130 10 200-14v71H0z' fill='%23FFF3EB'/%3E%3Cpath d='M0 204c90-18 170-10 240 0s110 4 160-8v29H0z' fill='%23FDE4D3'/%3E%3C/svg%3E") center/cover no-repeat}
+.ilustra img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease}
+.ilustra.tem img{opacity:1}
+.ilustra.capa{aspect-ratio:3/1;width:100%;max-height:220px;margin-bottom:14px;background-position:center 50%}
+.ilustra.traco{background:none;border-radius:0;aspect-ratio:auto;width:170px;margin:0 auto 18px}
+.ilustra.traco .ilu{width:100%;margin:0}
+.ilustra.traco.tem{aspect-ratio:4/3;width:min(240px,72%);border-radius:var(--raio)}
+.ilustra.traco.tem .ilu{display:none}
+.vazio > .ilustra:not(.traco){width:min(240px,72%);margin:0 auto 18px}
+.com-ilustra{display:grid;grid-template-columns:minmax(0,1fr) 148px;gap:18px;align-items:center}
+@media (max-width:599px){.com-ilustra{grid-template-columns:minmax(0,1fr)}.com-ilustra .ilustra{width:148px;order:-1}}
+.folha .ilustra.capa{margin:0 0 14px}
+@media (prefers-reduced-motion: reduce){html:not(.movimento) .ilustra img{transition:none}}
 </style>
 </head>
 <body>
@@ -3316,6 +3337,14 @@ function barraDemo() {
 // 9. AS TELAS
 // =====================================================================================================================
 const DESK = () => matchMedia('(min-width: 900px)').matches;
+// as ilustrações da série (ilustras/PROMPTS-MIDJOURNEY.md): cada lugar pede ilustras/v2/<nome>.webp. Enquanto o arquivo não
+// existe, fica o lugar reservado (o céu da série) ou, com `antes`, o desenho que já estava ali; quando existir, a imagem
+// entra sozinha. ILU_FALTA guarda as que faltaram, para não pedir de novo a cada redesenho
+window.ILU_FALTA = window.ILU_FALTA || new Set();
+const ilustra = (nome, cls, antes, reserva, foco) => { const img = (src, ou, pos) => `<img src="${src}" alt=""${pos ? ` style="object-position:${pos}"` : ''} onload="this.parentNode.classList.add('tem')" onerror="${ou}">`;
+  const falta = ILU_FALTA.has(nome), pos = `50% ${foco || 50}%`;
+  return `<span class="ilustra${cls ? ' ' + cls : ''}${antes ? ' traco' : ''}" aria-hidden="true">${antes || ''}${falta ? (reserva ? img(reserva, 'this.remove()', pos) : '')
+    : img(`ilustras/v2/${nome}.webp`, `ILU_FALTA.add('${nome}');` + (reserva ? `this.onerror=function(){this.remove()};this.style.objectPosition='${pos}';this.src='${reserva}'` : 'this.remove()'))}</span>`; };
 // a ilustração da capa do capítulo (a área), do Midjourney; o objetivo do cliente fica com a foto dele
 // foco: a altura (0 a 100) do trecho que aparece na faixa, onde está o assunto da imagem
 const CAPA_AREA = { liberdade: { src: 'ilustras/alternativas/porta-3.webp', foco: 62 } };
@@ -3894,7 +3923,7 @@ function telaProva(id) {
   const cab = `<p class="mut" style="margin:0 0 14px">${esc(c.titulo)} · cinco perguntas; acertando quatro, o capítulo fica concluído</p>`;
   if (P.i >= qs.length) {
     const ok = ac >= 4, errou = [...new Set(qs.filter((q, k) => P.r[k] !== q.p.c).map(q => q.m))], cq = conquistas();
-    return `<div style="max-width:720px">${cab}<div class="card">${ok ? `<span class="etiqueta">Capítulo concluído</span><div class="nivel-nome">${ac} de 5</div>
+    return `<div style="max-width:720px">${cab}<div class="card">${ok ? `${ilustra('capitulo-concluido', 'capa')}<span class="etiqueta">Capítulo concluído</span><div class="nivel-nome">${ac} de 5</div>
         <p class="cinco">${esc(c.titulo)} fica concluído, sem precisar fazer os módulos.</p><div class="conqs">${medalha(cq.find(x => x.id === 'saber:' + c.id))}${medalha(cq.find(x => x.id === 'fazer:' + c.fazer[0]))}</div>`
       : `<span class="etiqueta">Faltou pouco</span><div class="nivel-nome">${ac} de 5</div><p class="cinco">Eram quatro para concluir. O capítulo segue na trilha, a começar pelo que ficou em dúvida:</p><div class="lista">${errou.map(linhaModulo).join('')}</div>`}
       <div class="linha" style="margin-top:14px"><a class="primaria" href="#saber" style="display:inline-flex;align-items:center;text-decoration:none">Voltar aos capítulos</a>${ok ? '' : '<button class="btn" data-acao="prova-refazer">Refazer a prova</button>'}</div></div></div>`;
@@ -3970,7 +3999,7 @@ const saudacao = () => { const hr = new Date().getHours(), s = hr < 12 ? 'Bom di
 // ele protege. O mapa dos sete mundos fica na Jornada
 function telaPasso() {
   const P = passoCompleto();
-  if (!P) return `<div class="vazio">${ILUSTRA.cumprido}<h2>Passos cumpridos</h2><p>${R.consultora ? 'A ' + esc(R.consultora.nome) + ' define o próximo passo.' : 'O próximo é aprofundar o plano.'}</p><a class="btn" href="#jornada">Ver a escalada</a></div>`;
+  if (!P) return `<div class="vazio">${ilustra('passos-cumpridos', '', ILUSTRA.cumprido)}<h2>Passos cumpridos</h2><p>${R.consultora ? 'A ' + esc(R.consultora.nome) + ' define o próximo passo.' : 'O próximo é aprofundar o plano.'}</p><a class="btn" href="#jornada">Ver a escalada</a></div>`;
   const objs = objetivos().filter(o => o.tipo !== 'liberdade' && progresso(o) < 1).sort((a, b) => a.data < b.data ? -1 : 1), protege = objs[0];
   const tarefas = P.tarefas.length ? P.tarefas.map(cartaoTarefa).join('') : P.acao ? `<a class="btn" href="${P.acao[1]}" style="display:inline-flex;align-items:center;text-decoration:none">${esc(P.acao[0])}</a>` : `<p class="vazio-l">Nenhuma tarefa leva dinheiro a este passo ainda${R.consultora ? `: <a href="#conversas">propor à ${esc(R.consultora.nome)} ›</a>` : ''}.</p>`;
   const resolvidos = P.trilha.filter(t => t.estado === 'resolvido'), resto = P.trilha.filter(t => t.estado !== 'resolvido');
@@ -3986,7 +4015,7 @@ function telaPasso() {
 // ---------- Tarefas ----------
 function telaTarefas() {
   const oc = ocorrencias();
-  if (!R.pedidos.length) return `<div class="vazio">${ILUSTRA.tarefas}<h2>Ainda sem tarefas</h2><p>${R.degrau === 'visitante' ? 'As tarefas nascem do plano: os aportes de cada objetivo, o teto da semana, os próximos passos. Com a conta, elas chegam com lembrete no WhatsApp.' : 'As tarefas nascem dos objetivos com aporte. Dê valor, data e aporte a um objetivo e o primeiro aporte vira tarefa.'}</p>
+  if (!R.pedidos.length) return `<div class="vazio">${ilustra('vazio-tarefas', '', ILUSTRA.tarefas)}<h2>Ainda sem tarefas</h2><p>${R.degrau === 'visitante' ? 'As tarefas nascem do plano: os aportes de cada objetivo, o teto da semana, os próximos passos. Com a conta, elas chegam com lembrete no WhatsApp.' : 'As tarefas nascem dos objetivos com aporte. Dê valor, data e aporte a um objetivo e o primeiro aporte vira tarefa.'}</p>
     ${R.degrau === 'visitante' ? '<button class="primaria" data-acao="criar-conta">Criar a minha conta</button>' : '<a class="primaria" href="#cartao/objetivos" style="display:inline-flex;align-items:center;text-decoration:none">Criar um objetivo</a>'}${novaTarefaBotao()}</div>`;
   // os filtros: o tipo, com nomes da casa, e de quem é, quando há dois
   const f = UI.filtro, vis = oc.filter(o => f === 'todas' || o.cat === f || (f.startsWith('resp:') && (deQuem(o) === f.slice(5) || deQuem(o) === 'os dois')));
@@ -4128,7 +4157,7 @@ function telaCartao(id) {
   const pre = R.degrau !== 'completo' ? ((CALCS[c.id] || c.id === 'objetivos' || c.id === 'saude') ? calculadora(c) : '') + calcEmBreve(c) : '';
   const rel = R.degrau === 'completo' ? relatorioDaArea(c) : '';
   const prox = proximoNaArea(c, falta);
-  const ca = CAPA_AREA[c.id], capa = ca ? `<img class="capa-area" src="${ca.src}" alt="" style="object-position:50% ${ca.foco}%">` : '';
+  const ca = CAPA_AREA[c.id], capa = ilustra('capa-' + c.id, 'capa', '', ca && ca.src, ca && ca.foco);   // a da série; enquanto não chega, a escolhida antes (só a liberdade tem)
   return `<div style="max-width:1080px">${capa}${niveisDaArea(c, f)}${rel ?`<div class="grade2" style="align-items:start">${resumo}${lista}</div>${atalhosDaArea(c)}${rel}` : `<div class="grade2" style="align-items:start"><div>${resumo}${pre}</div><div>${lista}${prox}</div></div>${atalhosDaArea(c)}${semRelatorio(c)}`}</div>`;
 }
 // AS TRÊS PROFUNDIDADES (v2/ARQUITETURA.md, seção 3), as mesmas em toda área e em todo degrau: 1. a visão geral (o cartão do
@@ -4136,7 +4165,7 @@ function telaCartao(id) {
 // planejamento). Sem plano publicado, o nível 3 aparece no mesmo lugar, dizendo com o que ele chega
 const niveisDaArea = (c, f) => { const v = versoesVigentes()[0];
   return `<div class="niveis" role="group" aria-label="As três profundidades desta área"><span class="on"><b>1</b>Visão geral</span><button class="on" data-acao="nivel" data-v="nivel-2"><b>2</b>Aprofundada <small>${pct(f)}</small></button><button class="${v ? 'on' : ''}" data-acao="nivel" data-v="nivel-3"><b>3</b>Relatório <small>${v ? dataBRano(v.em) : 'com o planejamento'}</small></button></div>`; };
-const semRelatorio = c => `<div class="card vago ilustra-vaga" id="nivel-3"><span class="rotulo" style="margin:0 0 6px">3 · No relatório</span><p class="peq" style="margin:0;color:var(--marinho)">A visão mais detalhada desta área é o capítulo dela no relatório do planejamento: ${esc(nomesJuntos(c.paginas.map(p => p[1].toLowerCase())))}. Ele chega com o planejamento completo, montado com um planejador. <a href="#relatorio">Como é o relatório</a> · <a href="#conversas">${esc(falarCom())}</a></p></div>`;
+const semRelatorio = c => `<div class="card vago ilustra-vaga com-ilustra" id="nivel-3"><div><span class="rotulo" style="margin:0 0 6px">3 · No relatório</span><p class="peq" style="margin:0;color:var(--marinho)">A visão mais detalhada desta área é o capítulo dela no relatório do planejamento: ${esc(nomesJuntos(c.paginas.map(p => p[1].toLowerCase())))}. Ele chega com o planejamento completo, montado com um planejador. <a href="#relatorio">Como é o relatório</a> · <a href="#conversas">${esc(falarCom())}</a></p></div>${ilustra('vazio-relatorio')}</div>`;
 // as calculadoras de produção que ainda não foram refeitas no cartão: a entrada existe, dizendo que vem
 const CALC_EM_BREVE = { tributario: 'A calculadora de imposto de renda e PGBL', riscos: 'A calculadora do seguro de vida e de acidentes' };
 const calcEmBreve = c => CALC_EM_BREVE[c.id] ? `<div class="card vago"><div class="entre"><b style="color:var(--marinho)">${CALC_EM_BREVE[c.id]}</b><span class="chip">em breve</span></div><p class="mut" style="margin:6px 0 0">Na plataforma de hoje ela é um assistente à parte; aqui, vai gravar nesta área.</p></div>` : '';
@@ -4369,7 +4398,7 @@ function efeitoTeto(o, gasto) {
 // ---------- Objetivos ----------
 function telaObjetivos() {
   const objs = objetivos();
-  if (!objs.length) return `<div class="vazio">${ILUSTRA.objetivos}<h2>Ainda sem objetivos</h2><p>Um objetivo com valor e data diz para onde vai o dinheiro. Pode ser uma viagem, a entrada de uma casa, quitar uma dívida ou a primeira reserva.</p><a class="primaria" href="#cartao/objetivos" style="display:inline-flex;align-items:center;text-decoration:none">Criar o primeiro</a></div>`;
+  if (!objs.length) return `<div class="vazio">${ilustra('vazio-objetivos', '', ILUSTRA.objetivos)}<h2>Ainda sem objetivos</h2><p>Um objetivo com valor e data diz para onde vai o dinheiro. Pode ser uma viagem, a entrada de uma casa, quitar uma dívida ou a primeira reserva.</p><a class="primaria" href="#cartao/objetivos" style="display:inline-flex;align-items:center;text-decoration:none">Criar o primeiro</a></div>`;
   const pedem = soma(objs.filter(o => !o.complementar).map(necessario)), poe = soma(objs.filter(o => !o.complementar).map(o => o.aporte));
   return `<div style="max-width:760px">${linhasDosObjetivos()}${objs.map(o => { const t = tomDoObj(o), nec = necessario(o);
       return `<a class="obj-card" href="#objetivo/${o.id}"><span class="thumb" style="background-image:${FUNDO_OBJ(o)}"></span><span style="min-width:0"><span class="entre"><b>${esc(o.nome)}</b><span class="chip ${t[0]}">${t[1]}</span></span>
@@ -4488,7 +4517,7 @@ function telaJornada() {
     const dentro = st === 'agora' && P ? `<ol class="trilha-v">${P.trilha.map(t => `<li class="${t.estado === 'resolvido' ? 'feito' : t.estado}"${t.estado === 'agora' ? ' aria-current="step"' : ''}><span class="p"></span><span>${esc(t.nome)}<small>${t.estado === 'resolvido' ? 'resolvido quando o plano começou' : t.estado === 'agora' ? 'o passo agora' : 'depois'}</small></span></li>`).join('')}</ol>` : st === 'feito' ? `<small>resolvido: ${ganhos[i].toLowerCase()}</small>` : `<small>${esc(PERGUNTAS_MUNDO[i])}</small>`;
     return `<li class="mundo ${st}"><span class="p"></span><div><b>${m}</b>${dentro}</div></li>`; }).join('');
   const escalada = `<div class="card"><span class="rotulo" style="margin:0 0 4px">A escalada</span><p class="mut" style="margin:0 0 10px">${pl('Vocês estão', 'Você está')} em <b>${MUNDOS[atual]}</b>: ${PERGUNTAS_MUNDO[atual]}${P && P.deQuem ? ' O passo é ' + esc(P.deQuem) + '.' : ''}</p><ol class="mundos">${mundos}</ol></div>`;
-  return `<div class="grade2" style="align-items:start"><div>${AGENDA_AREA.cartoes()}${servicoHtml()}${relacao}${R.temas && R.temas.length ? `<div class="card"><span class="rotulo" style="margin:0 0 6px">Para uma próxima conversa</span>${R.temas.map(t => `<div class="peq" style="padding:6px 0;border-top:1px solid var(--areia);color:var(--marinho)">${esc(t)}</div>`).join('')}</div>` : ''}</div>${escalada}</div>`;
+  return `${ilustra('capa-jornada', 'capa')}<div class="grade2" style="align-items:start"><div>${AGENDA_AREA.cartoes()}${servicoHtml()}${relacao}${R.temas && R.temas.length ? `<div class="card"><span class="rotulo" style="margin:0 0 6px">Para uma próxima conversa</span>${R.temas.map(t => `<div class="peq" style="padding:6px 0;border-top:1px solid var(--areia);color:var(--marinho)">${esc(t)}</div>`).join('')}</div>` : ''}</div>${escalada}</div>`;
 }
 
 // ---------- O atendimento (decisão de 30/10): o nível de serviço de cada degrau, quem atende e o próximo encontro, com o
@@ -4570,8 +4599,8 @@ function telaConversas() {
 // portal entra aqui, nunca no Painel. A entrada que ainda não tem o que mostrar aparece no mesmo lugar, dizendo quando ----------
 const itemMais = (href, ic, nome, sub, chip) => href ? `<a href="${href}">${ICONES[ic]}<span>${nome}<small>${sub}</small></span></a>` : `<div class="sem">${ICONES[ic]}<span>${nome}<small>${sub}</small></span><span class="chip">${chip || 'em breve'}</span></div>`;
 function telaMais() {
-  const temPlano = !!versoesVigentes().length, g = (t, itens) => `<h3 class="rotulo">${t}</h3>${itens.join('')}`;
-  return `<div class="mais-lista" style="max-width:560px">
+  const temPlano = !!versoesVigentes().length, g = (t, itens) => `<section><h3 class="rotulo">${t}</h3>${itens.join('')}</section>`;
+  return `<div class="mais-lista mais-grupos" style="max-width:560px">
     ${g('Acompanhar', [itemMais('#realizado', 'realizado', 'Realizado', realizadoExiste() ? 'O planejado e o que aconteceu, no orçamento e no patrimônio' : 'O planejado e o que aconteceu; ganha corpo com três meses de registro'),
       itemMais(temPlano ? urlAcompanhamento() : null, 'semanadas', 'Semanadas', 'O teto da fatura do cartão, semana a semana', 'com o plano')])}
     ${g('O plano', [itemMais('#relatorio', 'relatorio', 'Relatório', 'O planejamento completo, capítulo a capítulo, e as versões')])}
@@ -4583,9 +4612,9 @@ function telaMais() {
 // É o nível 3 inteiro; cada área do Plano abre o capítulo dela ----------
 function telaRelatorio() {
   const vs = versoesVigentes(), botao = 'style="display:inline-flex;align-items:center;text-decoration:none"';
-  if (!vs.length) return `<div class="vazio ilustra-vaga"><h2>O relatório do planejamento</h2><p>É a visão mais detalhada do plano: cada área em capítulos, com os números, os gráficos e a explicação de quem montou. Ele chega com o planejamento completo. Até lá, o Plano mostra as mesmas onze áreas com o que já existe.</p>
+  if (!vs.length) return `<div class="vazio ilustra-vaga">${ilustra('vazio-relatorio')}<h2>O relatório do planejamento</h2><p>É a visão mais detalhada do plano: cada área em capítulos, com os números, os gráficos e a explicação de quem montou. Ele chega com o planejamento completo. Até lá, o Plano mostra as mesmas onze áreas com o que já existe.</p>
     <div class="linha" style="justify-content:center"><a class="primaria" href="#plano" ${botao}>Ver o Plano</a><a class="btn" href="#conversas" ${botao}>${esc(falarCom())}</a></div></div>`;
-  return `<div style="max-width:760px"><p class="duo-sub" style="margin:0 0 10px">O planejamento completo, como foi apresentado. Cada ajuste vira uma versão nova, com data; as anteriores ficam aqui.</p>
+  return `<div style="max-width:760px">${ilustra('capa-relatorio', 'capa')}<p class="duo-sub" style="margin:0 0 10px">O planejamento completo, como foi apresentado. Cada ajuste vira uma versão nova, com data; as anteriores ficam aqui.</p>
     ${vs.map((v, i) => `<div class="card"><div class="entre"><div><span class="rotulo" style="margin:0 0 4px">Versão ${v.n}${i ? '' : ' · em vigor'}</span><b class="num" style="font-size:18px">${dataBRano(v.em)}</b><div class="mut">${esc(v.comentario || 'versão publicada')}${v.consultor ? ' · ' + esc(v.consultor) : ''}</div></div>
       <a class="${i ? 'btn' : 'primaria'}" href="${urlRelatorioInteiro(v.n)}" ${botao}>Ver planejamento</a></div></div>`).join('')}
     <p class="mut">Cada área do <a href="#plano">Plano</a> abre o capítulo dela. Para propor uma mudança, use "Simular outros valores" no relatório${R.consultora ? `, ou <a href="#conversas">fale com a ${esc(R.consultora.nome)}</a>` : ''}.</p></div>`;
@@ -4600,7 +4629,7 @@ const PRIMEIROS = [['#exame', 'Faça o exame de saúde financeira', '33 pergunta
   ['#cartao/liberdade', 'Veja a sua liberdade financeira', 'Quando o trabalho passa a ser escolha, e com que renda.'], ['#objetivos', 'Dê valor e data aos objetivos', 'Cada objetivo com aporte vira uma tarefa do mês.'],
   ['#tarefas', 'Acompanhe as tarefas e os lembretes', 'O que fazer em cada mês. O lembrete chega no WhatsApp, e a resposta vale nos dois lugares.']];
 const ONDE_FICA = [['#painel', 'Painel', 'o passo de agora e o que resolver'], ['#objetivos', 'Objetivos', 'o que realizar e como cada um está indo'], ['#tarefas', 'Tarefas', 'o que fazer, e se foi feito'], ['#plano', 'Plano', 'as onze áreas, cada uma em três profundidades'], ['#mais', 'Mais', 'o acompanhamento, o relatório, o saber, os utilitários e a Nord']];
-const telaComoUsar = () => `<div style="max-width:760px"><div class="card vago ilustra-vaga"><div class="entre"><b style="color:var(--marinho)">Vídeo: como utilizar a plataforma</b><span class="chip">em breve</span></div><p class="mut" style="margin:6px 0 0">O vídeo de apresentação entra aqui.</p></div>
+const telaComoUsar = () => `<div style="max-width:760px">${ilustra('capa-comousar', 'capa')}<div class="card vago ilustra-vaga"><div class="entre"><b style="color:var(--marinho)">Vídeo: como utilizar a plataforma</b><span class="chip">em breve</span></div><p class="mut" style="margin:6px 0 0">O vídeo de apresentação entra aqui.</p></div>
   <div class="card"><span class="rotulo" style="margin:0 0 4px">Primeiros passos</span><ol class="passos-uso">${PRIMEIROS.map(([h, t, s]) => `<li><span><a href="${h}">${t} &#8250;</a><small>${s}</small></span></li>`).join('')}</ol></div>
   <div class="card"><span class="rotulo" style="margin:0 0 4px">Onde fica cada coisa</span>${ONDE_FICA.map(([h, t, s]) => `<div class="peq" style="padding:7px 0;border-top:1px solid var(--areia)"><a href="${h}" style="font-weight:600;color:var(--marinho);text-decoration:none">${t}</a>: ${s}</div>`).join('')}</div></div>`;
 // ---------- Utilitários: as calculadoras sem valores salvos (produção: "Calculadoras úteis"). Ajudam a decidir; nada aqui
@@ -4662,7 +4691,7 @@ const apagarAvulsaHtml = o => o.pedido.avulsa && (CONSULTOR ? o.pedido.por === '
 // pauta com as duas origens e o campo da família, e a confirmação da data ----------
 function telaPreparar() {
   const e = proximoEncontro(), A = areas(), r = reunioes()[0], pauta = pautaDaReuniao(A), c = R.consultora;
-  if (e.convite) return `<div class="vazio"><h2>Ainda sem reunião marcada</h2><p>${esc(e.texto)}</p>${botaoAgendar(e, 'primaria')}</div>`;
+  if (e.convite) return `<div class="vazio">${ilustra('vazio-reuniao')}<h2>Ainda sem reunião marcada</h2><p>${esc(e.texto)}</p>${botaoAgendar(e, 'primaria')}</div>`;
   const ficou = r && (r.tarefas || []).length ? `<div class="card"><h3>O que ficou de ${dataBRano(r.data)}</h3>${r.tarefas.map((t, i) => { const st = estadoDaTarefaDaReuniao(r, t, i); return `<div class="linha-l"><span>${esc(t.txt)}</span><span class="chip ${st[0]}">${esc(st[1])}</span></div>`; }).join('')}</div>` : '';
   // os números antes e depois: a reserva, o patrimônio, os aportes e a nota do exame, da data do plano até hoje
   const base = r ? r.data : R.publicadaEm || HOJE, aps = ocorrencias().filter(o => o.pedido.id === 'aporte' && !o.sugerida && o.data >= base && o.data <= HOJE), feitos = aps.filter(o => ['feita', 'outro'].includes(o.estado)).length;
@@ -4743,7 +4772,7 @@ function folhaImprevisto() {
     <div class="linha" style="margin-top:14px"><button class="primaria" data-acao="imp-gravar" ${v && I.tipo && I.tipo !== 'outra' ? '' : 'disabled'}>Usei a reserva</button><button class="btn" data-acao="fechar">Fechar</button></div>`;
 }
 // criar a conta: o que o visitante preencheu na sessão vai para o vetor da conta nova, sem pedir de novo
-const folhaConta = () => { const c = UI.folha; return `<div class="alca"></div><h2>Criar a sua conta</h2><p class="mut">O que ${c.dois ? 'vocês preencheram' : 'você preencheu'} até aqui vai junto. Os lembretes no WhatsApp só chegam com o seu consentimento.</p>
+const folhaConta = () => { const c = UI.folha; return `<div class="alca"></div>${ilustra('boas-vindas', 'capa')}<h2>Criar a sua conta</h2><p class="mut">O que ${c.dois ? 'vocês preencheram' : 'você preencheu'} até aqui vai junto. Os lembretes no WhatsApp só chegam com o seu consentimento.</p>
   <div class="campo"><label>Só você ou vocês dois?</label><div class="opcoes"><button type="button" class="${!c.dois ? 'on' : ''}" data-acao="conta-dois" data-v="">Só eu</button><button type="button" class="${c.dois ? 'on' : ''}" data-acao="conta-dois" data-v="1">Nós dois</button></div></div>
   <div class="campo"><label for="ct-nome">O seu primeiro nome</label><input id="ct-nome" data-conta="nome" value="${esc(c.nome || '')}"></div>
   ${c.dois ? `<div class="campo"><label for="ct-nome2">O primeiro nome da outra pessoa</label><input id="ct-nome2" data-conta="nome2" value="${esc(c.nome2 || '')}"></div>` : ''}
