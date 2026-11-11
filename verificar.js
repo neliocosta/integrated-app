@@ -1267,5 +1267,12 @@ console.log('\nSemanadas: o teto da fatura do cartão, semana a semana');
   ok('acompanhamento: abaixo do marco, os marcos ficam e cada semana mostra a sua folga (200 e 500)', A3.semanas[0].folga === 200 && A3.semanas[1].folga === 500 && A3.semanas[3].marco === 9500 && !A3.semanas.some(s => s.mudou), A3.semanas.map(s => s.folga).join(' '));
   ok('acompanhamento: sem nada informado, as semanas ficam com os marcos do plano e não há novo alvo', A0.novo === null && A0.semanas.map(s => s.marco).join(' ') === '4100 6500 8000 9500' && A0.fecha === 9500, '');
 }
+console.log('\nFeedback do cliente simulado de 12 meses (area-logada/v2/FEEDBACK-APLICADO.md)');
+{ const area = fs.readFileSync('area-cliente.html', 'utf8'), base = fs.readFileSync('index.html', 'utf8');
+  ok('Q1: lançar um mês com o patrimônio em branco não zera bens, participações nem dívidas (em branco é "não mudou")', !/n\('(bens|participacoes|dividas)'\) \|\| 0/.test(area) && /n\(k\) != null \? n\(k\) : ant \? \+ant\[k\]/.test(area), '');
+  ok('Q2: na área vista pelo planejador, a mensagem sai como "consultora" e fecha as perguntas em aberto', /if \(CONSULTOR\) \{ X\.conversas\.forEach\(m => \{ if \(m\.quem !== 'consultora' && !m\.respondida\) m\.respondida = true; \}\); X\.conversas\.push\(\{ em: AGORA\(\), quem: 'consultora'/.test(area), '');
+  ok('T1: o Confirmar de "não fiz" fica preso ao pé da folha (.linha.pe, sticky)', /\.folha \.linha\.pe\{position:sticky/.test(area) && /<div class="linha pe"><button class="primaria" data-acao="responder"/.test(area), '');
+  ok('Q20: a folha não se redesenha dentro do próprio desenho (o "change" do campo que sai)', /function desenharFolha\(\) \{ if \(desenharFolha\.em\) return;/.test(area), '');
+}
 console.log('\n' + (falhas ? falhas + ' verificação(ões) falharam.' : 'Tudo certo.') + '\n');
 process.exit(falhas ? 1 : 0);

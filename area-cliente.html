@@ -289,6 +289,8 @@ textarea{width:100%;min-height:96px;border:1px solid var(--borda);border-radius:
 .folha{background:var(--fundo);width:100%;max-height:90vh;overflow-y:auto;border-radius:18px 18px 0 0;padding:18px 18px 22px;animation:sobe .25s ease}
 .folha .alca{width:40px;height:4px;border-radius:9999px;background:var(--borda);margin:-6px auto 12px}
 .folha h2{font:500 23px/1.2 var(--serifa);color:var(--marinho);margin:2px 0 6px}
+/* a escolha só vale com o Confirmar: ele fica preso ao pé da folha, à vista, por mais que o conteúdo acima cresça */
+.folha .linha.pe{position:sticky;bottom:-22px;margin:12px -18px -22px;padding:12px 18px 22px;background:var(--fundo);border-top:1px solid var(--borda);z-index:1}
 @media (min-width:900px){.veu{align-items:center}.folha{width:580px;border-radius:16px;max-height:86vh}.folha .alca{display:none}}
 .resp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
 .resp button{min-height:52px;border-radius:10px;border:1px solid var(--borda);background:var(--cartao);font:600 14.5px var(--sans);color:var(--marinho)}
@@ -4365,7 +4367,7 @@ function naoFizHtml(o) {
       <button class="btn link peq" data-acao="ver-por-obj" style="margin-top:6px">${F_.porObj ? 'esconder' : 'ver por objetivo'}</button>${F_.porObj ? `<div class="peq" style="margin-top:6px">${ef.map(e => `<p style="margin:4px 0"><b style="color:var(--marinho)">${esc(e.obj.nome)}.</b> ${esc(fraseDoEfeito(e))}</p>`).join('')}</div>` : ''}
       ${[opcoes.find(x => x[0] === sug), ...opcoes.filter(x => x[0] !== sug)].map(([k, t]) => `<button class="saida${k === sug ? ' sug' : ''}${F_.saida === k ? ' on' : ''}" aria-pressed="${F_.saida === k}" data-acao="saida" data-v="${k}"><b>${SAIDAS[k]}${k === sug ? ' (sugerida)' : ''}</b>${t}</button>`).join('')}
       ${F_.saida === 'coube' ? `<div class="campo"><label for="coube">Quanto cabe por mês</label><input id="coube" inputmode="decimal" data-moeda value="${moedaTxt(F_.coube != null ? F_.coube : Math.round(o.valor * 0.6))}" data-campo="coube"></div>` : ''}
-      ${F_.saida ? antesDepois(o, F_.saida) + (completo && F_.saida !== 'outro' ? `<p class="mut" style="margin:6px 0">No planejamento completo, o ajuste vale como provisório até a ${esc(R.consultora ? R.consultora.nome : 'consultora')} aprovar.</p>` : '') + `<div class="linha"><button class="primaria" data-acao="responder" data-v="${F_.saida === 'outro' ? 'outro' : 'naofiz'}">Confirmar</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>` : `<div style="margin-top:10px"><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`}`;
+      ${F_.saida ? antesDepois(o, F_.saida) + (completo && F_.saida !== 'outro' ? `<p class="mut" style="margin:6px 0">No planejamento completo, o ajuste vale como provisório até a ${esc(R.consultora ? R.consultora.nome : 'consultora')} aprovar.</p>` : '') + `<div class="linha pe"><button class="primaria" data-acao="responder" data-v="${F_.saida === 'outro' ? 'outro' : 'naofiz'}">Confirmar</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>` : `<div style="margin-top:10px"><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`}`;
   }
   const txt = o.cat === 'educacional' ? 'Sem problema: escolha uma nova data.' : o.pedido.risco ? o.pedido.risco : 'O que esta tarefa resolve continua em aberto.';
   return `<div class="aviso at" style="margin-top:12px">${esc(txt)}</div><div class="campo"><label for="nova">Nova data</label><input id="nova" type="date" min="${addD(HOJE, 1)}" value="${F_.novaData || addD(HOJE, 7)}" data-campo="novaData"></div>
@@ -4497,7 +4499,7 @@ function folhaLancar() {
   return `<div class="alca"></div><h2>Lançar ${mesAnoL(mes)}</h2><p class="mut">Sem open banking, os totais do mês por grupo. ${orcadoNoMes(mes) ? 'O orçado deste mês: ' + brl(orcadoNoMes(mes).entradas) + ' de entradas, ' + brl(orcadoNoMes(mes).fixas) + ' de fixas e ' + brl(orcadoNoMes(mes).ajustaveis) + ' de ajustáveis.' : ''}</p>
     <div class="campo"><label for="l-mes">O mês</label><input id="l-mes" type="month" max="${addM(MES, -1)}" value="${mes}" data-lanc="mes"></div>
     ${c('entradas', 'Entradas')}${c('fixas', 'Despesas fixas')}${c('ajustaveis', 'Despesas ajustáveis')}
-    <div class="rotulo">O patrimônio no fim do mês (opcional)</div>${c('financeiro', 'Financeiro')}${c('bens', 'Bens')}${c('participacoes', 'Participações')}${c('dividas', 'Dívidas')}
+    <div class="rotulo">O patrimônio no fim do mês (opcional)</div><p class="mut" style="margin:0 0 8px">Preencha só o que mudou. O que ficar em branco continua como está.</p>${c('financeiro', 'Financeiro')}${c('bens', 'Bens')}${c('participacoes', 'Participações')}${c('dividas', 'Dívidas')}
     <div class="linha"><button class="primaria" data-acao="gravar-lancamento">Gravar</button><button class="btn" data-acao="fechar">Cancelar</button></div>`;
 }
 
@@ -4588,9 +4590,9 @@ function telaConversas() {
   // o convite ao completo, para quem está na clínica, fica escondido enquanto a família está em Sobreviver
   const subir = n => n.id === 'completo' && dg === 'clinica' && mundoAtual() > 0 ? `<button class="btn peq" style="margin-top:10px" data-acao="toast" data-txt="No produto, abre a agenda da reunião de avaliação do planejamento e da carteira.">Conhecer numa reunião de avaliação</button>` : '';
   const niveis = `<div class="rotulo">Os níveis de atendimento da Nord</div><div class="niveis">${NIVEIS.map(n => `<div class="card nivel${n.id === nv ? ' meu' : ''}"><div class="entre"><b>${n.nome}</b>${n.id === nv ? `<span class="chip mar">o ${pl('de vocês', 'seu')}</span>` : ''}</div>${lista(n)}<p class="mut" style="margin:0">${n.ritmo}.</p>${subir(n)}</div>`).join('')}</div>`;
-  const conversas = c ? `<div class="rotulo">As conversas</div><div style="max-width:720px">${X.conversas.map(m => `<div class="msg ${m.quem === 'consultora' ? 'dela' : 'minha'}">${esc(m.txt)}<small>${m.quem === 'consultora' ? esc(c.completo) : esc(nomeDe(m.quem))} · ${dataBR(m.em)}${m.quem !== 'consultora' && !m.respondida ? ' · aguardando a resposta, em até 2 dias úteis' : ''}</small></div>`).join('') || '<div class="mut">Nenhuma conversa ainda.</div>'}
-      <div class="card" style="margin-top:16px"><div class="campo" style="margin-top:0"><label for="msg">Escrever para a ${esc(c.nome)}</label><textarea id="msg" data-campo="rascunho" placeholder="Uma dúvida, um pedido de conversa ou uma mudança na vida de ${pl('vocês', 'você')}">${esc(UI.rascunho)}</textarea></div>
-      <div class="entre"><span class="mut">A resposta chega aqui e no WhatsApp.</span><button class="btn" data-acao="enviar">Enviar</button></div></div></div>`
+  const conversas = c ? `<div class="rotulo">As conversas</div><div style="max-width:720px">${X.conversas.filter(m => m.em.slice(0, 10) <= HOJE).map(m => `<div class="msg ${m.quem === 'consultora' ? 'dela' : 'minha'}">${esc(m.txt)}<small>${m.quem === 'consultora' ? esc(c.completo) : esc(nomeDe(m.quem))} · ${dataBR(m.em)}${m.quem !== 'consultora' && !m.respondida ? ' · aguardando a resposta, em até 2 dias úteis' : ''}</small></div>`).join('') || '<div class="mut">Nenhuma conversa ainda.</div>'}
+      <div class="card" style="margin-top:16px"><div class="campo" style="margin-top:0"><label for="msg">${CONSULTOR ? 'Responder a ' + esc(nomesJuntos(R.domicilio.membros.map(m => m.nome))) : 'Escrever para a ' + esc(c.nome)}</label><textarea id="msg" data-campo="rascunho" placeholder="${CONSULTOR ? 'A resposta sai com o seu nome e tira da fila as perguntas em aberto' : 'Uma dúvida, um pedido de conversa ou uma mudança na vida de ' + pl('vocês', 'você')}">${esc(UI.rascunho)}</textarea></div>
+      <div class="entre"><span class="mut">${CONSULTOR ? 'Você escreve como ' + esc(c.completo) + '.' : 'A resposta chega aqui e no WhatsApp.'}</span><button class="btn" data-acao="enviar">${CONSULTOR ? 'Responder' : 'Enviar'}</button></div></div></div>`
     : `<div class="rotulo">Enquanto isso</div><div class="card" style="max-width:720px"><h3>As lives mensais de planejamento</h3><p class="peq" style="margin:0">Uma vez por mês, ao vivo e gravada, com o passo de cada momento de vida e gente da Nord respondendo.</p></div>`;
   const agenda = AGENDA_AREA.cartoes();
   return `<div class="grade2" style="align-items:stretch">${servico}${encontro}</div>${agenda ? `<div class="grade2" style="align-items:start;margin-top:12px">${agenda}</div>` : ''}${blocoReunioes()}${niveis}${conversas}`;
@@ -4733,7 +4735,10 @@ function desenhar() {
   if (desenhar.ultima === location.hash) window.scrollTo(0, topo);
   desenhar.ultima = location.hash;
 }
-function desenharFolha() {
+// trocar a folha tira do documento o campo em foco, e o navegador dispara o "change" dele no meio da troca: esse segundo
+// desenho, aninhado, quebrava o primeiro (NotFoundError). O estado já foi guardado no "input"; o aninhado não é preciso
+function desenharFolha() { if (desenharFolha.em) return; desenharFolha.em = true; try { folhaNaTela(); } finally { desenharFolha.em = false; } }
+function folhaNaTela() {
   const f = document.getElementById('folha-raiz');
   if (UI.folha && UI.folha.lancar) { f.innerHTML = `<div class="veu" data-acao="fechar-fora"><div class="folha" role="dialog" aria-modal="true" aria-label="Lançar um mês">${folhaLancar()}</div></div>`; return; }
   if (UI.folha && UI.folha.sobra != null) { f.innerHTML = `<div class="veu" data-acao="fechar-fora"><div class="folha" role="dialog" aria-modal="true" aria-label="Não precisa poupar mais">${folhaSobra()}</div></div>`; return; }
@@ -4856,7 +4861,7 @@ document.addEventListener('click', async ev => {
   if (acao === 'fiz-rapido') { UI.folha = { id: a.dataset.id }; await responder('feita'); return; }
   if (acao === 'fechar' || acao === 'fechar-fora') { UI.folha = null; if (location.hash.startsWith('#tarefa/')) history.replaceState(null, '', '#tarefas'); desenhar(); return; }
   if (acao === 'modo') { Object.assign(UI.folha, { modo: a.dataset.v || null, saida: null }); desenharFolha(); return; }
-  if (acao === 'saida') { UI.folha.saida = a.dataset.v; desenharFolha(); return; }
+  if (acao === 'saida') { UI.folha.saida = a.dataset.v; desenharFolha(); const on = document.querySelector('.folha .saida.on'); if (on) on.scrollIntoView({ block: 'center' }); return; }
   if (acao === 'ver-por-obj') { UI.folha.porObj = !UI.folha.porObj; desenharFolha(); return; }
   if (acao === 'responder') { await responder(a.dataset.v); return; }
   if (acao === 'quiz') { const id = a.dataset.m, q = +a.dataset.q, st = UI.quiz[id] = UI.quiz[id] || {}; if (st[q] != null) return; st[q] = +a.dataset.v; UI.ultimaQ = { m: id, q }; const antes = ganhas();
@@ -4891,8 +4896,11 @@ document.addEventListener('click', async ev => {
   if (acao === 'desfazer') { if (UI.desfazer) { X = JSON.parse(UI.desfazer); UI.desfazer = null; await ARMAZEM.gravar('execucao', X); } UI.toast = null; desenhar(); return; }
   if (acao === 'enviar') {
     const txt = UI.rascunho.trim(); if (!txt) return;
-    X.conversas.push({ em: AGORA(), quem: MEMBRO(), txt, origem: 'Conversas' }); UI.rascunho = '';
-    await ARMAZEM.gravar('execucao', X); avisar(`Enviado. A ${R.consultora.nome} responde em até 2 dias úteis.`); desenhar(); return;
+    // o planejador, na área vista por ele, responde como ele mesmo: a resposta fecha as perguntas que esperavam
+    if (CONSULTOR) { X.conversas.forEach(m => { if (m.quem !== 'consultora' && !m.respondida) m.respondida = true; }); X.conversas.push({ em: AGORA(), quem: 'consultora', txt, origem: 'Conversas' }); }
+    else X.conversas.push({ em: AGORA(), quem: MEMBRO(), txt, origem: 'Conversas' });
+    UI.rascunho = '';
+    await ARMAZEM.gravar('execucao', X); avisar(CONSULTOR ? 'Resposta enviada.' : `Enviado. A ${R.consultora.nome} responde em até 2 dias úteis.`); desenhar(); return;
   }
   // as calculadoras: as opções gravam no rascunho; "Gravar" leva tudo ao vetor
   if (acao === 'calc-op') { const ar = a.dataset.area; UI.calc[ar] = UI.calc[ar] || {}; UI.calc[ar][a.dataset.c] = a.dataset.v; desenhar(); return; }
@@ -4923,7 +4931,9 @@ document.addEventListener('click', async ev => {
     if (n('entradas') == null || n('fixas') == null || n('ajustaveis') == null) { avisar('Entradas, fixas e ajustáveis são os três números do mês.'); desenhar(); return; }
     const origem = quemGrava() + ' lançou em ' + dataBRano(HOJE);
     X.realizado.orcamento[mes] = { entradas: n('entradas'), fixas: n('fixas'), ajustaveis: n('ajustaveis'), origem };
-    if (n('financeiro') != null) X.realizado.patrimonio[mes] = { financeiro: n('financeiro'), bens: n('bens') || 0, participacoes: n('participacoes') || 0, dividas: n('dividas') || 0, origem };
+    // campo em branco é "não mudou": vale o último registro até aquele mês e, sem ele, o valor de hoje (nunca zero)
+    const PAT = ['financeiro', 'bens', 'participacoes', 'dividas'], ant = (Object.entries(X.realizado.patrimonio || {}).filter(([m]) => m <= mes).sort().pop() || [])[1];
+    if (PAT.some(k => n(k) != null)) X.realizado.patrimonio[mes] = Object.assign(Object.fromEntries(PAT.map(k => [k, n(k) != null ? n(k) : ant ? +ant[k] || 0 : +fv(k) || 0])), { origem });
     await ARMAZEM.gravar('execucao', X); UI.folha = null; avisar(`${mesAnoL(mes)} lançado.`); desenhar(); return; }
   // criar a conta (visitante)
   if (acao === 'criar-conta') { UI.folha = { conta: true }; desenharFolha(); return; }
