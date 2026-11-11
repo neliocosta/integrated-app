@@ -75,14 +75,70 @@ h2{font:600 17px Sora,sans-serif;color:var(--nl-navy-900);margin:0 0 10px}
 .ilustra img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease}
 .ilustra.tem img{opacity:1}
 /* a carteira: um cliente por linha */
-.cli{background:var(--nl-white);border-radius:var(--r-card);box-shadow:var(--shadow-card);padding:16px 22px;display:grid;grid-template-columns:42px minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) auto;gap:14px 16px;align-items:center;margin-bottom:12px}
-.cli .pe{grid-column:1/-1;border-top:1px solid var(--nl-sand);padding-top:12px}
+/* a carteira em escala (11/11/2026): busca, filtros e uma linha por cliente, para a base de 120 caber e se achar */
+.filtros{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0 10px}
+.filtros .busca{flex:1 1 280px;position:relative}
+.filtros .busca input{width:100%;height:42px;border:0;border-radius:var(--r-controle);box-shadow:inset 0 0 0 1px var(--nl-gray-300);background:var(--nl-white);padding:0 14px 0 40px;font:500 14px 'DM Sans',sans-serif;color:var(--nl-navy-900)}
+.filtros .busca input:focus{outline:0;box-shadow:inset 0 0 0 2px var(--nl-navy-900)}
+.filtros .busca svg{position:absolute;left:13px;top:12px;width:18px;height:18px;stroke:var(--nl-gray-500);fill:none;stroke-width:1.8;stroke-linecap:round;pointer-events:none}
+.filtros select{height:42px;border:0;border-radius:var(--r-controle);box-shadow:inset 0 0 0 1px var(--nl-gray-300);background:var(--nl-white);padding:0 12px;font:500 13.5px 'DM Sans',sans-serif;color:var(--nl-navy-900);max-width:100%}
+.rapidos{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px}
+.rapidos button{border:0;background:var(--nl-white);box-shadow:inset 0 0 0 1px var(--nl-gray-300);border-radius:9999px;padding:6px 12px;min-height:32px;font:600 12.5px 'DM Sans',sans-serif;color:var(--nl-navy-900);cursor:pointer}
+.rapidos button[aria-pressed=true]{background:var(--nl-navy-900);color:#fff;box-shadow:none}
+.rapidos button i{font-style:normal;font-weight:500;opacity:.7;margin-left:5px}
+.rapidos .conta{margin-left:auto;font-size:12.5px;color:var(--nl-gray-500)}
+.tab-cli{background:var(--nl-white);border-radius:var(--r-card);box-shadow:var(--shadow-card);overflow:visible}
+.cli{display:grid;grid-template-columns:36px minmax(0,1.6fr) minmax(0,1.1fr) minmax(0,1fr) minmax(0,1.2fr) auto;gap:6px 14px;align-items:center;padding:10px 16px;border-top:1px solid var(--nl-sand);position:relative}
+.cli:first-child{border-top:0}
+.cli:hover{background:var(--nl-cream,#FDFCFA)}
+.cli.cab{padding:9px 16px;font:600 11px 'DM Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--nl-gray-500)}
+.cli.cab:hover{background:transparent}
+.cli .ini{width:34px;height:34px;font-size:12.5px}
+.cli .nome b{display:block;font:600 14.5px Sora,sans-serif;color:var(--nl-navy-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cli .nome a{text-decoration:none;color:inherit}
+.cli .nome a::after{content:"";position:absolute;inset:0}
+.cli .nome a:hover{text-decoration:underline;text-underline-offset:3px}
+.cli .nome small{font-size:12px;color:var(--nl-gray-500)}
+.cli .col{font-size:13px;color:var(--nl-navy-900);min-width:0}
+.cli .col .leg{display:block}
+.cli .acoes{display:flex;gap:6px;align-items:center;position:relative;z-index:1}
+.cli .al{color:var(--nl-atencao);font-weight:600}
+.menu{position:relative}
+.menu summary{list-style:none;cursor:pointer;width:32px;height:32px;border-radius:var(--r-peq);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px var(--nl-gray-300);font:600 16px/1 'DM Sans',sans-serif;color:var(--nl-navy-900);background:var(--nl-white)}
+.menu summary::-webkit-details-marker{display:none}
+.menu[open] summary{box-shadow:inset 0 0 0 1px var(--nl-navy-900)}
+.menu .pop{position:absolute;right:0;top:38px;z-index:20;background:var(--nl-white);border-radius:var(--r-bloco);box-shadow:0 14px 40px -12px rgba(19,31,46,.35),0 0 0 1px var(--nl-sand);padding:6px;min-width:190px;display:flex;flex-direction:column}
+.menu .pop a{padding:9px 12px;border-radius:var(--r-peq);text-decoration:none;color:var(--nl-navy-900);font:500 13.5px 'DM Sans',sans-serif}
+.menu .pop a:hover{background:var(--nl-sand)}
+.mais-cli{display:flex;justify-content:center;padding:14px}
+/* as metas do semestre: o número, o nível de 1 a 5 e o "i" que explica cada uma, como na área do consultor em produção */
+.metas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:12px}
+.meta{background:var(--nl-white);border-radius:var(--r-bloco);box-shadow:var(--shadow-card);padding:14px 16px;position:relative;border-top:2.5px solid var(--nl-sand)}
+.meta.tem{border-top-color:var(--nl-orange-500)}
+.meta .num{display:block;font:600 24px/1.1 Sora,sans-serif;color:var(--nl-navy-900);letter-spacing:-.02em}
+.meta b{display:block;font:600 11px 'DM Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--nl-gray-500);margin-top:6px}
+.meta p{font-size:12.5px;color:var(--nl-navy-900);margin-top:3px;line-height:1.4}
+.meta .nivel{display:flex;gap:4px;margin-top:10px}
+.meta .nivel i{flex:1;height:5px;border-radius:3px;background:var(--nl-sand)}
+.meta .nivel i.on{background:var(--nl-orange-500)}
+.meta .prox{font-size:12px;color:var(--nl-gray-500);margin-top:8px}
+.info{position:absolute;right:12px;top:12px}
+.info summary{list-style:none;cursor:pointer;width:22px;height:22px;border-radius:50%;background:var(--nl-sand);color:var(--nl-navy-900);font:600 12px/22px 'DM Sans',sans-serif;text-align:center}
+.info summary::-webkit-details-marker{display:none}
+.info[open] summary{background:var(--nl-navy-900);color:#fff}
+.info .pop{position:absolute;right:0;top:28px;z-index:20;width:min(300px,78vw);background:var(--nl-navy-900);color:#fff;border-radius:var(--r-bloco);padding:12px 14px;font-size:12.5px;line-height:1.45;box-shadow:0 14px 40px -12px rgba(19,31,46,.5)}
+.info .pop b{display:block;color:#fff;font:600 12.5px 'DM Sans',sans-serif;letter-spacing:0;text-transform:none;margin:0 0 4px}
+@media (max-width:860px){
+  .metas{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cli{grid-template-columns:36px minmax(0,1fr) auto;row-gap:2px}
+  .cli.cab{display:none}
+  .cli .col{grid-column:2/3;font-size:12.5px}
+  .cli .acoes{grid-column:3;grid-row:1}
+}
+.cli-antiga{background:var(--nl-white);border-radius:var(--r-card);box-shadow:var(--shadow-card);padding:16px 22px;display:grid;grid-template-columns:42px minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) auto;gap:14px 16px;align-items:center;margin-bottom:12px}
 .ini{width:42px;height:42px;border-radius:50%;background:var(--nl-peach-100);color:var(--nl-orange-600);display:flex;align-items:center;justify-content:center;font:600 15px Sora,sans-serif}
-.cli .nome b{display:block;font:600 16px Sora,sans-serif;color:var(--nl-navy-900);margin-bottom:4px;text-wrap:balance}
 .cli .nome a{text-decoration:none;color:inherit}
 .cli .nome a:hover{text-decoration:underline;text-underline-offset:3px}
-.cli .col small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--nl-gray-500);margin-bottom:2px}
-.cli .col span{color:var(--nl-navy-900);font-size:13.5px}
 .tag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:9999px;background:var(--nl-sand);color:var(--nl-gray-500);font:600 11px 'DM Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;vertical-align:3px;white-space:nowrap}
 .atalhos{display:flex;gap:6px;flex-wrap:wrap}
 /* o pipeline: as 20 etapas em colunas, rolando para o lado */
@@ -239,7 +295,27 @@ function cliente(id) {
 }
 let AGENDA = [];
 function lerAgenda() { AGENDA = []; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith('nl-db:agAgendamentos/')) try { const v = JSON.parse(localStorage.getItem(k)); if (v && v.dados) AGENDA.push(v.dados); } catch (e) { } } }
-const clientes = () => { lerAgenda(); return LOJA.ids().map(cliente).sort((a, b) => (!!a.exemplo - !!b.exemplo) || String(b.em || '').localeCompare(String(a.em || '')) || a.id.localeCompare(b.id)); };
+// a base em escala: ?demo=120 acrescenta clientes de demonstração, só na memória (nada é gravado), com nomes inventados,
+// espalhados pelas etapas como numa carteira de verdade. Servem para ver a busca, os filtros e o pipeline cheios
+const DEMO_N = Math.min(400, +(new URLSearchParams(location.search).get('demo') || 0) || 0);
+function clientesDemo(n) {
+  const PN = ['Ana', 'Bruno', 'Carla', 'Diego', 'Elisa', 'Fábio', 'Gabriela', 'Heitor', 'Isabela', 'João', 'Karina', 'Leandro', 'Marina', 'Nelson', 'Olívia', 'Paulo', 'Queila', 'Rafael', 'Sofia', 'Tiago', 'Úrsula', 'Vítor', 'Wanda', 'Xavier', 'Yara', 'Zeca'],
+    SN = ['Almeida', 'Barros', 'Cardoso', 'Duarte', 'Esteves', 'Fonseca', 'Guimarães', 'Henriques', 'Ibarra', 'Jardim', 'Klein', 'Lacerda', 'Moraes', 'Nogueira', 'Oliveira', 'Pacheco', 'Queiroz', 'Ribeiro', 'Siqueira', 'Teixeira', 'Uchoa', 'Vasconcelos'];
+  // a distribuição pelas etapas imita a de uma carteira real: muita gente no topo do funil e na execução
+  const PESO = [34, 4, 8, 3, 3, 14, 9, 2, 2, 10, 5, 2, 3, 3, 2, 3, 2, 3, 3, 5], TOT = PESO.reduce((a, b) => a + b, 0), hoje = hojeDe('demo');
+  let x = 7; const rnd = () => (x = (x * 1103515245 + 12345) % 2147483648) / 2147483648;
+  return Array.from({ length: n }, (_, k) => {
+    let r = rnd() * TOT, etapa = 0; while (r > PESO[etapa]) r -= PESO[etapa++];
+    const nome = PN[Math.floor(rnd() * PN.length)] + ' ' + SN[Math.floor(rnd() * SN.length)] + (rnd() < .35 ? ' e ' + PN[Math.floor(rnd() * PN.length)] : ''), id = 'demo-' + (k + 1);
+    const ate = rnd() < .45 ? addD(hoje, Math.round(rnd() * 50) - 18) : null, esp = rnd() < .22 ? 1 + Math.floor(rnd() * 3) : 0, temReuniao = rnd() < .18, exame = rnd() < .7 ? addD(hoje, -Math.round(rnd() * 400)) : null;
+    const c = { id, hoje, nome, demo: true, exemplo: 'demonstração', plano: null, exec: {}, vetor: null, clinica: null, at: { etapa, etapaAte: ate, etapaEm: addD(hoje, -Math.round(rnd() * 90)) }, versoes: [], membros: [], proposta: null, em: '',
+      sugerida: etapa, etapa, tarefas: [], minhas: [], daColeta: [], conversas: [], ajustes: [], pauta: [], exames: exame ? [{ data: exame, nota: 40 + Math.round(rnd() * 50) }] : [],
+      reuniao: temReuniao ? { inicio: addD(hoje, 1 + Math.round(rnd() * 20)) + 'T' + String(9 + Math.floor(rnd() * 8)).padStart(2, '0') + ':00:00', regras: { nomePublico: etapa < 4 ? 'Apresentação do plano' : 'Acompanhamento' } } : null, espera: [] };
+    for (let i = 0; i < esp; i++) c.espera.push({ txt: ['Mensagem sem resposta', 'Minha tarefa: enviar o resumo da reunião', 'Tarefa pedida ao cliente em atraso'][i % 3], href: '#cliente/' + id, atrasada: i === 2 });
+    if (ate && ate < hoje) c.espera.push({ txt: 'Etapa "' + ETAPAS[etapa] + '" vencida em ' + dataBR(ate), href: '#cliente/' + id, atrasada: true });
+    return c; });
+}
+const clientes = () => { lerAgenda(); return LOJA.ids().map(cliente).concat(DEMO_N ? clientesDemo(DEMO_N) : []).sort((a, b) => (!!a.exemplo - !!b.exemplo) || String(b.em || '').localeCompare(String(a.em || '')) || a.id.localeCompare(b.id)); };
 const vence = c => { const ate = c.at.etapaAte; if (!ate) return ''; const n = difD(c.hoje, ate); return n < 0 ? `<span class="chip at">vencido há ${-n} ${n === -1 ? 'dia' : 'dias'}</span>` : `<span class="chip">vence em ${n} ${n === 1 ? 'dia' : 'dias'}</span>`; };
 const quandoReuniao = a => a ? dataHora(a.inicio) + (a.regras && a.regras.nomePublico ? ' · ' + a.regras.nomePublico : '') : '';
 
@@ -256,38 +332,86 @@ const cabecalho = (L, tela) => { const esp = L.reduce((s, c) => s + c.espera.len
     <div class="botoes"><label class="btn btn-secondary" title="Um plano em JSON (o do portal, exportado, ou um que uma IA extraiu dos documentos do cliente) entra como um cliente novo; serve também para recuperar uma coleta de um arquivo">Importar JSON<input type="file" accept=".json,application/json" id="arqImportar"></label><a class="btn btn-novo" id="btnNovo" href="#">+ Novo cliente</a></div></div>
   <div class="abas" role="navigation" aria-label="Visões da carteira">${[['carteira', 'Carteira'], ['pipeline', 'Pipeline'], ['espera', 'Espera por mim']].map(([id, n]) => `<a href="#${id}"${tela === id ? ' aria-current="page"' : ''}>${n}${id === 'espera' && esp ? `<i>${esp}</i>` : ''}</a>`).join('')}</div>`; };
 
-function telaCarteira(L) {
+// o que a busca e os filtros guardam enquanto a página está aberta
+const FILTRO = { q: '', etapa: '', so: '', ordem: 'prioridade', n: 40, vencidos: false };
+const semAcento = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const GRUPOS_ETAPA = [['g:funil', 'Até a entrega do relatório', [0, 1, 2, 3]], ['g:exec', 'Aprovação e execução', [4, 5, 6]], ['g:acomp', 'Acompanhamentos e renovação', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]], ['g:fim', 'Consultoria concluída', [19]]];
+const vencido = c => !!(c.at.etapaAte && c.at.etapaAte < c.hoje);
+const exameVelho = c => !c.exames.length || difD(c.exames[0].data, c.hoje) > 183;
+const coletaAberta = c => !!(c.plano && c.plano.coleta && c.plano.coleta.status !== 'finalizada');
+const RAPIDOS = [['espera', 'Esperando por mim', c => c.espera.length > 0], ['vencido', 'Etapa vencida', vencido], ['reuniao', 'Com reunião marcada', c => !!c.reuniao], ['semreuniao', 'Sem reunião marcada', c => !c.reuniao], ['exame', 'Exame desatualizado', exameVelho], ['coleta', 'Coleta em andamento', coletaAberta]];
+function filtrados(L) {
+  const q = semAcento(FILTRO.q.trim()), g = GRUPOS_ETAPA.find(x => x[0] === FILTRO.etapa), so = RAPIDOS.find(r => r[0] === FILTRO.so);
+  const l = L.filter(c => (!q || semAcento(c.nome + ' ' + c.id + ' ' + ((c.plano && c.plano.email) || '')).includes(q)) && (FILTRO.etapa === '' || (g ? g[2].includes(c.etapa) : c.etapa === +FILTRO.etapa)) && (!so || so[2](c)));
+  const por = { nome: (a, b) => a.nome.localeCompare(b.nome, 'pt-BR'), etapa: (a, b) => a.etapa - b.etapa || a.nome.localeCompare(b.nome, 'pt-BR'),
+    reuniao: (a, b) => (a.reuniao ? a.reuniao.inicio : '9') < (b.reuniao ? b.reuniao.inicio : '9') ? -1 : 1,
+    prioridade: (a, b) => (vencido(b) - vencido(a)) || (b.espera.length - a.espera.length) || ((a.at.etapaAte || '9') < (b.at.etapaAte || '9') ? -1 : (a.at.etapaAte || '9') > (b.at.etapaAte || '9') ? 1 : 0) || a.nome.localeCompare(b.nome, 'pt-BR') };
+  return l.sort(por[FILTRO.ordem] || por.prioridade);
+}
+const menuAtalhos = c => `<details class="menu"><summary aria-label="Atalhos de ${escH(c.nome)}">&#8943;</summary><div class="pop"><a data-tela href="${url('tela-consultor.html', c.id, '&coleta')}">Coleta</a><a data-tela href="${url('tela-consultor.html', c.id)}">Montar o plano</a><a data-tela href="${url('evolucao-patrimonial.html', c.id, '&consultor')}">Relatório</a><a data-tela href="${url('area-cliente.html', c.id, '&consultor')}">Área do cliente</a><a data-tela href="${url('acompanhamento.html', c.id, '&consultor')}">Acompanhamento</a></div></details>`;
+// a lista (os filtros rápidos, a contagem e as linhas): redesenhada sozinha a cada tecla, para a busca não perder o foco
+function htmlLista(L) {
+  const F = filtrados(L), mostra = F.slice(0, FILTRO.n);
   const linha = c => { const ab = c.tarefas.filter(t => t.aberta).length, atr = c.tarefas.filter(t => t.atrasada).length;
     return `<div class="cli"><div class="ini">${escH(iniciais(c.nome))}</div>
-      <div class="nome"><b><a href="#cliente/${encodeURIComponent(c.id)}">${escH(c.nome)}</a>${c.exemplo ? `<span class="tag">exemplo · ${c.exemplo}</span>` : ''}</b><span class="chip mar">${ETAPAS[c.etapa]}</span> ${vence(c)}</div>
-      <div class="col"><small>Próxima reunião</small><span>${c.reuniao ? escH(quandoReuniao(c.reuniao)) : 'sem reunião marcada'}</span></div>
-      <div class="col"><small>Tarefas e alertas</small><span>${ab ? ab + (ab === 1 ? ' tarefa aberta' : ' tarefas abertas') + (atr ? `, ${atr} em atraso` : '') : 'nenhuma tarefa aberta'}${c.espera.length ? ` · <a href="#cliente/${encodeURIComponent(c.id)}">${c.espera.length} esperando por você</a>` : ''}</span></div>
-      <div class="abrir"><a class="btn btn-terc btn-peq" href="#cliente/${encodeURIComponent(c.id)}">Abrir a ficha</a></div>
-      <div class="pe">${atalhos(c, true)}</div></div>`; };
-  const seis = L.filter(c => !c.exames.length || difD(c.exames[0].data, c.hoje) > 183), coletas = L.filter(c => c.plano && c.plano.coleta && c.plano.coleta.status !== 'finalizada');
-  const reunioes = L.filter(c => c.reuniao).sort((a, b) => a.reuniao.inicio < b.reuniao.inicio ? -1 : 1);
-  const lista = (itens, vazio) => itens.length ? itens.join('') : `<p class="vazio">${vazio}</p>`;
-  return `<div class="cartao breve"><div class="cab-cartao"><h2>Metas do semestre</h2><span class="chip">em breve</span></div>
-      <div class="grade4" style="margin-top:10px">${['Renovação', 'NPS', 'Indicações', 'Cobertura da base'].map(m => `<div class="meta"><b>${m}</b><span class="leg">nível de 1 a 5</span></div>`).join('')}</div></div>
-    <h2 style="margin-top:22px">Clientes <span class="leg" style="font-weight:400">${L.length}</span></h2>${L.map(linha).join('') || `<div class="cartao vazio-ilu ilustra-vaga">${ilustra('consultor-base-vazia')}<b>Nenhum cliente ainda</b><p>Comece por "+ Novo cliente": ele abre a reunião de coleta.</p></div>`}
+      <div class="nome"><b><a href="#cliente/${encodeURIComponent(c.id)}">${escH(c.nome)}</a></b>${c.exemplo ? `<small>${c.demo ? '' : 'exemplo · '}${c.exemplo}</small>` : ''}</div>
+      <div class="col"><span class="chip mar">${ETAPAS[c.etapa]}</span> ${vence(c)}</div>
+      <div class="col">${c.reuniao ? escH(quandoReuniao(c.reuniao)) : '<span class="leg">sem reunião</span>'}</div>
+      <div class="col">${c.espera.length ? `<span class="al">${c.espera.length} esperando por você</span>` : ''}${ab ? `<span class="leg">${ab} ${ab === 1 ? 'tarefa aberta' : 'tarefas abertas'}${atr ? ', ' + atr + ' em atraso' : ''}</span>` : c.espera.length ? '' : '<span class="leg">em dia</span>'}</div>
+      <div class="acoes">${menuAtalhos(c)}</div></div>`; };
+  const rapidos = `<div class="rapidos" role="group" aria-label="Filtros rápidos">${RAPIDOS.map(([id, n, f]) => `<button type="button" data-so="${id}" aria-pressed="${FILTRO.so === id}">${n}<i>${L.filter(f).length}</i></button>`).join('')}<span class="conta">${F.length === L.length ? L.length + (L.length === 1 ? ' cliente' : ' clientes') : F.length + ' de ' + L.length}${FILTRO.q || FILTRO.etapa !== '' || FILTRO.so ? ' · <button type="button" class="btn-link" data-limpar style="border:0;background:none;cursor:pointer;font:inherit;text-decoration:underline">limpar</button>' : ''}</span></div>`;
+  if (!L.length) return `<div class="cartao vazio-ilu ilustra-vaga">${ilustra('consultor-base-vazia')}<b>Nenhum cliente ainda</b><p>Comece por "+ Novo cliente": ele abre a reunião de coleta.</p></div>`;
+  return rapidos + (F.length ? `<div class="tab-cli"><div class="cli cab"><span></span><span>Cliente</span><span>Etapa</span><span>Próxima reunião</span><span>Tarefas e alertas</span><span></span></div>${mostra.map(linha).join('')}${F.length > mostra.length ? `<div class="mais-cli"><button type="button" class="btn btn-secondary" data-mais>Mostrar mais ${Math.min(40, F.length - mostra.length)} · faltam ${F.length - mostra.length}</button></div>` : ''}</div>`
+    : `<div class="cartao vazio"><b style="color:var(--nl-navy-900)">Nenhum cliente com esses filtros</b><p class="leg" style="margin-top:4px">Tente outro nome ou limpe os filtros.</p></div>`);
+}
+// as metas do semestre: o que a base sabe contar (cobertura e renovação) aparece com o número; NPS e indicações dizem o que
+// falta para aparecer. O "i" de cada uma explica o que é e como se conta, como na área do consultor em produção
+function metasDoSemestre(L) {
+  const reais = L.filter(c => !c.exemplo || c.demo);
+  const esperados = reais.filter(c => c.demo ? c.etapa >= 7 && c.etapa <= 18 : c.versoes.length && difD(c.versoes[c.versoes.length - 1].em.slice(0, 10), c.hoje) > 183), feitos = esperados.filter(c => c.demo ? [10, 13, 18].includes(c.etapa) || c.etapa > 10 : c.versoes.length >= 2);
+  const aguard = reais.filter(c => c.etapa === 14).length, renov = reais.filter(c => c.etapa >= 15 && c.etapa <= 18).length;
+  const nivel = p => p == null ? 0 : Math.max(1, Math.min(5, Math.ceil(p * 5 - 1e-9)));
+  const M = [
+    { t: 'Renovação', p: aguard + renov ? renov / (aguard + renov) : null, d: aguard + renov ? `${renov} de ${aguard + renov} renovaram` : 'nenhum contrato vencendo neste semestre', i: 'Dos clientes cujo contrato chegou ao fim no semestre, quantos renovaram. Aqui, conta quem passou de "Aguardando renovação" para um novo ciclo de acompanhamento.' },
+    { t: 'NPS', p: null, d: 'sem respostas registradas', i: 'A nota das pesquisas de satisfação respondidas pelos seus clientes no semestre. Em produção, aparece a partir de 5 clientes respondendo. As pesquisas ainda não são enviadas por esta base.' },
+    { t: 'Indicações', p: null, d: 'sem indicações registradas', i: 'Os clientes novos que chegaram pelo seu link de indicação no semestre. O link de indicação ainda não existe nesta base.' },
+    { t: 'Cobertura da base', p: esperados.length ? feitos.length / esperados.length : null, d: esperados.length ? `${feitos.length} de ${esperados.length} acompanhamentos em dia` : 'nenhum acompanhamento esperado', i: 'Dos acompanhamentos esperados no semestre (um a cada seis meses depois da entrega do relatório), quantos foram feitos. Um cliente sem a data de entrega do relatório fica fora da conta.' }];
+  return `<div class="cab-cartao" style="margin-top:4px"><h2>Metas do semestre</h2><span class="leg">${+hojeDe('x').slice(5, 7) <= 6 ? '1º' : '2º'} semestre de ${hojeDe('x').slice(0, 4)}</span></div>
+    <div class="metas">${M.map(m => { const n = nivel(m.p); return `<div class="meta${m.p != null ? ' tem' : ''}"><details class="info"><summary aria-label="O que é ${m.t}">i</summary><div class="pop"><b>${m.t}</b>${m.i}${m.p != null ? ' O nível, de 1 a 5, sobe a cada 20 pontos percentuais; a régua do bônus de produção ainda não foi trazida para cá.' : ''}</div></details>
+      <span class="num">${m.p != null ? Math.round(m.p * 100) + '%' : '—'}</span><b>${m.t}</b><p>${m.d}</p><div class="nivel" role="img" aria-label="${n ? 'nível ' + n + ' de 5' : 'sem nível ainda'}">${[1, 2, 3, 4, 5].map(k => `<i class="${k <= n ? 'on' : ''}"></i>`).join('')}</div><div class="prox">${n ? 'nível ' + n + ' de 5' + (n === 5 ? ' · no topo' : '') : 'aparece quando houver dados'}</div></div>`; }).join('')}</div>`;
+}
+function telaCarteira(L) {
+  const seis = L.filter(exameVelho), coletas = L.filter(coletaAberta), reunioes = L.filter(c => c.reuniao).sort((a, b) => a.reuniao.inicio < b.reuniao.inicio ? -1 : 1);
+  const lista = (itens, vazio, so) => itens.length ? itens.slice(0, 5).join('') + (itens.length > 5 ? `<p style="margin-top:8px"><button type="button" class="btn btn-secondary btn-peq" data-so="${so}" data-rolar>Ver os ${itens.length} na lista</button></p>` : '') : `<p class="vazio">${vazio}</p>`;
+  const opt = (v, n) => `<option value="${v}"${String(FILTRO.etapa) === String(v) ? ' selected' : ''}>${n}</option>`;
+  return metasDoSemestre(L) + `
+    <h2 id="clientes" style="margin-top:26px">Clientes</h2>
+    <div class="filtros"><label class="busca"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" id="buscaCli" data-filtro="q" value="${escH(FILTRO.q)}" placeholder="Buscar cliente pelo nome ou e-mail" aria-label="Buscar cliente" autocomplete="off"></label>
+      <select data-filtro="etapa" aria-label="Filtrar por etapa">${opt('', 'Todas as etapas')}<optgroup label="Por fase">${GRUPOS_ETAPA.map(g => opt(g[0], g[1])).join('')}</optgroup><optgroup label="Por etapa">${ETAPAS.map((e, i) => opt(i, e)).join('')}</optgroup></select>
+      <select data-filtro="ordem" aria-label="Ordenar">${[['prioridade', 'O que pede atenção primeiro'], ['nome', 'Nome, de A a Z'], ['etapa', 'Etapa do pipeline'], ['reuniao', 'Próxima reunião']].map(([v, n]) => `<option value="${v}"${FILTRO.ordem === v ? ' selected' : ''}>${n}</option>`).join('')}</select></div>
+    <div id="listaCli">${htmlLista(L)}</div>
     <div class="grade" style="margin-top:22px">
-      <div class="cartao"><h2>Reuniões marcadas</h2>${lista(reunioes.map(c => `<div class="linha"><div class="tx"><b>${escH(quandoReuniao(c.reuniao))}</b><small><a href="#cliente/${encodeURIComponent(c.id)}">${escH(c.nome)}</a></small></div></div>`), 'Nenhuma reunião marcada na agenda.')}<p style="margin-top:8px"><a href="agendamento.html" data-tela>Abrir a agenda</a></p></div>
-      <div class="cartao"><h2>Exames desatualizados</h2><p class="leg" style="margin-bottom:4px">Sem exame de saúde financeira, ou com o último há mais de seis meses.</p>${lista(seis.map(c => `<div class="linha"><div class="tx"><b><a href="#cliente/${encodeURIComponent(c.id)}">${escH(c.nome)}</a></b><small>${c.exames.length ? 'último em ' + dataBR(c.exames[0].data) + ', nota ' + c.exames[0].nota : 'nenhum exame'}</small></div></div>`), 'Todos com o exame em dia.')}</div>
-      <div class="cartao"><h2>Coletas em andamento</h2>${lista(coletas.map(c => `<div class="linha"><div class="tx"><b><a href="#cliente/${encodeURIComponent(c.id)}">${escH(c.nome)}</a></b><small>coleta aberta, ainda não finalizada</small></div><a class="btn btn-secondary btn-peq" data-tela href="${url('tela-consultor.html', c.id, '&coleta')}">Continuar</a></div>`), 'Nenhuma coleta aberta.')}</div>
+      <div class="cartao"><h2>Reuniões marcadas</h2>${lista(reunioes.map(c => `<div class="linha"><div class="tx"><b>${escH(quandoReuniao(c.reuniao))}</b><small><a href="#cliente/${encodeURIComponent(c.id)}">${escH(c.nome)}</a></small></div></div>`), 'Nenhuma reunião marcada na agenda.', 'reuniao')}<p style="margin-top:8px"><a href="agendamento.html" data-tela>Abrir a agenda</a></p></div>
+      <div class="cartao"><h2>Exames desatualizados</h2><p class="leg" style="margin-bottom:4px">Sem exame de saúde financeira, ou com o último há mais de seis meses.</p>${lista(seis.map(c => `<div class="linha"><div class="tx"><b><a href="#cliente/${encodeURIComponent(c.id)}">${escH(c.nome)}</a></b><small>${c.exames.length ? 'último em ' + dataBR(c.exames[0].data) + ', nota ' + c.exames[0].nota : 'nenhum exame'}</small></div></div>`), 'Todos com o exame em dia.', 'exame')}</div>
+      <div class="cartao"><h2>Coletas em andamento</h2>${lista(coletas.map(c => `<div class="linha"><div class="tx"><b><a href="#cliente/${encodeURIComponent(c.id)}">${escH(c.nome)}</a></b><small>coleta aberta, ainda não finalizada</small></div><a class="btn btn-secondary btn-peq" data-tela href="${url('tela-consultor.html', c.id, '&coleta')}">Continuar</a></div>`), 'Nenhuma coleta aberta.', 'coleta')}</div>
       <div>${emBreve('NPS em aberto', 'As pesquisas de satisfação enviadas e ainda sem resposta.')}${emBreve('Programa contínuo', 'Os clientes do programa contínuo e o que vence em cada um.')}</div>
     </div>
     <div class="cartao breve" style="margin-top:8px"><h2>Mais da área do consultor</h2><p class="leg">Existem em produção e ainda não foram trazidos para cá:</p>
       ${[['Visão por papel', 'admin, escritório ou proprietário, e a carteira de outro consultor'], ['Link de indicação', 'para cadastrar clientes direto na sua carteira'], ['Resultados de campanha', ''], ['Cotações de seguros', ''], ['Consultores e escritórios, Pipeline Admin, Registro de ações, Ferramentas técnicas', 'por papel']].map(([t, s]) => `<div class="linha"><div class="tx"><b>${t}</b>${s ? `<small>${s}</small>` : ''}</div><span class="chip">em breve</span></div>`).join('')}</div>
     <p class="nota">${MODO_NUVEM ? 'Os planos ficam no banco deste link e abrem em qualquer computador com a sua conta. Só você, dono do link, vê esta lista.' : 'Neste computador, os planos ficam no navegador. No link publicado, ficam no banco do link e abrem em qualquer computador.'}
-      Para importar um plano em JSON (por exemplo, extraído por uma IA dos documentos do cliente), siga o <a href="ux/plano-exemplo.json" download="modelo-plano.json">modelo</a> e a seção "Formato do plano" do README.</p>`;
+      Para importar um plano em JSON (por exemplo, extraído por uma IA dos documentos do cliente), siga o <a href="ux/plano-exemplo.json" download="modelo-plano.json">modelo</a> e a seção "Formato do plano" do README.${DEMO_N ? ' Os clientes marcados "demonstração" são inventados e existem só nesta página (?demo=' + DEMO_N + ').' : ''}</p>`;
 }
 
 function telaPipeline(L) {
-  const vencidos = L.filter(c => c.at.etapaAte && c.at.etapaAte < c.hoje).length;
-  return `<p class="leg" style="margin-bottom:12px">As vinte etapas, do topo do funil à consultoria concluída. A etapa é a que você pôs na ficha; sem isso, a base sugere uma pelo que o cliente já tem. <b style="color:var(--nl-navy-900)">Vencidos: ${vencidos}</b></p>
-    <div class="quadro">${ETAPAS.map((e, i) => { const cs = L.filter(c => c.etapa === i);
-      return `<section class="coluna${cs.length ? '' : ' sem'}" aria-label="${e}"><h3>${e}<span>${cs.length || ''}</span></h3>${cs.map(c => `<a class="pcard" href="#cliente/${encodeURIComponent(c.id)}"><b>${escH(c.nome)}</b><small>${c.exemplo ? 'exemplo · ' + c.exemplo : 'Planejamento'}${c.at.etapaEm ? ' · desde ' + dataBR(c.at.etapaEm) : c.at.etapa == null ? ' · etapa sugerida' : ''}</small>${vence(c) ? `<small>${vence(c)}</small>` : ''}</a>`).join('')}</section>`; }).join('')}</div>`;
+  const q = semAcento(FILTRO.q.trim()), venc = L.filter(vencido).length, F = L.filter(c => (!q || semAcento(c.nome).includes(q)) && (!FILTRO.vencidos || vencido(c)));
+  const card = c => `<a class="pcard" href="#cliente/${encodeURIComponent(c.id)}"><b>${escH(c.nome)}</b><small>${c.exemplo ? (c.demo ? '' : 'exemplo · ') + c.exemplo : 'Planejamento'}${c.at.etapaEm ? ' · desde ' + dataBR(c.at.etapaEm) : c.at.etapa == null ? ' · etapa sugerida' : ''}</small>${vence(c) ? `<small>${vence(c)}</small>` : ''}</a>`;
+  return `<div class="filtros" style="margin-top:0"><label class="busca"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" id="buscaPipe" data-filtro="q" value="${escH(FILTRO.q)}" placeholder="Buscar cliente no pipeline" aria-label="Buscar cliente no pipeline" autocomplete="off"></label>
+      <div class="rapidos" style="margin:0"><button type="button" data-vencidos aria-pressed="${FILTRO.vencidos}">Vencidos<i>${venc}</i></button><span class="conta" style="margin-left:6px">${F.length === L.length ? L.length + ' clientes' : F.length + ' de ' + L.length}</span></div></div>
+    <div id="quadroPipe">${htmlQuadro(F, card)}</div>
+    <p class="leg" style="margin-top:6px">As vinte etapas, do topo do funil à consultoria concluída. A etapa é a que você pôs na ficha; sem isso, a base sugere uma pelo que o cliente já tem.</p>`;
 }
+const htmlQuadro = (F, card) => `<div class="quadro">${ETAPAS.map((e, i) => { const cs = F.filter(c => c.etapa === i).sort((a, b) => (vencido(b) - vencido(a)) || a.nome.localeCompare(b.nome, 'pt-BR'));
+  return `<section class="coluna${cs.length ? '' : ' sem'}" aria-label="${e}"><h3>${e}<span>${cs.length || ''}</span></h3>${cs.slice(0, 12).map(card).join('')}${cs.length > 12 ? `<details><summary class="btn btn-secondary btn-peq" style="width:100%;margin-top:8px">mais ${cs.length - 12}</summary><div style="margin-top:8px">${cs.slice(12).map(card).join('')}</div></details>` : ''}</section>`; }).join('')}</div>`;
 
 function telaEspera(L) {
   const itens = L.flatMap(c => c.espera.map(e => ({ c, e })));
@@ -374,13 +498,29 @@ function telaFicha(c) {
 function desenhar() {
   const m = document.getElementById('miolo');
   if (!DONO) { m.innerHTML = '<div class="cartao vazio">Esta página é do consultor. O seu planejamento é apresentado pelo seu consultor na área logada da Nord Liberta.</div>'; return; }
-  const { tela, arg } = rota(), L = clientes(), f = document.activeElement, fid = f && f.id, topo = scrollY;
+  const { tela, arg } = rota(), L = LISTA = clientes(), f = document.activeElement, fid = f && f.id, topo = scrollY;
   if (tela === 'cliente') { const c = L.find(x => x.id === arg); m.innerHTML = c ? telaFicha(c) : '<div class="cartao vazio">Cliente não encontrado. <a href="#carteira">Voltar à base</a></div>'; document.title = (c ? c.nome : 'Cliente') + ' — Nord Liberta'; }
   else { m.innerHTML = cabecalho(L, tela) + (tela === 'pipeline' ? telaPipeline(L) : tela === 'espera' ? telaEspera(L) : telaCarteira(L)); document.title = 'Base de clientes — Nord Liberta'; }
   if (fid) { const n = document.getElementById(fid); if (n) { n.focus(); scrollTo(0, topo); } }
 }
 addEventListener('hashchange', () => { FORM.tudo = false; desenhar(); scrollTo(0, 0); });
 addEventListener('storage', e => { if (e.key && e.key.startsWith('nl-db:')) desenhar(); });   // a área do cliente (outra aba, ou o quadro) gravou: a base mostra na hora
+
+// ---------- os gestos da carteira: a busca redesenha só a lista (o campo não perde o foco); os filtros valem na hora ----------
+let LISTA = [];
+const redesenhaLista = () => { const l = document.getElementById('listaCli'); if (l) l.innerHTML = htmlLista(LISTA); const p = document.getElementById('quadroPipe'); if (p) desenharPipe(); };
+const desenharPipe = () => { const q = semAcento(FILTRO.q.trim()), F = LISTA.filter(c => (!q || semAcento(c.nome).includes(q)) && (!FILTRO.vencidos || vencido(c)));
+  document.getElementById('quadroPipe').innerHTML = htmlQuadro(F, c => `<a class="pcard" href="#cliente/${encodeURIComponent(c.id)}"><b>${escH(c.nome)}</b><small>${c.exemplo ? (c.demo ? '' : 'exemplo · ') + c.exemplo : 'Planejamento'}${c.at.etapaEm ? ' · desde ' + dataBR(c.at.etapaEm) : ''}</small>${vence(c) ? `<small>${vence(c)}</small>` : ''}</a>`); };
+document.addEventListener('input', e => { const k = e.target.dataset && e.target.dataset.filtro; if (!k) return; FILTRO[k] = e.target.value; FILTRO.n = 40; redesenhaLista(); });
+document.addEventListener('click', e => {
+  const so = e.target.closest('[data-so]'), mais = e.target.closest('[data-mais]'), limpar = e.target.closest('[data-limpar]'), venc = e.target.closest('[data-vencidos]');
+  if (so) { FILTRO.so = FILTRO.so === so.dataset.so && !so.hasAttribute('data-rolar') ? '' : so.dataset.so; FILTRO.n = 40; redesenhaLista(); if (so.hasAttribute('data-rolar')) document.getElementById('clientes').scrollIntoView({ behavior: 'smooth' }); }
+  else if (mais) { FILTRO.n += 40; redesenhaLista(); }
+  else if (limpar) { Object.assign(FILTRO, { q: '', etapa: '', so: '', n: 40 }); desenhar(); }
+  else if (venc) { FILTRO.vencidos = !FILTRO.vencidos; desenhar(); }
+  // um menu de atalhos aberto fecha quando se clica fora dele
+  document.querySelectorAll('details.menu[open], details.info[open]').forEach(d => { if (!d.contains(e.target)) d.removeAttribute('open'); });
+});
 
 // ---------- os gestos da ficha ----------
 const clienteAberto = () => rota().tela === 'cliente' ? rota().arg : null;
