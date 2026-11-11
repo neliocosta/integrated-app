@@ -1235,6 +1235,32 @@ body.v-livro .rotulo .mais{font-weight:400;font-size:13px}
 .obj-resumo{font-size:13.5px;line-height:1.45;color:var(--legenda);margin:-2px 0 10px}
 @media (min-width:900px){.obj-cards{grid-auto-flow:row;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:14px;overflow:visible;margin:0 0 26px;padding:0}}
 @media (prefers-reduced-motion:reduce){.vital,.ferr a,.obj-c{transition:none}.vital:hover,.ferr a:hover,.obj-c:hover{transform:none}}
+
+/* ===== A área abre o planejamento dela (11/11/2026): o capítulo do relatório é o conteúdo principal da página, na largura
+   e na altura inteiras (sem rolagem própria); a visão geral vira uma faixa no alto e as informações da área recolhem ===== */
+.plan-cab{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;margin:26px 0 12px}
+.plan-cab h2{font:500 24px/1.2 var(--serifa);color:var(--marinho);margin:0;letter-spacing:-.01em}
+.plan-cab p{margin:4px 0 0;font-size:13.5px;color:var(--legenda)}
+.plan-cab .inteiro{font:600 13px var(--sans);color:var(--marinho);white-space:nowrap}
+.plan-abas{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 12px;padding-bottom:2px}
+.plan-abas::-webkit-scrollbar{display:none}
+.plan-abas button{flex:none;border:1px solid var(--borda);background:var(--cartao);border-radius:9999px;padding:8px 14px;min-height:38px;font:500 13.5px var(--sans);color:var(--marinho);white-space:nowrap}
+.plan-abas button.on{background:var(--marinho);border-color:var(--marinho);color:#fff}
+.plan-abas .sep{flex:none;width:1px;background:var(--borda);margin:6px 4px}
+.quadro.cheio{height:max(640px,calc(100vh - 150px));min-height:0;border-radius:var(--raio);transition:height .25s ease}
+.resumo-faixa{display:grid;grid-template-columns:minmax(0,1fr);gap:14px 28px;align-items:center}
+.resumo-faixa .grande{margin:8px 0 2px}
+@media (min-width:900px){.resumo-faixa.com-viz{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}}
+details.info-area{margin-top:18px}
+details.info-area > summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);padding:14px 18px;font:600 15px var(--sans);color:var(--marinho)}
+details.info-area > summary::-webkit-details-marker{display:none}
+details.info-area > summary small{font:400 13px var(--sans);color:var(--legenda)}
+details.info-area > summary::after{content:"+";font:400 20px/1 var(--sans);color:var(--legenda);margin-left:8px}
+details.info-area[open] > summary::after{content:"\2212"}
+details.info-area[open] > summary{border-radius:var(--raio) var(--raio) 0 0;border-bottom-color:transparent}
+details.info-area > .card{border-radius:0 0 var(--raio) var(--raio);border-top:0;margin:0}
+.cap .abre-area{display:block;margin-top:12px;padding-top:10px;border-top:1px solid var(--areia);font:600 13px var(--sans);color:var(--marinho)}
+@media (prefers-reduced-motion:reduce){.quadro.cheio{transition:none}}
 </style>
 </head>
 <body>
@@ -4340,7 +4366,7 @@ function cartaoArea(c, a, compacto, i) {
     return `<a class="cap semdado" href="#cartao/${c.id}" ${vt}><span class="r"><span class="ar-nome">${iconeArea(c.id)}${esc(c.nome)}</span>${mini}</span><div class="sub" style="margin-top:8px;color:var(--marinho);font-size:14px">${esc(c.pergunta)}</div>${n ? `<div class="sub" style="margin-top:6px">${esc(Object.values(a.ind)[0].txt)}</div>` : ''}<span class="convite">${convite} &#8250;</span></a>`;
   }
   const t = a.capa.tom;
-  return `<a class="cap" data-area="${c.id}" href="#cartao/${c.id}" ${vt}><span class="r"><span class="ar-nome">${iconeArea(c.id)}${esc(c.nome)}</span>${mini}</span><div class="big">${a.capa.big}</div><div class="sub">${esc(a.capa.sub)}</div>${t ? `<span class="chip ${t[0]} estado">${esc(t[1])}</span>` : ''}<div class="viz">${a.capa.viz || ''}</div></a>`;
+  return `<a class="cap" data-area="${c.id}" href="#cartao/${c.id}" ${vt}><span class="r"><span class="ar-nome">${iconeArea(c.id)}${esc(c.nome)}</span>${mini}</span><div class="big">${a.capa.big}</div><div class="sub">${esc(a.capa.sub)}</div>${t ? `<span class="chip ${t[0]} estado">${esc(t[1])}</span>` : ''}<div class="viz">${a.capa.viz || ''}</div><span class="abre-area">${versoesVigentes().length ? 'Ver o planejamento ' + (c.id === 'objetivos' ? 'dos objetivos' : 'desta área') + ' em detalhe' : 'Abrir esta área em detalhe'} &#8250;</span></a>`;
 }
 
 // ---------- A página de uma área: o resumo maior, as informações (as que existem, com a origem, e as que faltam, com o
@@ -4358,7 +4384,12 @@ function telaCartao(id) {
   const rel = R.degrau === 'completo' ? relatorioDaArea(c) : '';
   const prox = proximoNaArea(c, falta);
   const ca = CAPA_AREA[c.id], capa = ilustra('capa-' + c.id, 'capa', '', ca && ca.src, ca && ca.foco);   // a da série; enquanto não chega, a escolhida antes (só a liberdade tem)
-  return `<div style="max-width:1080px">${capa}${niveisDaArea(c, f)}${desdeOPlano(c)}${rel ?`<div class="grade2" style="align-items:start">${resumo}${lista}</div>${atalhosDaArea(c)}${rel}` : `<div class="grade2" style="align-items:start"><div>${resumo}${pre}</div><div>${lista}${prox}</div></div>${atalhosDaArea(c)}${semRelatorio(c)}`}</div>`;
+  if (rel) {   // com o plano publicado: a visão geral numa faixa, o capítulo do planejamento em largura e altura inteiras, e as informações recolhidas
+    const viz = vizGrande(c, a), faixa = `<div class="card resumo-faixa${viz ? ' com-viz' : ''}" ${vt}><div><div class="entre"><span class="rotulo" style="margin:0">${esc(c.pergunta)}</span>${a.capa && a.capa.tom ? `<span class="chip ${a.capa.tom[0]}">${esc(a.capa.tom[1])}</span>` : ''}</div>${a.capa ? `<div class="grande">${a.capa.big}</div><div class="mut">${esc(a.capa.sub)}</div>` : ''}</div>${viz ? `<div>${viz}</div>` : ''}</div>`;
+    const info = `<details class="info-area" id="nivel-2"><summary><span>As ${c.ind.length} informações desta área <small>· de onde vem cada número</small></span><small>${tem_.length} de ${c.ind.length}</small></summary>${lista.replace(' id="nivel-2"', '')}</details>`;
+    return `<div style="max-width:1180px">${capa}${niveisDaArea(c, f)}${desdeOPlano(c)}${faixa}${atalhosDaArea(c)}${rel}${info}</div>`;
+  }
+  return `<div style="max-width:1080px">${capa}${niveisDaArea(c, f)}${desdeOPlano(c)}<div class="grade2" style="align-items:start"><div>${resumo}${pre}</div><div>${lista}${prox}</div></div>${atalhosDaArea(c)}${semRelatorio(c)}</div>`;
 }
 // AS TRÊS PROFUNDIDADES (v2/ARQUITETURA.md, seção 3), as mesmas em toda área e em todo degrau: 1. a visão geral (o cartão do
 // Plano e a capa daqui), 2. a visão aprofundada (as informações da área e a calculadora) e 3. o relatório (o capítulo do
@@ -4391,14 +4422,57 @@ function vizGrande(c, a) {
 }
 // no Completo, a versão expandida é o capítulo do relatório, aberto aqui dentro; o fluxo de caixa de 24 meses e o da vida
 // toda são a janela do fluxo do relatório
-function relatorioDaArea(c) {
-  const v = versoesVigentes()[0], pags = c.paginas.filter(([p]) => !p.startsWith('carteira-') || (RS && RS.carteira));
-  const aba = UI.aba[c.id] && pags.some(p => p[0] === UI.aba[c.id]) ? UI.aba[c.id] : pags[0][0];
-  const url = aba === 'fluxo24' ? urlRelatorio(v.n, '&fluxo') : aba === 'fluxovida' ? urlRelatorio(v.n, '&fluxo&vida') : urlRelatorio(v.n, '&fase=' + aba);
-  return `<div class="rotulo" id="nivel-3">3 · No relatório de ${dataBRano(v.em)}, em detalhe</div><div class="abas">${pags.map(([p, nome]) => `<button class="filtro${p === aba ? ' on' : ''}" data-acao="aba" data-area="${c.id}" data-v="${p}">${esc(nome)}</button>`).join('')}</div>
-    <iframe class="quadro" title="${esc(c.nome)} no plano" src="${url}" loading="lazy"></iframe>
-    <p class="mut"><a href="${urlRelatorioInteiro(v.n, aba.startsWith('fluxo') ? 'orcamento' : aba)}">Abrir o relatório inteiro &#8250;</a> · É o mesmo relatório da apresentação. Para propor uma mudança, use "Simular outros valores" na página, ou ${R.consultora ? `<a href="#conversas">fale com a ${esc(R.consultora.nome)}</a>` : 'fale com o seu planejador'}.</p>`;
+// os capítulos do relatório que cada área abre: as páginas saem do relatório publicado (RS.paginas), então o que o
+// consultor acrescenta ou tira da apresentação aparece aqui sozinho; o resumo do caso (o vídeo do planejador, os números
+// e o que fazer) vem na frente, quando o capítulo tem um
+const CAPS_DA_AREA = { saude: ['diagnostico'], gestao: ['gestao'], dividas: ['patrimonio'], objetivos: ['objetivos'], reserva: ['riscos', 'politica'], riscos: ['riscos'], patrimonio: ['patrimonio'],
+  politica: ['politica', 'carteira'], tributario: ['tributario'], liberdade: ['liberdade', 'conceitos'], evolucao: ['evolucao'] };
+const CAP_COM_RESUMO = ['tributario', 'patrimonio', 'riscos', 'politica', 'objetivos', 'liberdade', 'carteira', 'evolucao'];
+const CAP_NOME = { politica: 'a política', carteira: 'a carteira', riscos: 'os riscos', liberdade: 'a liberdade', conceitos: 'os conceitos' };
+function paginasDaArea(c) {
+  const caps = CAPS_DA_AREA[c.id] || [], doRel = (RS && RS.paginas) || [];
+  if (!doRel.length) return c.paginas.filter(([p]) => !p.startsWith('carteira-') || (RS && RS.carteira));
+  const l = [];
+  caps.forEach((cap, k) => { const ps = doRel.filter(p => p.cap === cap); if (!ps.length || (cap === 'carteira' && !RS.carteira)) return;   // sem carteira no plano, o capítulo dela não tem o que mostrar
+    if (k) l.push(['|']);   // a divisa entre dois capítulos
+    if (CAP_COM_RESUMO.includes(cap)) l.push(['resumo-' + cap, k ? 'Resumo: ' + (CAP_NOME[cap] || cap) : 'Resumo do caso']);
+    ps.forEach(p => l.push([p.id, p.titulo])); });
+  if (c.id === 'gestao') l.push(['|'], ['fluxo24', 'Fluxo de caixa · 24 meses'], ['fluxovida', 'Fluxo de caixa · vida toda']);
+  return l.length ? l : c.paginas;
 }
+// no Completo, a área abre o capítulo dela no planejamento: é o conteúdo principal da página. O quadro cresce até a altura
+// da página do relatório (ajustaQuadro), para não haver uma rolagem dentro da outra
+function relatorioDaArea(c) {
+  const v = versoesVigentes()[0], pags = paginasDaArea(c), reais = pags.filter(p => p[0] !== '|');
+  const aba = UI.aba[c.id] && reais.some(p => p[0] === UI.aba[c.id]) ? UI.aba[c.id] : reais[0][0];
+  const url = aba === 'fluxo24' ? urlRelatorio(v.n, '&fluxo') : aba === 'fluxovida' ? urlRelatorio(v.n, '&fluxo&vida') : urlRelatorio(v.n, '&fase=' + aba);
+  return `<div class="plan-cab" id="nivel-3"><div><h2>O planejamento de ${esc(c.nome.charAt(0).toLowerCase() + c.nome.slice(1))}</h2><p>Do relatório de ${dataBRano(v.em)}${R.consultora ? ', preparado pela ' + esc(R.consultora.nome) : ''}: ${reais.length} ${reais.length === 1 ? 'página' : 'páginas'}, as mesmas da apresentação.</p></div><a class="inteiro" href="${urlRelatorioInteiro(v.n, aba.startsWith('fluxo') ? 'orcamento' : aba)}">Abrir em tela cheia &#8250;</a></div>
+    ${reais.length > 1 ? `<div class="plan-abas" role="tablist" aria-label="Páginas do planejamento desta área">${pags.map(([p, nome]) => p === '|' ? '<span class="sep" aria-hidden="true"></span>' : `<button role="tab" aria-selected="${p === aba}" class="${p === aba ? 'on' : ''}" data-acao="aba" data-area="${c.id}" data-v="${p}">${esc(nome)}</button>`).join('')}</div>` : ''}
+    <iframe class="quadro cheio" title="${esc(c.nome)} no planejamento" src="${url}"></iframe>
+    <p class="mut" style="margin-top:10px">Para propor uma mudança, use "Simular outros valores" na página, ou ${R.consultora ? `<a href="#conversas">fale com a ${esc(R.consultora.nome)}</a>` : 'fale com o seu planejador'}.</p>`;
+}
+// o quadro do relatório fica da altura da página aberta nele: mede o conteúdo (a página do relatório rola dentro de #pagina)
+// numa altura de base e cresce até caber; refaz a conta quando a página troca lá dentro ou a janela muda de largura
+function ajustaQuadro(f) {
+  let doc; try { doc = f.contentDocument; } catch (e) { return; }
+  const pg = doc && doc.getElementById('pagina'); if (!pg) return;
+  // as abas da área já dizem a página: o cabeçalho de navegação do relatório (capítulo, anterior e próxima) some aqui dentro
+  const cab0 = doc.querySelector('header'); if (cab0 && doc.body.classList.contains('embutido') && !doc.body.classList.contains('fluxo')) cab0.style.display = 'none';
+  const base = Math.max(640, innerHeight - 150), cab = doc.querySelector('header'), medir = () => {
+    f.style.transition = 'none'; f.style.height = base + 'px';
+    const ca = pg.scrollHeight, h = (cab && getComputedStyle(cab).display !== 'none' ? cab.offsetHeight : 0) + ca + 2;
+    // a página que se desenha pela altura da janela (seções de tela inteira) cresceria sem parar: essa fica na altura de base, com a rolagem dela
+    f.style.height = (base + 400) + 'px'; f._fixo = pg.scrollHeight > ca + 150 && pg.scrollHeight > pg.clientHeight + 50;
+    f.style.height = (f._fixo ? base : Math.min(12000, Math.max(base, h))) + 'px'; requestAnimationFrame(() => { f.style.transition = ''; }); };
+  let t = null; const depois = () => { clearTimeout(t); t = setTimeout(medir, 180); };
+  // as entradas animadas e as fontes aumentam a página depois da carga: o quadro só cresce (sem voltar à base, para não piscar)
+  const crescer = () => { if (!f._fixo && pg.scrollHeight > pg.clientHeight + 2) f.style.height = Math.min(12000, (cab && getComputedStyle(cab).display !== 'none' ? cab.offsetHeight : 0) + pg.scrollHeight + 2) + 'px'; };
+  medir(); [400, 1000, 2000, 3500, 6000].forEach(ms => setTimeout(crescer, ms));
+  if (doc.defaultView.ResizeObserver && !f._ro) { f._ro = new doc.defaultView.ResizeObserver(crescer); [...pg.children].forEach(n => f._ro.observe(n)); }
+  if (!f._obs) { f._obs = new MutationObserver(depois); f._obs.observe(pg, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'open', 'hidden'] });
+    doc.defaultView.addEventListener('resize', () => { if (Math.abs(f.clientWidth - (f._w || 0)) > 4) { f._w = f.clientWidth; depois(); } }); f._w = f.clientWidth; }
+}
+document.addEventListener('load', e => { const f = e.target; if (f && f.tagName === 'IFRAME' && f.classList.contains('cheio')) { f._obs = null; f._ro = null; ajustaQuadro(f); } }, true);
 
 // ---------- As calculadoras de cada área: gravam no vetor, com a data e "você" como origem; o plano se ajusta na hora ----------
 const SIMNAO = [['Sim', 'Sim'], ['Não', 'Não']];
@@ -5055,7 +5129,7 @@ document.addEventListener('click', async ev => {
   if (acao === 'apagar-avulsa') { const antes = JSON.stringify(X); X.avulsas = (X.avulsas || []).filter(t => t.id !== a.dataset.id); await ARMAZEM.gravar('execucao', X); UI.folha = null; UI.desfazer = antes;
     if (location.hash.startsWith('#tarefa/')) history.replaceState(null, '', '#tarefas'); avisar('Tarefa apagada.', true); desenhar(); return; }
   // as três profundidades: o toque leva ao nível, na mesma página
-  if (acao === 'nivel') { const n = document.getElementById(a.dataset.v); if (n) n.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+  if (acao === 'nivel') { const n = document.getElementById(a.dataset.v); if (n) { if (n.tagName === 'DETAILS') n.open = true; n.scrollIntoView({ behavior: 'smooth', block: 'start' }); } return; }
   if (acao === 'imp-op') { Object.assign(UI.folha.imprevisto, { [a.dataset.c]: a.dataset.v }); desenharFolha(); return; }
   if (acao === 'imp-gravar') { const I = UI.folha.imprevisto; if (!(I.valor > 0) || !I.tipo) { avisar('Falta dizer o que aconteceu e quanto.'); return; }
     X.imprevistos = (X.imprevistos || []).concat({ em: AGORA(), quem: MEMBRO(), tipo: I.tipo, valor: I.valor, de: I.de || 'reserva' }); await ARMAZEM.gravar('execucao', X); UI.folha = null;
