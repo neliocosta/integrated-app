@@ -309,6 +309,23 @@ Macios e confiantes: cantos generosos, a ação principal em pílula laranja e o
 - **Border:** nenhuma. As divisórias internas são linhas de 1px em areia.
 - **Internal Padding:** 20px × 22px nos cartões menores, 24px × 32px nos cartões de destaque.
 
+### As telas do consultor e do cliente (2.0)
+As telas do consultor (base de clientes, ficha, montagem, agenda, acompanhamento) e a área do cliente usam os mesmos
+valores, cada uma com os seus nomes de variável (as telas são autocontidas):
+
+- **Cores:** as da tabela acima. Estado em dia `#E3F3E9` com texto `#22794A`; atenção em pêssego `#FFF3EB` com texto
+  `#964400`; etiqueta neutra em areia; etiqueta de etapa em ardósia.
+- **Raios:** 16 cartão, 12 bloco interno, 11 botão, 8 item pequeno e campo, pílula na ação principal e nas etiquetas.
+- **Botões:** uma ação principal por tela (pílula laranja, texto marinho); apoio branco com fio; suave em pêssego.
+- **"Em breve":** contorno tracejado, sem sombra e sem fundo, com a etiqueta "em breve". Nunca um cartão cheio.
+- **Estado vazio:** numa tela inteira, a cena da série, um título e o que fazer; dentro de um cartão pequeno, uma linha de
+  texto em cinza legenda.
+- **Foco:** anel de 2 px com 2 px de afastamento, laranja nas telas do consultor e marinho na área do cliente.
+- **A casca do consultor:** faixa no Marinho Profundo, a mesma cor do menu do portal, sem repetir o ícone da marca quando
+  a tela já tem cabeçalho próprio.
+- **O papel é a única diferença:** creme `#FDFCFA` com sombra neutra no consultor e no relatório; `#F8F4EE` com fio marinho
+  na área do cliente (o Livro).
+
 ### Navigation
 - **Cabeçalho:** o capítulo em rótulo marinho e a página em DM Sans 600 marinho, entre setas de anterior e próxima. Embaixo
   fica a barra de progresso dividida por capítulo, com os trechos vistos em laranja. Um clique abre o sumário.
@@ -324,14 +341,21 @@ seguem três convenções:
 Ao aparecer, o gráfico se revela uma vez, por exemplo com as marquinhas do relógio acendendo em sequência. Com menos
 movimento no sistema, ele só aparece pela opacidade.
 
-### Ilustrações das capas (headers de página)
-A abertura de cada área (o capítulo) leva uma ilustração do Midjourney em **vetor plano**, escolhida em 31/10/2026. A
-referência é [ilustras/referencia/vetor-plano.webp](ilustras/referencia/vetor-plano.webp): uma pessoa relaxando numa
-plataforma flutuante, com uma planta, um café e o notebook fechado.
+### Ilustrações da série
+Uma série de ilustrações do Midjourney em **vetor plano** (estilo escolhido em 31/10/2026) aparece pela ferramenta toda
+(decisão de 10/11/2026; antes era só a capa da área). A referência é
+[ilustras/referencia/vetor-plano.webp](ilustras/referencia/vetor-plano.webp): uma pessoa relaxando numa plataforma
+flutuante, com uma planta, um café e o notebook fechado. A lista, os tamanhos e os prompts estão em
+[ilustras/PROMPTS-MIDJOURNEY.md](ilustras/PROMPTS-MIDJOURNEY.md).
 
-- **Onde:** só na capa da área (`CAPA_AREA`). O objetivo do cliente leva a foto dele, nunca uma ilustração.
-- **Formato:** é uma faixa na largura toda, baixa (`height:clamp(140px,22vw,220px)`), com `object-fit:cover` e um foco
-  vertical por imagem (`object-position:50% Y%`) no trecho do assunto. Gere a imagem em 16:9.
+- **Onde:** onde a imagem acolhe, orienta ou comemora: a capa de cada área do Plano, a abertura de Relatório, Como usar e
+  Jornada, os estados vazios, criar a conta, capítulo concluído e os dois vazios da base do consultor. Nunca no Painel (fica
+  a foto), no objetivo do cliente (fica a foto dele) nem em telas de trabalho densas.
+- **Dois formatos:** a **faixa** que abre a página (`.ilustra.capa`, 3:1, até 220 px de altura, gerada em 3:1 com o assunto
+  no terço direito e no meio da altura) e a **cena** dos estados vazios (`.ilustra`, 4:3, 240 px de largura).
+- **O lugar reservado:** `ilustra('<nome>')` desenha o lugar com `aspect-ratio` e um céu suave nas cores da série; quando
+  `ilustras/v2/<nome>.webp` existe, a imagem cobre o lugar, sem mexer no código. Onde já havia um desenho de traço, ele
+  fica até a imagem chegar.
 - **O estilo:** vetor chapado sem contorno, formas arredondadas e personagem de braços e pernas alongados em pose relaxada,
   com muito céu.
 - **As cores:** fundo azul-claro, branco quente e pêssego. O laranja #FA7A35 entra nos objetos de destaque, e o marinho
@@ -340,7 +364,7 @@ plataforma flutuante, com uma planta, um café e o notebook fechado.
 Para montar o prompt, use o molde abaixo e troque só a cena:
 
 ```
-contemporary flat illustration of [CENA DA ÁREA], open bright sky, friendly modern SaaS illustration style with simple rounded shapes, palette of warm white, light blue, soft peach and vivid orange #FA7A35, minimal navy #20344C details, airy and joyful, subject on the right, empty sky on the left --ar 16:9 --sref <link da referência> --sw 200 --no text, outlines, gradients, photorealistic
+contemporary flat illustration of [CENA], open bright sky, friendly modern SaaS illustration style with simple rounded shapes, palette of warm white, light blue, soft peach and vivid orange #FA7A35, minimal navy #20344C details, airy and joyful, [COMPOSIÇÃO DO FORMATO] --ar [3:1 ou 4:3] --sref <link da referência> --sw 200 --no text, letters, numbers, outlines, gradients, photorealistic, coins, dollar signs, piggy bank
 ```
 
 - O `--sref` aponta para a imagem de referência e é o que mantém as capas da mesma família. O link é o da imagem no

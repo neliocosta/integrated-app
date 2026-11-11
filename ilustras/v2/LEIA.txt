@@ -1,0 +1,2 @@
+As ilustrações da série entram aqui, com o nome indicado em ../PROMPTS-MIDJOURNEY.md (ex.: capa-gestao.webp).
+A ferramenta mostra cada uma assim que o arquivo existir.
