@@ -2768,7 +2768,7 @@ function vezesDaAvulsa(t, hoje) {
   }
   return l;
 }
-const pedidosAvulsos = (lista, consultora) => lista.flatMap(t => vezesDaAvulsa(t, HOJE).map(v => ({ id: v.id, avulsa: t.id, por: t.por, cat: t.cat || 'burocratica', ritmo: 'unica', data: v.data, resp: t.resp || undefined,
+const pedidosAvulsos = (lista, consultora) => lista.flatMap(t => vezesDaAvulsa(t, HOJE).map(v => ({ id: v.id, avulsa: t.id, por: t.por, cat: t.cat || 'burocratica', ritmo: 'unica', data: v.data, resp: t.resp || undefined, efeito: t.efeito, valor: t.valor, gesto: t.gesto, curto: t.curto, como: t.como,
   titulo: t.titulo + (v.n > 1 ? ` (${v.k + 1} de ${v.n})` : ''), serve: [t.serve, t.por === 'consultor' ? 'pedida ' + (consultora ? 'pela ' + consultora.nome : 'pelo planejador') : ''].filter(Boolean).join(' · ') || 'criada por ' + (t.quem || 'você'),
   quando: 'até ' + dataBR(v.data) + (t.lembrete ? ', com lembrete no WhatsApp' + (t.lembrete.hora ? ' às ' + t.lembrete.hora : '') : '') })));
 function ocorrencias() {
@@ -2907,10 +2907,26 @@ function passoCompleto() {
     P.figura = 'escada'; P.atual = at; P.alvo = alvo; P.marcas = [['mínima', al * 0.4, '3 meses'], ['aceitável', al * 0.7, '5 meses'], ['ideal', al, (fv('reservaMeses') || 8) + ' meses']];
     P.falta = falta; P.linhas = [`Faltam ${brlC(falta)}`];
     const unica = exec && exec.pedido.efeito && exec.pedido.efeito.reserva ? exec : null;
-    if (unica) { const v = unica.pedido.efeito.reserva; P.atalho = `com o resgate${v < falta - 0.5 ? ' de ' + brlC(v) : ''} ${unica.data < HOJE ? 'previsto para ' + dataBR(unica.data) + ', ainda não feito' : 'até ' + dataBR(unica.data)}`; P.linhas.push(P.atalho[0].toUpperCase() + P.atalho.slice(1)); P.atalhoVencido = unica.data < HOJE; }
+    // a tarefa que leva dinheiro à reserva: o resgate do plano, de uma vez, ou a reposição mês a mês que a família aceitou
+    if (unica) { const v = unica.pedido.efeito.reserva; P.atalho = unica.pedido.avulsa ? `guardando ${brl(v)} por mês: ${unica.data < HOJE ? 'a de ' + dataBR(unica.data) + ' ainda não foi feita' : 'a próxima é até ' + dataBR(unica.data)}`
+      : `com o resgate${v < falta - 0.5 ? ' de ' + brlC(v) : ''} ${unica.data < HOJE ? 'previsto para ' + dataBR(unica.data) + ', ainda não feito' : 'até ' + dataBR(unica.data)}`; P.linhas.push(P.atalho[0].toUpperCase() + P.atalho.slice(1)); P.atalhoVencido = unica.data < HOJE; }
+    // o passo do plano já foi executado e a reserva voltou a ficar abaixo (um imprevisto): o título diz o que falta hoje
+    if (p.pedido && falta > 0.5 && !oc.some(o => o.pedido.id === p.pedido && o.aberta) && oc.some(o => o.pedido.id === p.pedido && !o.aberta)) P.titulo = 'Repor a reserva';
+    // a reposição mensal já aceita, entre uma vez respondida e a seguinte (que ainda não entrou na lista de tarefas)
+    const rep = !unica ? (X.avulsas || []).find(t => t.efeito && t.efeito.reserva && t.rec === 'mensal' && vezesDaAvulsa(t, HOJE).length < (+t.vezes || 1)) : null;
+    if (rep) { P.atalho = `guardando ${brl(rep.efeito.reserva)} por mês: a próxima é até ${dataBR(maisMeses(rep.data, vezesDaAvulsa(rep, HOJE).length))}`; P.linhas.push(P.atalho[0].toUpperCase() + P.atalho.slice(1)); }
+    // a tarefa de aporte sugerida (ainda não aceita) é a que leva dinheiro à reserva: a síntese diz o que ela faz
+    const sug = !unica && !rep ? oc.find(o => o.sugerida && o.pedido.reservaPrimeiro && o.valor > 0) : null;
+    if (sug) { P.atalho = `aceitando a tarefa de ${brl(sug.valor)} por mês, fecha em ${mesAno(addM(MES, Math.ceil(falta / sug.valor)) + '-01')}`; P.linhas.push(P.atalho[0].toUpperCase() + P.atalho.slice(1)); }
     if (ritmo > 0) { const n = Math.ceil(Math.max(0, falta - (unica ? unica.pedido.efeito.reserva : 0)) / ritmo); P.ritmo = ritmo; P.quando = addM(MES, n); P.linhas.push(`No ritmo de ${brl(ritmo)} por mês (o aporte vai para a reserva), ${mesAno(P.quando + '-01')}`); }
-    else if (!unica) { P.semData = true; P.linhas.push('Sem data: nenhuma tarefa leva dinheiro à reserva'); }
-    P.sintese = `Faltam ${brlC(falta)} · ${unica ? P.atalho : ritmo > 0 ? 'no ritmo de hoje, ' + mesAno(P.quando + '-01') : 'sem data: nenhuma tarefa leva dinheiro à reserva'}`;
+    else if (!unica && !rep && !sug) { P.semData = true;
+      // sem tarefa que leve dinheiro à reserva, a área propõe a óbvia e a família aceita com um toque: com plano, repor em até
+      // seis meses; sem plano, a sobra inteira (a régua manda tudo para a reserva até a mínima)
+      const sb = R.degrau === 'completo' ? 0 : Math.max(0, sobra() || 0), mensal = Math.min(falta, sb > 0 ? Math.floor(sb / 50) * 50 || sb : Math.max(100, Math.ceil(falta / 6 / 50) * 50));
+      if (R.degrau !== 'visitante' && mensal > 0.5 && !oc.some(o => o.sugerida)) { const n = Math.ceil(falta / mensal); P.proposta = { mensal, meses: n, quando: addM(MES, n) };
+        P.linhas.push(`Sem data ainda. Guardando ${brl(mensal)} por mês, fecha em ${mesAno(P.proposta.quando + '-01')}`); }
+      else P.linhas.push('Sem data: nenhuma tarefa leva dinheiro à reserva'); }
+    P.sintese = `Faltam ${brlC(falta)} · ${unica || rep || sug ? P.atalho : ritmo > 0 ? 'no ritmo de hoje, ' + mesAno(P.quando + '-01') : P.proposta ? `guardando ${brl(P.proposta.mensal)} por mês, fecha em ${mesAno(P.proposta.quando + '-01')}` : 'sem data: nenhuma tarefa leva dinheiro à reserva'}`;
   } else if (p.criterio === 'sequencia') { P.figura = 'contagem'; P.sintese = `${p.atual} de ${p.alvo} meses · o próximo aporte ${exec ? 'em ' + dataBR(exec.data) : 'conta'}`; P.linhas = [`Faltam ${p.alvo - p.atual} ${p.alvo - p.atual === 1 ? 'mês' : 'meses'} seguidos de aporte feito`]; }
   else if (exec) { P.figura = 'unica'; P.sintese = `Uma tarefa: ${exec.titulo} · até ${dataBR(exec.data)}`; P.linhas = [P.sintese]; }
   else { P.figura = p.fracao != null && p.valor ? 'barra' : 'texto'; P.sintese = p.valor ? p.valor.replace(/<[^>]+>/g, '') : p.porque; P.linhas = [P.sintese]; }
@@ -3399,7 +3415,9 @@ const VISITA_ANTERIOR = (() => { const k = 'nl-visita:' + (CLIENTE || 'visitante
 const MES_L = m => MESES_L[+m.slice(5) - 1];
 const Cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 // o rótulo curto do botão (até 26 caracteres): o da tarefa, quando há; senão o título cortado
-const rotuloCurto = o => o.curto || (o.pedido.id === 'aporte' ? 'Marcar o aporte de ' + MES_L(o.mes) : o.semana ? (ehSegunda() ? 'Combinar a semana' : 'Responder a semana') : o.titulo.length <= 26 ? o.titulo : o.titulo.slice(0, 25).replace(/\s\S*$/, '') + '…');
+const rotuloCurto = o => o.curto || (o.pedido.id === 'aporte' ? 'Marcar o aporte de ' + MES_L(o.mes) : o.semana ? (ehSegunda() ? 'Combinar a semana' : 'Responder a semana') : o.titulo.length <= 34 ? o.titulo : o.titulo.slice(0, 33).replace(/\s\S*$/, '') + '…');
+// a mensagem já começada para a planejadora, a partir do passo sem data (o link "propor" não abre o Atendimento em branco)
+const rascunhoDoPasso = P => P && P.figura === 'escada' ? `A reserva está em ${brlC(P.atual)} e faltam ${brlC(P.falta)} para a ${(P.marcas.find(([, v]) => Math.abs(v - P.alvo) < 1) || ['ideal'])[0]}. ${(X.imprevistos || []).length ? 'Usamos uma parte num imprevisto. ' : ''}Como ${pl('repomos', 'reponho')}?` : '';
 const ORDEM_IMPACTO = { dinheiro: 0, carteira: 1, burocratica: 2, interacao: 3, comportamental: 4, educacional: 5 };
 const porImpacto = (a, b) => ((a.pedido.risco ? -1 : ORDEM_IMPACTO[a.cat]) - (b.pedido.risco ? -1 : ORDEM_IMPACTO[b.cat])) || (a.data < b.data ? -1 : 1);
 // a ação do dia: uma por visita, decidida pelo calendário e pela fila de quem está logado. (1) o aporte no dia dele; (2) a
@@ -3471,14 +3489,19 @@ function linhaSituacao(oc) {
 // números-chave no rodapé, fora da parte clara da foto ----------
 function heroiPainel(oc, P) {
   const convite = 'Um plano para a vida que você quer viver começa por saber onde você está.';
-  const acao = P ? acaoDoDia(oc) : null, minhasAbertas = oc.filter(o => o.aberta && minha(o)), respondiHoje = oc.some(o => o.resposta && o.resposta.em.slice(0, 10) === HOJE && o.resposta.quem === MEMBRO());
+  // o botão do passo faz o passo: a tarefa aberta que o executa vem antes da ação do dia (que segue na lista "Esta semana")
+  const doPasso = P && P.tarefas ? P.tarefas.find(o => o.aberta && minha(o)) : null;
+  const acao = doPasso ? { rot: rotuloCurto(doPasso), comp: `${doPasso.min ? doPasso.min + ' min · ' : ''}${esc(doPasso.serve)}`, id: doPasso.id } : P ? acaoDoDia(oc) : null, minhasAbertas = oc.filter(o => o.aberta && minha(o)), respondiHoje = oc.some(o => o.resposta && o.resposta.em.slice(0, 10) === HOJE && o.resposta.quem === MEMBRO());
   const proxData = (minhasAbertas.filter(o => o.data > HOJE)[0] || {}).data;
   let botao = '';
   if (P && P.id === 'exame') botao = `<a class="primaria" href="#exame">Fazer o exame</a>`;
+  else if (P && P.proposta) botao = `<button class="primaria" data-acao="repor-reserva">Guardar ${brl(P.proposta.mensal)} por mês</button><p class="sob">${P.proposta.meses} ${P.proposta.meses === 1 ? 'vez' : 'meses'}, até ${mesAno(P.proposta.quando + '-01')} · vira tarefa, com lembrete${R.consultora ? ' · a ' + esc(R.consultora.nome) + ' vê e pode ajustar' : ''}</p>`;
   else if (acao) botao = `<button class="primaria" data-acao="${acao.aceitar ? 'aceitar' : 'abrir'}" data-id="${esc(acao.id)}">${esc(acao.rot)}</button><p class="sob">${acao.comp}</p>`;
   else if (P) botao = `<p class="sob">${respondiHoje ? 'Feito por hoje' : 'Nada para hoje'}${proxData ? ' · a próxima é em ' + dataBR(proxData) : ''}</p>`;
-  const cartao = P ? `<section class="passo"><span class="r">O passo agora</span><h2 class="titulo">${esc(P.titulo)}</h2>${figuraDoPasso(P, true)}<p class="sintese">${esc(P.sintese)}${P.semData && R.consultora ? ` · <a href="#conversas">propor à ${esc(R.consultora.nome)} ›</a>` : ''}</p>${botao}<a class="ver" href="#passo">Ver o passo &#8250;</a></section>`
-    : `<section class="passo"><span class="r">O passo agora</span><p class="sintese">Os passos de agora estão cumpridos. ${R.consultora ? 'A ' + esc(R.consultora.nome) + ' define o próximo.' : 'O próximo é aprofundar o plano.'}</p><a class="ver" href="#jornada">Ver a escalada &#8250;</a></section>`;
+  const cartao = P ? `<section class="passo"><span class="r">O passo agora</span><h2 class="titulo">${esc(P.titulo)}</h2>${figuraDoPasso(P, true)}<p class="sintese">${esc(P.sintese)}${P.semData && R.consultora ? ` · <a href="#conversas" data-acao="rascunho" data-txt="${esc(rascunhoDoPasso(P))}">${P.proposta ? 'ou combinar outro valor com a' : 'propor à'} ${esc(R.consultora.nome)} ›</a>` : ''}</p>${botao}<a class="ver" href="#passo">Ver o passo &#8250;</a></section>`
+    : (() => { // os passos escolhidos estão cumpridos: enquanto o próximo não é definido, a tarefa aberta de maior efeito (a ameaça antes do resto)
+      const prox = oc.filter(o => o.aberta && !o.semana).sort(porImpacto)[0];
+      return `<section class="passo"><span class="r">O passo agora</span><p class="sintese">Os passos de agora estão cumpridos. ${R.consultora ? 'A ' + esc(R.consultora.nome) + ' define o próximo' + (prox ? '; enquanto isso, o que mais pesa no plano:' : '.') : 'O próximo é aprofundar o plano.'}</p>${prox ? `<button class="primaria" data-acao="abrir" data-id="${esc(prox.id)}">${esc(rotuloCurto(prox))}</button><p class="sob">${prox.min ? prox.min + ' min · ' : ''}${esc(prox.serve || '')}${minha(prox) ? '' : ' · de ' + esc(nomeDe(prox.resp))}</p>` : ''}<a class="ver" href="#jornada">Ver a escalada &#8250;</a></section>`; })();
   // o propósito em uma linha: a frase gravada; sem ela, os objetivos da família (o que o passo protege)
   const objs = objetivos(), lib = objs.find(o => o.tipo === 'liberdade'), nomes = objs.filter(o => o.tipo !== 'liberdade').slice(0, 2).map(o => o.nome.charAt(0).toLowerCase() + o.nome.slice(1));
   const fraseObjs = nomes.length ? `Para ${nomesJuntos(nomes.map(n => (/^(casa|viagem|reserva)/.test(n) ? 'a ' : 'o ') + n).concat(lib ? ['a liberdade aos ' + lib.idade] : []))}: ${P && P.figura === 'escada' ? 'um imprevisto não sai desse dinheiro.' : 'é para isso que o passo de agora existe.'}` : '';
@@ -3493,9 +3516,10 @@ function heroiPainel(oc, P) {
 // ---------- Bloco 2: esta semana. Agora (um cartão), a tarefa do outro, as respondidas com o efeito, o depois, o teto quando
 // não é o botão, e uma linha de Saber ----------
 function efeitoDaResposta(o) {
-  if (o.semana) return o.estado === 'feita' ? `a semana de ${dataBR(o.semana.de)} fechou no teto` : o.estado === 'naofiz' ? `a semana de ${dataBR(o.semana.de)} passou do teto${o.resposta.valor != null ? ' em ' + brl(o.resposta.valor - o.valor) : ''}` : 'o valor da semana informado';
+  if (o.semana) return o.estado === 'feita' ? (o.resposta.valor != null && o.valor - o.resposta.valor > 0.5 ? `a semana de ${dataBR(o.semana.de)} ficou ${brl(o.valor - o.resposta.valor)} abaixo do teto` : `a semana de ${dataBR(o.semana.de)} fechou no teto`) : o.estado === 'naofiz' ? `a semana de ${dataBR(o.semana.de)} passou do teto${o.resposta.valor != null ? ' em ' + brl(o.resposta.valor - o.valor) : ''}` : 'o valor da semana informado';
   if (o.divisao && o.divisao.length) { const d = o.divisao[0], f = feitoPorObjetivo(o)[d.obj] || 0;
-    return o.estado === 'naofiz' ? `não feito · ${o.divisao.length === 1 ? objDe(d.obj).nome + ' atrasa' : 'os objetivos atrasam'} um mês` : `${objDe(d.obj).nome} ficou ${brl(f)} mais perto${o.estado === 'parcial' ? ' (feito em parte)' : ''}`; }
+    const sd = o.resposta && o.resposta.saida;   // a saída escolhida diz o efeito: manter a data não atrasa nada
+    return o.estado === 'naofiz' ? (sd === 'manter' ? 'não feito · compensado nos próximos aportes, as datas ficam' : sd === 'coube' ? 'não feito · o aporte passou ao que cabe e as datas se esticam' : `não feito · ${o.divisao.length === 1 ? objDe(d.obj).nome + ' atrasa' : 'os objetivos atrasam'} um mês`) : `${objDe(d.obj).nome} ficou ${brl(f)} mais perto${o.estado === 'parcial' ? ' (feito em parte)' : ''}`; }
   if (o.pedido.efeito && o.pedido.efeito.reserva) return o.estado === 'feita' ? 'a reserva subiu ' + brlC(o.resposta.valor != null ? o.resposta.valor : o.pedido.efeito.reserva) : estadoTxt(o);
   return estadoTxt(o);
 }
@@ -4033,7 +4057,8 @@ function telaPasso() {
   const P = passoCompleto();
   if (!P) return `<div class="vazio">${ilustra('passos-cumpridos', '', ILUSTRA.cumprido)}<h2>Passos cumpridos</h2><p>${R.consultora ? 'A ' + esc(R.consultora.nome) + ' define o próximo passo.' : 'O próximo é aprofundar o plano.'}</p><a class="btn" href="#jornada">Ver a escalada</a></div>`;
   const objs = objetivos().filter(o => o.tipo !== 'liberdade' && progresso(o) < 1).sort((a, b) => a.data < b.data ? -1 : 1), protege = objs[0];
-  const tarefas = P.tarefas.length ? P.tarefas.map(cartaoTarefa).join('') : P.acao ? `<a class="btn" href="${P.acao[1]}" style="display:inline-flex;align-items:center;text-decoration:none">${esc(P.acao[0])}</a>` : `<p class="vazio-l">Nenhuma tarefa leva dinheiro a este passo ainda${R.consultora ? `: <a href="#conversas">propor à ${esc(R.consultora.nome)} ›</a>` : ''}.</p>`;
+  const tarefas = P.tarefas.length ? P.tarefas.map(cartaoTarefa).join('') : P.acao ? `<a class="btn" href="${P.acao[1]}" style="display:inline-flex;align-items:center;text-decoration:none">${esc(P.acao[0])}</a>` : P.proposta ? `<div class="card"><p class="peq" style="margin:0 0 10px;color:var(--marinho)">Nenhuma tarefa leva dinheiro a este passo ainda. A mais simples: guardar ${brl(P.proposta.mensal)} por mês, ${P.proposta.meses} ${P.proposta.meses === 1 ? 'vez' : 'meses'}, até ${mesAno(P.proposta.quando + '-01')}.</p><div class="linha"><button class="primaria" data-acao="repor-reserva">Guardar ${brl(P.proposta.mensal)} por mês</button>${R.consultora ? `<a class="btn link peq" href="#conversas" data-acao="rascunho" data-txt="${esc(rascunhoDoPasso(P))}">combinar outro valor com a ${esc(R.consultora.nome)} ›</a>` : ''}</div></div>`
+ : `<p class="vazio-l">Nenhuma tarefa leva dinheiro a este passo ainda${R.consultora ? `: <a href="#conversas" data-acao="rascunho" data-txt="${esc(rascunhoDoPasso(P))}">propor à ${esc(R.consultora.nome)} ›</a>` : ''}.</p>`;
   const resolvidos = P.trilha.filter(t => t.estado === 'resolvido'), resto = P.trilha.filter(t => t.estado !== 'resolvido');
   const trilha = `<ol class="trilha-v">${resolvidos.length ? `<li class="resolvido"><details><summary>${resolvidos.length} ${resolvidos.length === 1 ? 'passo já estava resolvido' : 'passos já estavam resolvidos'} quando o plano começou</summary><ul>${resolvidos.map(t => `<li>${esc(t.nome)}</li>`).join('')}</ul></details></li>` : ''}${resto.map(t => `<li class="${t.estado}"${t.estado === 'agora' ? ' aria-current="step"' : ''}><span class="p"></span><span>${esc(t.nome)}<small>${t.estado === 'agora' ? 'agora' : 'depois'}</small></span></li>`).join('')}</ol>`;
   return `<div style="max-width:720px"><div class="card passo-tela"><span class="rotulo" style="margin:0">O passo agora</span><div class="grande" style="margin:8px 0 6px">${esc(P.titulo)}</div><p class="peq" style="color:var(--marinho);margin:0 0 14px">${esc(P.porque)}</p>
@@ -4336,11 +4361,25 @@ const moedaTxt = v => { const n = numero(v); return n == null ? '' : n.toLocaleS
 const opcoesHtml = (c, ops, atual) => `<div class="opcoes">${ops.map(([v, n]) => `<button type="button" class="${String(atual) === String(v) ? 'on' : ''}" data-acao="ex-op" data-c="${c}" data-v="${esc(v)}">${esc(n)}</button>`).join('')}</div>`;
 
 // ---------- A folha de respostas de uma ocorrência (Fiz, Fiz parte, Não fiz, Adiar) ----------
+// "Como fazer": o que o plano já sabe sobre o como da tarefa. O passo a passo que a planejadora escreveu (como), o primeiro
+// gesto, para onde vai o dinheiro da reserva, o perfil de cada caixinha do aporte; e a pergunta já começada quando falta algo
+function comoFazer(o) {
+  if (!o.aberta) return '';
+  const l = [], cons = R.consultora;
+  if (o.pedido.como) l.push(esc(o.pedido.como));
+  if (o.gesto) l.push('Por onde começar: ' + esc(o.gesto) + (o.min ? `, uns ${o.min} minutos` : '') + '.');
+  if (o.pedido.efeito && o.pedido.efeito.reserva) l.push(esc((R.passos.find(p => p.criterio === 'reserva') || {}).onde || ONDE_RESERVA));
+  if (o.divisao && RS) { const cx = o.divisao.map(d => [objDe(d.obj), RS.politica.caixinhas.find(c => c.id === d.obj)]).filter(([ob, c]) => ob && c && c.estrategia);
+    if (cx.length) l.push(`Onde aplicar, pelo plano: ${esc(nomesJuntos(cx.map(([ob, c]) => `${ob.nome}, no perfil ${c.estrategia}`)))}. <a href="#cartao/politica">Ver os investimentos &#8250;</a>`); }
+  if (!l.length && !['carteira', 'dinheiro'].includes(o.cat)) return '';
+  if (cons && !o.pedido.como && ['carteira', 'dinheiro', 'burocratica'].includes(o.cat)) l.push(`Faltou saber de onde tirar, onde pôr ou por onde enviar? <a href="#conversas" data-acao="rascunho" data-txt="${esc(`Sobre a tarefa "${o.titulo}": `)}">Perguntar à ${esc(cons.nome)} &#8250;</a>`);
+  return l.length ? `<div class="rotulo">Como fazer</div><ul class="linhas-p">${l.map(x => `<li>${x}</li>`).join('')}</ul>` : '';
+}
 function folhaTarefa(o) {
   const F_ = UI.folha, quem = nomeDe(MEMBRO());
   const cab = `<div class="alca"></div><span class="rotulo" style="margin:0">${CATS[o.cat]}${casal() && o.resp ? ' · ' + esc(nomeDe(o.resp)) : ''}</span><h2>${esc(o.titulo)}</h2><div class="mut">${esc(o.serve)} · ${esc(o.quando)}</div>`;
   const orient = (R.orientacoes || []).find(x => x.pedido === o.pedido.id);
-  const combinado = orient ? `<p class="peq" style="color:var(--marinho);margin:10px 0 0">${esc(orient.txt)}</p>` : '';
+  const combinado = (orient ? `<p class="peq" style="color:var(--marinho);margin:10px 0 0">${esc(orient.txt)}</p>` : '') + comoFazer(o);
   const hist = o.respostas.length ? `<div class="rotulo">Histórico</div>${o.respostas.map(r => `<div class="hist">${dataBR(r.em)} · ${esc(nomeDe(r.quem))} ${r.estado === 'adiada' ? `adiou para ${dataBR(r.novaData)}${r.motivo ? ': "' + esc(r.motivo) + '"' : ''}` : `respondeu: ${esc(o.cat === 'comportamental' ? ({ feita: 'fiquei dentro', naofiz: 'passei', parcial: 'informei o valor' }[r.estado]) : ESTADO_TXT[r.estado])}${r.valor != null ? ', ' + brl(r.valor) : ''}${r.saida ? ' · ' + esc(SAIDAS[r.saida]) : ''}${r.obs ? ': "' + esc(r.obs) + '"' : ''}`} ${r.canal === 'whatsapp' ? '(pelo WhatsApp)' : ''}</div>`).join('')}` : '';
   const divisao = o.divisao ? `<div class="sep"></div>${o.divisao.map(d => `<div class="entre peq" style="padding:3px 0"><span>${esc(objDe(d.obj).nome)}</span><b class="num" style="font-size:16px">${brl(d.valor)}</b></div>`).join('')}` : '';
   const risco = o.pedido.risco && o.aberta ? `<div class="aviso at" style="margin-top:10px">${esc(textoDoRisco(o))}</div>` : '';
@@ -4460,6 +4499,7 @@ function telaObjetivo(id) {
   return `<div style="max-width:820px"><div class="obj-foto" style="background-image:${FUNDO_OBJ(o)}"><div class="sobre"><b>${esc(o.nome)}</b><span>${esc(o.porque || '')}</span></div></div>
     <div class="nums"><div><span>Guardado</span><b>${brlC(g)}</b><small>de ${brlC(o.valor)} · ${pct(g / o.valor)}</small></div><div><span>Por mês</span><b class="fut">${brl(o.aporte)}</b><small>${o.tipo === 'liberdade' && liberdadeAncorada() ? '' : o.aporte >= nec - 0.5 ? `de ${brl(nec)} necessários · ` : `sozinho, pediria ${brl(nec)} · `}${t[1]}</small></div><div><span>${o.tipo === 'liberdade' ? 'A data' : 'Na data'}</span><b>${o.tipo === 'liberdade' ? 'aos ' + o.idade : mesAno(o.data + '-01')}</b><small>${o.tipo === 'liberdade' ? mesAnoL(o.data) + ', com ' + brl(o.desejada) + ' por mês' : 'no ritmo de hoje, ' + brlC(naData)}</small></div></div>
     <div class="card"><h3>O caminho até lá</h3>${curvaObjetivo(o)}</div>
+    ${R.degrau === 'completo' && versoesVigentes()[0] ? `<div class="card"><div class="entre"><span class="peq" style="color:var(--marinho)">Quer mudar o valor, a data ou o aporte? Simule no relatório e envie a proposta${R.consultora ? ' à ' + esc(R.consultora.nome) : ''}: nada muda no plano até ela aprovar.</span><a class="btn" href="${urlRelatorioInteiro(versoesVigentes()[0].n, 'evolucao')}&simular=${o.tipo === 'liberdade' ? 'ff' : 'obj:' + encodeURIComponent(o.id)}" style="display:inline-flex;align-items:center;text-decoration:none;flex:none">Simular e propor</a></div></div>` : ''}
     <div class="grade2"><div class="card"><h3>A estratégia</h3><p class="peq" style="margin:0">${esc(o.estrategia || 'Guardar o aporte todo mês, numa caixinha só deste objetivo.')}</p><p class="mut" style="margin:8px 0 0">${esc(o.origem || '')}</p></div>
       <div class="card"><h3>Os aportes</h3>${aps.length ? aps.map(a => `<div class="entre peq" style="padding:5px 0;border-top:1px solid var(--areia)"><span>${mesAnoL(a.mes)}</span><span>${a.aberta ? `<span class="chip ${atrasada(a) ? 'at' : ''}">${atrasada(a) ? 'atrasado' : 'aguardando'}</span>` : `<span class="chip ${a.estado === 'feita' ? 'ok' : 'at'}">${estadoTxt(a)} · ${brl(feitoPorObjetivo(a)[o.id] || 0)}</span>`}</span></div>`).join('') : `<div class="mut">${R.pedidos.length ? 'O primeiro aporte ainda não venceu.' : o.complementar ? 'A liberdade recebe o que sobra depois dos objetivos.' : 'Sem tarefa de aporte ainda.'}</div>`}
         ${o.versoes.length ? `<div class="rotulo">Ajustes</div>${o.versoes.map(v => `<div class="hist">${dataBR(v.em)} · ${v.campo === 'aporte' ? `aporte de ${brl(v.de)} para ${brl(v.para)}` : `data de ${mesAno(v.de + '-01')} para ${mesAno(v.para + '-01')}`} (${esc(SAIDAS[v.saida] || 'ajuste')}${v.provisorio ? ', provisório até a ' + esc(R.consultora ? R.consultora.nome : 'consultora') + ' aprovar' : v.aprovadoEm ? ', aprovado pela ' + esc(R.consultora ? R.consultora.nome : 'consultora') + ' em ' + dataBR(v.aprovadoEm) : ''})</div>`).join('')}` : ''}</div></div></div>`;
@@ -4892,6 +4932,14 @@ document.addEventListener('click', async ev => {
   if (acao === 'fiz-rapido') { UI.folha = { id: a.dataset.id }; await responder('feita'); return; }
   if (acao === 'fechar' || acao === 'fechar-fora') { UI.folha = null; if (location.hash.startsWith('#tarefa/')) history.replaceState(null, '', '#tarefas'); desenhar(); return; }
   if (acao === 'modo') { Object.assign(UI.folha, { modo: a.dataset.v || null, saida: null }); desenharFolha(); return; }
+  // o link "propor" leva ao Atendimento com a mensagem já começada (o endereço muda sozinho, pelo href)
+  if (acao === 'rascunho') { if (a.dataset.txt && !UI.rascunho) UI.rascunho = a.dataset.txt; return; }
+  // aceitar a reposição da reserva: vira uma tarefa mensal da família, com lembrete; cada vez feita soma na reserva
+  if (acao === 'repor-reserva') { const P = passoCompleto(), pr = P && P.proposta; if (!pr) return;
+    const antes = JSON.stringify(X), d5 = MES + '-05', data = d5 >= HOJE ? d5 : addM(MES, 1) + '-05';
+    X.avulsas = (X.avulsas || []).concat({ id: 'a' + Date.now().toString(36), titulo: `Guardar ${brl(pr.mensal)} na reserva`, curto: 'Guardar na reserva', serve: 'para a reserva voltar ao combinado', data, cat: 'carteira', resp: '', por: 'cliente', quem: nomeDe(MEMBRO()), em: AGORA(),
+      lembrete: { hora: '09:00', assinatura: '' }, rec: pr.meses > 1 ? 'mensal' : '', vezes: pr.meses, efeito: { reserva: pr.mensal }, valor: pr.mensal, gesto: 'transferir para a aplicação da reserva, a de liquidez diária' });
+    await ARMAZEM.gravar('execucao', X); UI.desfazer = antes; avisar(`Combinado: ${brl(pr.mensal)} por mês para a reserva, até ${mesAno(pr.quando + '-01')}.`, true); desenhar(); return; }
   // corrigir uma resposta já dada: a tarefa volta para em aberto (com os ajustes dela desfeitos) e a folha reabre para responder de novo
   if (acao === 'corrigir-resposta') { const id = a.dataset.id; await gravarMarca(id, 'limpar'); UI.folha = { id }; desenharFolha(); return; }
   if (acao === 'saida') { UI.folha.saida = a.dataset.v; desenharFolha(); const on = document.querySelector('.folha .saida.on'); if (on) on.scrollIntoView({ block: 'center' }); return; }

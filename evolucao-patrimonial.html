@@ -250,6 +250,7 @@ canvas#main.grab-obj{cursor:ew-resize}
 .pi-sk .nm{font:600 14px 'DM Sans',sans-serif;fill:var(--nl-navy-900)} .pi-sk .vl{font:600 15px Sora,sans-serif;fill:var(--nl-navy-900)} .pi-sk .pc{font:500 12.5px 'DM Sans',sans-serif;fill:#6b6a66}
 .pi-sk .or{font:600 11px 'DM Sans',sans-serif;letter-spacing:.14em;text-transform:uppercase;fill:#6b6a66} .pi-sk .ov{font:600 26px Sora,sans-serif;fill:var(--nl-navy-900)} .pi-sk .ou{font:500 13px 'DM Sans',sans-serif;fill:#6b6a66}
 .pi-dois{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.pi-tab{display:block;overflow-x:auto}}   /* a tabela das caixinhas rola de lado no celular, em vez de cortar */
 .pi-tab{width:100%;border-collapse:collapse} .pi-tab th{font:600 11px 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#6b6a66;text-align:left;padding:0 10px 10px}
 .pi-tab th.v,.pi-tab td.v{text-align:right} .pi-tab td{padding:13px 10px;border-top:1px solid #F1EEE8;font:500 14px 'DM Sans',sans-serif;color:var(--nl-gray-700);vertical-align:middle}
 .pi-tab td.v{font:600 15px Sora,sans-serif;color:var(--nl-navy-900)} .pi-tab td.v small{display:block;font:500 12px 'DM Sans',sans-serif;color:#6b6a66}
@@ -536,6 +537,11 @@ canvas#main.grab-obj{cursor:ew-resize}
 .ob-cab,.ob-ln{display:grid;grid-template-columns:20px minmax(150px,1fr) 80px minmax(240px,2.4fr) 112px 88px;column-gap:16px;align-items:center}
 .ob-cab.m,.ob-ln.m{grid-template-columns:minmax(150px,1fr) minmax(240px,2.4fr) 112px 48px 24px}
 .ob-cab{font:500 12px 'DM Sans',sans-serif;color:#6b6a66;padding:0 8px 8px;border-bottom:1px solid #F1EEE8}
+/* no celular, cada despesa ocupa três linhas (nome e valor; a régua; quanto reduz e o valor novo), em vez de seis colunas cortadas */
+@media (max-width:700px){.ob-cab{display:none}
+  .ob-ln{grid-template-columns:20px minmax(0,1fr) auto;column-gap:10px;row-gap:4px;padding:10px 8px}
+  .ob-ln .ob-tr{grid-column:1 / -1} .ob-ln .ob-red{grid-column:1 / 3;justify-self:start}
+  .ob-ln .ob-novo::before{content:'novo: ';font:500 12px 'DM Sans',sans-serif;color:#6b6a66}}
 .ob-cab .d{text-align:right}
 .ob-ln{min-height:44px;padding:0 8px;border-bottom:1px solid #F1EEE8;transition:background .15s ease-out}
 .ob-ln:hover{background:var(--ob-hover)}
@@ -1077,6 +1083,8 @@ body.arrastando-car,body.arrastando-car *{cursor:grabbing!important;user-select:
 .modal.calc.lado .calc-g{grid-template-columns:1fr} .modal.calc.lado .calc-campos{position:static} .calc-campos label[hidden]{display:none}
 .calc-g{display:grid;grid-template-columns:280px minmax(0,1fr);gap:22px;margin:16px 0 4px;align-items:start}
 .calc-campos{position:sticky;top:0;display:flex;flex-direction:column;gap:10px;background:#FAF8F4;border-radius:12px;padding:14px 16px}
+/* no celular, a calculadora fica numa coluna: os campos em cima, a comparação embaixo, sem cortar à direita */
+@media (max-width:700px){.calc-g{grid-template-columns:minmax(0,1fr);gap:14px}.calc-campos{position:static}}
 .calc-campos h5{font:600 12px Sora,sans-serif;color:var(--nl-navy-900);margin-top:4px}
 .calc-campos label{display:flex;flex-direction:column;gap:4px;font:500 11.5px 'DM Sans',sans-serif;color:#6b6a66}
 .calc-campos input,.calc-campos select{height:34px;border:1px solid #E4E0D8;border-radius:8px;padding:0 10px;font:600 14px Sora,sans-serif;font-variant-numeric:tabular-nums;color:var(--nl-navy-900);background:#fff}
@@ -1093,6 +1101,7 @@ body.arrastando-car,body.arrastando-car *{cursor:grabbing!important;user-select:
 .calc-cmp{width:100%;border-collapse:collapse;font-size:12.5px} .calc-cmp th{font:600 11px 'DM Sans',sans-serif;color:#6b6a66;text-align:left;padding:6px 8px;border-bottom:1px solid #F1EEE8}
 .calc-cmp td{padding:8px;border-bottom:1px solid #F6F4F0;color:var(--nl-gray-700)} .calc-cmp .n{text-align:right;white-space:nowrap} .calc-cmp b{color:var(--nl-navy-900)}
 .calc-cmp tr.mudou td{background:#FFF8F2} .calc-cmp tr.mudou b{color:#E06600}
+@media (max-width:700px){.calc-cmp .n{white-space:normal}.calc-cmp th,.calc-cmp td{padding:7px 4px}}   /* "como está" e "com estes valores" cabem lado a lado no celular */
 .calc-obs{display:block;margin-top:14px;font:500 12px 'DM Sans',sans-serif;color:#6b6a66} .calc-obs textarea{margin-top:4px;min-height:56px}
 .calc-pend{margin-top:12px;background:#EEF2F7;border-radius:10px;padding:10px 13px;font-size:12.5px;color:var(--nl-navy-900);line-height:1.5}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--nl-navy-900);color:#fff;padding:10px 16px;border-radius:10px;font:500 13px 'DM Sans',sans-serif;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60;max-width:90vw}
@@ -5430,7 +5439,7 @@ function abrirCalc(id, arg) {
     ${cfg.rascunho && !pend ? '<div class="bts"><button class="btn btn-secondary btn-small" data-calc-acao="fechar">Cancelar</button><button class="btn btn-primary btn-small" data-calc-acao="enviar" disabled>Incluir nas mudanças</button></div>' : pend ? '<div class="calc-pend">Sua proposta está com o consultor. Você pode simular à vontade; para propor algo novo, cancele o envio.</div><div class="bts"><button class="btn btn-secondary btn-small" data-calc-acao="fechar">Fechar</button></div>'
       : `<label class="calc-obs">Observações para o consultor (opcional)<textarea id="calcObs" placeholder="${escH(cfg.obs || 'Conte ao consultor o porquê da mudança.')}"></textarea></label>
     ${outras ? `<div class="muted">${outras === 1 ? 'Vai junto a outra alteração que já está' : 'Vão junto as outras ' + outras + ' alterações que já estão'} na sua proposta.</div>` : ''}
-    <div class="bts"><button class="btn btn-secondary btn-small" data-calc-acao="fechar">Cancelar</button><button class="btn btn-primary btn-small" data-calc-acao="enviar" disabled>Enviar ao consultor</button></div>`}`;
+    <div class="bts"><span class="muted" id="calcDica" style="margin-right:auto;align-self:center">Mude um valor para poder enviar.</span><button class="btn btn-secondary btn-small" data-calc-acao="fechar">Cancelar</button><button class="btn btn-primary btn-small" data-calc-acao="enviar" disabled>Enviar ao consultor</button></div>`}`;
   document.getElementById('calcModal').classList.toggle('lado', !!cfg.lado); document.getElementById('calcModal').hidden = false;
   document.getElementById('calcModalC').scrollTop = 0;   // a janela é sempre a mesma: abre no alto, não na rolagem da anterior
   calcAtualiza(true);
@@ -5441,6 +5450,7 @@ function calcAtualiza(ja) {
   const vals = Object.fromEntries(CALC.cfg.campos.map(c => [c.k, calcValor(c)]));
   document.querySelectorAll('#calcModalC [data-cf]').forEach(i => { const c = CALC.cfg.campos.find(x => x.k === i.dataset.cf); i.classList.toggle('mudou', calcMudou(c)); if (c.mostra) i.closest('label').hidden = !c.mostra(vals); });
   const env = document.querySelector('[data-calc-acao="enviar"]'); if (env) env.disabled = !alts.length;
+  const dica = document.getElementById('calcDica'); if (dica) dica.hidden = alts.length > 0;   // o botão desligado diz por quê
   const pinta = () => { if (CALC) document.getElementById('calcRes').innerHTML = CALC.cfg.resultado(calcPlano(), alts.length > 0); };
   clearTimeout(CALC.t);
   if (!CALC.cfg.lento) { pinta(); return; }   // a simulação inteira: a janela aparece antes, e a conta espera o cliente parar de digitar
@@ -8278,6 +8288,9 @@ BASE = baseDe(PLANO); PROP = lerProposta(); respostaNoPlano();
 mostraFase(FASE);
 if (temAlteracoes()) aplicaVista(); else desenhaPropBar();
 updateStats(); setPlayLabel(); requestAnimationFrame(frame);
+// aberto pela área do cliente com &simular=<calculadora> (obj:<id> de um objetivo, ff da liberdade): "Simular outros valores"
+// já abre, sem o cliente ter de achar o ícone no gráfico
+{ const q = new URLSearchParams(location.search).get('simular'); if (q && PAPEL === 'cliente') { const [id, arg] = q.split(/:(.*)/); setTimeout(() => abrirCalc(id, arg), 500); } }
 </script>
 </body>
 </html>
