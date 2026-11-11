@@ -1111,6 +1111,27 @@ body.v-livro .rotulo .mais{font-weight:400;font-size:13px}
   .heroi .frase{font-size:24px}
   .heroi .passo .primaria{width:100%;justify-content:center}
 }
+/* ---------- 2.0: as três profundidades da área, os grupos de Mais e as telas que vieram da produção ---------- */
+.niveis{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.niveis > *{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:5px 12px 5px 6px;border:1px solid var(--borda);border-radius:9999px;background:var(--cartao);font:500 13px var(--sans);color:var(--legenda)}
+.niveis button{cursor:pointer}
+.niveis b{width:22px;height:22px;border-radius:50%;background:var(--areia);color:var(--marinho);font:600 12px/22px var(--sans);text-align:center}
+.niveis .on{color:var(--marinho)}
+.niveis .on b{background:var(--marinho);color:#fff}
+.niveis small{color:var(--legenda);font-size:12px}
+.card.vago{border-style:dashed;background:transparent}
+.mais-lista h3.rotulo{margin:18px 0 8px}
+.mais-lista h3.rotulo:first-child{margin-top:0}
+.mais-lista .sem{display:flex;align-items:center;gap:12px;border:1px dashed var(--borda);border-radius:var(--raio);padding:14px 16px;margin-bottom:8px;color:var(--legenda);font-weight:600}
+.mais-lista .sem > span:first-of-type{flex:1}
+.mais-lista .sem small{display:block;font-weight:400;font-size:12.5px}
+.passos-uso{margin:0;padding:0;list-style:none;counter-reset:uso}
+.passos-uso li{counter-increment:uso;display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;padding:10px 0;border-top:1px solid var(--areia)}
+.passos-uso li:first-child{border-top:0}
+.passos-uso li::before{content:counter(uso);width:24px;height:24px;border-radius:50%;background:var(--areia);color:var(--marinho);font:600 12px/24px var(--sans);text-align:center}
+.passos-uso a{font-weight:600;color:var(--marinho);text-decoration:none}
+.passos-uso small{display:block;color:var(--legenda);font-size:13px}
+.util-res{margin-top:6px}
 </style>
 </head>
 <body>
@@ -2543,6 +2564,9 @@ function notaDoExame(r) {
 addEventListener('message', e => { const m = e.data; if (m && m.nl === 1 && m.t === 'ola' && e.source) e.source.postMessage({ nl: 1, t: 'ola' }, '*'); });
 const RESUMOS = {}, RES = {};
 const urlRelatorio = (n, extra) => `evolucao-patrimonial.html?cliente=${encodeURIComponent(CLIENTE)}&embutido&versao=${n}${extra || ''}`;
+// o relatório inteiro, numa página só dele, com o botão que volta para a área (&area) e as páginas do acompanhamento
+const urlRelatorioInteiro = (n, fase) => `evolucao-patrimonial.html?cliente=${encodeURIComponent(CLIENTE)}&versao=${n}&area${fase ? '&fase=' + fase : ''}`;
+const urlAcompanhamento = () => `acompanhamento.html?cliente=${encodeURIComponent(CLIENTE)}&area${CONSULTOR ? '&consultor' : ''}`;
 function resumoDe(n) {
   if (RESUMOS[n]) return RESUMOS[n];
   return RESUMOS[n] = new Promise((ok, erro) => {
@@ -2650,6 +2674,8 @@ function montar() {
     // a tarefa é sugerida a partir das respostas: só vale (e só conta) depois de aceita; enquanto a reserva não chega à mínima, o aporte vai para ela
     if (dg === 'cadastrado' && comAporte.length) pedidos.push({ id: 'aporte', cat: 'dinheiro', ritmo: 'mensal', dia: 5, desde: addM(comAporte.map(x => x.criado.slice(0, 7)).sort()[0], 1), resp: dom.casal ? 'os dois' : dom.membros[0].id, divisao: comAporte.map(x => ({ obj: x.id })), sugerida: !((X && X.aceites) || {}).aporte, reservaPrimeiro: true });
   }
+  // as tarefas e os lembretes avulsos, em todo degrau: os que o planejador cadastra (na ficha do cliente, em index.html, ou aqui com ?consultor) e os do próprio cliente
+  pedidos = pedidos.concat(pedidosAvulsos((X && X.avulsas) || [], consultora));
   return { degrau: dg, domicilio: dom, consultora, objetivos, pedidos, passos, proposito, publicadaEm,
     orientacoes: C ? C.orientacoes : [], temas: C ? C.temas : [], checkup: C ? C.checkup : null, aprofundamento: C ? C.aprofundamento : null };
 }
@@ -2700,6 +2726,24 @@ function tetosDoMes(p, mes) {
   });
 }
 let OC_CACHE = null;
+// AS TAREFAS AVULSAS (execucao.avulsas): as que não nascem de um número do plano. O planejador cadastra para o cliente e o
+// cliente cria as dele, com os mesmos campos: { id, titulo, serve, data, cat, resp, por: 'consultor' | 'cliente', quem, em,
+// lembrete: { hora, assinatura } | null, rec: '' | 'semanal' | 'quinzenal' | 'mensal', vezes }. O lembrete no WhatsApp é um
+// atributo da tarefa (UX.md); o envio é da plataforma. Cada vez de uma recorrência é uma tarefa com o seu estado
+// (av:<id>:<k>): entram as vencidas, as dos próximos 14 dias e a seguinte. A resposta grava em execucao.respostas, de onde a
+// base de clientes lê. A MESMA CONTA está em index.html (vezesDaAvulsa): mudou aqui, muda lá.
+function vezesDaAvulsa(t, hoje) {
+  const n = t.rec ? Math.max(1, Math.min(60, +t.vezes || 1)) : 1, fim = addD(hoje, 14), l = [];
+  for (let k = 0; k < n; k++) {
+    const data = !k ? t.data : t.rec === 'mensal' ? maisMeses(t.data, k) : addD(t.data, k * (t.rec === 'quinzenal' ? 14 : 7));
+    l.push({ id: 'av:' + t.id + (t.rec ? ':' + k : ''), data, k, n });
+    if (data > fim) break;
+  }
+  return l;
+}
+const pedidosAvulsos = (lista, consultora) => lista.flatMap(t => vezesDaAvulsa(t, HOJE).map(v => ({ id: v.id, avulsa: t.id, por: t.por, cat: t.cat || 'burocratica', ritmo: 'unica', data: v.data, resp: t.resp || undefined,
+  titulo: t.titulo + (v.n > 1 ? ` (${v.k + 1} de ${v.n})` : ''), serve: [t.serve, t.por === 'consultor' ? 'pedida ' + (consultora ? 'pela ' + consultora.nome : 'pelo planejador') : ''].filter(Boolean).join(' · ') || 'criada por ' + (t.quem || 'você'),
+  quando: 'até ' + dataBR(v.data) + (t.lembrete ? ', com lembrete no WhatsApp' + (t.lembrete.hora ? ' às ' + t.lembrete.hora : '') : '') })));
 function ocorrencias() {
   if (OC_CACHE) return OC_CACHE;
   const fim = addD(HOJE, 14), lista = [];
@@ -3223,14 +3267,19 @@ const ICONES = {
   jornada: '<svg viewBox="0 0 24 24"><path d="M4 19c4 0 4-6 8-6s4-6 8-6"/><circle cx="4" cy="19" r="1.5"/><circle cx="20" cy="7" r="1.5"/></svg>',
   conversas: '<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>',
   mais: '<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>',
+  relatorio: '<svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5a2.5 2.5 0 0 1 2.5 2.5z"/></svg>',
+  semanadas: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M7 14h2M11 14h2M15 14h2"/></svg>',
+  utilitarios: '<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/></svg>',
+  research: '<svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5"/></svg>',
+  comousar: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg>',
 };
 // a navegação: quatro destinos iguais nas duas larguras e "Mais" com o que é de consulta (Saber, Jornada e o Realizado, quando
 // houver três meses de registro); Atendimento é o botão do cabeçalho
 const LATERAL = [['painel', 'Painel'], ['objetivos', 'Objetivos'], ['tarefas', 'Tarefas'], ['plano', 'Plano']];
-const MAIS = () => [['saber', 'Saber'], ['jornada', 'Jornada']].concat(realizadoExiste() ? [['realizado', 'Realizado']] : []);
+const MAIS = () => [['saber', 'Saber'], ['jornada', 'Jornada']].concat(realizadoExiste() ? [['realizado', 'Realizado']] : []).concat([['mais', 'Mais']]);   // "Mais" é o índice de tudo o que não é do dia a dia (v2/ARQUITETURA.md)
 const BAIXO = [['painel', 'Painel'], ['objetivos', 'Objetivos'], ['tarefas', 'Tarefas'], ['plano', 'Plano'], ['mais', 'Mais']];
-const TITULOS = { painel: 'Painel', objetivos: 'Objetivos', tarefas: 'Tarefas', plano: 'Plano', realizado: 'Realizado', jornada: 'Jornada', conversas: 'Atendimento', passo: 'O passo agora', tarefa: 'Tarefa', exame: 'Exame de saúde financeira', mais: 'Mais', saber: 'Saber', modulo: 'Saber', prova: 'Saber', preparar: 'Preparar a reunião' };
-const PAI = { objetivo: 'objetivos', passo: 'painel', tarefa: 'tarefas', conversas: 'painel', cartao: 'plano', exame: 'plano', realizado: 'mais', jornada: 'mais', saber: 'mais', modulo: 'saber', prova: 'saber', preparar: 'jornada' };
+const TITULOS = { painel: 'Painel', objetivos: 'Objetivos', tarefas: 'Tarefas', plano: 'Plano', realizado: 'Realizado', jornada: 'Jornada', conversas: 'Atendimento', passo: 'O passo agora', tarefa: 'Tarefa', exame: 'Exame de saúde financeira', mais: 'Mais', saber: 'Saber', modulo: 'Saber', prova: 'Saber', preparar: 'Preparar a reunião', relatorio: 'Relatório', utilitarios: 'Utilitários', research: 'Research da Nord', comousar: 'Como usar' };
+const PAI = { objetivo: 'objetivos', passo: 'painel', tarefa: 'tarefas', conversas: 'painel', cartao: 'plano', exame: 'plano', realizado: 'mais', jornada: 'mais', saber: 'mais', modulo: 'saber', prova: 'saber', preparar: 'jornada', relatorio: 'mais', utilitarios: 'mais', research: 'mais', comousar: 'mais' };
 const aguardando = () => X.conversas.filter(c => c.quem !== 'consultora' && !c.respondida).length;
 const falarCom = () => R.consultora ? 'Falar com a ' + R.consultora.nome : 'Falar com alguém';
 function casca(conteudo) {
@@ -3934,7 +3983,7 @@ function telaPasso() {
 function telaTarefas() {
   const oc = ocorrencias();
   if (!R.pedidos.length) return `<div class="vazio">${ILUSTRA.tarefas}<h2>Ainda sem tarefas</h2><p>${R.degrau === 'visitante' ? 'As tarefas nascem do plano: os aportes de cada objetivo, o teto da semana, os próximos passos. Com a conta, elas chegam com lembrete no WhatsApp.' : 'As tarefas nascem dos objetivos com aporte. Dê valor, data e aporte a um objetivo e o primeiro aporte vira tarefa.'}</p>
-    ${R.degrau === 'visitante' ? '<button class="primaria" data-acao="criar-conta">Criar a minha conta</button>' : '<a class="primaria" href="#cartao/objetivos" style="display:inline-flex;align-items:center;text-decoration:none">Criar um objetivo</a>'}</div>`;
+    ${R.degrau === 'visitante' ? '<button class="primaria" data-acao="criar-conta">Criar a minha conta</button>' : '<a class="primaria" href="#cartao/objetivos" style="display:inline-flex;align-items:center;text-decoration:none">Criar um objetivo</a>'}${novaTarefaBotao()}</div>`;
   // os filtros: o tipo, com nomes da casa, e de quem é, quando há dois
   const f = UI.filtro, vis = oc.filter(o => f === 'todas' || o.cat === f || (f.startsWith('resp:') && (deQuem(o) === f.slice(5) || deQuem(o) === 'os dois')));
   const agora = o => o.aberta && (o.data <= HOJE || (o.semana && o.semana.atual));
@@ -3942,7 +3991,7 @@ function telaTarefas() {
   const cats = ['todas', ...new Set(oc.map(o => o.cat))].map(c => [c, c === 'todas' ? 'Todas' : CATS[c]]).concat(casal() ? R.domicilio.membros.map(m => ['resp:' + m.id, m.nome]) : []);
   const doMes = oc.filter(o => o.data.slice(0, 7) === MES && !o.sugerida), feitas = doMes.filter(o => !o.aberta).length;
   return `<div style="max-width:760px"><p class="duo-sub" style="margin:0 0 10px">${MESES_L[+MES.slice(5) - 1].charAt(0).toUpperCase() + MESES_L[+MES.slice(5) - 1].slice(1)}: ${feitas} de ${doMes.length} feitas</p><div class="filtros">${cats.map(([c, n]) => `<button class="filtro${f === c ? ' on' : ''}" data-acao="filtro" data-v="${c}">${esc(n)}</button>`).join('')}</div>
-    ${grupos.map(([n, l]) => l.length ? `<details class="grupo" data-g="${n}" ${(UI.grupos[n] ?? true) ? 'open' : ''} ontoggle="UI.grupos[this.dataset.g]=this.open"><summary class="rotulo">${n === 'Sugeridas' ? 'Sugeridas a partir das suas respostas' : n} <span class="conta">${l.length}</span></summary>${l.map(cartaoTarefa).join('')}</details>` : '').join('') || '<div class="aviso">Nenhuma tarefa aqui.</div>'}
+    ${novaTarefaBotao()}${grupos.map(([n, l]) => l.length ? `<details class="grupo" data-g="${n}" ${(UI.grupos[n] ?? true) ? 'open' : ''} ontoggle="UI.grupos[this.dataset.g]=this.open"><summary class="rotulo">${n === 'Sugeridas' ? 'Sugeridas a partir das suas respostas' : n} <span class="conta">${l.length}</span></summary>${l.map(cartaoTarefa).join('')}</details>` : '').join('') || '<div class="aviso">Nenhuma tarefa aqui.</div>'}
     <p class="mut" style="margin-top:16px">Os lembretes chegam no WhatsApp; a resposta vale nos dois lugares.</p></div>`;
 }
 
@@ -4069,15 +4118,26 @@ function telaCartao(id) {
   const vt = `style="view-transition-name:cap-${c.id}"`;   // o mesmo nome do cartão: um cresce até o outro
   const resumo = a.capa ? `<div class="card" ${vt}><div class="entre"><span class="rotulo" style="margin:0">${esc(c.pergunta)}</span>${a.capa.tom ? `<span class="chip ${a.capa.tom[0]}">${esc(a.capa.tom[1])}</span>` : ''}</div><div class="grande" style="margin:10px 0 4px">${a.capa.big}</div><div class="mut" style="margin-bottom:10px">${esc(a.capa.sub)}</div>${vizGrande(c, a)}</div>`
     : `<div class="card" ${vt}><span class="rotulo" style="margin:0">${esc(c.pergunta)}</span><p class="peq" style="color:var(--marinho);margin:10px 0 0">Esta área ainda está vazia. ${falta.some(([, , m]) => m !== 'consultor') ? 'Os primeiros números saem ' + (falta.some(([, , m]) => m === 'exame') && !exames().length ? 'do exame de saúde financeira' : 'da calculadora abaixo') + '.' : 'Ela é preenchida com um planejador, na coleta de dados e no plano.'}</p></div>`;
-  const lista = `<div class="card"><div class="entre"><h3 style="margin:0">As ${c.ind.length} informações desta área</h3><span class="mut">${tem_.length} de ${c.ind.length} · ${pct(f)}</span></div><div class="trilho" style="margin:8px 0 6px"><i style="width:${(f * 100).toFixed(1)}%"></i></div>
+  const lista = `<div class="card" id="nivel-2"><div class="entre"><h3 style="margin:0">As ${c.ind.length} informações desta área</h3><span class="mut">${tem_.length} de ${c.ind.length} · ${pct(f)}</span></div><div class="trilho" style="margin:8px 0 6px"><i style="width:${(f * 100).toFixed(1)}%"></i></div>
     ${tem_.map(([i, nome]) => `<div class="ind tem"><span class="p"></span><span><b>${esc(nome)}</b><br>${esc(a.ind[i].txt)}<small>${esc(a.ind[i].o)}</small></span></div>`).join('')}
     ${falta.map(([i, nome, m]) => `<div class="ind"><span class="p"></span><span>${esc(nome)}<small>${esc(COMO[m])}</small></span></div>`).join('')}</div>`;
-  const pre = R.degrau !== 'completo' && (CALCS[c.id] || c.id === 'objetivos' || c.id === 'saude') ? calculadora(c) : '';
+  const pre = R.degrau !== 'completo' ? ((CALCS[c.id] || c.id === 'objetivos' || c.id === 'saude') ? calculadora(c) : '') + calcEmBreve(c) : '';
   const rel = R.degrau === 'completo' ? relatorioDaArea(c) : '';
   const prox = proximoNaArea(c, falta);
   const ca = CAPA_AREA[c.id], capa = ca ? `<img class="capa-area" src="${ca.src}" alt="" style="object-position:50% ${ca.foco}%">` : '';
-  return `<div style="max-width:1080px">${capa}${rel ?`<div class="grade2" style="align-items:start">${resumo}${lista}</div>${rel}` : `<div class="grade2" style="align-items:start"><div>${resumo}${pre}</div><div>${lista}${prox}</div></div>`}</div>`;
+  return `<div style="max-width:1080px">${capa}${niveisDaArea(c, f)}${rel ?`<div class="grade2" style="align-items:start">${resumo}${lista}</div>${atalhosDaArea(c)}${rel}` : `<div class="grade2" style="align-items:start"><div>${resumo}${pre}</div><div>${lista}${prox}</div></div>${atalhosDaArea(c)}${semRelatorio(c)}`}</div>`;
 }
+// AS TRÊS PROFUNDIDADES (v2/ARQUITETURA.md, seção 3), as mesmas em toda área e em todo degrau: 1. a visão geral (o cartão do
+// Plano e a capa daqui), 2. a visão aprofundada (as informações da área e a calculadora) e 3. o relatório (o capítulo do
+// planejamento). Sem plano publicado, o nível 3 aparece no mesmo lugar, dizendo com o que ele chega
+const niveisDaArea = (c, f) => { const v = versoesVigentes()[0];
+  return `<div class="niveis" role="group" aria-label="As três profundidades desta área"><span class="on"><b>1</b>Visão geral</span><button class="on" data-acao="nivel" data-v="nivel-2"><b>2</b>Aprofundada <small>${pct(f)}</small></button><button class="${v ? 'on' : ''}" data-acao="nivel" data-v="nivel-3"><b>3</b>Relatório <small>${v ? dataBRano(v.em) : 'com o planejamento'}</small></button></div>`; };
+const semRelatorio = c => `<div class="card vago ilustra-vaga" id="nivel-3"><span class="rotulo" style="margin:0 0 6px">3 · No relatório</span><p class="peq" style="margin:0;color:var(--marinho)">A visão mais detalhada desta área é o capítulo dela no relatório do planejamento: ${esc(nomesJuntos(c.paginas.map(p => p[1].toLowerCase())))}. Ele chega com o planejamento completo, montado com um planejador. <a href="#relatorio">Como é o relatório</a> · <a href="#conversas">${esc(falarCom())}</a></p></div>`;
+// as calculadoras de produção que ainda não foram refeitas no cartão: a entrada existe, dizendo que vem
+const CALC_EM_BREVE = { tributario: 'A calculadora de imposto de renda e PGBL', riscos: 'A calculadora do seguro de vida e de acidentes' };
+const calcEmBreve = c => CALC_EM_BREVE[c.id] ? `<div class="card vago"><div class="entre"><b style="color:var(--marinho)">${CALC_EM_BREVE[c.id]}</b><span class="chip">em breve</span></div><p class="mut" style="margin:6px 0 0">Na plataforma de hoje ela é um assistente à parte; aqui, vai gravar nesta área.</p></div>` : '';
+// o que acontece de verdade nesta área mora fora do Plano: a Gestão financeira leva às Semanadas e ao Realizado
+const atalhosDaArea = c => c.id !== 'gestao' ? '' : `<p class="mut" style="margin:0 0 12px">O que acontece de verdade, mês a mês: ${versoesVigentes().length ? `<a href="${urlAcompanhamento()}">Semanadas</a> (o teto da fatura do cartão) · ` : ''}<a href="#realizado">Realizado</a>.</p>`;
 const proximoNaArea = (c, falta) => falta.some(([, , m]) => m === 'consultor') && R.degrau !== 'completo'
   ? `<div class="aviso" style="margin-bottom:12px">${falta.filter(([, , m]) => m === 'consultor').length} ${falta.filter(([, , m]) => m === 'consultor').length === 1 ? 'informação desta área depende' : 'informações desta área dependem'} de uma conversa com um planejador. ${R.consultora ? `<a href="#conversas">Falar com a ${esc(R.consultora.nome)}</a>` : '<a href="#conversas">Agendar uma clínica</a>'}.</div>` : '';
 // o gráfico maior de cada área, com o que existe
@@ -4102,9 +4162,9 @@ function relatorioDaArea(c) {
   const v = versoesVigentes()[0], pags = c.paginas.filter(([p]) => !p.startsWith('carteira-') || (RS && RS.carteira));
   const aba = UI.aba[c.id] && pags.some(p => p[0] === UI.aba[c.id]) ? UI.aba[c.id] : pags[0][0];
   const url = aba === 'fluxo24' ? urlRelatorio(v.n, '&fluxo') : aba === 'fluxovida' ? urlRelatorio(v.n, '&fluxo&vida') : urlRelatorio(v.n, '&fase=' + aba);
-  return `<div class="rotulo">No plano de ${dataBRano(v.em)}, em detalhe</div><div class="abas">${pags.map(([p, nome]) => `<button class="filtro${p === aba ? ' on' : ''}" data-acao="aba" data-area="${c.id}" data-v="${p}">${esc(nome)}</button>`).join('')}</div>
+  return `<div class="rotulo" id="nivel-3">3 · No relatório de ${dataBRano(v.em)}, em detalhe</div><div class="abas">${pags.map(([p, nome]) => `<button class="filtro${p === aba ? ' on' : ''}" data-acao="aba" data-area="${c.id}" data-v="${p}">${esc(nome)}</button>`).join('')}</div>
     <iframe class="quadro" title="${esc(c.nome)} no plano" src="${url}" loading="lazy"></iframe>
-    <p class="mut">É o mesmo relatório da apresentação. Para propor uma mudança, use "Simular outros valores" na página, ou ${R.consultora ? `<a href="#conversas">fale com a ${esc(R.consultora.nome)}</a>` : 'fale com o seu planejador'}.</p>`;
+    <p class="mut"><a href="${urlRelatorioInteiro(v.n, aba.startsWith('fluxo') ? 'orcamento' : aba)}">Abrir o relatório inteiro &#8250;</a> · É o mesmo relatório da apresentação. Para propor uma mudança, use "Simular outros valores" na página, ou ${R.consultora ? `<a href="#conversas">fale com a ${esc(R.consultora.nome)}</a>` : 'fale com o seu planejador'}.</p>`;
 }
 
 // ---------- As calculadoras de cada área: gravam no vetor, com a data e "você" como origem; o plano se ajusta na hora ----------
@@ -4239,7 +4299,7 @@ function folhaTarefa(o) {
       ${o.respostas.filter(r => r.estado === 'adiada').length && R.consultora ? `<div class="aviso at">É o segundo adiamento desta tarefa: a ${esc(R.consultora.nome)} vai ver e pode ajudar.</div>` : ''}
       <div class="linha" style="margin-top:12px"><button class="primaria" data-acao="responder" data-v="adiada">Adiar</button><button class="btn" data-acao="modo" data-v="">Voltar</button></div>`;
   }
-  return cab + combinado + divisao + semanas + risco + corpo + `<p class="mut" style="margin:14px 0 0">Respondendo como ${esc(quem)}.</p>` + hist;
+  return cab + combinado + divisao + semanas + risco + corpo + `<p class="mut" style="margin:14px 0 0">Respondendo como ${esc(quem)}.</p>` + hist + apagarAvulsaHtml(o);
 }
 const SAIDAS = { manter: 'Manter a data', adiar: 'Adiar o objetivo', coube: 'Ajustar ao que coube', outro: 'Usei em outro objetivo', versao: 'nova versão do plano' };
 function efeitoDoAporte(o, coube) {
@@ -4424,7 +4484,7 @@ function telaJornada() {
     const dentro = st === 'agora' && P ? `<ol class="trilha-v">${P.trilha.map(t => `<li class="${t.estado === 'resolvido' ? 'feito' : t.estado}"${t.estado === 'agora' ? ' aria-current="step"' : ''}><span class="p"></span><span>${esc(t.nome)}<small>${t.estado === 'resolvido' ? 'resolvido quando o plano começou' : t.estado === 'agora' ? 'o passo agora' : 'depois'}</small></span></li>`).join('')}</ol>` : st === 'feito' ? `<small>resolvido: ${ganhos[i].toLowerCase()}</small>` : `<small>${esc(PERGUNTAS_MUNDO[i])}</small>`;
     return `<li class="mundo ${st}"><span class="p"></span><div><b>${m}</b>${dentro}</div></li>`; }).join('');
   const escalada = `<div class="card"><span class="rotulo" style="margin:0 0 4px">A escalada</span><p class="mut" style="margin:0 0 10px">${pl('Vocês estão', 'Você está')} em <b>${MUNDOS[atual]}</b>: ${PERGUNTAS_MUNDO[atual]}${P && P.deQuem ? ' O passo é ' + esc(P.deQuem) + '.' : ''}</p><ol class="mundos">${mundos}</ol></div>`;
-  return `<div class="grade2" style="align-items:start"><div>${AGENDA_AREA.cartoes()}${relacao}${R.temas && R.temas.length ? `<div class="card"><span class="rotulo" style="margin:0 0 6px">Para uma próxima conversa</span>${R.temas.map(t => `<div class="peq" style="padding:6px 0;border-top:1px solid var(--areia);color:var(--marinho)">${esc(t)}</div>`).join('')}</div>` : ''}</div>${escalada}</div>`;
+  return `<div class="grade2" style="align-items:start"><div>${AGENDA_AREA.cartoes()}${servicoHtml()}${relacao}${R.temas && R.temas.length ? `<div class="card"><span class="rotulo" style="margin:0 0 6px">Para uma próxima conversa</span>${R.temas.map(t => `<div class="peq" style="padding:6px 0;border-top:1px solid var(--areia);color:var(--marinho)">${esc(t)}</div>`).join('')}</div>` : ''}</div>${escalada}</div>`;
 }
 
 // ---------- O atendimento (decisão de 30/10): o nível de serviço de cada degrau, quem atende e o próximo encontro, com o
@@ -4502,7 +4562,98 @@ function telaConversas() {
   const agenda = AGENDA_AREA.cartoes();
   return `<div class="grade2" style="align-items:stretch">${servico}${encontro}</div>${agenda ? `<div class="grade2" style="align-items:start;margin-top:12px">${agenda}</div>` : ''}${blocoReunioes()}${niveis}${conversas}`;
 }
-const telaMais = () => `<div class="mais-lista" style="max-width:560px"><a href="#saber">${ICONES.saber}<span>Saber<small>Os capítulos, com o que serve ao seu passo primeiro</small></span></a><a href="#jornada">${ICONES.jornada}<span>Jornada<small>As reuniões, a escalada e a preparação da próxima conversa</small></span></a>${realizadoExiste() ? `<a href="#realizado">${ICONES.realizado}<span>Realizado<small>O planejado e o que aconteceu, no orçamento e no patrimônio</small></span></a>` : ''}<a href="#conversas">${ICONES.conversas}<span>Atendimento<small>Quem atende, as reuniões e as conversas</small></span></a></div>`;
+// ---------- Mais: o índice do que não é do dia a dia, em cinco grupos (v2/ARQUITETURA.md). O que veio da produção e do
+// portal entra aqui, nunca no Painel. A entrada que ainda não tem o que mostrar aparece no mesmo lugar, dizendo quando ----------
+const itemMais = (href, ic, nome, sub, chip) => href ? `<a href="${href}">${ICONES[ic]}<span>${nome}<small>${sub}</small></span></a>` : `<div class="sem">${ICONES[ic]}<span>${nome}<small>${sub}</small></span><span class="chip">${chip || 'em breve'}</span></div>`;
+function telaMais() {
+  const temPlano = !!versoesVigentes().length, g = (t, itens) => `<h3 class="rotulo">${t}</h3>${itens.join('')}`;
+  return `<div class="mais-lista" style="max-width:560px">
+    ${g('Acompanhar', [itemMais('#realizado', 'realizado', 'Realizado', realizadoExiste() ? 'O planejado e o que aconteceu, no orçamento e no patrimônio' : 'O planejado e o que aconteceu; ganha corpo com três meses de registro'),
+      itemMais(temPlano ? urlAcompanhamento() : null, 'semanadas', 'Semanadas', 'O teto da fatura do cartão, semana a semana', 'com o plano')])}
+    ${g('O plano', [itemMais('#relatorio', 'relatorio', 'Relatório', 'O planejamento completo, capítulo a capítulo, e as versões')])}
+    ${g('Aprender', [itemMais('#saber', 'saber', 'Saber', 'Os capítulos, com o que serve ao seu passo primeiro'), itemMais('#research', 'research', 'Research da Nord', 'Os relatórios de investimentos da Nord'), itemMais('#comousar', 'comousar', 'Como usar', 'Os primeiros passos e onde fica cada coisa')])}
+    ${g('Ferramentas', [itemMais('#utilitarios', 'utilitarios', 'Utilitários', 'Contas rápidas para decidir, sem gravar nada')])}
+    ${g('A Nord', [itemMais('#jornada', 'jornada', 'Jornada', 'As reuniões, a escalada e a preparação da próxima conversa'), itemMais('#conversas', 'conversas', 'Atendimento', 'Quem atende, as reuniões e as conversas')])}</div>`;
+}
+// ---------- Relatório: as versões publicadas do planejamento, cada uma com a data, o comentário e "Ver planejamento".
+// É o nível 3 inteiro; cada área do Plano abre o capítulo dela ----------
+function telaRelatorio() {
+  const vs = versoesVigentes(), botao = 'style="display:inline-flex;align-items:center;text-decoration:none"';
+  if (!vs.length) return `<div class="vazio ilustra-vaga"><h2>O relatório do planejamento</h2><p>É a visão mais detalhada do plano: cada área em capítulos, com os números, os gráficos e a explicação de quem montou. Ele chega com o planejamento completo. Até lá, o Plano mostra as mesmas onze áreas com o que já existe.</p>
+    <div class="linha" style="justify-content:center"><a class="primaria" href="#plano" ${botao}>Ver o Plano</a><a class="btn" href="#conversas" ${botao}>${esc(falarCom())}</a></div></div>`;
+  return `<div style="max-width:760px"><p class="duo-sub" style="margin:0 0 10px">O planejamento completo, como foi apresentado. Cada ajuste vira uma versão nova, com data; as anteriores ficam aqui.</p>
+    ${vs.map((v, i) => `<div class="card"><div class="entre"><div><span class="rotulo" style="margin:0 0 4px">Versão ${v.n}${i ? '' : ' · em vigor'}</span><b class="num" style="font-size:18px">${dataBRano(v.em)}</b><div class="mut">${esc(v.comentario || 'versão publicada')}${v.consultor ? ' · ' + esc(v.consultor) : ''}</div></div>
+      <a class="${i ? 'btn' : 'primaria'}" href="${urlRelatorioInteiro(v.n)}" ${botao}>Ver planejamento</a></div></div>`).join('')}
+    <p class="mut">Cada área do <a href="#plano">Plano</a> abre o capítulo dela. Para propor uma mudança, use "Simular outros valores" no relatório${R.consultora ? `, ou <a href="#conversas">fale com a ${esc(R.consultora.nome)}</a>` : ''}.</p></div>`;
+}
+// ---------- Research da Nord: os relatórios que o menu de produção trazia. Só o Comitê tem endereço conhecido aqui ----------
+const RESEARCH = [['Comitê de Investimentos', 'A alocação recomendada pela Nord, revista todo mês', LINKS.comite], ['Renda Fixa Pro', 'Títulos públicos e crédito privado', null], ['Nord Fundos', 'Fundos de investimento', null],
+  ['Nord FIIs', 'Fundos imobiliários', null], ['O Investidor de Valor', 'Ações', null], ['Nord Dividendos', 'Ações que pagam dividendos', null]];
+const telaResearch = () => `<div class="mais-lista" style="max-width:560px"><p class="duo-sub" style="margin:0 0 12px">Os relatórios de investimentos da Nord. Abrem na área de membros, em outra aba.</p>
+  ${RESEARCH.map(([n, s, u]) => u ? `<a href="${u}" target="_blank" rel="noopener">${ICONES.research}<span>${n}<small>${s}</small></span></a>` : itemMais(null, 'research', n, s)).join('')}</div>`;
+// ---------- Como usar: o vídeo e os "primeiros passos" de produção, cada passo levando à tela dele ----------
+const PRIMEIROS = [['#exame', 'Faça o exame de saúde financeira', '33 perguntas, uns 8 minutos. Ele situa a sua vida financeira e preenche boa parte do Plano.'], ['#cartao/reserva', 'Calcule a sua reserva', 'A mínima, a aceitável e a ideal, pelo seu custo de vida.'],
+  ['#cartao/liberdade', 'Veja a sua liberdade financeira', 'Quando o trabalho passa a ser escolha, e com que renda.'], ['#objetivos', 'Dê valor e data aos objetivos', 'Cada objetivo com aporte vira uma tarefa do mês.'],
+  ['#tarefas', 'Acompanhe as tarefas e os lembretes', 'O que fazer em cada mês. O lembrete chega no WhatsApp, e a resposta vale nos dois lugares.']];
+const ONDE_FICA = [['#painel', 'Painel', 'o passo de agora e o que resolver'], ['#objetivos', 'Objetivos', 'o que realizar e como cada um está indo'], ['#tarefas', 'Tarefas', 'o que fazer, e se foi feito'], ['#plano', 'Plano', 'as onze áreas, cada uma em três profundidades'], ['#mais', 'Mais', 'o acompanhamento, o relatório, o saber, os utilitários e a Nord']];
+const telaComoUsar = () => `<div style="max-width:760px"><div class="card vago ilustra-vaga"><div class="entre"><b style="color:var(--marinho)">Vídeo: como utilizar a plataforma</b><span class="chip">em breve</span></div><p class="mut" style="margin:6px 0 0">O vídeo de apresentação entra aqui.</p></div>
+  <div class="card"><span class="rotulo" style="margin:0 0 4px">Primeiros passos</span><ol class="passos-uso">${PRIMEIROS.map(([h, t, s]) => `<li><span><a href="${h}">${t} &#8250;</a><small>${s}</small></span></li>`).join('')}</ol></div>
+  <div class="card"><span class="rotulo" style="margin:0 0 4px">Onde fica cada coisa</span>${ONDE_FICA.map(([h, t, s]) => `<div class="peq" style="padding:7px 0;border-top:1px solid var(--areia)"><a href="${h}" style="font-weight:600;color:var(--marinho);text-decoration:none">${t}</a>: ${s}</div>`).join('')}</div></div>`;
+// ---------- Utilitários: as calculadoras sem valores salvos (produção: "Calculadoras úteis"). Ajudam a decidir; nada aqui
+// grava no vetor nem muda o plano. O resultado se refaz enquanto a pessoa digita ----------
+const utilNum = (k, padrao) => { const v = numero((UI.util || {})[k]); return v == null ? padrao : v; };
+const campoUtil = (k, rot, padrao, moeda, ajuda) => `<div class="campo"><label for="u-${k}">${rot}</label><input id="u-${k}" inputmode="decimal"${moeda ? ' data-moeda' : ''} data-util="${k}" value="${esc((UI.util || {})[k] != null ? (UI.util || {})[k] : padrao)}">${ajuda ? `<small>${ajuda}</small>` : ''}</div>`;
+function resUtilInv() {
+  const v = utilNum('inv.valor', 100000), tx = utilNum('inv.taxa', 12) / 100, inf = utilNum('inv.inflacao', 4.5) / 100, ir = utilNum('inv.ir', 15) / 100, anos = Math.max(0, utilNum('inv.anos', 10));
+  const liq = tx * (1 - ir), real = (1 + liq) / (1 + inf) - 1;
+  return `<b class="num" style="font-size:22px">${nf1.format(real * 100)}% ao ano</b> acima da inflação, depois do imposto (${nf1.format(liq * 100)}% líquido). Em ${nf1.format(anos)} ${anos === 1 ? 'ano' : 'anos'}, ${brl(v)} viram ${brl(v * Math.pow(1 + real, anos))} em poder de compra de hoje.`;
+}
+function resUtilImo() {
+  const v = utilNum('imo.valor', 500000), al = utilNum('imo.aluguel', 2500), cu = utilNum('imo.custos', 300), vago = Math.min(12, Math.max(0, utilNum('imo.vago', 1))), ir = utilNum('imo.ir', 15) / 100, val = utilNum('imo.valorizacao', 0) / 100;
+  const liq = al * (12 - vago) * (1 - ir) - cu * 12, y = v > 0 ? liq / v : 0;
+  return `<b class="num" style="font-size:22px">${nf1.format(y * 100)}% ao ano</b> de aluguel líquido sobre o valor do imóvel: ${brl(liq)} por ano, ${brl(liq / 12)} por mês. Com a valorização acima da inflação, ${nf1.format((y + val) * 100)}% ao ano.`;
+}
+const telaUtilitarios = () => `<div style="max-width:1080px"><p class="duo-sub" style="margin:0 0 10px">Contas rápidas para decidir. Nada aqui é gravado nem muda o plano.</p><div class="grade2" style="align-items:start">
+  <div class="card calc"><h3>Rendimento real de um investimento</h3><p class="mut" style="margin:0 0 4px">Quanto ele rende de verdade, tirando o imposto e a inflação.</p>
+    ${campoUtil('inv.valor', 'Valor aplicado', '100.000', true)}${campoUtil('inv.taxa', 'Rendimento ao ano, em %', '12')}${campoUtil('inv.ir', 'Imposto sobre o ganho, em %', '15', false, '15% a 22,5% na renda fixa, conforme o prazo; 0 nos isentos')}${campoUtil('inv.inflacao', 'Inflação ao ano, em %', '4,5')}${campoUtil('inv.anos', 'Por quantos anos', '10')}
+    <div class="aviso util-res" id="util-inv">${resUtilInv()}</div><p class="mut" style="margin:8px 0 0">Conta simples: o imposto entra todo ano, sobre o ganho do ano.</p></div>
+  <div class="card calc"><h3>Rendimento real de um imóvel</h3><p class="mut" style="margin:0 0 4px">Quanto o aluguel rende sobre o valor do imóvel, depois dos custos de quem é dono.</p>
+    ${campoUtil('imo.valor', 'Valor de mercado do imóvel', '500.000', true)}${campoUtil('imo.aluguel', 'Aluguel por mês', '2.500', true)}${campoUtil('imo.custos', 'Custos do dono por mês', '300', true, 'manutenção, administração, IPTU e condomínio quando vazio')}${campoUtil('imo.vago', 'Meses vazio por ano', '1')}${campoUtil('imo.ir', 'Imposto sobre o aluguel, em %', '15')}${campoUtil('imo.valorizacao', 'Valorização acima da inflação ao ano, em %', '0')}
+    <div class="aviso util-res" id="util-imo">${resUtilImo()}</div><p class="mut" style="margin:8px 0 0">O aluguel costuma ser reajustado pela inflação; por isso o resultado já é real.</p></div></div></div>`;
+// ---------- A jornada do serviço, como em produção (Embarque → Entrega do relatório → Acompanhamento #1 → #2 → Renovação),
+// com as datas do plano; na clínica e antes dela, as etapas daquele atendimento. Fica na Jornada, ao lado da escalada ----------
+function servicoHtml() {
+  const dg = R.degrau, ex = exames(), rs = reunioes();
+  let et;
+  if (dg === 'completo') { const k = calendarioCompleto(versoesVigentes());
+    et = [['Embarque', rs.length ? rs[rs.length - 1].data : null, true], ['Entrega do relatório', k.apres, true], ['Acompanhamento #1', k.acomp1.data, k.acomp1.feito], ['Acompanhamento #2', k.anual.data, k.anual.feito], ['Renovação', null, false]]; }
+  else if (dg === 'clinica') et = [['Exame de saúde financeira', ex.length ? ex[0].data : null, !!ex.length], ['Clínica financeira', R.publicadaEm, true]].concat(R.aprofundamento ? [['Conversa de aprofundamento', R.aprofundamento, R.aprofundamento < HOJE]] : []).concat([['Check-up anual', R.checkup, false]]);
+  else et = [['Exame de saúde financeira', ex.length ? ex[ex.length - 1].data : null, !!ex.length], ['Reunião de avaliação', null, false], ['Planejamento', null, false]];
+  const prox = et.findIndex(e => !e[2]);
+  return `<div class="card"><span class="rotulo" style="margin:0 0 8px">A jornada do serviço</span>${et.map(([n, d, ok], i) => `<div class="etapa ${ok ? 'feita' : i === prox ? 'agora' : ''}"><span class="p"></span><div><b>${n}</b> <span class="mut">${d ? dataBRano(d) : ok ? '' : 'a definir'}</span></div></div>`).join('')}</div>`;
+}
+// ---------- Nova tarefa: a tarefa avulsa, com o lembrete como atributo. O cliente cria as dele; o planejador (?consultor)
+// cria para o cliente, e a resposta volta para a base de clientes ----------
+const novaTarefaBotao = () => R.degrau === 'visitante' ? '' : `<div class="linha" style="margin:4px 0 12px"><button class="btn" data-acao="nova-tarefa">${CONSULTOR ? 'Nova tarefa para ' + esc(R.domicilio.titulo) : 'Nova tarefa'}</button></div>`;
+const CATS_AVULSA = ['burocratica', 'interacao', 'educacional', 'carteira'];
+const REC = [['', 'Uma vez'], ['semanal', 'Toda semana'], ['quinzenal', 'A cada 15 dias'], ['mensal', 'Todo mês']];
+function folhaNova() {
+  const n = UI.folha.nova, op = (l, sel) => l.map(([v, t]) => `<option value="${esc(v)}"${v === sel ? ' selected' : ''}>${esc(t)}</option>`).join('');
+  return `<div class="alca"></div><h2>${CONSULTOR ? 'Nova tarefa para ' + esc(R.domicilio.titulo) : 'Nova tarefa'}</h2><p class="mut">${CONSULTOR ? 'Aparece em Tarefas, como pedida por você. A resposta volta para a base de clientes.' : 'Uma tarefa sua, com lembrete se quiser. As do plano continuam nascendo dele.'}</p>
+    <div class="campo"><label for="nt-titulo">O que fazer</label><input id="nt-titulo" maxlength="120" data-nova="titulo" value="${esc(n.titulo)}"></div>
+    <div class="campo"><label for="nt-serve">Para quê (opcional)</label><input id="nt-serve" maxlength="120" data-nova="serve" value="${esc(n.serve)}" placeholder="para…"></div>
+    <div class="campo"><label for="nt-data">${n.rec ? 'A primeira vez, até' : 'Até quando'}</label><input id="nt-data" type="date" data-nova="data" value="${esc(n.data)}"></div>
+    <div class="campo"><label for="nt-cat">Tipo</label><select id="nt-cat" data-nova="cat">${op(CATS_AVULSA.map(c => [c, CATS[c]]), n.cat)}</select></div>
+    ${casal() ? `<div class="campo"><label for="nt-resp">De quem é</label><select id="nt-resp" data-nova="resp">${op([['', 'Dos dois']].concat(R.domicilio.membros.map(m => [m.id, m.nome])), n.resp)}</select></div>` : ''}
+    <div class="campo"><label for="nt-rec">Repetição</label><select id="nt-rec" data-nova="rec">${op(REC, n.rec)}</select></div>
+    ${n.rec ? `<div class="campo"><label for="nt-vezes">Quantas vezes</label><input id="nt-vezes" type="number" min="2" max="60" data-nova="vezes" value="${esc(n.vezes)}"></div>` : ''}
+    <label class="linha peq" style="margin:14px 0 4px;color:var(--marinho);cursor:pointer"><input type="checkbox" data-nova="lembrar" ${n.lembrar ? 'checked' : ''}> Lembrar no WhatsApp</label>
+    ${n.lembrar ? `<div class="campo"><label for="nt-hora">A que horas</label><input id="nt-hora" type="time" data-nova="hora" value="${esc(n.hora)}"></div>
+    <div class="campo"><label for="nt-ass">Assinatura da mensagem (opcional)</label><input id="nt-ass" maxlength="60" data-nova="assinatura" value="${esc(n.assinatura)}"></div>` : ''}
+    <div class="linha" style="margin-top:14px"><button class="primaria" data-acao="gravar-nova">Criar a tarefa</button><button class="btn" data-acao="fechar">Fechar</button></div>`;
+}
+// quem criou a tarefa avulsa pode apagá-la: o cliente, as dele; o planejador, as que ele pediu
+const apagarAvulsaHtml = o => o.pedido.avulsa && (CONSULTOR ? o.pedido.por === 'consultor' : o.pedido.por === 'cliente') ? `<div style="margin-top:12px"><button class="btn link peq" data-acao="apagar-avulsa" data-id="${esc(o.pedido.avulsa)}">Apagar esta tarefa${/:\d+$/.test(o.id) ? ' e as repetições' : ''}</button></div>` : '';
 // ---------- Preparar a reunião: a entrada da próxima reunião, aberta. O que ficou da última, os números antes e depois, a
 // pauta com as duas origens e o campo da família, e a confirmação da data ----------
 function telaPreparar() {
@@ -4539,7 +4690,7 @@ function desenhar() {
   let html;
   try {
     html = ({ painel: telaPainel, passo: telaPasso, tarefas: telaTarefas, tarefa: telaTarefas, objetivos: telaObjetivos, objetivo: () => telaObjetivo(arg), plano: telaPlano, cartao: () => telaCartao(arg),
-      exame: telaExame, realizado: telaRealizado, jornada: telaJornada, conversas: telaConversas, mais: telaMais, saber: telaSaber, modulo: () => telaModulo(arg), prova: () => telaProva(arg), preparar: telaPreparar }[tela] || telaPainel)();
+      exame: telaExame, realizado: telaRealizado, jornada: telaJornada, conversas: telaConversas, mais: telaMais, saber: telaSaber, modulo: () => telaModulo(arg), prova: () => telaProva(arg), preparar: telaPreparar, relatorio: telaRelatorio, utilitarios: telaUtilitarios, research: telaResearch, comousar: telaComoUsar }[tela] || telaPainel)();
   } catch (e) { console.error(e); html = `<div class="aviso at">Não foi possível mostrar esta tela agora. ${esc(e.message)}</div>`; }
   raiz.innerHTML = casca(html);
   document.title = (tela === 'objetivo' ? (objDe(arg) || {}).nome || 'Objetivo' : tela === 'cartao' ? (CARTOES.find(c => c.id === arg) || {}).nome || 'Plano' : TITULOS[tela] || 'Painel') + ' — Nord Liberta';
@@ -4554,6 +4705,7 @@ function desenharFolha() {
   if (UI.folha && UI.folha.lancar) { f.innerHTML = `<div class="veu" data-acao="fechar-fora"><div class="folha" role="dialog" aria-modal="true" aria-label="Lançar um mês">${folhaLancar()}</div></div>`; return; }
   if (UI.folha && UI.folha.sobra != null) { f.innerHTML = `<div class="veu" data-acao="fechar-fora"><div class="folha" role="dialog" aria-modal="true" aria-label="Não precisa poupar mais">${folhaSobra()}</div></div>`; return; }
   if (UI.folha && UI.folha.conta) { f.innerHTML = `<div class="veu" data-acao="fechar-fora"><div class="folha" role="dialog" aria-modal="true" aria-label="Criar a conta">${folhaConta()}</div></div>`; return; }
+  if (UI.folha && UI.folha.nova) { f.innerHTML = `<div class="veu" data-acao="fechar-fora"><div class="folha" role="dialog" aria-modal="true" aria-label="Nova tarefa">${folhaNova()}</div></div>`; return; }
   if (UI.folha && UI.folha.imprevisto) { f.innerHTML = `<div class="veu" data-acao="fechar-fora"><div class="folha" role="dialog" aria-modal="true" aria-label="Um imprevisto">${folhaImprevisto()}</div></div>`; return; }
   const o = UI.folha && ocorrenciaDe(UI.folha.id);
   f.innerHTML = o ? `<div class="veu" data-acao="fechar-fora"><div class="folha" role="dialog" aria-modal="true" aria-label="${esc(o.titulo)}">${folhaTarefa(o)}</div></div>` : '';
@@ -4639,6 +4791,18 @@ document.addEventListener('click', async ev => {
     avisar(`A Nord lembra ${nomeDe(deQuem(o))} pelo WhatsApp: "${o.titulo}, desde ${dataBR(o.data)}".`); desenhar(); return; }
   // um imprevisto: o que aconteceu, quanto, quando e de onde; a resposta diz o custo no passo antes da folga
   if (acao === 'imprevisto') { UI.folha = { imprevisto: { de: 'reserva' } }; desenharFolha(); return; }
+  // a tarefa avulsa (do cliente, ou do planejador com ?consultor) e o lembrete dela; ver vezesDaAvulsa
+  if (acao === 'nova-tarefa') { UI.folha = { nova: { titulo: '', serve: '', data: addD(HOJE, 7), cat: 'burocratica', resp: '', rec: '', vezes: 4, lembrar: true, hora: '09:00', assinatura: CONSULTOR && R.consultora ? R.consultora.completo || R.consultora.nome : '' } }; desenharFolha(); return; }
+  if (acao === 'gravar-nova') { const n = UI.folha.nova, titulo = String(n.titulo || '').trim();
+    if (!titulo || !/^\d{4}-\d{2}-\d{2}$/.test(n.data || '')) { avisar('A tarefa precisa dizer o que fazer e até quando.'); desenhar(); return; }
+    const antes = JSON.stringify(X);
+    X.avulsas = (X.avulsas || []).concat({ id: 'a' + Date.now().toString(36), titulo, serve: String(n.serve || '').trim(), data: n.data, cat: n.cat, resp: n.resp || '', por: CONSULTOR ? 'consultor' : 'cliente', quem: CONSULTOR ? marcaDoPlanejador().quem : nomeDe(MEMBRO()), em: AGORA(),
+      lembrete: n.lembrar ? { hora: n.hora || '09:00', assinatura: String(n.assinatura || '').trim() } : null, rec: n.rec || '', vezes: n.rec ? Math.max(2, Math.min(60, +n.vezes || 2)) : 1 });
+    await ARMAZEM.gravar('execucao', X); UI.folha = null; UI.desfazer = antes; avisar('Tarefa criada.' + (n.lembrar ? ' O lembrete chega no WhatsApp.' : ''), true); desenhar(); return; }
+  if (acao === 'apagar-avulsa') { const antes = JSON.stringify(X); X.avulsas = (X.avulsas || []).filter(t => t.id !== a.dataset.id); await ARMAZEM.gravar('execucao', X); UI.folha = null; UI.desfazer = antes;
+    if (location.hash.startsWith('#tarefa/')) history.replaceState(null, '', '#tarefas'); avisar('Tarefa apagada.', true); desenhar(); return; }
+  // as três profundidades: o toque leva ao nível, na mesma página
+  if (acao === 'nivel') { const n = document.getElementById(a.dataset.v); if (n) n.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
   if (acao === 'imp-op') { Object.assign(UI.folha.imprevisto, { [a.dataset.c]: a.dataset.v }); desenharFolha(); return; }
   if (acao === 'imp-gravar') { const I = UI.folha.imprevisto; if (!(I.valor > 0) || !I.tipo) { avisar('Falta dizer o que aconteceu e quanto.'); return; }
     X.imprevistos = (X.imprevistos || []).concat({ em: AGORA(), quem: MEMBRO(), tipo: I.tipo, valor: I.valor, de: I.de || 'reserva' }); await ARMAZEM.gravar('execucao', X); UI.folha = null;
@@ -4771,6 +4935,8 @@ document.addEventListener('input', ev => {
   if (d.ex && UI.exame) { UI.exame.resp[d.ex] = t.value; return; }
   if (d.lanc && UI.folha) { UI.folha[d.lanc] = t.value; return; }
   if (d.conta && UI.folha) { UI.folha[d.conta] = t.value; return; }
+  if (d.nova && UI.folha && UI.folha.nova) { UI.folha.nova[d.nova] = t.type === 'checkbox' ? t.checked : t.value; if (t.type === 'checkbox' || d.nova === 'rec') desenharFolha(); return; }
+  if (d.util) { (UI.util = UI.util || {})[d.util] = t.value; const r = document.getElementById('util-' + d.util.slice(0, 3)); if (r) r.innerHTML = d.util.startsWith('inv') ? resUtilInv() : resUtilImo(); return; }
 });
 // o efeito de uma falta e o caminho de um objetivo novo são recalculados ao sair do campo, sem perder o foco no meio
 document.addEventListener('change', ev => { const t = ev.target, d = t.dataset || {};
