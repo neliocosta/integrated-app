@@ -25,6 +25,30 @@ cliente; muda a profundidade preenchida.
 calculadora (2) e o capítulo do relatório (3), com a régua dos três níveis no alto; sem plano publicado, o nível 3 aparece
 no mesmo lugar dizendo com o que chega. Falta levar a regra para fora do Plano (Objetivos, Realizado).
 
+## Exame de saúde financeira revisto, como o nível 1 de cada área
+
+`em discussão` · 11/11/2026 · Nélio
+
+O exame (33 perguntas, nota de 0 a 100, algoritmo próprio) tem uns cinco anos e nunca foi revisto a fundo. A ideia é
+rever as perguntas e a conta da nota final com o que se aprendeu nas conversas com clientes, e fazer do exame a **origem
+do nível 1** das três profundidades: ele dá o norte de cada área; a clínica com o consultor (ou as tarefas e lições da
+trilha do fazer e do saber) aprofunda para o nível 2; o planejamento completo dá o nível 3.
+
+O mesmo dado fica mais preciso a cada nível. O exemplo do Nélio, na poupança:
+
+| Nível | De onde vem | O dado |
+|---|---|---|
+| 1 · exame | a pessoa declara | "poupo uns R$ 1.500 por mês; guardei em 8 dos últimos 12 meses" |
+| 2 · clínica | o consultor confere com ela | na verdade perto de R$ 1.100 por mês, em 6 meses; **alvo combinado de R$ 1.700**, que passa a ser cobrado |
+| 3 · planejamento | orçamento inteiro e Open Banking | o que a família ganhou e gastou nos últimos 12 meses (medido) e o que se espera nos próximos 24 (projetado) |
+
+O que existe hoje: as 33 perguntas de produção estão em `COLETA.md`, seção 0 (com o `name` de cada uma), e reescritas em
+`area-cliente.html` (`EXAME`). A **fórmula oficial não está aqui**: roda no servidor (`saudeFinanceiraController`); a
+`notaDoExame()` da área é uma conta provisória minha, com os cinco pilares em pesos iguais.
+
+Perguntas abertas: a fórmula oficial (o Nélio traz?); o que os clientes erram ou não entendem hoje; se os cinco pilares
+continuam ou se a nota passa a ser por área do Plano; como tratar a quebra da série histórica quando a conta mudar.
+
 ## Versão 2.0: as duas ferramentas numa só
 
 `aceita` · 11/11/2026 · Nélio · ver `area-logada/v2/ARQUITETURA.md`
