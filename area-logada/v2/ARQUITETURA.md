@@ -126,9 +126,14 @@ Base de clientes (index.html) ── Carteira (#carteira) · Pipeline (#pipeline
      ├─ Área do cliente   area-cliente.html?cliente=<id>&consultor
      ├─ Acompanhamento    acompanhamento.html?cliente=<id>&consultor
      ├─ Tarefas e lembretes: para o cliente (vão para a área dele), do consultor e de reunião (ficam na ficha)
-     └─ O que o cliente fez (últimas respostas, conversas sem resposta, proposta pendente)
+     └─ O que o cliente fez: primeiro o que espera pelo consultor (mensagem sem resposta → Responder; ajuste provisório →
+        Aprovar; tarefa pedida em atraso; proposta), depois a linha do tempo de tudo o que ele marcou, escreveu e lançou
+        (respostas com a saída escolhida, imprevistos, ajustes, mensagens, pauta, meses lançados)
 Agenda (agendamento.html)
 ```
+
+A base aceita `?hoje=AAAA-MM-DD`, como a área do cliente, e repassa o relógio às telas que abre (o relatório, as Semanadas, a
+agenda e o portal ainda usam o relógio real).
 
 A **casca do consultor** (`<script id="casca-consultor">`, escrita no `index.html` e copiada pelo `sync-motor.js`) põe as
 mesmas ligações em toda tela do consultor: Base de clientes, Pipeline, Agenda e, com um cliente aberto, Ficha, Coleta, Montar o
@@ -175,6 +180,17 @@ O que acontece de verdade (o realizado) não é um quarto nível: é a outra met
 4. As demais voltas já existiam e ficam: a proposta do cliente no relatório (aprovar na Montagem), a conversa no
    Atendimento, o realizado das Semanadas (`realizados/<id>`), a reunião marcada na agenda.
 
+5. **A volta completa** (rodada do cliente simulado, [FEEDBACK-APLICADO.md](FEEDBACK-APLICADO.md)):
+   - a conversa: na área vista pelo consultor (`&consultor`), a mensagem sai como `quem: 'consultora'` e marca como
+     respondidas as perguntas em aberto; o cliente a lê no Atendimento;
+   - o ajuste que o cliente faz sozinho num aporte não feito (`execucao.ajustes[]`, `provisorio: true`) entra em "Espera por
+     mim"; **Aprovar**, na ficha, grava `provisorio: false` e `aprovadoEm`, e a página do objetivo passa a dizer "aprovado";
+   - a pauta que o cliente escreve (`execucao.pauta[]`) aparece na ficha, em Reuniões, e vale até a reunião seguinte ser registrada;
+   - o imprevisto (`execucao.imprevistos[]`) e os meses lançados aparecem na linha do tempo da ficha;
+   - a tarefa cadastrada na ficha aceita "Como fazer" (`avulsa.como`), que o cliente lê na folha da tarefa;
+   - a reposição da reserva que o cliente aceita no Painel é uma tarefa avulsa mensal com `efeito: { reserva }`: cada vez
+     feita soma na reserva, e o consultor a vê na ficha como tarefa criada pelo cliente.
+
 Recorrência: cada vez é uma tarefa com o seu próprio estado (`av:<id>:<k>`); aparecem as vencidas, as dos próximos 14 dias e
 a seguinte.
 
@@ -218,6 +234,9 @@ a seguinte.
    de lá. Para dois computadores, o armazém da área precisa ir para o banco do link, como o do portal.
 7. Registrar a clínica e registrar a reunião (UX.md) continuam sem tela; a ficha do cliente é o lugar.
 8. O cliente pode apagar uma tarefa criada pelo consultor? Hoje não: só as dele.
+9. As decisões que saíram do quadro do cliente simulado (qual é o "quanto vocês guardam", se o que o cliente marca muda a
+   proteção e a reserva do plano, a conta dos objetivos, um teto só, o gráfico da evolução no celular) estão no fim do
+   [FEEDBACK-APLICADO.md](FEEDBACK-APLICADO.md), com a causa de cada número que diverge.
 
 ## 7. Telas para o designer
 

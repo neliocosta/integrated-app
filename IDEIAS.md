@@ -56,7 +56,7 @@ Perguntas abertas:
 
 ## Cliente simulado que usa a ferramenta por 12 meses
 
-`nova` · 11/11/2026 · Nélio
+`feita` · 11/11/2026 · Nélio · ver `area-logada/v2/QUADRO-FEEDBACK.md`, `DIARIO-12-MESES.md` e `FEEDBACK-APLICADO.md`
 
 Um cliente simulado usa a ferramenta por doze meses (entra, responde as tarefas, falha em algumas, recebe os lembretes,
 passa pelas reuniões) e devolve um quadro de feedback: o que ajudou, o que confundiu, o que faltou em cada mês.
@@ -66,6 +66,136 @@ Perguntas abertas:
 - Quantos perfis (os de `ux/personas/clientes-teste.md` e os vinte do Painel são o ponto de partida) e em que degrau cada um.
 - O relógio: a área já aceita `?hoje=`; falta um roteiro que avance mês a mês e grave as respostas de cada mês.
 - O formato do quadro: por mês e por tela, com a pergunta que a pessoa tinha e se a tela respondeu.
+
+11/11/2026: primeira rodada feita com um perfil (Ana, CLT, casada, no celular) no exemplo completo: 72 cartões no quadro. A segunda
+rodada de UX aplicou o quadro (24 corrigidos, 11 em parte) e deixou as decisões e as causas dos números que divergem em
+`area-logada/v2/FEEDBACK-APLICADO.md`. Para repetir: a base de clientes agora aceita `?hoje=`, como a área; o relatório, as
+Semanadas, a agenda e o portal ainda usam o relógio real, e o exemplo é roteirizado até jun/2027.
+
+## Acesso próprio do cônjuge
+
+`nova` · 11/11/2026 · cliente simulado de 12 meses (S10)
+
+O Marcos quis ver no celular dele e não há convite nem entrada própria: as tarefas dele saem "Respondendo como Ana". Convidar o cônjuge,
+cada um vendo e respondendo as suas, com o mesmo plano.
+
+Perguntas abertas:
+
+- Um login por pessoa ou um link por membro do domicílio.
+- O que cada um vê do outro (tarefas, mensagens, pauta).
+
+## Cotação do seguro pela Nord
+
+`nova` · 11/11/2026 · cliente simulado de 12 meses (S5)
+
+"Cotar o seguro de vida do Marcos · pedir a cotação a um corretor" ficou aberta oito meses: que corretor? É a maior ameaça do
+plano do exemplo. Um botão "pedir a cotação pela Nord" na tarefa, ou o contato de quem cota; em produção existe "Cotações de Seguros"
+na área do consultor.
+
+Perguntas abertas:
+
+- Quem cota (corretor parceiro, a própria Nord) e como a apólice contratada volta para o plano e sobe a proteção.
+
+## Registro da reunião, balanço do ano e renovação
+
+`nova` · 11/11/2026 · cliente simulado de 12 meses (S12)
+
+Antes de renovar, não há uma página com o que mudou em 12 meses, e a reunião em si não deixa registro feito na ferramenta ("registrar o
+resumo" está em breve). Um "seu ano": reserva, aportes, objetivos, proteção e imposto, antes e depois; e o resumo da reunião gravado pelo
+consultor na ficha.
+
+Perguntas abertas:
+
+- O que entra no balanço e quem o escreve.
+- A tela de renovação (hoje a Jornada diz "a definir").
+
+## Destino do dinheiro extra (13º, bônus)
+
+`nova` · 11/11/2026 · cliente simulado de 12 meses (S6)
+
+Entraram o 13º e o bônus de março e nada disse para onde iam. Uma tarefa no mês em que o extra entra: "R$ X para tal objetivo" (ou para a
+reserva, se ela estiver abaixo).
+
+Perguntas abertas:
+
+- A regra de destino é do consultor, no plano, ou uma sugestão da área.
+
+## O imposto já garantido e a lista do IR de abril
+
+`nova` · 11/11/2026 · cliente simulado de 12 meses (S7 e S8)
+
+Feito o PGBL, o cartão segue mostrando só a economia possível ("R$ 34 mil por ano a menos"). Mostrar o já garantido no ano. E, em março e
+abril, uma lista curta do que declarar e juntar, saída do capítulo de impostos.
+
+Perguntas abertas:
+
+- De onde vem o "já aportado no ano" (a tarefa marcada, o extrato, o consultor).
+
+## Anexar e dizer por quê na tarefa
+
+`nova` · 11/11/2026 · cliente simulado de 12 meses (S9)
+
+"Enviar o informe de rendimentos": enviar por onde? "Não fiz" só deixa marcar nova data. Um campo "por quê", que o consultor lê, e anexar
+o arquivo na própria tarefa.
+
+Perguntas abertas:
+
+- Onde o arquivo mora e quem pode vê-lo.
+
+## O dia em que o objetivo chega
+
+`nova` · 11/11/2026 · cliente simulado de 12 meses (S13)
+
+Passada a data da viagem, a tela mostra "57%" e linhas "atrasado"; ninguém pergunta se viajaram. Na data: "chegou. Realizaram? Adiar? Usar o
+que tem?", com a resposta gravada no histórico do objetivo.
+
+Perguntas abertas:
+
+- O que acontece com o dinheiro guardado quando o objetivo é realizado por menos ou adiado.
+
+## Enquanto você esteve fora
+
+`nova` · 11/11/2026 · cliente simulado de 12 meses (S17)
+
+Depois de quase dois meses sem abrir, a volta mostra só uma linha ("Desde 20/04: o patrimônio foi atualizado"). Três linhas: o que venceu, o
+que foi feito por você (pelo WhatsApp, pelo consultor) e o que fazer agora.
+
+Perguntas abertas:
+
+- A partir de quantos dias de ausência aparece.
+
+## A palavra comum, ou um toque que explica
+
+`nova` · 11/11/2026 · cliente simulado de 12 meses (T13)
+
+Liquidez diária, D+0, caixinha, ajustáveis, pró-labore, ITCMD, VGBL, "Construir", "Ruína em investimentos": a cliente não sabe. Trocar pela
+palavra comum onde der e, onde não der, um toque que explica em uma linha.
+
+Perguntas abertas:
+
+- A lista de termos e quem escreve as explicações (o tom é do dono do produto).
+
+## Um teto só: a tarefa da semana e as Semanadas
+
+`nova` · 11/11/2026 · cliente simulado de 12 meses (T6 e T7)
+
+Em Tarefas, "Teto da semana: até R$ 1.237, em qualquer meio"; nas Semanadas, "a fatura em até R$ 1.325", com outras datas, e responder num
+lugar não vale no outro. Um combinado só, perguntado no fim da semana, com a resposta valendo nos dois lugares.
+
+Perguntas abertas:
+
+- Qual dos dois é o combinado (os gastos que a família controla, ou a fatura do cartão).
+
+## Lembrete de verdade no WhatsApp, resposta com um toque e login
+
+`nova` · 11/11/2026 · cliente simulado de 12 meses ("o que não consegui testar")
+
+O protótipo só registra que o lembrete seria enviado; a conta se cria com o primeiro nome e fica no navegador. O envio, a página de um toque
+(`/taskChecker` de produção) e o login com consentimento do WhatsApp são da plataforma.
+
+Perguntas abertas:
+
+- A ordem de construção na plataforma.
 
 ## Tempo dedicado ao plano: 5 minutos por mês, 30 a cada seis, 1 hora por ano
 
