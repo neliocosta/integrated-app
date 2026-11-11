@@ -10,6 +10,8 @@ na plataforma Nord Liberta. Escrito em 23/10/2026 a partir de dois levantamentos
 | [README.md](README.md) (este) | Premissas, o que já existe, os degraus de profundidade e a tese do produto |
 | [UX.md](UX.md) | A experiência tela a tela: navegação, estados por degrau, a mecânica das tarefas e lembretes, o orçado × realizado |
 | [ETAPAS.md](ETAPAS.md) | O plano do projeto: etapas na ordem de construção, critério de pronto e dependências |
+| [AGENDAMENTO.md](AGENDAMENTO.md) | A especificação do agendamento de reuniões (no lugar do OnceHub): tipos, calendários, distribuição por peso, link público e lembretes por WhatsApp |
+| [PROMPT-AGENDAMENTO.md](PROMPT-AGENDAMENTO.md) | O prompt pronto para abrir a sessão que constrói o protótipo do agendamento |
 | [PROMPT-MOCK.md](PROMPT-MOCK.md) | O prompt pronto para gerar o mock navegável da primeira versão |
 | [avaliacao-2026-10-24.md](avaliacao-2026-10-24.md) e [rodada 2](avaliacao-2026-10-24-rodada-2.md) | As duas rodadas de avaliação com personas que revisaram o UX.md antes do mock |
 

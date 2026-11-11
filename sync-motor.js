@@ -12,3 +12,18 @@ for (const id of ['engine', 'armazem', 'graficos']) {
   console.log(id + ' sincronizado (' + Math.round(bloco.length / 1024) + ' KB)');
 }
 fs.writeFileSync(p, s);
+
+// O motor e o armazém da agenda: do painel (agendamento.html) para a página de quem agenda e para a área do cliente.
+// Só onde a tela já carrega o bloco; a primeira cópia em cada tela é posta à mão, no lugar certo dela.
+const painel = fs.readFileSync('agendamento.html', 'utf8');
+for (const id of ['motor-agenda', 'armazem-agenda']) {
+  const re = new RegExp('<script id="' + id + '">[\\s\\S]*?<\\/script>'), bloco = painel.match(re)[0];
+  for (const destino of ['agendar.html', 'area-cliente.html']) {
+    if (!fs.existsSync(destino)) continue;
+    const t = fs.readFileSync(destino, 'utf8');
+    if (!re.test(t)) continue;
+    const quebra = t.includes('\r\n') ? '\r\n' : '\n';   // a área do cliente é CRLF: a cópia segue a quebra de cada tela
+    fs.writeFileSync(destino, t.replace(re, () => bloco.replace(/\r?\n/g, quebra)));
+    console.log(id + ' sincronizado em ' + destino + ' (' + Math.round(bloco.length / 1024) + ' KB)');
+  }
+}
