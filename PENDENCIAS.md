@@ -140,6 +140,21 @@ direto (WhatsApp e e-mail) é só do Completo; a clínica fala pelas mensagens d
   → #2 → Renovação, com datas "a definir"; alinhar os nomes e as datas com a área.
 - **O convite ao Completo para quem está na clínica** fica escondido em Sobreviver (UX.md › Jornada); confirmar.
 
+## Backlog do Painel e do Plano, do feedback de 11/11/2026 (em aberto)
+
+1. **Catálogo dos cartões do "próximo passo mais importante".** Listar todos os passos que podem aparecer no cartão do
+   alto do Painel e, para cada um, definir o elemento gráfico, o texto e o rótulo do botão.
+2. **Planejamento da área recriado de forma nativa.** Hoje a página de cada área mostra as páginas do relatório num
+   quadro embutido (em 11/11 saiu o "anterior/próximo", que levava a outros capítulos). O Nélio quer os elementos
+   refeitos na própria página, só com o que pertence ao tema. Fazer área por área.
+3. **A evolução de cada objetivo.** Ao abrir um objetivo, ver a história dele a cada atualização (o desenho inicial, as
+   reuniões de acompanhamento, os registros de entrada) e, com Open Finance, uma fotografia nova dos valores. Em aberto:
+   como dizer qual investimento pertence a qual objetivo.
+4. **Para onde vai "O mês e o ano".** Saiu do Painel; `blocoMesAno()` segue em `area-cliente.html` sem uso.
+5. **Os cinco sinais vitais.** O Nélio gostou e vai pensar se são mesmo os cinco mais importantes.
+6. **"Deveria ter hoje" dos objetivos.** A conta é provisória: aporte constante do mês em que o objetivo entrou no plano
+   até a data-alvo. Conferir com a regra que o planejamento usa.
+
 ## Revisão do exame de saúde financeira (em aberto, 11/11/2026)
 
 Pedido do Nélio: rever as 33 perguntas e a conta da nota, que têm uns cinco anos, e fazer do exame o nível 1 de cada

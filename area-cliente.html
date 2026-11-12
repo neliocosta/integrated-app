@@ -647,7 +647,7 @@ body.f-instrument .cab h1{font-size:36px}
 body.v-livro .plano-cab h2{font:500 22px var(--serifa)}
 .v-aurora .plano-cab h2{font:600 18px 'Sora',sans-serif}
 /* o seletor Resumo | Em detalhe: uma cápsula fina com o pino que desliza de um lado ao outro */
-.alterna{position:relative;display:inline-flex;padding:3px;border:1px solid var(--borda);border-radius:9999px;background:var(--cartao);isolation:isolate}
+.alterna{position:relative;display:inline-grid;grid-template-columns:1fr 1fr;padding:3px;border:1px solid var(--borda);border-radius:9999px;background:var(--cartao);isolation:isolate}
 .alterna button{position:relative;z-index:1;flex:1 1 0;border:0;background:transparent;padding:7px 16px;border-radius:9999px;font:500 13px var(--sans);letter-spacing:.01em;color:var(--legenda);white-space:nowrap;transition:color .45s ease}
 .alterna button[aria-pressed="true"]{color:#fff}
 .alterna .pino{position:absolute;z-index:0;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:9999px;background:var(--marinho);box-shadow:0 1px 2px rgba(19,31,46,.18);transition:transform .5s cubic-bezier(.22,.9,.26,1)}
@@ -1256,6 +1256,7 @@ body.v-livro .rotulo .mais{font-weight:400;font-size:13px}
 .obj-resumo{font-size:13.5px;line-height:1.45;color:var(--legenda);margin:-2px 0 10px}
 @media (min-width:900px){.obj-cards{grid-auto-flow:row;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;overflow:visible;margin:0 0 26px;padding:0}}
 @media (min-width:1280px){.obj-cards{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}}
+.cap-grade.compacta .vital .vt-m{min-height:50px}
 @media (prefers-reduced-motion:reduce){.vital,.ferr a,.obj-c{transition:none}.vital:hover,.ferr a:hover,.obj-c:hover{transform:none}}
 
 /* ===== A área abre o planejamento dela (11/11/2026): o capítulo do relatório é o conteúdo principal da página, na largura
@@ -3643,16 +3644,23 @@ function trajetoriaDoHeroi() {
     <span class="lb base" style="left:0">hoje, aos ${x0}</span><span class="lb base meio" style="left:50%">ver a evolução ano a ano ›</span><span class="lb base dir" style="left:100%">aos ${x1}</span></a>`;
 }
 // os sinais vitais: cinco áreas do plano, cada uma com o mesmo número e o mesmo estado da capa dela no Plano (uma conta só)
-function sinaisVitais(A) {
+function vizDoSinal(id) {
   const ex = exames(), ult = ex[ex.length - 1], ra = reservaAtual(), ri = reservaIdeal(), rd = fv('renda'), cs = fv('custo');
   const anel = f => `<svg class="anel" viewBox="0 0 48 48" aria-hidden="true"><circle class="f" cx="24" cy="24" r="20"/><circle class="v" cx="24" cy="24" r="20" stroke-dasharray="${(clamp(f, 0, 1) * 125.66).toFixed(1)} 125.66"/></svg>`;
   const regua = (f, marcas) => `<div class="regua" aria-hidden="true"><i style="width:${(clamp(f, 0, 1) * 100).toFixed(1)}%"></i>${(marcas || []).map(m => `<u style="left:${(m * 100).toFixed(1)}%"></u>`).join('')}</div>`;
   const viz = { saude: () => ult ? anel(ult.nota / 100) : '', riscos: () => RS ? anel(RS.riscos.nota) : '',
-    gestao: () => tem(rd) && tem(cs) && rd > 0 ? regua((rd - cs) / rd / 0.4, [0.5]) : '', reserva: () => tem(ra) && ri ? regua(ra / ri, [0.4, 0.7]) : '', liberdade: () => '' };
+    gestao: () => tem(rd) && tem(cs) && rd > 0 ? regua((rd - cs) / rd / 0.4, [0.5]) : '', reserva: () => tem(ra) && ri ? regua(ra / ri, [0.4, 0.7]) : '' };
+  return viz[id] ? viz[id]() : '';
+}
+// um cartão de área no formato do sinal vital: o nome, o número principal (com o anel ou a régua, quando a área tem) e o estado
+function cartaoSinal(id, nome, c, cls, attrs) {
+  const vz = c ? vizDoSinal(id) : '', t = c && c.tom, emAnel = /class="anel"/.test(vz);
+  if (!c) return `<a class="vital vazio${cls ? ' ' + cls : ''}" href="#cartao/${id}" ${attrs || ''}><span class="vt-r">${iconeArea(id)}${esc(nome)}</span><div class="vt-m"><div class="vt-big"><small>${id === 'saude' ? 'O exame diz a nota, em 5 minutos' : 'Ainda sem número'}</small></div></div><span class="vt-e">${id === 'saude' || !exames().length ? 'Começar pelo exame' : 'Preencher'} ›</span></a>`;
+  return `<a class="vital${t && t[0] !== 'ok' ? ' at' : ''}${cls ? ' ' + cls : ''}" href="#cartao/${id}" ${attrs || ''}><span class="vt-r">${iconeArea(id)}${esc(nome)}</span><div class="vt-m">${emAnel ? vz : ''}<div class="vt-big">${c.big}</div></div>${emAnel ? '' : vz}${t ? `<span class="vt-e">${esc(t[1])}</span>` : ''}</a>`;
+}
+function sinaisVitais(A) {
   const nomes = { saude: 'Saúde financeira', gestao: 'Para o futuro', reserva: 'Reserva', riscos: 'Proteção', liberdade: 'Liberdade' };
-  return `<div class="vitais">${['saude', 'gestao', 'reserva', 'riscos', 'liberdade'].map(id => { const c = A[id].capa, vz = c ? viz[id]() : '', t = c && c.tom, emAnel = /class="anel"/.test(vz);
-    if (!c) return `<a class="vital vazio" href="#cartao/${id}"><span class="vt-r">${iconeArea(id)}${nomes[id]}</span><div class="vt-m"><div class="vt-big"><small>${id === 'saude' ? 'O exame diz a nota, em 5 minutos' : 'Ainda sem número'}</small></div></div><span class="vt-e">${id === 'saude' || !ex.length ? 'Começar pelo exame' : 'Preencher'} ›</span></a>`;
-    return `<a class="vital${t && t[0] !== 'ok' ? ' at' : ''}" href="#cartao/${id}"><span class="vt-r">${iconeArea(id)}${nomes[id]}</span><div class="vt-m">${emAnel ? vz : ''}<div class="vt-big">${c.big}</div></div>${emAnel ? '' : vz}${t ? `<span class="vt-e">${esc(t[1])}</span>` : ''}</a>`; }).join('')}</div>`;
+  return `<div class="vitais">${Object.keys(nomes).map(id => cartaoSinal(id, nomes[id], A[id].capa)).join('')}</div>`;
 }
 // as ferramentas rápidas: o que a pessoa abre, usa em um minuto e fecha. O plano completo e o Saber são seções inteiras,
 // com a aba delas no menu, e não entram aqui
@@ -4256,13 +4264,12 @@ function telaPlano() {
   // nos visuais novos, o Plano abre compacto (só o número principal de cada área); o botão abre todos em detalhe
   if (VISUAL === 'sobrio') return faixaVisitante() + cab + `<div class="cap-grade tres">${CARTOES.map(c => cartaoArea(c, A[c.id])).join('')}</div>`;
   const exp = planoExpandido();
-  // as onze áreas em três faixas: onde estamos, para onde vamos, como protegemos e fazemos render; as em atenção primeiro
-  const FAIXAS = [['Onde estamos', ['saude', 'gestao', 'dividas', 'patrimonio']], ['Para onde vamos', ['objetivos', 'reserva', 'liberdade', 'evolucao']], ['Como protegemos e fazemos render', ['riscos', 'politica', 'tributario']]];
+  // as onze áreas em três faixas: onde estamos, para onde vamos, como chegamos lá; as em atenção primeiro
+  const FAIXAS = [['Onde estamos', ['saude', 'gestao', 'dividas', 'patrimonio']], ['Para onde vamos', ['objetivos', 'reserva', 'liberdade', 'evolucao']], ['Como chegamos lá', ['riscos', 'politica', 'tributario']]];
   const atencao = c => A[c.id].capa && A[c.id].capa.tom && A[c.id].capa.tom[0] !== 'ok' ? 0 : 1;
   let k = 0;
   const grade = FAIXAS.map(([t, ids]) => `<h3 class="faixa-t">${t}</h3>` + ids.map(id => CARTOES.find(c => c.id === id)).sort((a, b) => atencao(a) - atencao(b)).map(c => cartaoArea(c, A[c.id], !exp, k++)).join('')).join('');
   return faixaVisitante() + cab + `<div class="plano-cab"><h2>As onze áreas do plano</h2><div class="alterna" role="group" aria-label="Como ver as áreas" data-on="${exp ? 1 : 0}"><button data-acao="expandir" data-v="0" aria-pressed="${!exp}">Resumo</button><button data-acao="expandir" data-v="1" aria-pressed="${exp}">Em detalhe</button><i class="pino" aria-hidden="true"></i></div></div>
-    <p class="mut" style="margin:-6px 0 12px">A barra em cada área mostra até onde o plano foi; a área em atenção vem primeiro na faixa.</p>
     <div class="cap-grade ${exp ? 'tres' : 'compacta'}">${grade}</div>`;
 }
 // compacto ou expandido: a escolha fica na tela e é lembrada neste navegador (conveniência; o padrão é compacto)
@@ -4278,7 +4285,8 @@ const anima = (el, quadros, o) => el.animate(quadros, Object.assign({ duration: 
 async function alternarPlano(q) {
   const salvar = () => { UI.expandido = q; try { localStorage.setItem('nl-plano-expandido', q ? '1' : '0'); } catch (e) { } };
   if (PLANO_ANIMANDO) return;
-  if ((!MOVIMENTO && matchMedia('(prefers-reduced-motion: reduce)').matches) || !Element.prototype.animate) { salvar(); desenhar(); return; }
+  if (!Element.prototype.animate) { salvar(); desenhar(); return; }
+  if (!MOVIMENTO && matchMedia('(prefers-reduced-motion: reduce)').matches) CARROSSEL_VISTO = true;   // sem o carrossel: só a entrada curta, em sequência
   PLANO_ANIMANDO = true;
   try {
     const sel = document.querySelector('.alterna');   // o pino desliza antes de a tela mudar
@@ -4339,7 +4347,7 @@ async function fecharPlano(salvar) {
   // de trás para a frente, um a um, como quem fecha o livro
   await Promise.all(vis.reverse().map((c, i) => anima(c, [{ transform: 'none', opacity: 1 }, { transform: 'translateY(-6px) scale(.88)', opacity: 0 }], { duration: 240, delay: i * 50, easing: 'cubic-bezier(.5,0,.75,0)' })));
   salvar(); desenhar();
-  document.querySelectorAll('.cap-grade .cap').forEach((c, i) => anima(c, [{ transform: 'translateY(10px) scale(.96)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 360, delay: i * 35, fill: 'backwards' }));
+  document.querySelectorAll('.cap-grade > a').forEach((c, i) => anima(c, [{ transform: 'translateY(10px) scale(.96)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 360, delay: i * 35, fill: 'backwards' }));
 }
 const planoExpandido = () => { if (UI.expandido == null) { try { UI.expandido = localStorage.getItem('nl-plano-expandido') === '1'; } catch (e) { UI.expandido = false; } } return UI.expandido; };
 // o cartão de uma área: completo (número, frase, estado e gráfico) ou compacto (só o número principal e o estado). O
@@ -4347,11 +4355,7 @@ const planoExpandido = () => { if (UI.expandido == null) { try { UI.expandido = 
 function cartaoArea(c, a, compacto, i) {
   const f = profundidade(c, a), n = Object.keys(a.ind).length, mini = `<span class="prof-mini" title="${n} de ${c.ind.length} informações" aria-label="${n} de ${c.ind.length} informações"><i><em style="width:${(f * 100).toFixed(0)}%"></em></i></span>`;
   const vt = `style="view-transition-name:cap-${c.id};--i:${i || 0}"`;   // --i: a posição no plano, para a sequência da transformação
-  if (compacto) {
-    if (!a.capa) return `<a class="cap compacto semdado" data-area="${c.id}" href="#cartao/${c.id}" ${vt}><span class="r"><span class="ar-nome">${iconeArea(c.id)}${esc(c.nome)}</span>${mini}</span><span class="convite">${!exames().length && c.ind.some(([, , m]) => m === 'exame') ? 'Começar pelo exame' : 'Começar'} &#8250;</span></a>`;
-    const t = a.capa.tom;
-    return `<a class="cap compacto" data-area="${c.id}" href="#cartao/${c.id}" ${vt}><span class="r"><span class="ar-nome">${iconeArea(c.id)}${esc(c.nome)}</span>${mini}</span><div class="big">${a.capa.big}</div>${t ? `<span class="chip ${t[0]}" title="${esc(t[1])}">${esc(t[1])}</span>` : ''}</a>`;
-  }
+  if (compacto) return cartaoSinal(c.id, c.nome, a.capa, 'cap-s', `data-area="${c.id}" ${vt}`);   // em resumo, o mesmo cartão dos sinais vitais do Painel
   if (!a.capa) {
     const primeiraCalc = c.ind.find(([id, , m]) => !a.ind[id] && m !== 'consultor'), convite = !exames().length && c.ind.some(([, , m]) => m === 'exame') ? 'Começar pelo exame' : primeiraCalc ? (primeiraCalc[2] === 'exame' ? 'Responder o exame' : 'Abrir a calculadora') : 'Ver o que esta área responde';
     return `<a class="cap semdado" href="#cartao/${c.id}" ${vt}><span class="r"><span class="ar-nome">${iconeArea(c.id)}${esc(c.nome)}</span>${mini}</span><div class="sub" style="margin-top:8px;color:var(--marinho);font-size:14px">${esc(c.pergunta)}</div>${n ? `<div class="sub" style="margin-top:6px">${esc(Object.values(a.ind)[0].txt)}</div>` : ''}<span class="convite">${convite} &#8250;</span></a>`;
@@ -4378,16 +4382,14 @@ function telaCartao(id) {
   if (rel) {   // com o plano publicado: a visão geral numa faixa, o capítulo do planejamento em largura e altura inteiras, e as informações recolhidas
     const viz = vizGrande(c, a), faixa = `<div class="card resumo-faixa${viz ? ' com-viz' : ''}" ${vt}><div><div class="entre"><span class="rotulo" style="margin:0">${esc(c.pergunta)}</span>${a.capa && a.capa.tom ? `<span class="chip ${a.capa.tom[0]}">${esc(a.capa.tom[1])}</span>` : ''}</div>${a.capa ? `<div class="grande">${a.capa.big}</div><div class="mut">${esc(a.capa.sub)}</div>` : ''}</div>${viz ? `<div>${viz}</div>` : ''}</div>`;
     const info = `<details class="info-area" id="nivel-2"><summary><span>As ${c.ind.length} informações desta área <small>· de onde vem cada número</small></span><small>${tem_.length} de ${c.ind.length}</small></summary>${lista.replace(' id="nivel-2"', '')}</details>`;
-    return `<div style="max-width:1180px">${capa}${niveisDaArea(c, f)}${desdeOPlano(c)}${faixa}${atalhosDaArea(c)}${rel}${info}</div>`;
+    return `<div style="max-width:1180px">${capa}${desdeOPlano(c)}${faixa}${atalhosDaArea(c)}${rel}${info}</div>`;
   }
-  return `<div style="max-width:1080px">${capa}${niveisDaArea(c, f)}${desdeOPlano(c)}<div class="grade2" style="align-items:start"><div>${resumo}${pre}</div><div>${lista}${prox}</div></div>${atalhosDaArea(c)}${semRelatorio(c)}</div>`;
+  return `<div style="max-width:1080px">${capa}${desdeOPlano(c)}<div class="grade2" style="align-items:start"><div>${resumo}${pre}</div><div>${lista}${prox}</div></div>${atalhosDaArea(c)}${semRelatorio(c)}</div>`;
 }
 // AS TRÊS PROFUNDIDADES (v2/ARQUITETURA.md, seção 3), as mesmas em toda área e em todo degrau: 1. a visão geral (o cartão do
 // Plano e a capa daqui), 2. a visão aprofundada (as informações da área e a calculadora) e 3. o relatório (o capítulo do
 // planejamento). Sem plano publicado, o nível 3 aparece no mesmo lugar, dizendo com o que ele chega
-const niveisDaArea = (c, f) => { const v = versoesVigentes()[0];
-  return `<div class="niveis" role="group" aria-label="As três profundidades desta área"><span class="on"><b>1</b>Visão geral</span><button class="on" data-acao="nivel" data-v="nivel-2"><b>2</b>Aprofundada <small>${pct(f)}</small></button><button class="${v ? 'on' : ''}" data-acao="nivel" data-v="nivel-3"><b>3</b>Relatório <small>${v ? dataBRano(v.em) : 'com o planejamento'}</small></button></div>`; };
-const semRelatorio = c => `<div class="card vago ilustra-vaga com-ilustra" id="nivel-3"><div><span class="rotulo" style="margin:0 0 6px">3 · No relatório</span><p class="peq" style="margin:0;color:var(--marinho)">A visão mais detalhada desta área é o capítulo dela no relatório do planejamento: ${esc(nomesJuntos(c.paginas.map(p => p[1].toLowerCase())))}. Ele chega com o planejamento completo, montado com um planejador. <a href="#relatorio">Como é o relatório</a> · <a href="#conversas">${esc(falarCom())}</a></p></div>${ilustra('vazio-relatorio')}</div>`;
+const semRelatorio = c => `<div class="card vago ilustra-vaga com-ilustra" id="nivel-3"><div><span class="rotulo" style="margin:0 0 6px">No planejamento completo</span><p class="peq" style="margin:0;color:var(--marinho)">A visão mais detalhada desta área é o capítulo dela no relatório do planejamento: ${esc(nomesJuntos(c.paginas.map(p => p[1].toLowerCase())))}. Ele chega com o planejamento completo, montado com um planejador. <a href="#relatorio">Como é o relatório</a> · <a href="#conversas">${esc(falarCom())}</a></p></div>${ilustra('vazio-relatorio')}</div>`;
 // as calculadoras de produção que ainda não foram refeitas no cartão: a entrada existe, dizendo que vem
 const CALC_EM_BREVE = { tributario: 'A calculadora de imposto de renda e PGBL', riscos: 'A calculadora do seguro de vida e de acidentes' };
 const calcEmBreve = c => CALC_EM_BREVE[c.id] ? `<div class="card vago"><div class="entre"><b style="color:var(--marinho)">${CALC_EM_BREVE[c.id]}</b><span class="chip">em breve</span></div><p class="mut" style="margin:6px 0 0">Na plataforma de hoje ela é um assistente à parte; aqui, vai gravar nesta área.</p></div>` : '';
@@ -4449,6 +4451,7 @@ function ajustaQuadro(f) {
   const pg = doc && doc.getElementById('pagina'); if (!pg) return;
   // as abas da área já dizem a página: o cabeçalho de navegação do relatório (capítulo, anterior e próxima) some aqui dentro
   const cab0 = doc.querySelector('header'); if (cab0 && doc.body.classList.contains('embutido') && !doc.body.classList.contains('fluxo')) cab0.style.display = 'none';
+  if (!doc.getElementById('na-area')) { const st = doc.createElement('style'); st.id = 'na-area'; st.textContent = '.pg-nav{display:none!important}'; doc.head.appendChild(st); }
   const base = Math.max(640, innerHeight - 150), cab = doc.querySelector('header'), medir = () => {
     f.style.transition = 'none'; f.style.height = base + 'px';
     const ca = pg.scrollHeight, h = (cab && getComputedStyle(cab).display !== 'none' ? cab.offsetHeight : 0) + ca + 2;
