@@ -1164,6 +1164,16 @@ body.v-livro .rotulo .mais{font-weight:400;font-size:13px}
 .heroi.h2{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:end;padding:22px 20px 20px;min-height:0}
 .heroi.h2::before{background:linear-gradient(180deg,rgba(19,31,46,.74),rgba(19,31,46,.5) 45%,rgba(19,31,46,.78))}
 .heroi.h2 .h2-tit{font:500 24px/1.2 var(--serifa);color:#fff;margin:0 0 6px;letter-spacing:-.005em}
+.heroi.h2.vida{display:block;padding:22px 20px 40px}
+.heroi.h2.vida .traj{height:230px;margin:26px 0 0}
+.heroi.h2.vida .traj .lb{font-size:12.5px}
+.heroi.h2.vida .traj .lb b{font-size:17px}
+.heroi.h2.vida .traj .pt{width:11px;height:11px;margin:-5.5px 0 0 -5.5px}
+.heroi.h2.vida .traj .pt.lib{width:14px;height:14px;margin:-7px 0 0 -7px}
+.traj .lb.topo.fim{transform:translateY(-100%);text-align:right;margin-top:-12px}
+.heroi.dest{display:block;min-height:0;padding:0;margin:0 0 10px;background:var(--noite)}
+.heroi.dest::before{background:linear-gradient(120deg,rgba(32,52,76,.9),rgba(19,31,46,.2))}
+.heroi.dest .passo{border:0;background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;padding:22px 24px}
 .heroi.h2 .proposito-l{margin:0 0 18px;max-width:56ch}
 .heroi.h2 .h2-pat{display:block;text-decoration:none;color:#fff}
 .heroi.h2 .h2-pat small{display:block;font:500 13px var(--sans);color:rgba(255,255,255,.82)}
@@ -1189,6 +1199,11 @@ body.v-livro .rotulo .mais{font-weight:400;font-size:13px}
   .heroi.h2 .h2-pat b{font-size:52px}
   .traj{height:200px}
   .heroi.h2 .h2-tit{font-size:28px}
+  .heroi.h2.vida{padding:30px 36px 46px}
+  .heroi.h2.vida .h2-tit{font-size:32px}
+  .heroi.h2.vida .traj{height:340px}
+  .heroi.h2.vida .traj .lb{font-size:13.5px}
+  .heroi.h2.vida .traj .lb b{font-size:22px}
 }
 .vitais{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 22px}
 .vital{display:flex;flex-direction:column;gap:8px;background:var(--cartao);border:1px solid var(--borda);border-radius:var(--raio);padding:14px 14px 13px;text-decoration:none;color:inherit;min-width:0;transition:box-shadow .18s,transform .18s}
@@ -1196,7 +1211,8 @@ body.v-livro .rotulo .mais{font-weight:400;font-size:13px}
 .vital .vt-r{display:flex;align-items:center;gap:7px;font:500 12.5px var(--sans);color:var(--legenda)}
 .vital .vt-r svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.7;flex:none}
 .vital .vt-r svg.ic-area,body.v-livro .cap .ar-nome .ic-area{stroke:var(--laranja-txt)}
-.vital .vt-m{display:flex;align-items:center;gap:12px;min-height:50px}
+.vital .vt-m{display:flex;align-items:flex-start;gap:12px;height:58px}
+.vital .vt-b{height:8px}
 .vital .vt-big{font:500 22px/1.1 'Sora',sans-serif;letter-spacing:-.02em;color:var(--marinho);min-width:0}
 .vital .vt-big small{display:block;font:400 12px/1.3 var(--sans);letter-spacing:0;color:var(--legenda);margin-top:3px}
 .vital .vt-big small.delta{display:inline;margin:0 0 0 4px}
@@ -1205,11 +1221,11 @@ body.v-livro .rotulo .mais{font-weight:400;font-size:13px}
 .vital .anel .f{stroke:var(--trilho)}
 .vital .anel .v{stroke:var(--verde);stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%}
 .vital.at .anel .v{stroke:var(--laranja)}
-.vital .regua{position:relative;height:6px;border-radius:3px;background:var(--trilho);margin-top:2px}
+.vital .regua{position:relative;height:6px;border-radius:3px;background:var(--trilho)}
 .vital .regua i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--verde)}
 .vital.at .regua i{background:var(--laranja)}
 .vital .regua u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--marinho);border-radius:1px}
-.vital .vt-e{display:flex;align-items:center;gap:6px;font:500 12px/1.3 var(--sans);color:var(--verde-txt);margin-top:auto}
+.vital .vt-e{display:flex;align-items:baseline;gap:6px;font:500 12px/1.3 var(--sans);color:var(--verde-txt)}
 .vital .vt-e::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--verde);flex:none}
 .vital.at .vt-e{color:var(--atencao-txt)}.vital.at .vt-e::before{background:var(--laranja)}
 .vital.vazio .vt-e{color:var(--marinho)}.vital.vazio .vt-e::before{display:none}
@@ -1258,7 +1274,6 @@ body.v-livro .rotulo .mais{font-weight:400;font-size:13px}
 .obj-resumo{font-size:13.5px;line-height:1.45;color:var(--legenda);margin:-2px 0 10px}
 @media (min-width:900px){.obj-cards{grid-auto-flow:row;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;overflow:visible;margin:0 0 26px;padding:0}}
 @media (min-width:1280px){.obj-cards{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}}
-.cap-grade.compacta .vital .vt-m{min-height:50px}
 @media (prefers-reduced-motion:reduce){.vital,.ferr a,.obj-c{transition:none}.vital:hover,.ferr a:hover,.obj-c:hover{transform:none}}
 
 /* ===== A área abre o planejamento dela (11/11/2026): o capítulo do relatório é o conteúdo principal da página, na largura
@@ -3616,18 +3631,14 @@ function heroiPainel(oc, P) {
   const proposito = R.proposito ? `<p class="proposito-l">${esc(R.proposito)}</p>` : R.degrau === 'visitante' ? `<p class="proposito-l">${convite}</p>` : fraseObjs ? `<p class="proposito-l">${esc(fraseObjs)}</p>` : P && P.porque ? `<p class="proposito-l">${esc(P.porque)}</p>` : '';
   const pt = fv('patrimonioTotal'), ra = reservaAtual(), ri = reservaIdeal();
   const posReserva = tem(ra) && ri ? (ra >= ri - 0.5 ? 'ideal' : ra >= ri * 0.7 - 0.5 ? 'entre a aceitável e a ideal' : ra >= ri * 0.4 - 0.5 ? 'entre a mínima e a aceitável' : 'abaixo da mínima') : '';
-  // embaixo da trajetória, os valores dela: a liberdade, os objetivos no caminho e o fim do plano; sem plano publicado, só a reserva
-  const pa = RS && RS.evolucao && RS.evolucao.porAno, comTraj = pa && pa.length >= 3, Lp = comTraj && RS.liberdade && RS.liberdade.idade != null ? pa.find(q => q.idade === RS.liberdade.idade) : null;
-  const noCaminho = objs.filter(o => o.tipo !== 'liberdade' && o.valor > 0), v0 = versoesVigentes()[0];
-  const chaves = comTraj ? [
-    Lp ? `<a href="#cartao/liberdade"><small>Na liberdade, aos ${Lp.idade}</small><b>${brlC(Lp.total)}</b></a>` : '',
-    noCaminho.length ? `<a href="#objetivos"><small>${noCaminho.length} ${noCaminho.length === 1 ? 'objetivo' : 'objetivos'} no caminho</small><b>${brlC(soma(noCaminho.map(o => o.valor)))}</b></a>` : '',
-    `<a href="${v0 ? urlRelatorioInteiro(v0.n, 'evolucao') : '#cartao/evolucao'}"><small>Aos ${pa[pa.length - 1].idade}</small><b>${brlC(pa[pa.length - 1].total)}</b></a>`].filter(Boolean)
-    : tem(ra) ? [`<a href="#cartao/reserva"><small>Reserva</small><b>${brlC(ra)}</b>${posReserva ? `<em>${posReserva}</em>` : ''}</a>`] : [];
+  // sem plano publicado não há linha da vida: o alto fica com o propósito, o patrimônio, a reserva e o cartão do passo
+  const pa = RS && RS.evolucao && RS.evolucao.porAno, comTraj = pa && pa.length >= 3;
+    const chaves = tem(ra) ? [`<a href="#cartao/reserva"><small>Reserva</small><b>${brlC(ra)}</b>${posReserva ? `<em>${posReserva}</em>` : ''}</a>`] : [];
   const capaPat = areas().patrimonio.capa, tomPat = capaPat && capaPat.tom;
   const patGrande = tem(pt) ? `<a class="h2-pat" href="#cartao/patrimonio"><small>Patrimônio ${casal() ? 'da família' : ''} hoje</small><b>${brlC(+pt)}</b>${tomPat ? `<em class="${tomPat[0] === 'ok' ? '' : 'at'}">${esc(tomPat[1])}</em>` : ''}</a>` : '';
-  const titulo = comTraj ? `<h2 class="h2-tit">${pl('O plano de vida de vocês', 'O seu plano de vida')}</h2>` : '';
-  return `<section class="heroi h2" style="background-image:url('${PAISAGEM}')"><div class="h2-esq">${titulo}${proposito}${patGrande}${trajetoriaDoHeroi()}${chaves.length ? `<div class="chaves" style="margin-top:${comTraj ? 0 : 18}px">${chaves.join('')}</div>` : ''}</div><div class="h2-dir">${cartao}</div></section>`;
+  // com o plano publicado, o alto é só a linha da vida (o plano de vida), e o cartão do passo abre o bloco dos próximos passos
+  if (comTraj) return { heroi: `<section class="heroi h2 vida" style="background-image:url('${PAISAGEM}')"><h2 class="h2-tit">${pl('O plano de vida de vocês', 'O seu plano de vida')}</h2>${trajetoriaDoHeroi()}</section>`, passo: `<div class="heroi dest">${cartao.replace('O próximo passo mais importante', 'O mais importante agora')}</div>` };
+  return { heroi: `<section class="heroi h2" style="background-image:url('${PAISAGEM}')"><div class="h2-esq">${proposito}${patGrande}${chaves.length ? `<div class="chaves" style="margin-top:18px">${chaves.join('')}</div>` : ''}</div><div class="h2-dir">${cartao}</div></section>`, passo: '' };
 }
 // a trajetória do patrimônio no alto do Painel, do plano publicado (RS.evolucao.porAno): de hoje ao fim da vida, com os
 // objetivos e a liberdade marcados. A linha é um SVG esticado; os pontos e os rótulos são HTML, para não deformarem
@@ -3645,7 +3656,8 @@ function trajetoriaDoHeroi() {
     <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="traj-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
       <path d="${linha} L100 100 L0 100 Z" fill="url(#traj-g)"/><path d="${linha}" fill="none" stroke="#fff" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/><path d="M0 100 H100" stroke="rgba(255,255,255,.35)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
     ${pontos}${lib}<i class="pt hoje" style="left:0%;top:${Y(pa[0].total).toFixed(2)}%"></i>
-    <span class="lb base" style="left:0">hoje, aos ${x0}</span><span class="lb base meio" style="left:50%">ver a evolução ano a ano ›</span><span class="lb base dir" style="left:100%">aos ${x1}</span></a>`;
+    <span class="lb base" style="left:0">hoje, aos ${x0}</span><span class="lb base meio" style="left:50%">${marcos.length ? marcos.length + (marcos.length === 1 ? ' objetivo' : ' objetivos') + ' no caminho · ' : ''}ver a evolução ano a ano ›</span><span class="lb base dir" style="left:100%">aos ${x1}</span>
+    <span class="lb topo fim" style="right:0;top:${Y(pa[pa.length - 1].total).toFixed(2)}%"><b>${brlC(pa[pa.length - 1].total)}</b>aos ${x1}</span></a>`;
 }
 // os sinais vitais: cinco áreas do plano, cada uma com o mesmo número e o mesmo estado da capa dela no Plano (uma conta só)
 function vizDoSinal(id) {
@@ -3659,8 +3671,8 @@ function vizDoSinal(id) {
 // um cartão de área no formato do sinal vital: o nome, o número principal (com o anel ou a régua, quando a área tem) e o estado
 function cartaoSinal(id, nome, c, cls, attrs) {
   const vz = c ? vizDoSinal(id) : '', t = c && c.tom, emAnel = /class="anel"/.test(vz);
-  if (!c) return `<a class="vital vazio${cls ? ' ' + cls : ''}" href="#cartao/${id}" ${attrs || ''}><span class="vt-r">${iconeArea(id)}${esc(nome)}</span><div class="vt-m"><div class="vt-big"><small>${id === 'saude' ? 'O exame diz a nota, em 5 minutos' : 'Ainda sem número'}</small></div></div><span class="vt-e">${id === 'saude' || !exames().length ? 'Começar pelo exame' : 'Preencher'} ›</span></a>`;
-  return `<a class="vital${t && t[0] !== 'ok' ? ' at' : ''}${cls ? ' ' + cls : ''}" href="#cartao/${id}" ${attrs || ''}><span class="vt-r">${iconeArea(id)}${esc(nome)}</span><div class="vt-m">${emAnel ? vz : ''}<div class="vt-big">${c.big}</div></div>${emAnel ? '' : vz}${t ? `<span class="vt-e">${esc(t[1])}</span>` : ''}</a>`;
+  if (!c) return `<a class="vital vazio${cls ? ' ' + cls : ''}" href="#cartao/${id}" ${attrs || ''}><span class="vt-r">${iconeArea(id)}${esc(nome)}</span><div class="vt-m"><div class="vt-big"><small>${id === 'saude' ? 'O exame diz a nota, em 5 minutos' : 'Ainda sem número'}</small></div></div><div class="vt-b"></div><span class="vt-e">${id === 'saude' || !exames().length ? 'Começar pelo exame' : 'Preencher'} ›</span></a>`;
+  return `<a class="vital${t && t[0] !== 'ok' ? ' at' : ''}${cls ? ' ' + cls : ''}" href="#cartao/${id}" ${attrs || ''}><span class="vt-r">${iconeArea(id)}${esc(nome)}</span><div class="vt-m">${emAnel ? vz : ''}<div class="vt-big">${c.big}</div></div><div class="vt-b">${emAnel ? '' : vz}</div>${t ? `<span class="vt-e">${esc(t[1])}</span>` : ''}</a>`;
 }
 function sinaisVitais(A) {
   const nomes = { saude: 'Saúde financeira', gestao: 'Para o futuro', reserva: 'Reserva', riscos: 'Proteção', liberdade: 'Liberdade' };
@@ -3688,20 +3700,18 @@ function efeitoDaResposta(o) {
   if (o.pedido.efeito && o.pedido.efeito.reserva) return o.estado === 'feita' ? 'a reserva subiu ' + brlC(o.resposta.valor != null ? o.resposta.valor : o.pedido.efeito.reserva) : estadoTxt(o);
   return estadoTxt(o);
 }
-// Para esta semana: no máximo três cartões, cada um com o assunto, o que é, para que serve e um botão. A tarefa da vez
-// (a do passo já está no cartão do alto), o teto da semana a responder e a pendência do plano que mais pesa
-function blocoAgir(oc, P, acao) {
+// Os próximos passos mais importantes: o passo do plano em destaque (quando o alto é a linha da vida), a tarefa da vez e a
+// pendência do plano que mais pesa. Sem janela de semana: o cliente pode voltar meses depois e os passos são os mesmos
+function blocoAgir(oc, P, acao, passo) {
   if (R.degrau === 'visitante') return '';
   const doPasso = P && P.tarefas ? P.tarefas.find(o => o.aberta && minha(o)) : null;
   const minhas = oc.filter(o => o.aberta && minha(o) && !o.semana && o !== doPasso).sort(porImpacto), doOutro = oc.filter(o => o.aberta && !minha(o) && !o.semana).sort(porImpacto), sug = oc.filter(o => o.sugerida);
-  const t = minhas[0] || sug[0], teto = oc.find(o => o.semana && o.semana.atual && o.aberta), pend = pendenciasDoPlano(oc)[0], it = [];
+  const t = minhas[0] || sug[0], pend = pendenciasDoPlano(oc)[0], it = [];
   if (t) it.push({ tom: 'tarefa', ic: ICONES.tarefas, rot: (casal() ? nomeDe(deQuem(t)) + ' · ' : '') + (t.sugerida ? 'tarefa sugerida' : 'tarefa'), tit: t.curto || t.titulo, sub: [t.min ? t.min + ' min' : '', t.serve].filter(Boolean).join(' · '),
     btn: `<button class="btn" data-acao="${t.sugerida ? 'aceitar' : 'abrir'}" data-id="${esc(t.id)}">${t.sugerida ? 'Aceitar' : 'Abrir'}</button>` });
-  if (teto) it.push({ tom: 'semana', ic: ICONES.semanadas, rot: 'Semanadas', tit: `Até ${brl(teto.valor)} nesta semana`, sub: `nos gastos que ${pl('vocês controlam', 'você controla')} · responder até ${dataBR(teto.data)}`,
-    btn: `<button class="btn" data-acao="abrir" data-id="${esc(teto.id)}">Responder</button>` });
   if (pend) it.push({ tom: 'risco', ic: iconeArea('riscos'), rot: 'Pendência do plano', tit: pend.txt, sub: '', btn: pend.acao });
-  const outro = doOutro[0] ? `<div class="linha-outro"><span>${doOutro.length === 1 ? 'Mais 1' : 'Mais ' + doOutro.length}, ${casal() ? 'd' + (nomeDe(deQuem(doOutro[0])).match(/a$/) ? 'a ' : 'o ') : 'de '}${esc(nomeDe(deQuem(doOutro[0])))}: ${esc((doOutro[0].curto || doOutro[0].titulo).replace(/^./, c => c.toLowerCase()).replace(new RegExp('\s+d[oa] ' + nomeDe(deQuem(doOutro[0])) + '$'), ''))}</span>${lembrarHtml(doOutro[0])}</div>` : '';
-  return `<section class="semana"><div class="rotulo">Para esta semana<a class="mais" href="#tarefas">Todas as tarefas &#8250;</a></div>${it.length ? it.map(i => `<div class="agir ${i.tom}"><span class="ag-ic" aria-hidden="true">${i.ic}</span><span class="ag-tx"><small>${esc(i.rot)}</small><b>${esc(i.tit)}</b>${i.sub ? `<span>${esc(i.sub)}</span>` : ''}</span>${i.btn}</div>`).join('') : '<p class="vazio-l">Nada para esta semana.</p>'}${outro}</section>`;
+  const outro = doOutro[0] ? `<div class="linha-outro"><span>${doOutro.length === 1 ? 'Mais 1' : 'Mais ' + doOutro.length}, ${casal() ? 'd' + (nomeDe(deQuem(doOutro[0])).match(/a$/) ? 'a ' : 'o ') : 'de '}${esc(nomeDe(deQuem(doOutro[0])))}: ${esc((doOutro[0].curto || doOutro[0].titulo).replace(/^./, c => c.toLowerCase()).replace(new RegExp('\\s+d[oa] ' + nomeDe(deQuem(doOutro[0])) + '$'), ''))}</span>${lembrarHtml(doOutro[0])}</div>` : '';
+  return `<section class="semana"><div class="rotulo">Os próximos passos mais importantes<a class="mais" href="#tarefas">Todas as tarefas &#8250;</a></div>${passo || ''}${it.length ? it.map(i => `<div class="agir ${i.tom}"><span class="ag-ic" aria-hidden="true">${i.ic}</span><span class="ag-tx"><small>${esc(i.rot)}</small><b>${esc(i.tit)}</b>${i.sub ? `<span>${esc(i.sub)}</span>` : ''}</span>${i.btn}</div>`).join('') : passo ? '' : '<p class="vazio-l">Nenhum passo em aberto.</p>'}${outro}</section>`;
 }
 // lembrar o outro: uma mensagem da Nord, no máximo uma por tarefa a cada sete dias, com o estado depois
 function lembrarHtml(o) {
@@ -3843,7 +3853,9 @@ function blocoNord(A) {
 }
 function telaPainel() {
   const A = areas(), oc = ocorrencias(), P = passoCompleto(), acao = P ? acaoDoDia(oc) : null;
-  const b1 = heroiPainel(oc, P), b2 = blocoAgir(oc, P, acao), b3 = blocoObjetivos(A, P), b6 = AGENDA_AREA.cartoes() + blocoNord(A);
+  const h = heroiPainel(oc, P), b1 = h.heroi, b2 = blocoAgir(oc, P, acao, h.passo), b3 = blocoObjetivos(A, P);
+  // o cartão de agendar fica dentro de "Com a Nord", logo abaixo do título
+  const nord = blocoNord(A), k = nord.indexOf('</div>') + 6, b6 = nord.slice(0, k) + AGENDA_AREA.cartoes() + nord.slice(k);
   const planoVis = R.degrau === 'visitante' ? `<a class="linha-l card" href="#plano" style="display:flex;text-decoration:none"><span>As onze áreas do seu plano, preenchidas pelo exame</span><small>ver &#8250;</small></a>` : '';
   // a casa: a vida financeira inteira primeiro (o plano de vida, os sinais vitais, as ferramentas rápidas, os objetivos); depois, o que fazer e com quem
   const cima = faixaVisitante() + b1 + planoVis + sinaisVitais(A) + blocoFerramentas() + b3;
