@@ -140,6 +140,19 @@ direto (WhatsApp e e-mail) é só do Completo; a clínica fala pelas mensagens d
   → #2 → Renovação, com datas "a definir"; alinhar os nomes e as datas com a área.
 - **O convite ao Completo para quem está na clínica** fica escondido em Sobreviver (UX.md › Jornada); confirmar.
 
+## Revisão do exame de saúde financeira (em aberto, 11/11/2026)
+
+Pedido do Nélio: rever as 33 perguntas e a conta da nota, que têm uns cinco anos, e fazer do exame o nível 1 de cada
+área (a clínica e a trilha aprofundam para o nível 2; o planejamento completo é o nível 3). A ideia está em `IDEIAS.md`
+("Exame de saúde financeira revisto"); a fórmula de produção e os 17 achados, em
+`area-logada/referencias/EXAME-FORMULA-ATUAL.md`.
+
+- **Falta o Nélio mandar:** as dúvidas e confusões dos clientes ao responder; confirmar como a nota geral sai dos cinco
+  pilares.
+- **Depois:** proposta de perguntas e de nota (por pilar ou por área do Plano), o que fazer com a série histórica, e a
+  decisão sobre a régua da fase de vida (a de produção e a do motor usam múltiplos diferentes).
+- **Até lá:** `notaDoExame()` em `area-cliente.html` continua provisória, por decisão dele; não trocar pela de produção.
+
 ## Feedback da apresentação real (21/10/2026)
 
 O usuário apresentou um plano a um cliente e trouxe:
