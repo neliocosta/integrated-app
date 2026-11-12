@@ -5,6 +5,9 @@ anterior. Leia junto com o `README.md`, que descreve como as duas telas funciona
 
 ## Como continuar
 
+**Situação em 12/11/2026:** o trabalho está no branch `claude/versao-2-integrada`. O que o Nélio precisa revisar e decidir
+está em `REVISAR.md`; o backlog do Painel e do Plano, logo abaixo.
+
 1. `node verificar.js` — roda a simulação em Node e confere as invariantes. Deve terminar com "Tudo certo".
 2. Abra `tela-consultor.html` e `evolucao-patrimonial.html` no navegador. Os arquivos são autocontidos.
 3. Escolha um item de **P1** abaixo.
@@ -140,7 +143,7 @@ direto (WhatsApp e e-mail) é só do Completo; a clínica fala pelas mensagens d
   → #2 → Renovação, com datas "a definir"; alinhar os nomes e as datas com a área.
 - **O convite ao Completo para quem está na clínica** fica escondido em Sobreviver (UX.md › Jornada); confirmar.
 
-## Backlog do Painel e do Plano, do feedback de 11/11/2026 (em aberto)
+## Backlog do Painel e do Plano, do feedback de 11 e 12/11/2026 (em aberto)
 
 1. **Catálogo dos cartões do "próximo passo mais importante".** Listar todos os passos que podem aparecer no cartão do
    alto do Painel e, para cada um, definir o elemento gráfico, o texto e o rótulo do botão.
@@ -150,10 +153,16 @@ direto (WhatsApp e e-mail) é só do Completo; a clínica fala pelas mensagens d
 3. **A evolução de cada objetivo.** Ao abrir um objetivo, ver a história dele a cada atualização (o desenho inicial, as
    reuniões de acompanhamento, os registros de entrada) e, com Open Finance, uma fotografia nova dos valores. Em aberto:
    como dizer qual investimento pertence a qual objetivo.
-4. **Para onde vai "O mês e o ano".** Saiu do Painel; `blocoMesAno()` segue em `area-cliente.html` sem uso.
+4. **Para onde vai "O mês e o ano".** Saiu do Painel; `blocoMesAno()` segue em `area-cliente.html` sem uso. O mesmo
+   vale para a ação do imprevisto (o botão saiu do Painel) e para o cartão do teto semanal, que saiu dos próximos passos.
 5. **Os cinco sinais vitais.** O Nélio gostou e vai pensar se são mesmo os cinco mais importantes.
 6. **"Deveria ter hoje" dos objetivos.** A conta é provisória: aporte constante do mês em que o objetivo entrou no plano
    até a data-alvo. Conferir com a regra que o planejamento usa.
+7. **A linha da vida para quem não tem plano publicado.** Visitante, cadastrado e clínica seguem com o alto antigo
+   (propósito, patrimônio e o passo). Pensar numa linha da vida com o que o exame e a clínica dão.
+8. **Ferramentas rápidas.** O Nélio ainda duvida se estas são as mais úteis para a casa; rever a lista.
+9. **Cartões dos objetivos.** Ele vai reavaliar o que falta.
+10. **Mais laranja**, se a primeira dose parecer tímida: o cabeçalho do cartão das Semanadas e o seletor do Plano.
 
 ## Revisão do exame de saúde financeira (em aberto, 11/11/2026)
 
