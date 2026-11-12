@@ -750,7 +750,7 @@ body.v-livro .chip::before{content:"";width:6px;height:6px;border-radius:50%;bac
 body.v-livro .chip:not(.ok):not(.at):not(.crit):not(.mar){color:var(--legenda)}
 body.v-livro .delta{background:transparent!important;padding:0;margin-left:8px;font-size:12px!important;font-weight:500!important}
 /* o menu: a aba ativa sublinhada em marinho fino; o laranja fica para a ação */
-@media (min-width:900px){body.v-livro .lateral .item.on{border-bottom:1.5px solid var(--marinho);color:var(--marinho)}}
+@media (min-width:900px){body.v-livro .lateral .item.on{border-bottom:2px solid var(--laranja);color:var(--marinho)}}
 body.v-livro .lateral .item{color:var(--legenda)}
 /* o progresso mais fino */
 body.v-livro .passo .trilho.fut{height:6px!important}
@@ -901,7 +901,8 @@ button.abre-l{width:100%;background:transparent;border:0;border-top:1px solid va
 .mundos .mundo .trilha-v{margin:6px 0 0 2px}
 .mundos .mundo .trilha-v li{padding:5px 0}
 .lateral .divisor{display:block;height:1px;background:var(--areia);margin:8px 10px}
-.faixa-t{grid-column:1/-1;font:400 17px var(--serifa);color:var(--marinho);margin:14px 0 -4px}
+.faixa-t{grid-column:1/-1;font:400 17px var(--serifa);color:var(--marinho);margin:14px 0 -4px;display:flex;align-items:center;gap:10px}
+.faixa-t::before{content:"";width:18px;height:2px;border-radius:1px;background:var(--laranja)}
 .faixa-t:first-child{margin-top:0}
 @media (max-width:1079px){.painel{display:block}}
 @media (max-width:899px){.heroi .proposito-l{font-size:15px}.heroi .passo .titulo{font-size:22px}}
@@ -1194,6 +1195,7 @@ body.v-livro .rotulo .mais{font-weight:400;font-size:13px}
 .vital:hover{box-shadow:0 10px 24px -14px rgba(19,31,46,.35);transform:translateY(-1px)}
 .vital .vt-r{display:flex;align-items:center;gap:7px;font:500 12.5px var(--sans);color:var(--legenda)}
 .vital .vt-r svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.7;flex:none}
+.vital .vt-r svg.ic-area,body.v-livro .cap .ar-nome .ic-area{stroke:var(--laranja-txt)}
 .vital .vt-m{display:flex;align-items:center;gap:12px;min-height:50px}
 .vital .vt-big{font:500 22px/1.1 'Sora',sans-serif;letter-spacing:-.02em;color:var(--marinho);min-width:0}
 .vital .vt-big small{display:block;font:400 12px/1.3 var(--sans);letter-spacing:0;color:var(--legenda);margin-top:3px}
@@ -1282,7 +1284,9 @@ details.info-area > summary::after{content:"+";font:400 20px/1 var(--sans);color
 details.info-area[open] > summary::after{content:"\2212"}
 details.info-area[open] > summary{border-radius:var(--raio) var(--raio) 0 0;border-bottom-color:transparent}
 details.info-area > .card{border-radius:0 0 var(--raio) var(--raio);border-top:0;margin:0}
-.cap .abre-area{display:block;margin-top:12px;padding-top:10px;border-top:1px solid var(--areia);font:600 13px var(--sans);color:var(--marinho)}
+.cap .abre-area{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--areia);font:600 13.5px var(--sans);color:var(--laranja-txt)}
+.cap .abre-area i{flex:none;width:28px;height:28px;border-radius:50%;background:var(--at-bg);display:grid;place-items:center;font-style:normal;font-size:15px;line-height:1;color:var(--laranja-txt);transition:background .18s,color .18s,transform .18s}
+.cap:hover .abre-area i{background:var(--laranja);color:#fff;transform:translateX(2px)}
 @media (prefers-reduced-motion:reduce){.quadro.cheio{transition:none}}
 </style>
 </head>
@@ -4361,7 +4365,7 @@ function cartaoArea(c, a, compacto, i) {
     return `<a class="cap semdado" href="#cartao/${c.id}" ${vt}><span class="r"><span class="ar-nome">${iconeArea(c.id)}${esc(c.nome)}</span>${mini}</span><div class="sub" style="margin-top:8px;color:var(--marinho);font-size:14px">${esc(c.pergunta)}</div>${n ? `<div class="sub" style="margin-top:6px">${esc(Object.values(a.ind)[0].txt)}</div>` : ''}<span class="convite">${convite} &#8250;</span></a>`;
   }
   const t = a.capa.tom;
-  return `<a class="cap" data-area="${c.id}" href="#cartao/${c.id}" ${vt}><span class="r"><span class="ar-nome">${iconeArea(c.id)}${esc(c.nome)}</span>${mini}</span><div class="big">${a.capa.big}</div><div class="sub">${esc(a.capa.sub)}</div>${t ? `<span class="chip ${t[0]} estado">${esc(t[1])}</span>` : ''}<div class="viz">${a.capa.viz || ''}</div><span class="abre-area">${versoesVigentes().length ? 'Ver o planejamento ' + (c.id === 'objetivos' ? 'dos objetivos' : 'desta área') + ' em detalhe' : 'Abrir esta área em detalhe'} &#8250;</span></a>`;
+  return `<a class="cap" data-area="${c.id}" href="#cartao/${c.id}" ${vt}><span class="r"><span class="ar-nome">${iconeArea(c.id)}${esc(c.nome)}</span>${mini}</span><div class="big">${a.capa.big}</div><div class="sub">${esc(a.capa.sub)}</div>${t ? `<span class="chip ${t[0]} estado">${esc(t[1])}</span>` : ''}<div class="viz">${a.capa.viz || ''}</div><span class="abre-area">Detalhar esta área<i aria-hidden="true">&#8594;</i></span></a>`;
 }
 
 // ---------- A página de uma área: o resumo maior, as informações (as que existem, com a origem, e as que faltam, com o
